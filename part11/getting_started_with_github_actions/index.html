@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على CI/CD وGitHub Actions والنشر الآلي ومراقبة الجودة."/><!----><title>البدء مع GitHub Actions - الجزء 11 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#الاحتياجات-الأساسية">الاحتياجات الأساسية</a></li><li class="toc__depth-3"><a href="#البدء-مع-سير-العمل">البدء مع سير العمل</a></li><li class="toc__depth-3"><a href="#إعداد-خطوات-الفحص-والاختبار-والبناء">إعداد خطوات الفحص والاختبار والبناء</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#D4A8E2"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part11">الجزء 11: التكامل والتسليم المستمر</a></p> <h1>البدء مع GitHub Actions</h1></div> <div class="course-content"><!----><p>قبل أن نبدأ اللعب مع GitHub Actions، لنلقِ نظرة على ماهيتها وكيف تعمل.</p>
+<p>تعمل GitHub Actions وفق <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#workflows" target="_blank" rel="noreferrer noopener">أسيار العمل (workflows)</a>. سير العمل هو سلسلة من <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#jobs" target="_blank" rel="noreferrer noopener">المهام (jobs)</a> التي تُنفَّذ عندما يحفّزها <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#events" target="_blank" rel="noreferrer noopener">حدث</a> معيّن. تحتوي كل مهمة على مجموعتها الخاصة من التعليمات التي تخبر GitHub Actions بما ينبغي فعله.</p>
+<p>يبدو التنفيذ النموذجي لسير العمل هكذا:</p>
+<ul>
+<li>يقع الحدث المُحفِّز (على سبيل المثال، دفع (push) إلى الفرع main).</li>
+<li>يُنفَّذ سير العمل المرتبط بذلك المُحفِّز.</li>
+<li>التنظيف</li>
+</ul>
+<h3 id="الاحتياجات-الأساسية">الاحتياجات الأساسية</h3>
+<p>بشكل عام، لكي تعمل CI على مستودع، نحتاج إلى بضعة أمور:</p>
+<ul>
+<li>مستودع (بديهي)</li>
+<li>تعريف لما تحتاج CI إلى فعله: يمكن أن يكون ذلك في صورة ملف معيّن داخل المستودع أو يمكن تعريفه في نظام CI نفسه</li>
+<li>أن تكون CI على علم بوجود المستودع (وملف الإعدادات داخله)</li>
+<li>أن تكون CI قادرة على الوصول إلى المستودع</li>
+<li>أن تملك CI الأذونات اللازمة لتنفيذ الإجراءات التي يُفترض أن تقوم بها: على سبيل المثال، إذا احتاجت CI إلى النشر في بيئة إنتاج، فإنها تحتاج إلى <em>بيانات اعتماد</em> لتلك البيئة.</li>
+</ul>
+<p>هذا هو النموذج التقليدي على الأقل، وسنرى بعد قليل كيف تختصر GitHub Actions بعض هذه الخطوات، أو بالأحرى تجعلها بحيث لا داعي للقلق بشأنها!</p>
+<p>لـGitHub Actions ميزة كبيرة على الحلول المستضافة ذاتياً: فالمستودع مستضاف لدى مزوّد CI. بعبارة أخرى، يوفّر GitHub كلاً من المستودع ومنصة CI. وهذا يعني أننا إذا فعّلنا Actions لمستودع، فإن GitHub يعلم مسبقاً بأن لدينا أسيار عمل معرّفة وكيف تبدو تلك التعريفات.</p>
+<div class="tasks">
+<p><strong>2. المشروع المثال</strong></p>
+</div>
+<h3 id="البدء-مع-سير-العمل">البدء مع سير العمل</h3>
+<p>المكوّن الجوهري لإنشاء خطوط أنابيب CI/CD باستخدام GitHub Actions هو ما يُسمى <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#workflows" target="_blank" rel="noreferrer noopener">سير العمل (Workflow)</a>. أسيار العمل هي تدفقات عملية يمكنك إعدادها في مستودعك لتشغيل مهام آلية مثل البناء والاختبار وفحص الشيفرة وإصدار الإصدارات والنشر، على سبيل المثال لا الحصر! يبدو التسلسل الهرمي لسير العمل كما يلي:</p>
+<p>سير العمل</p>
+<ul>
+<li>مهمة</li>
+<li>مهمة</li>
+</ul>
+<p>يجب أن يحدد كل سير عمل <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#jobs" target="_blank" rel="noreferrer noopener">مهمة (Job)</a> واحدة على الأقل، تحتوي على مجموعة من <a href="https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#steps" target="_blank" rel="noreferrer noopener">الخطوات (Steps)</a> لتنفيذ مهام فردية. تُشغَّل المهام بالتوازي، أما الخطوات في كل مهمة فتُنفَّذ بالتتابع.</p>
+<p>تتنوع الخطوات بين تشغيل أمر مخصص واستخدام إجراءات معرّفة مسبقاً، ومن هنا جاء اسم GitHub Actions. يمكنك إنشاء <a href="https://docs.github.com/en/free-pro-team@latest/actions/creating-actions" target="_blank" rel="noreferrer noopener">إجراءات مخصصة</a> أو استخدام أي إجراءات ينشرها المجتمع، وهي كثيرة، لكن لنعد إلى ذلك لاحقاً!</p>
+<p>لكي يتعرف GitHub على أسيار عملك، يجب تحديدها في مجلد <em>.github/workflows</em> داخل مستودعك. كل سير عمل هو ملف منفصل بذاته، ويجب إعداده باستخدام لغة تسلسل البيانات <a href="https://yaml.org/" data-type="link" data-id="https://yaml.org/">YAML</a>.</p>
+<p>YAML اختصار تكراري لعبارة &quot;YAML Ain't Markup Language&quot;. وكما يوحي الاسم، هدفها أن تكون مقروءة للبشر، وهي تُستخدم عادةً في ملفات الإعدادات.</p>
+<p>لاحظ أن المسافات البادئة مهمة في YAML. يمكنك تعلم المزيد عن الصياغة <a href="https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<p>يحتوي سير العمل الأساسي على ثلاثة عناصر في مستند YAML. هذه العناصر الثلاثة هي:</p>
+<ul>
+<li>name: أجل، لقد خمّنتها، اسم سير العمل</li>
+<li>(on) triggers: الأحداث التي تحفّز تنفيذ سير العمل</li>
+<li>jobs: المهام المنفصلة التي سينفذها سير العمل (قد يحتوي سير العمل الأساسي على مهمة واحدة فقط).</li>
+</ul>
+<p>يبدو تعريف سير العمل البسيط هكذا:</p>
+<pre><code>name: Hello World!
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: |
+          echo &quot;Hello World!&quot;
+</code></pre>
+<p>توجد مهمة واحدة باسم <em>hello_world_job</em>، وستُشغَّل في بيئة افتراضية بنظام Ubuntu 24.04. للمهمة خطوة واحدة فقط باسم &quot;Say hello&quot;، وستنفّذ الأمر <code>echo &quot;Hello World!&quot;</code> في صدفة النظام.</p>
+<p>قد تتساءل إذن: متى يحفّز GitHub بدء سير العمل؟ هناك الكثير من <a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows" target="_blank" rel="noreferrer noopener">الخيارات</a> للاختيار منها، لكن بشكل عام يمكنك إعداد سير العمل ليبدأ عند:</p>
+<ul>
+<li>وقوع <em>حدث على GitHub</em> مثل دفع (push) commit إلى مستودع أو إنشاء issue أو pull request</li>
+<li>وقوع <em>حدث مجدول</em>، يُحدد باستخدام صياغة <a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noreferrer noopener">cron</a></li>
+<li>وقوع <em>حدث خارجي</em>، على سبيل المثال تنفيذ أمر في تطبيق خارجي مثل تطبيق المراسلة <a href="https://slack.com/" target="_blank" rel="noreferrer noopener">Slack</a> أو <a href="https://discord.com/" target="_blank" rel="noreferrer noopener">Discord</a></li>
+</ul>
+<p>لمعرفة المزيد عن الأحداث التي يمكن استخدامها لتحفيز سير العمل، يُرجى الرجوع إلى <a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows" target="_blank" rel="noreferrer noopener">توثيق</a> GitHub Actions.</p>
+<div class="tasks">
+<p><strong>3. مرحباً بالعالم!</strong></p>
+</div>
+<div class="tasks">
+<p><strong>4. التاريخ ومحتويات المجلد</strong></p>
+</div>
+<h3 id="إعداد-خطوات-الفحص-والاختبار-والبناء">إعداد خطوات الفحص والاختبار والبناء</h3>
+<p>بعد إكمال التمارين الأولى، سيكون لديك سير عمل بسيط لكنه عديم الفائدة تقريباً. لنجعل سير العمل يقوم بشيء مفيد.</p>
+<p>لنُنفّذ إجراءً (action) في GitHub Actions يقوم بفحص الشيفرة. إذا لم تنجح الفحوصات، سيعرض GitHub Actions حالة حمراء.</p>
+<p>في البداية، يبدو سير العمل الذي سنحفظه في الملف <em>pipeline.yml</em> هكذا:</p>
+<pre><code>name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+</code></pre>
+<p>قبل أن نتمكن من تشغيل أمر لفحص الشيفرة، علينا تنفيذ بضعة إجراءات لتهيئة بيئة المهمة.</p>
+<h4 id="تهيئة-البيئة">تهيئة البيئة</h4>
+<p>تُعدّ تهيئة البيئة خطوة مهمة عند إعداد خط أنابيب. سنستخدم بيئة افتراضية <em>ubuntu-latest</em> لأنها مطابقة لإصدار Ubuntu (وهو 24.04) الذي سنشغّله في الإنتاج.</p>
+<p>من المهم محاكاة البيئة نفسها في CI كما في الإنتاج بأقصى قدر ممكن من الدقة، لتجنّب حالات تعمل فيها الشيفرة نفسها بشكل مختلف في CI وفي الإنتاج، وهو ما يُبطل الغرض من استخدام CI فعلياً.</p>
+<p>بعد ذلك، نُدرج الخطوات في مهمة &quot;build&quot; التي ستحتاج CI إلى تنفيذها. كما لاحظنا في التمرين الأخير، لا تحتوي البيئة الافتراضية افتراضياً على أي شيفرة، لذا نحتاج إلى <em>سحب الشيفرة</em> من المستودع.</p>
+<p>هذه خطوة سهلة:</p>
+<pre><code>name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+// BEGIN HIGHLIGHT
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v6
+// END HIGHLIGHT
+</code></pre>
+<p>تُخبر الكلمة المفتاحية <a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsuses" target="_blank" rel="noreferrer noopener">uses</a> سير العمل بتشغيل <em>إجراء</em> معيّن. والإجراء قطعة شيفرة قابلة لإعادة الاستخدام، مثل دالة. يمكن تعريف الإجراءات في مستودعك في ملف منفصل، أو يمكنك استخدام الإجراءات المتاحة في المستودعات العامة.</p>
+<p>هنا نستخدم إجراءً عاماً هو <a href="https://github.com/actions/checkout" target="_blank" rel="noreferrer noopener">actions/checkout</a>، ونحدد إصداراً (@v6) لتجنّب التغييرات الكاسرة المحتملة إذا حُدِّث الإجراء. يفعل إجراء <em>checkout</em> ما يوحي به الاسم: فهو يسحب الشيفرة المصدرية للمشروع من Git.</p>
+<p>ثانياً، بما أن التطبيق مكتوب بـJavaScript، يجب تهيئة Node.js لتتمكن من استخدام الأوامر المحددة في <em>package.json</em>. لتهيئة Node.js يمكن استخدام إجراء <a href="https://github.com/actions/setup-node" target="_blank" rel="noreferrer noopener">actions/setup-node</a>. اختير الإصدار 24 من Node لأنه الإصدار الذي يستخدمه التطبيق في بيئة الإنتاج.</p>
+<pre><code># لم يعد يُعرض الاسم والمُحفِّز...
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+// BEGIN HIGHLIGHT
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+// END HIGHLIGHT
+</code></pre>
+<p>كما نرى، تُستخدم الكلمة المفتاحية <a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith" target="_blank" rel="noreferrer noopener">with</a> لإعطاء &quot;معامل&quot; للإجراء. وهنا يحدد المعامل إصدار Node.js الذي نريد استخدامه.</p>
+<p>أخيراً، يجب تثبيت اعتماديات التطبيق. وكما على جهازك الخاص، ننفّذ <code>npm install</code>. ينبغي أن تبدو الخطوات في المهمة الآن هكذا:</p>
+<pre><code>jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+// BEGIN HIGHLIGHT
+      - name: Install dependencies
+        run: npm install
+// END HIGHLIGHT
+</code></pre>
+<p>الآن ينبغي أن تكون البيئة جاهزة بالكامل كي تنفّذ المهمة مهامها المهمة.</p>
+<h4 id="فحص-الشيفرة">فحص الشيفرة</h4>
+<p>بعد تهيئة البيئة، يمكننا تشغيل جميع السكربتات من package.json كما نفعل على جهازنا الخاص. لفحص الشيفرة، كل ما عليك فعله هو إضافة خطوة لتشغيل الأمر <code>npm run eslint</code>.</p>
+<pre><code>jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install
+// BEGIN HIGHLIGHT
+      - name: Check style
+        run: npm run eslint
+// END HIGHLIGHT
+</code></pre>
+<p>لاحظ أن <em>name</em> الخطوة اختياري؛ فإذا عرّفت خطوة كما يلي</p>
+<pre><code>- run: npm run eslint
+</code></pre>
+<p>يُستخدم الأمر الذي يُشغَّل كاسم افتراضي.</p>
+<div class="tasks">
+<p><strong>5. سير عمل فحص الشيفرة</strong></p>
+</div>
+<div class="tasks">
+<p><strong>6. أصلح الشيفرة</strong></p>
+</div>
+<div class="tasks">
+<p><strong>7. البناء والاختبار</strong></p>
+</div>
+<div class="tasks">
+<p><strong>8. العودة إلى اللون الأخضر</strong></p>
+</div>
+<div class="tasks">
+<p><strong>9. اختبارات من طرف إلى طرف بسيطة</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part11/introduction_to_ci_cd"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">مقدمة إلى CI/CD</span></a><!--]--> <!--[0--><a class="next" href="../../part11/deployment"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">النشر</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

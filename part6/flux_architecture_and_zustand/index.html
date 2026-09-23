@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على معمارية Flux وZustand وReact Query وContext API لإدارة حالة التطبيقات."/><!----><title>معمارية Flux وZustand - الجزء 6 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#معمارية-flux">معمارية Flux</a></li><li class="toc__depth-3"><a href="#redux">Redux</a></li><li class="toc__depth-3"><a href="#zustand">Zustand</a></li><li class="toc__depth-3"><a href="#استخدام-الحالة-من-مكونات-مختلفة">استخدام الحالة من مكوّنات مختلفة</a></li><li class="toc__depth-3"><a href="#إعادة-تنظيم-الحالة">إعادة تنظيم الحالة</a></li><li class="toc__depth-3"><a href="#ملاحظات-zustand">ملاحظات Zustand</a></li><li class="toc__depth-3"><a href="#الدوال-النقية-والكائنات-غير-القابلة-للتغيير">الدوال النقية والكائنات غير القابلة للتغيير</a></li><li class="toc__depth-3"><a href="#النموذج-غير-المتحكم-به">النموذج غير المتحكَّم به</a></li><li class="toc__depth-3"><a href="#مزيد-من-المكونات-والوظائف">مزيد من المكوّنات والوظائف</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#B795F3"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part6">الجزء 6: إدارة الحالة</a></p> <h1>معمارية Flux وZustand</h1></div> <div class="course-content"><!----><p>اتّبعنا الممارسة التي توصي بها React لإدارة حالة التطبيق، وذلك بتعريف الحالة التي تحتاجها مكوّنات متعددة والدوال التي تتعامل معها في المكوّنات <a href="https://reactjs.org/docs/lifting-state-up.html" target="_blank" rel="noopener">العليا</a> في التسلسل الهرمي للمكوّنات. وعادةً ما كانت معظم الحالة والدوال التي تتعامل معها تُعرَّف مباشرة في المكوّن الجذري وتُمرَّر عبر props إلى المكوّنات التي تحتاجها. وهذا ينجح إلى حدٍّ ما، لكن مع نمو التطبيق تصبح إدارة الحالة صعبة.</p>
+<h3 id="معمارية-flux">معمارية Flux</h3>
+<p>طوّرت Facebook معمارية <a href="https://facebookarchive.github.io/flux/docs/in-depth-overview" target="_blank" rel="noopener">Flux</a> في بدايات تاريخ React للتخفيف من مشكلات إدارة الحالة. في Flux، تُفصَل إدارة حالة التطبيق بالكامل في <em>stores</em> خارجية خارج مكوّنات React. ولا تُغيَّر الحالة في store مباشرة، بل عبر <em>actions</em> محددة تُنشأ لهذا الغرض.</p>
+<p>عندما يُرسَل action ويغيّر حالة store، تُعاد عرض الواجهات:</p>
+<p><img src="../../images/mooc/c6580b86efb4.webp" alt="صورة توضيحية"></p>
+<p>إذا استدعى استخدام التطبيق (مثل الضغط على زر) تغيير الحالة، فيحدث التغيير عبر action. وهذا بدوره يؤدي إلى إعادة عرض الواجهة:</p>
+<p><img src="../../images/mooc/9ff17e8407bf.webp" alt="صورة توضيحية"></p>
+<p>وهكذا يوفّر Flux طريقة معيارية لكيفية ومكان حفظ حالة التطبيق ولإجراء تغييرات عليها.</p>
+<h3 id="redux">Redux</h3>
+<p>كان <a href="https://redux.js.org/" target="_blank" rel="noopener">Redux</a>، الذي يتبع معمارية Flux، الحل المهيمن لإدارة الحالة في تطبيقات React لما يقارب عقداً كاملاً. وفي هذه الدورة أيضاً استُخدم Redux حتى ربيع 2026. وقد لازمت Redux دائماً مشكلة التعقيد وكثرة الشيفرة النمطية المتكررة (boilerplate). تحسّن الوضع كثيراً مع ظهور Redux Toolkit، لكن رغم ذلك واصل المجتمع تطوير حلول بديلة لإدارة الحالة، مثل <a href="https://mobx.js.org/README.html">MobX</a> و<a href="https://recoiljs.org/">Recoil</a> و<a href="https://www.npmjs.com/package/jotai" target="_blank" rel="noopener">Jotai</a>. وقد تفاوتت شعبيتها.</p>
+<p>أكثر الوافدين الجدد إثارةً للاهتمام، وبلا شك الأكثر شعبية، هو <a href="https://zustand.docs.pmnd.rs/" target="_blank" rel="noopener">Zustand</a>، وهو أيضاً اختيارنا لحل إدارة الحالة. ويبدو أن Zustand قد لحق فعلاً بـ Redux في الشعبية:</p>
+<p><img src="../../images/mooc/a388491aa9a6.webp" alt="صورة توضيحية"></p>
+<h3 id="zustand">Zustand</h3>
+<p>لنتعرّف على Zustand من خلال تنفيذ تطبيق عدّاد مرة أخرى:</p>
+<p><img src="../../images/mooc/46faac4f212d.webp" alt="صورة توضيحية"></p>
+<p>سننشئ تطبيق Vite جديداً ونثبّت <em>Zustand</em>:</p>
+<pre><code class="language-bash">npm install zustand
+</code></pre>
+<p>النسخة الأولى، التي تعمل فيها زيادة العدّاد فقط، هي كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+}))
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">counter</span>)
+  <span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">increment</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;div&amp;gt;{counter}&amp;lt;/div&amp;gt;
+      &amp;lt;div&amp;gt;
+        &amp;lt;button onClick={increment}&amp;gt;plus&amp;lt;/button&amp;gt;
+        &amp;lt;button&amp;gt;minus&amp;lt;/button&amp;gt;
+        &amp;lt;button&amp;gt;zero&amp;lt;/button&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+    &amp;lt;/div&amp;gt;
+  )
+}
+</code></pre>
+<p>يبدأ التطبيق بإنشاء <em>store</em>، أي الحالة العامة، باستخدام دالة <a href="https://zustand.docs.pmnd.rs/reference/apis/create" target="_blank" rel="noopener">create</a> في Zustand:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+}))
+</code></pre>
+<p>تستقبل الدالة كمعامل <em>دالة</em> تُعيد الحالة المطلوب تعريفها للتطبيق. إذن المعامل هو كما يلي:</p>
+<pre><code>set =&amp;gt; ({
+  counter: 0,
+  increment: () =&amp;gt; set(state =&amp;gt; ({ counter: state.counter + 1 })),
+})
+</code></pre>
+<p>وهكذا تحتوي الحالة على <em>counter</em> بقيمة صفر، و<em>increment</em> وهي دالة.</p>
+<p>يمكن لمكوّنات التطبيق الوصول إلى القيم والدوال المعرّفة في الحالة عبر دالة <em>useCounterStore</em> المعرّفة باستخدام <em>create</em> في Zustand. ويستخدم مكوّن <em>App</em> المحدّدات (selectors) لاسترجاع قيمة <em>counter</em> ودالة <em>increment</em> من الحالة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// استخدام selector لاختيار الجزء الصحيح من حالة store</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">counter</span>)
+  <span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">increment</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      &amp;lt;div&gt;{counter}&amp;lt;/div&gt;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+      &amp;lt;div&gt;
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+        &amp;lt;button onClick={increment}&gt;plus&amp;lt;/button&gt;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+        &amp;lt;button&gt;minus&amp;lt;/button&gt;
+        &amp;lt;button&gt;zero&amp;lt;/button&gt;
+      &amp;lt;/div&gt;
+
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>تخزّن الشيفرة قيمة counter الخاصة بـ store في متغير كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">counter</span>)
+</code></pre>
+<p>تُستخدم دالة محدّد <em>state =&gt; state.counter</em> ، وهي تحدد ما يُعاد من محتويات store. وبالطريقة نفسها، تُسترجع الدالة المخزّنة في store إلى المتغير <em>increment</em>.</p>
+<p>تُعطى دالة الحالة <em>increment</em> ، التي عُرِّفت كما يلي، كمعالج نقر لزر &quot;plus&quot;:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">increment</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+<span class="hljs-comment">// END HIGHLIGHT</span>
+}))
+</code></pre>
+<p>لننظر إلى تعريف الدالة بشكل منفصل:</p>
+<pre><code>() =&amp;gt; set(state =&amp;gt; ({ counter: state.counter + 1 }))
+</code></pre>
+<p>هذه دالة تستدعي دالة <a href="https://zustand.docs.pmnd.rs/learn/guides/updating-state" target="_blank" rel="noopener">set</a> وتمرّر لها دالة أخرى كمعامل. وهذه الدالة الممرَّرة كمعامل تحدد كيف تتغير الحالة:</p>
+<pre><code>state =&amp;gt; ({ counter: state.counter + 1 })
+</code></pre>
+<p>وهي صيغة مختصرة لـ:</p>
+<pre><code class="language-js">state =&amp;gt; {
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> }
+}
+</code></pre>
+<p>تُعيد الدالة حالة جديدة تحسبها بناءً على الحالة القديمة التي يمكنها الوصول إليها عبر المعامل <em>state</em>. فإذا كانت الحالة القديمة، على سبيل المثال:</p>
+<pre><code class="language-js">{
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">increment</span>: <span class="hljs-comment">// تعريف الدالة</span>
+}
+</code></pre>
+<p>تصبح الحالة الجديدة:</p>
+<pre><code class="language-js">{
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">increment</span>: <span class="hljs-comment">// تعريف الدالة</span>
+}
+</code></pre>
+<p>تحتوي الحالة دائماً أيضاً على الدالة <em>increment</em> التي تغيّر الحالة.</p>
+<p>دالة انتقال الحالة</p>
+<pre><code>state =&amp;gt; ({ counter: state.counter + 1 })
+</code></pre>
+<p>تؤثر فقط على قيمة <em>counter</em> في الحالة.</p>
+<p>لا شيء يمنع تغيير الدالة الموجودة في الحالة داخل دالة انتقال الحالة؛ فمثلاً لو عرّفناها كما يلي:</p>
+<pre><code class="language-js">state =&amp;gt; {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> ,
+    <span class="hljs-attr">increment</span>: <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;increment broken&#x27;</span>)
+  }
+}
+</code></pre>
+<p>فلن يعمل زر الزيادة إلا في المرة الأولى؛ وبعدها لن يؤدي الضغط على الزر إلا إلى الطباعة في الطرفية.</p>
+<p>عندما تُضبط الحالة الجديدة كما يلي:</p>
+<pre><code>state =&amp;gt; ({ counter: state.counter + 1 })
+</code></pre>
+<p>لا تُحدَّث إلا قيمة المفتاح <em>counter</em> في الحالة؛ إذ تُحصل على الحالة الجديدة بدمج الحالة القديمة مع القيمة التي تُعيدها دالة تغيير الحالة. ولهذا فإن دالة انتقال الحالة التالية:</p>
+<pre><code>state =&amp;gt; ({})
+</code></pre>
+<p>لا تؤثر على الحالة إطلاقاً.</p>
+<p>لنكمل التطبيق لبقية الأزرار أيضاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+  <span class="hljs-attr">decrement</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> - <span class="hljs-number">1</span> })),
+  <span class="hljs-attr">zero</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(() =&amp;gt; ({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })),
+}))
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">counter</span>)
+  <span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">increment</span>)
+  <span class="hljs-keyword">const</span> decrement = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">decrement</span>)
+  <span class="hljs-keyword">const</span> zero = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">zero</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;div&amp;gt;{counter}&amp;lt;/div&amp;gt;
+      &amp;lt;div&amp;gt;
+        &amp;lt;button onClick={increment}&amp;gt;plus&amp;lt;/button&amp;gt;
+        &amp;lt;button onClick={decrement}&amp;gt;minus&amp;lt;/button&amp;gt;
+        &amp;lt;button onClick={zero}&amp;gt;zero&amp;lt;/button&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+    &amp;lt;/div&amp;gt;
+  )
+}
+</code></pre>
+<blockquote>
+<p>من أين يأتي set و state؟</p>
+<p>من أين يأتي <em>set</em>؟ إنها دالة مساعدة توفّرها دالة <em>create</em> في Zustand، وتُستخدم لتحديث الحالة. تستدعي <em>create</em> الدالة الممرَّرة إليها كمعامل وتمرّر لها <em>set</em> تلقائياً. لا تحتاج إلى استدعائها أو استيرادها بنفسك؛ يتولى Zustand ذلك.</p>
+<p>من أين يأتي <em>state</em>؟ عندما تُمرَّر دالة كمعامل إلى <em>set</em> (بدلاً من كائن حالة جديد مباشرة)، يستدعي Zustand تلك الدالة مع الحالة الحالية لـ store كوسيط لها. بهذه الطريقة، يمكن لدوال تحديث الحالة الوصول إلى الحالة القديمة لحساب الحالة الجديدة.</p>
+</blockquote>
+<h3 id="استخدام-الحالة-من-مكونات-مختلفة">استخدام الحالة من مكوّنات مختلفة</h3>
+<p>لنُعِد هيكلة التطبيق بحيث يُنقل تعريف store إلى ملفه الخاص <em>store.js</em>، وتُقسَّم الواجهة إلى مكوّنات متعددة، كل منها معرّف في ملفه الخاص.</p>
+<p>محتويات <em>store.js</em> بسيطة ومباشرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+  <span class="hljs-attr">decrement</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> - <span class="hljs-number">1</span> })),
+  <span class="hljs-attr">zero</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(() =&amp;gt; ({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })),
+}))
+</code></pre>
+<p>يُبسَّط مكوّن <em>App</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Display</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Display&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Controls</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Controls&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Display</span> /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Controls</span> /&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>الجدير بالملاحظة هنا أن مكوّن <em>App</em> لم يعد يمرّر الحالة إلى مكوّناته الفرعية. بل إن المكوّن لا يلمس الحالة بأي شكل؛ فقد فُصل تعريف store بالكامل خارج المكوّن.</p>
+<p>المكوّن الذي يعرض قيمة العدّاد بسيط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useCounterStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Display</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">counter</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;{counter}&amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Display</span>
+</code></pre>
+<p>يصل المكوّن إلى قيمة العدّاد عبر دالة <em>useCounterStore</em> التي تعرّف store. وهذا مريح من نواحٍ عديدة، فمثلاً لا حاجة لتمرير الحالة إلى المكوّن عبر props.</p>
+<p>المكوّن الذي يعرّف الأزرار يبدو هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useCounterStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Controls</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">increment</span>)
+  <span class="hljs-keyword">const</span> decrement = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">decrement</span>)
+  <span class="hljs-keyword">const</span> zero = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">zero</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;button onClick={increment}&amp;gt;plus&amp;lt;/button&amp;gt;
+      &amp;lt;button onClick={decrement}&amp;gt;minus&amp;lt;/button&amp;gt;
+      &amp;lt;button onClick={zero}&amp;gt;zero&amp;lt;/button&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Controls</span>
+</code></pre>
+<p>تأخذ دالة <em>useCounterStore</em> دالة محدّد (selector) كمعامل لها، وهي تحدد أي جزء من الحالة سيُستخدم. على سبيل المثال:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">increment</span>)
+</code></pre>
+<p>هنا تنتقي دالة المحدّد <em>state =&gt; state.increment</em> قيمة المفتاح <em>increment</em> من الحالة، أي الدالة التي تزيد العدّاد، وتخزّنها في المتغير <em>increment</em>.</p>
+<p>يمكننا أيضاً الوصول إلى الحالة بأكملها كما يلي:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> state = <span class="hljs-title function_">useCounterStore</span>()
+  <span class="hljs-comment">// يفعل الشيء نفسه مثل useCounterStore(state =&amp;gt; state)، أي يختار الحالة بأكملها</span>
+</code></pre>
+<p>يمكننا حينها الإشارة إلى قيمة العدّاد والدوال باستخدام الترميز النقطي (dot notation)، أي <em>state.counter</em> و<em>state.increment</em>.</p>
+<p>يطرح سؤال طبيعي نفسه: هل يمكن استخدام أجزاء متعددة من الحالة عبر التفكيك (destructuring):</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useCounterStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Controls</span> = (<span class="hljs-params"></span>) =&gt; {
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { increment, decrement, zero } = <span class="hljs-title function_">useCounterStore</span>()
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;button onClick={increment}&gt;plus&amp;lt;/button&gt;
+      &amp;lt;button onClick={decrement}&gt;minus&amp;lt;/button&gt;
+      &amp;lt;button onClick={zero}&gt;zero&amp;lt;/button&gt;
+    &amp;lt;/div&gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Controls</span>
+</code></pre>
+<p>الحل يعمل، لكن له عيب كبير. يؤدي التفكيك إلى إعادة عرض مكوّن <em>Controls</em> في كل مرة تتغير فيها قيمة العدّاد، مع أن المكوّن يعرض الأزرار فقط ولا يعرض القيمة نفسها.</p>
+<p><em>لذا فإن أفضل ممارسة في Zustand هي ألا تختار من الحالة إلا الأجزاء التي يحتاجها المكوّن المعني.</em> ولا يُعاد عرض المكوّن إلا عندما يتغير الجزء الذي اختاره من الحالة. أما عند كتابة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> increment = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">increment</span>)
+<span class="hljs-keyword">const</span> decrement = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">decrement</span>)
+<span class="hljs-keyword">const</span> zero = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">zero</span>)
+</code></pre>
+<p>فلم يعد المكوّن يتفاعل مع تغيّرات قيمة العدّاد لأنه لم يخترها من الحالة.</p>
+<h3 id="إعادة-تنظيم-الحالة">إعادة تنظيم الحالة</h3>
+<p>يمكننا الوصول إلى حل أنيق تماماً بإعادة تنظيم الحالة كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">decrement</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> - <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">zero</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(() =&amp;gt; ({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })),
+  }
+}))
+</code></pre>
+<p>أصبحت دوال تغيير الحالة الآن مجمّعة تحت مفتاحها الخاص <em>actions</em>، ويمكن اختيارها ككتلة واحدة وتفكيكها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Controls</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> { increment, decrement, zero } = <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">actions</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;button onClick={increment}&gt;plus&amp;lt;/button&gt;
+      &amp;lt;button onClick={decrement}&gt;minus&amp;lt;/button&gt;
+      &amp;lt;button onClick={zero}&gt;zero&amp;lt;/button&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>الآن لا تحدث أي إعادة عرض، لأن الدوال فقط هي التي اختيرت من الحالة، وهي تبقى نفسها طوال عمر store.</p>
+<p>وفقاً لبعض <a href="https://tkdodo.eu/blog/working-with-zustand#only-export-custom-hooks" target="_blank" rel="noopener">أفضل الممارسات</a>، لا يُنصح بتصدير الدالة التي تعرّف الحالة بأكملها لاستخدامها في كل أنحاء التطبيق. وبدلاً من ذلك، ينبغي إنشاء عروض أصغر منها لا تكشف إلا الأجزاء اللازمة من الحالة. لنعدّل <em>store.js</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">increment</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">decrement</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(state =&amp;gt; ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> - <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">zero</span>: () =&amp;gt; <span class="hljs-title function_">set</span>(() =&amp;gt; ({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })),
+  }
+}))
+
+<span class="hljs-comment">// دوال الخطافات المستخدمة في مواضع أخرى من التطبيق</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounter = () =&amp;gt; <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">counter</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounterControls = () =&amp;gt; <span class="hljs-title function_">useCounterStore</span>(state =&amp;gt; state.<span class="hljs-property">actions</span>)
+</code></pre>
+<p>الآن، خارج الوحدة التي تعرّف الحالة، أصبحت الدالتان <em>useCounter</em>، التي تُعيد قيمة العدّاد عند استدعائها، و<em>useCounterControls</em>، التي تُعيد الدوال التي تعدّل قيمة العدّاد، متاحتين. ويتغير الاستخدام قليلاً:</p>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">import</span> { useCounter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Display</span> = (<span class="hljs-params"></span>) =&gt; {
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> counter = <span class="hljs-title function_">useCounter</span>()
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;{counter}&amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">import</span> { useCounterControls } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Controls</span> = (<span class="hljs-params"></span>) =&gt; {
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { increment, decrement, zero } = <span class="hljs-title function_">useCounterControls</span>()
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;button onClick={increment}&gt;plus&amp;lt;/button&gt;
+      &amp;lt;button onClick={decrement}&gt;minus&amp;lt;/button&gt;
+      &amp;lt;button onClick={zero}&gt;zero&amp;lt;/button&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>عند استخدام الحالة بهذه الطريقة، لم تعد هناك حاجة لاستخدام دوال المحدّد، إذ أصبح استخدامها مخفياً داخل تعريف الدوال المساعدة الجديدة.</p>
+<p>لاحظ الأكثر انتباهاً أن الدوال المتعلقة بـ Zustand تبدأ أسماؤها بكلمة <em>use</em>. والسبب في ذلك أن الدالة التي تُعيدها دالة <em>create</em> في Zustand، وهي <em>useCounterStore</em> في مثالنا، هي دالة React <a href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noopener">custom hook</a>. كما أن دوالنا المساعدة <em>useCounter</em> و<em>useCounterControls</em> هي أيضاً في جوهرها خطافات مخصصة لأنها تخفي استخدام الخطاف المخصص <em>useCounterStore</em> بداخلها.</p>
+<p>تأتي الخطافات المخصصة بمجموعة من القواعد، فمثلاً يُتوقع أن تبدأ أسماؤها دائماً بـ <em>use</em>. كما تنطبق <a href="https://react.dev/warnings/invalid-hook-call-warning" target="_blank" rel="noopener">قواعد الخطافات</a> التي تناولناها في <a href="../../part1/a_more_complex_state_debugging_react_apps#rules-of-hooks" target="_blank" rel="noopener">الجزء 1</a> على الخطافات المخصصة أيضاً!</p>
+<h4 id="خطافات-مخصصة-مع-حالة-أكثر-تعقيدا">خطافات مخصصة مع حالة أكثر تعقيداً</h4>
+<p>افترض أننا نريد أيضاً عدّ عدد المرات التي تغيّرت فيها حالة العدّاد. يمكننا توسيع store كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({&lt;br&gt;  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,&lt;br&gt; <span class="hljs-comment">// BEGIN HIGHLIGHT&lt;br&gt;  changes: 0,&lt;br&gt; // END HIGHLIGHT&lt;br&gt;  actions: {&lt;br&gt;    increment: () =&gt; set(state =&gt; ({ &lt;br&gt;      counter: state.counter + 1, &lt;br&gt; // BEGIN HIGHLIGHT&lt;br&gt;      changes: state.changes + 1 &lt;br&gt; // END HIGHLIGHT&lt;br&gt;    })),&lt;br&gt;    decrement: () =&gt; set(state =&gt; ({ &lt;br&gt;      counter: state.counter - 1, &lt;br&gt; // BEGIN HIGHLIGHT&lt;br&gt;      changes: state.changes + 1 &lt;br&gt; // END HIGHLIGHT&lt;br&gt;    })),&lt;br&gt;    zero: () =&gt; set(state =&gt; ({ &lt;br&gt;      counter: 0, &lt;br&gt; // BEGIN HIGHLIGHT&lt;br&gt;      changes: state.changes + 1 &lt;br&gt; // END HIGHLIGHT&lt;br&gt;    })),&lt;br&gt;  }  &lt;br&gt;}))</span>
+</code></pre>
+<p>يمكننا حينها أن نحاول كتابة الخطاف الخاص بالوصول إلى القيم كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useValues</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ &lt;br&gt;   <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span>,&lt;br&gt;   <span class="hljs-attr">changes</span>: state.<span class="hljs-property">changes</span>&lt;br&gt;})
+</code></pre>
+<p>هذا لا يعمل، لأن دالة المحدّد تُعيد <em>كائناً جديداً في كل عرض</em>، حتى عندما لا تكون القيم الأساسية قد تغيرت. يقارن Zustand نتيجة المحدّد السابقة والجديدة بفحص تساوي المراجع (<code>===</code>)، لذا يُرى الكائن الجديد دائماً على أنه &quot;متغيّر&quot;. وهذا يؤدي إلى إطلاق إعادة عرض تستدعي المحدّد من جديد، الذي يُعيد كائناً جديداً آخر، وهكذا، في حلقة عرض لا نهائية.</p>
+<p>الحل هو تغليف المحدّد بـ <a href="https://zustand.docs.pmnd.rs/reference/hooks/use-shallow"><code>useShallow</code></a>، وهو يخبر Zustand بمقارنة حقول الكائن المُعاد بفحص تساوٍ سطحي (shallow equality) بدلاً من مقارنة مراجع الكائنات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useShallow } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;zustand/react/shallow&quot;</span>&lt;br&gt;&lt;br&gt;<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useValues</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> { &lt;br&gt;  <span class="hljs-title function_">useShallow</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> ({&lt;br&gt;    <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span>,&lt;br&gt;    <span class="hljs-attr">changes</span>: state.<span class="hljs-property">changes</span>,&lt;br&gt;  })),&lt;br&gt;)
+</code></pre>
+<p>الآن لا يُطلق Zustand إعادة عرض إلا عندما تحصل <em>counter</em> أو <em>changes</em> فعلاً على قيمة جديدة، وليس فقط عند إنشاء كائن جديد.</p>
+<div class="tasks">
+<p><strong>1. عودة إلى Unicafe</strong></p>
+</div>
+<div class="tasks">
+<p><strong>2. تشغيل الاختبارات</strong></p>
+</div>
+<h3 id="ملاحظات-zustand">ملاحظات Zustand</h3>
+<p>هدفنا هو إنشاء نسخة قائمة على Zustand من تطبيق الملاحظات العريق.</p>
+<p>النسخة الأولى من التطبيق هي التالية. مكوّن <em>App</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNotes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>()
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;ul&amp;gt;
+        {notes.<span class="hljs-title function_">map</span>(note =&amp;gt; (
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&amp;gt;
+            {note.<span class="hljs-property">important</span> ? &amp;lt;strong&amp;gt;{note.<span class="hljs-property">content</span>}&amp;lt;/strong&amp;gt; : note.<span class="hljs-property">content</span>}
+          &amp;lt;/li&amp;gt;
+        ))}
+      &amp;lt;/ul&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>يُعرَّف store في البداية كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">notes</span>: [
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+      <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Zustand is less complex than Redux&#x27;</span>,
+      <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+    },
+  ],
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useNotes = () =&amp;gt; <span class="hljs-title function_">useNoteStore</span>(state =&amp;gt; state.<span class="hljs-property">notes</span>)
+</code></pre>
+<p>في الوقت الحالي، لا يملك التطبيق وظيفة إضافة ملاحظات جديدة، ولا يدعمها store بعد. وقد هُيِّئت الحالة بملاحظة واحدة مضافة مسبقاً حتى نتحقق من أن التطبيق قادر على عرض الحالة بنجاح.</p>
+<h3 id="الدوال-النقية-والكائنات-غير-القابلة-للتغيير">الدوال النقية والكائنات غير القابلة للتغيير</h3>
+<p>المحاولة الأولى لكتابة action يضيف ملاحظة هي التالية:</p>
+<pre><code class="language-js">note =&amp;gt; <span class="hljs-title function_">set</span>(
+          state =&amp;gt; {
+            state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">push</span>(note)
+            <span class="hljs-keyword">return</span> state
+          }
+        )
+</code></pre>
+<p>تستقبل الدالة ملاحظة كمعامل وتُعيد حالة أُضيفت فيها الملاحظة الجديدة إلى الحالة القديمة <em>state</em>.</p>
+<p>غير أن محاولتنا ليست سليمة. يذكر <a href="https://zustand.docs.pmnd.rs/learn/guides/immutable-state-and-merging" target="_blank" rel="noopener">توثيق</a> Zustand أنه <em>كما هو الحال مع useState في React، نحتاج إلى تحديث الحالة بشكل غير قابل للتغيير (immutably)</em>. وكما نعلم، فإن <em>state.notes.push</em> تعدّل (أي mutate) كائن الحالة، لذا يجب تغيير الحل.</p>
+<p>الطريقة السليمة هي استخدام، على سبيل المثال، دالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat" target="_blank" rel="noopener">Array.concat</a> ، التي لا تعدّل الحالة الموجودة بل تنشئ نسخة جديدة منها مع إضافة الملاحظة الجديدة:</p>
+<pre><code class="language-js">note =&amp;gt; <span class="hljs-title function_">set</span>(
+          state =&amp;gt; {
+            <span class="hljs-keyword">return</span> { <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(note) }
+          }
+        )
+</code></pre>
+<p>أصبح تعريف store الآن كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(set =&amp;gt; ({
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">add</span>: note =&amp;gt; <span class="hljs-title function_">set</span>(
+      state =&amp;gt; ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(note) })
+    )
+  }
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useNotes = () =&amp;gt; <span class="hljs-title function_">useNoteStore</span>(state =&amp;gt; state.<span class="hljs-property">notes</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useNoteActions = () =&amp;gt; <span class="hljs-title function_">useNoteStore</span>(state =&amp;gt; state.<span class="hljs-property">actions</span>)
+</code></pre>
+<blockquote>
+<p>صيغة نشر المصفوفة</p>
+<p>من الطرق الأخرى الشائعة لفعل الشيء نفسه استخدام صيغة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">النشر (spread)</a> للمصفوفات:</p>
+<p>state =&gt; ({ notes: [...state.notes, note] })</p>
+<p>هنا تتكوّن مصفوفة بنشر كل عنصر من عناصر مصفوفة <em>state.notes</em> باستخدام صيغة النشر، ثم إلحاق الملاحظة الجديدة في النهاية. والاختيار بين استخدام spread أو دالة <em>concat</em> مسألة تفضيل شخصي.</p>
+</blockquote>
+<p>من الناحية التقنية، الحالة المنشأة بـ Zustand <a href="https://developer.mozilla.org/en-US/docs/Glossary/Immutable" target="_blank" rel="noopener">غير قابلة للتغيير (immutable)</a>، ويجب أن تكون دوال action التي تعدّل الحالة <a href="https://en.wikipedia.org/wiki/Pure_function" target="_blank" rel="noopener">دوالاً نقية (pure functions)</a>.</p>
+<p>الدوال النقية هي التي <em>لا تُنتج آثاراً جانبية</em> وتُعيد دائماً النتيجة نفسها عند استدعائها بالمعاملات نفسها.</p>
+<h3 id="النموذج-غير-المتحكم-به">النموذج غير المتحكَّم به</h3>
+<p>لنضف إلى التطبيق القدرة على إنشاء ملاحظات جديدة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNotes, useNoteActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>()
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { add } = <span class="hljs-title function_">useNoteActions</span>()
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">generateId</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title class_">Number</span>((<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">1000000</span>).<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">0</span>))
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = (<span class="hljs-params">e</span>) =&gt; {
+    e.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-keyword">const</span> content = e.<span class="hljs-property">target</span>.<span class="hljs-property">note</span>.<span class="hljs-property">value</span>
+    <span class="hljs-title function_">add</span>({ <span class="hljs-attr">id</span>: <span class="hljs-title function_">generateId</span>(), content, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> })
+    e.<span class="hljs-property">target</span>.<span class="hljs-title function_">reset</span>()
+  }
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      &amp;lt;form onSubmit={addNote}&gt;
+        &amp;lt;input name=<span class="hljs-string">&quot;note&quot;</span> /&gt;
+        &amp;lt;button type=<span class="hljs-string">&quot;submit&quot;</span>&gt;add&amp;lt;/button&gt;
+      &amp;lt;/form&gt;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+      &amp;lt;ul&gt;
+        {notes.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> (
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;
+            {note.<span class="hljs-property">important</span> ? &amp;lt;strong&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/strong&gt; : note.<span class="hljs-property">content</span>}
+          &amp;lt;/li&gt;
+        ))}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>التنفيذ مباشر إلى حد كبير. والجدير بالملاحظة عند إضافة ملاحظة جديدة أننا، بخلاف نماذجنا السابقة المنفذة بـ React، <em>لم</em> نربط قيمة حقل النموذج بحالة مكوّن <em>App</em>. ويسمي React مثل هذه النماذج <a href="https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components" target="_blank" rel="noopener">غير المتحكَّم بها (uncontrolled)</a>.</p>
+<blockquote>
+<p>للنماذج غير المتحكَّم بها قيود معينة. فهي لا تسمح، مثلاً، بتقديم رسائل تحقق فورية، ولا بتعطيل زر الإرسال بناءً على المحتوى، وما إلى ذلك. لكنها مناسبة لحالتنا هذه المرة. ويمكنك قراءة المزيد عن الموضوع <a href="https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/" target="_blank" rel="noopener">هنا</a> إن أردت.</p>
+</blockquote>
+<p>النموذج بسيط جداً:</p>
+<pre><code>&amp;lt;form onSubmit={addNote}&amp;gt;
+  &amp;lt;input name=&quot;note&quot; /&amp;gt;
+  &amp;lt;button type=&quot;submit&quot;&amp;gt;add&amp;lt;/button&amp;gt;
+&amp;lt;/form&amp;gt;
+</code></pre>
+<p>الجدير بالملاحظة في النموذج أن حقل الإدخال له اسم (name). وهذا يتيح لدالة المعالج الوصول إلى قيمة الحقل.</p>
+<p>معالج الإضافة مباشر أيضاً:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> addNote = (e) =&amp;gt; {
+    e.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-keyword">const</span> content = e.<span class="hljs-property">target</span>.<span class="hljs-property">note</span>.<span class="hljs-property">value</span>
+    <span class="hljs-title function_">add</span>({ <span class="hljs-attr">id</span>: <span class="hljs-title function_">generateId</span>(), content, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> })
+    e.<span class="hljs-property">target</span>.<span class="hljs-title function_">reset</span>()
+  }
+</code></pre>
+<p>يُسترجع المحتوى من حقل نص النموذج باستخدام <em>e.target.note.value</em> إلى متغير، يُستخدم كمعامل في استدعاء دالة إضافة الملاحظة <em>add</em>.</p>
+<p>والسطر الأخير، <em>e.target.reset()</em>، يفرّغ النموذج.</p>
+<p>الشيفرة الحالية للتطبيق متاحة بالكامل على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-1" target="_blank" rel="noopener">GitHub</a>، في الفرع <em>part6-1</em>.</p>
+<h3 id="مزيد-من-المكونات-والوظائف">مزيد من المكوّنات والوظائف</h3>
+<p>لنقسّم التطبيق إلى مزيد من المكوّنات. سنفصل إنشاء ملاحظة جديدة، وقائمة الملاحظات، وعرض ملاحظة واحدة، إلى مكوّنات خاصة بها.</p>
+<p>مكوّن <em>App</em> بعد التغيير بسيط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; (
+  &amp;lt;div&amp;gt;
+    &amp;lt;<span class="hljs-title class_">NoteForm</span> /&amp;gt;
+    &amp;lt;<span class="hljs-title class_">NoteList</span> /&amp;gt;
+  &amp;lt;/div&amp;gt;
+)
+</code></pre>
+<p>إنشاء الملاحظة، أي <em>NoteForm</em>، لا يحتوي على شيء مثير، لذا لا نعرض الشيفرة هنا.</p>
+<p>المكوّن المسؤول عن سرد الملاحظات، <em>NoteList</em>، يبدو كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNotes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">NoteList</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>()
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;ul&amp;gt;
+      {notes.<span class="hljs-title function_">map</span>(note =&amp;gt; (
+        &amp;lt;<span class="hljs-title class_">Note</span> key={note.<span class="hljs-property">id</span>} note={note} /&amp;gt;
+      ))}
+    &amp;lt;/ul&amp;gt;
+  )
+}
+</code></pre>
+<p>يجلب المكوّن قائمة الملاحظات من store وينشئ مكوّن <em>Note</em> مقابلاً لكل ملاحظة، ويمرّر بيانات الملاحظة كـ props:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = ({ note }) =&amp;gt; (
+  &amp;lt;li&amp;gt;
+    {note.<span class="hljs-property">important</span> ? &amp;lt;strong&amp;gt;{note.<span class="hljs-property">content</span>}&amp;lt;/strong&amp;gt; : note.<span class="hljs-property">content</span>}
+  &amp;lt;/li&amp;gt;
+)
+</code></pre>
+<p>لنضف أيضاً القدرة على تبديل أهمية الملاحظة. المكوّن بعد التغيير هو التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNoteActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Note</span> = (<span class="hljs-params">{ note }</span>) =&gt; {
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { toggleImportance } = <span class="hljs-title function_">useNoteActions</span>()
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;li&gt;
+      {note.<span class="hljs-property">important</span> ? &amp;lt;strong&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/strong&gt; : note.<span class="hljs-property">content</span>}
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      &amp;lt;button onClick={<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">toggleImportance</span>(note.<span class="hljs-property">id</span>)}&gt;
+        {note.<span class="hljs-property">important</span> ? <span class="hljs-string">&#x27;make not important&#x27;</span> : <span class="hljs-string">&#x27;make important&#x27;</span>}
+      &amp;lt;/button&gt;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+   &amp;lt;/li&gt;
+  )
+}
+</code></pre>
+<p>يفكّك المكوّن دالة تبديل الأهمية من القيمة المُعادة لـ <em>useNoteActions</em>، ويستدعيها عند النقر على زر التبديل.</p>
+<p>تنفيذ دالة تبديل الأهمية يبدو كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">add</span>: <span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> <span class="hljs-title function_">set</span>(
+      <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(note) })
+    ),
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">toggleImportance</span>: <span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span> <span class="hljs-title function_">set</span>(
+      <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+        <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span>
+          note.<span class="hljs-property">id</span> === id ? { ...note, <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> } : note
+        )
+      })
+    )
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  }
+}))
+</code></pre>
+<p>تستقبل الدالة معرّف الملاحظة المطلوب تعديلها كمعامل. وتتكوّن الحالة الجديدة من الحالة القديمة باستخدام دالة <em>map</em> بحيث تُضمَّن كل الملاحظات القديمة، باستثناء الملاحظة المطلوب تعديلها، إذ تُنشأ لها نسخة تُبدَّل فيها أهميتها:</p>
+<pre><code>{ ...note, important: !note.important }
+</code></pre>
+<p>الشيفرة الحالية للتطبيق متاحة بالكامل على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-2" target="_blank" rel="noopener">GitHub</a>، في الفرع <em>part6-2</em>.</p>
+<div class="tasks">
+<p><strong>3. anecdotes الخطوة 1</strong></p>
+</div>
+<div class="tasks">
+<p><strong>4. anecdotes الخطوة 2</strong></p>
+</div>
+<div class="tasks">
+<p><strong>5. anecdotes الخطوة 3</strong></p>
+</div>
+<div class="tasks">
+<p><strong>6. anecdotes الخطوة 4</strong></p>
+</div>
+<p>بعد إكمال التمارين، ينبغي أن يبدو التطبيق هكذا:</p>
+<p><img src="../../images/mooc/e232f973b851.webp" alt="صورة توضيحية"></p>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part6/getting_started"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">البدء</span></a><!--]--> <!--[0--><a class="next" href="../../part6/complex_state_fetch_testing"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">الحالة المعقدة والجلب والاختبار</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

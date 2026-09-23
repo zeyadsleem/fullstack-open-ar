@@ -1,0 +1,751 @@
+const r=8,t="f",s="f.md",n="Fragments والاشتراكات",a="fragments_and_subscriptions",p="/images/part-8.svg",l=[{depth:2,id:"fragments",text:"Fragments"},{depth:2,id:"الاشتراكات",text:"الاشتراكات"},{depth:2,id:"expressmiddleware",text:"expressMiddleware"},{depth:2,id:"الاشتراكات-على-الخادم",text:"الاشتراكات على الخادم"},{depth:2,id:"الاشتراكات-على-العميل",text:"الاشتراكات على العميل"},{depth:2,id:"مشكلة-n1",text:"مشكلة n+1"},{depth:2,id:"خاتمة",text:"خاتمة"}],e=`<p>نقترب من نهاية هذا الجزء. لنختم بإلقاء نظرة على بضعة تفاصيل إضافية حول GraphQL.</p>
+<h2 id="fragments">Fragments</h2>
+<p>من الشائع جداً في GraphQL أن تُعيد استعلامات متعددة نتائج متشابهة. فمثلاً، استعلام تفاصيل شخص</p>
+<pre><code>query {
+  findPerson(name: &quot;Pekka Mikkola&quot;) {
+    name
+    phone
+    address{
+      street
+      city
+    }
+  }
+}
+</code></pre>
+<p>واستعلام جميع الأشخاص</p>
+<pre><code>query {
+  allPersons {
+    name
+    phone
+    address{
+      street
+      city
+    }
+  }
+}
+</code></pre>
+<p>كلاهما يُعيد أشخاصاً. وعند اختيار الحقول المُعادة، يجب أن يعرّف الاستعلامان الحقول نفسها تماماً.</p>
+<p>يمكن تبسيط مثل هذه الحالات باستخدام <a href="https://graphql.org/learn/queries/#fragments" target="_blank" rel="noreferrer noopener">fragments</a>. ويبدو الـfragment الذي يختار كل تفاصيل شخص هكذا:</p>
+<pre><code>fragment PersonDetails on Person {
+  name
+  phone
+  address {
+    street
+    city
+  }
+}
+</code></pre>
+<p>باستخدام الـfragment، يمكننا كتابة الاستعلامات بصيغة مختصرة:</p>
+<pre><code>query {
+  allPersons {
+    ...PersonDetails // HIGHLIGHT LINE
+  }
+}
+
+query {
+  findPerson(name: &quot;Pekka Mikkola&quot;) {
+    ...PersonDetails // HIGHLIGHT LINE
+  }
+}
+</code></pre>
+<p>الـfragments <em><strong>لا تُعرَّف</strong></em> في مخطط GraphQL، بل في العميل. ويجب التصريح عن الـfragments عندما يستخدمها العميل في الاستعلامات.</p>
+<p>من حيث المبدأ، يمكننا التصريح عن الـfragment مع كل استعلام هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">FIND_PERSON</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> findPersonByName<span class="hljs-punctuation">(</span><span class="hljs-variable">$nameToSearch</span>: String<span class="hljs-punctuation">!</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">{</span>
+    findPerson<span class="hljs-punctuation">(</span><span class="hljs-symbol">name</span><span class="hljs-punctuation">:</span> <span class="hljs-variable">$nameToSearch</span>) <span class="hljs-punctuation">{</span>
+      <span class="hljs-punctuation">...</span>PersonDetails
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+
+  <span class="hljs-keyword">fragment</span> PersonDetails <span class="hljs-keyword">on</span> Person <span class="hljs-punctuation">{</span>
+    id
+    name
+    phone
+    address <span class="hljs-punctuation">{</span>
+      street
+      city
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+</code></pre>
+<p>لكن من الأكثر منطقية بكثير تعريف الـfragment مرة واحدة وتخزينه في متغير. لنضف تعريف الـfragment إلى بداية ملف <em>queries.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PERSON_DETAILS</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">fragment</span> PersonDetails <span class="hljs-keyword">on</span> Person <span class="hljs-punctuation">{</span>
+    id
+    name
+    phone
+    address <span class="hljs-punctuation">{</span>
+      street
+      city
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+</code></pre>
+<p>يمكن الآن تضمين الـfragment في كل الاستعلامات والـmutations التي تحتاجه باستخدام عملية <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noreferrer noopener">الأقواس المعقوفة بعد علامة الدولار</a>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">FIND_PERSON</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> findPersonByName<span class="hljs-punctuation">(</span><span class="hljs-variable">$nameToSearch</span>: String<span class="hljs-punctuation">!</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">{</span>
+    findPerson<span class="hljs-punctuation">(</span><span class="hljs-symbol">name</span><span class="hljs-punctuation">:</span> <span class="hljs-variable">$nameToSearch</span>) <span class="hljs-punctuation">{</span>
+      <span class="hljs-punctuation">...</span>PersonDetails
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+
+  </span><span class="hljs-subst">\${PERSON_DETAILS}</span><span class="language-graphql">
+\`</span>
+</code></pre>
+<p>إذ يُدرَج الآن القالب النصي الموجود في المتغير <code>PERSON_DETAILS</code> كجزء من القالب النصي <code>FIND_PERSON</code>. وعملياً، النتيجة النهائية مطابقة تماماً لما في المثال السابق، حيث كان الـfragment معرَّفاً مباشرة إلى جانب الاستعلام.</p>
+<h2 id="الاشتراكات">الاشتراكات</h2>
+<p>إلى جانب نوعي query وmutation، يقدّم GraphQL نوع عملية ثالثاً: <a href="https://www.apollographql.com/docs/react/data/subscriptions/" target="_blank" rel="noreferrer noopener">الاشتراكات (subscriptions)</a>. فبالاشتراكات، يمكن للعملاء <em>الاشتراك</em> في تحديثات حول التغييرات التي تطرأ على الخادم.</p>
+<p>تختلف الاشتراكات جذرياً عن أي شيء رأيناه في هذا المقرر حتى الآن. فحتى الآن، كان كل تفاعل بين المتصفح والخادم ناتجاً عن تطبيق React في المتصفح يرسل طلبات HTTP إلى الخادم. وقد نُفِّذت استعلامات GraphQL والـmutations بالطريقة نفسها أيضاً. أما مع الاشتراكات فالوضع معاكس: فبعد أن ينشئ التطبيق اشتراكاً، يبدأ في الاستماع إلى الخادم. وعندما تحدث تغييرات على الخادم، يرسل إشعاراً إلى كل <em>مشتركيه</em>.</p>
+<p>ومن الناحية التقنية، لا يُناسب بروتوكول HTTP جيداً التواصل المتجه من الخادم إلى المتصفح. لذلك يستخدم Apollo في الخفاء <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noreferrer noopener">WebSockets</a> للتواصل بين الخادم والمشتركين.</p>
+<h2 id="expressmiddleware">expressMiddleware</h2>
+<p>بدءاً من الإصدار 3.0، لم يعد Apollo Server يقدّم دعماً مباشراً للاشتراكات. لذلك نحتاج إلى إجراء عدد من التغييرات على شيفرة الواجهة الخلفية كي تعمل الاشتراكات.</p>
+<p>حتى الآن، كنا نشغّل التطبيق بالدالة سهلة الاستخدام <a href="https://www.apollographql.com/docs/apollo-server/api/standalone/#startstandaloneserver" target="_blank" rel="noreferrer noopener">startStandaloneServer</a>، التي بفضلها لم يكن التطبيق بحاجة إلى كثير من الإعداد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { startStandaloneServer } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@apollo/server/standalone&#x27;</span>)
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> startServer = (port) =&amp;gt; {
+  <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloServer</span>({
+    typeDefs,
+    resolvers,
+  })
+
+  <span class="hljs-title function_">startStandaloneServer</span>(server, {
+    <span class="hljs-attr">listen</span>: { port },
+    <span class="hljs-attr">context</span>: <span class="hljs-title function_">async</span> ({ req }) =&amp;gt; {
+      <span class="hljs-comment">// ...</span>
+    },
+  }).<span class="hljs-title function_">then</span>(({ url }) =&amp;gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Server ready at <span class="hljs-subst">\${url}</span>\`</span>)
+  })
+}
+</code></pre>
+<p>لسوء الحظ، لا تسمح startStandaloneServer بإضافة اشتراكات إلى التطبيق، لذا لننتقل إلى الدالة الأقوى <a href="https://www.apollographql.com/docs/apollo-server/api/express-middleware/" target="_blank" rel="noreferrer noopener">expressMiddleware</a>. وكما يوحي اسم الدالة، فهي وسيط Express، ما يعني أنه يجب إعداد Express أيضاً للتطبيق، بحيث يعمل خادم GraphQL كوسيط.</p>
+<p>لنثبّت Express وحزمة تكامل Apollo Server:</p>
+<pre><code class="language-bash">npm install express cors @as-integrations/express5
+</code></pre>
+<p>ونغيّر ملف <em>server.js</em> إلى الشكل التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { <span class="hljs-title class_">ApolloServer</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@apollo/server&#x27;</span>)
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> {
+  <span class="hljs-title class_">ApolloServerPluginDrainHttpServer</span>,
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@apollo/server/plugin/drainHttpServer&#x27;</span>)
+<span class="hljs-keyword">const</span> { expressMiddleware } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@as-integrations/express5&#x27;</span>)
+<span class="hljs-keyword">const</span> cors = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;cors&#x27;</span>)
+<span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>)
+<span class="hljs-keyword">const</span> { makeExecutableSchema } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@graphql-tools/schema&#x27;</span>)
+<span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> jwt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;jsonwebtoken&#x27;</span>)
+
+<span class="hljs-keyword">const</span> resolvers = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./resolvers&#x27;</span>)
+<span class="hljs-keyword">const</span> typeDefs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./schema&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">User</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./models/user&#x27;</span>)
+
+<span class="hljs-keyword">const</span> getUserFromAuthHeader = <span class="hljs-title function_">async</span> (auth) =&amp;gt; {
+  <span class="hljs-keyword">if</span> (!auth || !auth.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;Bearer &#x27;</span>)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+  }
+
+  <span class="hljs-keyword">const</span> decodedToken = jwt.<span class="hljs-title function_">verify</span>(auth.<span class="hljs-title function_">substring</span>(<span class="hljs-number">7</span>), process.<span class="hljs-property">env</span>.<span class="hljs-property">JWT_SECRET</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">User</span>.<span class="hljs-title function_">findById</span>(decodedToken.<span class="hljs-property">id</span>).<span class="hljs-title function_">populate</span>(<span class="hljs-string">&#x27;friends&#x27;</span>)
+}
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> startServer = <span class="hljs-title function_">async</span> (port) =&amp;gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+  <span class="hljs-keyword">const</span> httpServer = http.<span class="hljs-title function_">createServer</span>(app)
+
+  <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloServer</span>({
+    <span class="hljs-attr">schema</span>: <span class="hljs-title function_">makeExecutableSchema</span>({ typeDefs, resolvers }),
+    <span class="hljs-attr">plugins</span>: [<span class="hljs-title class_">ApolloServerPluginDrainHttpServer</span>({ httpServer })],
+  })
+
+  <span class="hljs-keyword">await</span> server.<span class="hljs-title function_">start</span>()
+
+  app.<span class="hljs-title function_">use</span>(
+    <span class="hljs-string">&#x27;/&#x27;</span>,
+    <span class="hljs-title function_">cors</span>(),
+    express.<span class="hljs-title function_">json</span>(),
+    <span class="hljs-title function_">expressMiddleware</span>(server, {
+      <span class="hljs-attr">context</span>: <span class="hljs-title function_">async</span> ({ req }) =&amp;gt; {
+        <span class="hljs-keyword">const</span> auth = req.<span class="hljs-property">headers</span>.<span class="hljs-property">authorization</span>
+        <span class="hljs-keyword">const</span> currentUser = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserFromAuthHeader</span>(auth)
+        <span class="hljs-keyword">return</span> { currentUser }
+      },
+    }),
+  )
+
+  httpServer.<span class="hljs-title function_">listen</span>(port, () =&amp;gt;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Server is now running on http://localhost:<span class="hljs-subst">\${port}</span>\`</span>),
+  )
+}
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = startServer
+</code></pre>
+<p>خادم GraphQL في المتغير <code>server</code> متصل الآن بالاستماع إلى جذر الخادم، أي إلى المسار <code>/</code>، باستخدام كائن <code>expressMiddleware</code>. وتُضبط معلومات المستخدم المسجَّل الدخول في السياق باستخدام الدالة التي عرّفناها سابقاً. ولأنه خادم Express، نحتاج أيضاً إلى الوسيطين express-json وcors كي تُحلَّل البيانات المضمّنة في الطلبات تحليلاً صحيحاً وكي لا تظهر مشكلات CORS.</p>
+<p>يجب تشغيل خادم GraphQL قبل أن يبدأ تطبيق Express بالاستماع على المنفذ المحدد، لذا جُعلت الدالة <code>startServer</code> <em>دالة async</em> لتكون قادرة على انتظار بدء خادم GraphQL:</p>
+<pre><code>await server.start()
+</code></pre>
+<p>ووفقاً للتوصيات الواردة في الوثائق، أُضيف <a href="https://www.apollographql.com/docs/apollo-server/api/plugin/drain-http-server" target="_blank" rel="noreferrer noopener">ApolloServerPluginDrainHttpServer</a> إلى إعدادات خادم GraphQL:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloServer</span>({
+    <span class="hljs-attr">schema</span>: <span class="hljs-title function_">makeExecutableSchema</span>({ typeDefs, resolvers }),
+    <span class="hljs-attr">plugins</span>: [<span class="hljs-title class_">ApolloServerPluginDrainHttpServer</span>({ httpServer })], <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  })
+</code></pre>
+<p>تضمن هذه الإضافة إغلاق الخادم إغلاقاً نظيفاً عند إيقاف عملية الخادم. فهي مثلاً تتيح إنهاء معالجة الطلبات الجارية وإغلاق اتصالات العملاء كي لا تبقى معلّقة.</p>
+<p>يمكن العثور على شيفرة الواجهة الخلفية على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-backend/tree/part8-6" target="_blank" rel="noreferrer noopener">GitHub</a>، في الفرع <em>part8-6</em>.</p>
+<h2 id="الاشتراكات-على-الخادم">الاشتراكات على الخادم</h2>
+<p>لننفّذ اشتراكات للاشتراك في إشعارات حول الأشخاص الجدد المُضافين.</p>
+<p>يتغير المخطط هكذا:</p>
+<pre><code>type Subscription {
+  personAdded: Person!
+}
+</code></pre>
+<p>فعند إضافة شخص جديد، تُرسَل كل تفاصيله إلى جميع المشتركين.</p>
+<p>أولاً، يجب أن نثبّت حزماً لإضافة الاشتراكات إلى GraphQL ومكتبة WebSocket لـNode.js:</p>
+<pre><code class="language-bash">npm install graphql-ws ws @graphql-tools/schema
+</code></pre>
+<p>يُغيَّر ملف <em>server.js</em> إلى:</p>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">WebSocketServer</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;ws&#x27;</span>)
+<span class="hljs-keyword">const</span> { useServer } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;graphql-ws/use/ws&#x27;</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> startServer = <span class="hljs-title function_">async</span> (port) =&amp;gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+  <span class="hljs-keyword">const</span> httpServer = http.<span class="hljs-title function_">createServer</span>(app)
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> wsServer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebSocketServer</span>({
+    <span class="hljs-attr">server</span>: httpServer,
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+  })
+
+  <span class="hljs-keyword">const</span> schema = <span class="hljs-title function_">makeExecutableSchema</span>({ typeDefs, resolvers })
+  <span class="hljs-keyword">const</span> serverCleanup = <span class="hljs-title function_">useServer</span>({ schema }, wsServer)
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> server = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloServer</span>({
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    schema,
+    <span class="hljs-attr">plugins</span>: [
+      <span class="hljs-title class_">ApolloServerPluginDrainHttpServer</span>({ httpServer }),
+      {
+        <span class="hljs-keyword">async</span> <span class="hljs-title function_">serverWillStart</span>(<span class="hljs-params"></span>) {
+          <span class="hljs-keyword">return</span> {
+            <span class="hljs-keyword">async</span> <span class="hljs-title function_">drainServer</span>(<span class="hljs-params"></span>) {
+              <span class="hljs-keyword">await</span> serverCleanup.<span class="hljs-title function_">dispose</span>();
+            },
+          }
+        },
+      },
+    ],
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+  })
+
+  <span class="hljs-keyword">await</span> server.<span class="hljs-title function_">start</span>()
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>عند استخدام الاستعلامات والـmutations، يستخدم GraphQL بروتوكول HTTP في التواصل. أما في حالة الاشتراكات، فيحدث التواصل بين العميل والخادم عبر <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noreferrer noopener">WebSockets</a>.</p>
+<p>ينشئ الإعداد أعلاه، إلى جانب مستمع طلبات HTTP، خدمة تستمع إلى WebSockets وتربطها بمخطط GraphQL الخاص بالخادم. ويسجّل الجزء الثاني من الإعداد دالة تُغلق اتصال WebSocket عند إيقاف الخادم. وإذا كنت مهتماً بتفاصيل الإعدادات أكثر، فإن <a href="https://www.apollographql.com/docs/apollo-server/data/subscriptions" target="_blank" rel="noreferrer noopener">وثائق</a> Apollo تشرح بدقة معقولة ما يفعله كل سطر من الشيفرة.</p>
+<p>وعلى عكس HTTP، يمكن للخادم عند استخدام WebSockets أن يبادر أيضاً بإرسال البيانات. لذلك تُناسب WebSockets اشتراكات GraphQL جيداً، حيث يجب أن يكون الخادم قادراً على إشعار كل العملاء الذين أنشأوا اشتراكاً معيناً عند وقوع الحدث المقابل (مثل إنشاء شخص).</p>
+<p>يحتاج الاشتراك <code>personAdded</code> إلى resolver. كما يجب تعديل resolver الخاص بالـ<code>addPerson</code> ليرسل إشعاراً إلى المشتركين.</p>
+<p>لنثبّت أولاً مكتبة توفّر وظيفة <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern" target="_blank" rel="noreferrer noopener">النشر والاشتراك</a>:</p>
+<pre><code class="language-bash">npm install graphql-subscriptions
+</code></pre>
+<p>التغييرات في ملف <em>resolvers.js</em> كالتالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { <span class="hljs-title class_">GraphQLError</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;graphql&#x27;</span>)
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">PubSub</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;graphql-subscriptions&#x27;</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-keyword">const</span> jwt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;jsonwebtoken&#x27;</span>)
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Person</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./models/person&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">User</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./models/user&#x27;</span>)
+
+<span class="hljs-keyword">const</span> pubsub = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PubSub</span>() <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> resolvers = {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-title class_">Mutation</span>: {
+    <span class="hljs-attr">addPerson</span>: <span class="hljs-title function_">async</span> (root, args, context) =&amp;gt; {
+        <span class="hljs-keyword">const</span> currentUser = context.<span class="hljs-property">currentUser</span>
+
+        <span class="hljs-keyword">if</span> (!currentUser) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GraphQLError</span>(<span class="hljs-string">&#x27;not authenticated&#x27;</span>, {
+            <span class="hljs-attr">extensions</span>: {
+              <span class="hljs-attr">code</span>: <span class="hljs-string">&#x27;UNAUTHENTICATED&#x27;</span>,
+            },
+          })
+        }
+
+        <span class="hljs-keyword">const</span> nameExists = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">exists</span>({ <span class="hljs-attr">name</span>: args.<span class="hljs-property">name</span> })
+
+        <span class="hljs-keyword">if</span> (nameExists) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GraphQLError</span>(<span class="hljs-string">\`Name must be unique: <span class="hljs-subst">\${args.name}</span>\`</span>, {
+            <span class="hljs-attr">extensions</span>: {
+              <span class="hljs-attr">code</span>: <span class="hljs-string">&#x27;BAD_USER_INPUT&#x27;</span>,
+              <span class="hljs-attr">invalidArgs</span>: args.<span class="hljs-property">name</span>,
+            },
+          })
+        }
+
+      <span class="hljs-keyword">const</span> person = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>({ ...args })
+
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">await</span> person.<span class="hljs-title function_">save</span>()
+        currentUser.<span class="hljs-property">friends</span> = currentUser.<span class="hljs-property">friends</span>.<span class="hljs-title function_">concat</span>(person)
+        <span class="hljs-keyword">await</span> currentUser.<span class="hljs-title function_">save</span>()
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GraphQLError</span>(<span class="hljs-string">\`Saving person failed: <span class="hljs-subst">\${error.message}</span>\`</span>, {
+          <span class="hljs-attr">extensions</span>: {
+            <span class="hljs-attr">code</span>: <span class="hljs-string">&#x27;BAD_USER_INPUT&#x27;</span>,
+            <span class="hljs-attr">invalidArgs</span>: args.<span class="hljs-property">name</span>,
+            error,
+          },
+        })
+      }
+
+      pubsub.<span class="hljs-title function_">publish</span>(<span class="hljs-string">&#x27;PERSON_ADDED&#x27;</span>, { <span class="hljs-attr">personAdded</span>: person })  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+      <span class="hljs-keyword">return</span> person
+    },
+    <span class="hljs-comment">// ...</span>
+  },
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-title class_">Subscription</span>: {
+    <span class="hljs-attr">personAdded</span>: {
+      <span class="hljs-attr">subscribe</span>: () =&amp;gt; pubsub.<span class="hljs-title function_">asyncIterableIterator</span>(<span class="hljs-string">&#x27;PERSON_ADDED&#x27;</span>)
+    },
+  },
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+}
+</code></pre>
+<p>مع الاشتراكات، يتبع التواصل نمط النشر والاشتراك باستخدام كائن <a href="https://www.apollographql.com/docs/apollo-server/data/subscriptions#the-pubsub-class" target="_blank" rel="noreferrer noopener">PubSub</a>.</p>
+<p>لم تُضَف سوى بضعة أسطر من الشيفرة، لكن الكثير يحدث في الخفاء. فـresolver الخاص بالاشتراك <code>personAdded</code> يسجّل ويحفظ معلومات عن كل العملاء الذين ينشئون الاشتراك. ويُحفظ العملاء في <a href="https://www.apollographql.com/docs/apollo-server/data/subscriptions/#listening-for-events" target="_blank" rel="noreferrer noopener">&quot;كائن مُكرِّر&quot;</a> يُسمى <em>PERSON_ADDED</em> بفضل الشيفرة التالية:</p>
+<pre><code>Subscription: {
+  personAdded: {
+    subscribe: () =&amp;gt; pubsub.asyncIterableIterator('PERSON_ADDED')
+  },
+},
+</code></pre>
+<p>اسم المُكرِّر نص عشوائي، لكنه اتباعاً للعُرف يكون اسم الاشتراك مكتوباً بأحرف كبيرة.</p>
+<p>إضافة شخص جديد <em>تنشر</em> إشعاراً بالعملية إلى جميع المشتركين باستخدام طريقة <code>publish</code> في PubSub:</p>
+<pre><code>pubsub.publish('PERSON_ADDED', { personAdded: person })
+</code></pre>
+<p>تنفيذ هذا السطر يرسل رسالة WebSocket عن الشخص المُضاف إلى كل العملاء المسجَّلين في المُكرِّر <em>PERSON_ADDED</em>.</p>
+<p>يمكن اختبار الاشتراكات باستخدام Apollo Explorer هكذا:</p>
+<p><img src="/images/mooc/d8fad9340390.webp" alt="مستكشف Apollo يعرض تبويب الاشتراكات والاستجابة"></p>
+<p>فيكون الاشتراك</p>
+<pre><code>subscription Subscription {
+  personAdded {
+    phone
+    name
+  }
+}
+</code></pre>
+<p>عند الضغط على الزر الأزرق <em>PersonAdded</em>، يبدأ Explorer في انتظار إضافة شخص جديد. وعند الإضافة، تظهر معلومات الشخص المُضاف على الجانب الأيمن من Explorer.</p>
+<p>يتضمن تنفيذ الاشتراكات الكثير من الإعدادات المختلفة. وبالنسبة للتمارين القليلة في هذا المقرر، ستكون بخير دون القلق بشأن كل التفاصيل. لكن إذا كنت تنفّذ اشتراكات في تطبيق مخصص للاستخدام الفعلي، فمن المؤكد أن عليك قراءة <a href="https://www.apollographql.com/docs/apollo-server/data/subscriptions" target="_blank" rel="noreferrer noopener">وثائق Apollo عن الاشتراكات</a>.</p>
+<p>يمكن العثور على شيفرة الواجهة الخلفية على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-backend/tree/part8-7" target="_blank" rel="noreferrer noopener">GitHub</a>، في الفرع <em>part8-7</em>.</p>
+<h2 id="الاشتراكات-على-العميل">الاشتراكات على العميل</h2>
+<p>لكي نستخدم الاشتراكات في تطبيق React لدينا، علينا إجراء بعض التغييرات، خصوصاً على <a href="https://www.apollographql.com/docs/react/data/subscriptions/" target="_blank" rel="noreferrer noopener">إعداداته</a>.</p>
+<p>لنضف مكتبة <em>graphql-ws</em> كاعتمادية في الواجهة الأمامية. فهي تمكّن اتصالات <em>WebSocket</em> لاشتراكات GraphQL:</p>
+<pre><code class="language-bash">npm install graphql-ws
+</code></pre>
+<p>يجب تعديل الإعدادات في <em>main.jsx</em> هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">StrictMode</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> { createRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.jsx&#x27;</span>
+
+<span class="hljs-keyword">import</span> {
+  <span class="hljs-title class_">ApolloClient</span>,
+  <span class="hljs-title class_">ApolloLink</span>, <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-title class_">HttpLink</span>,
+  <span class="hljs-title class_">InMemoryCache</span>,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">SetContextLink</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/link/context&#x27;</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">GraphQLWsLink</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/link/subscriptions&#x27;</span>
+<span class="hljs-keyword">import</span> { getMainDefinition } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/utilities&#x27;</span>
+<span class="hljs-keyword">import</span> { createClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;graphql-ws&#x27;</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> authLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SetContextLink</span>(({ headers }) =&amp;gt; {
+  <span class="hljs-keyword">const</span> token = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;phonebook-user-token&#x27;</span>)
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">headers</span>: {
+      ...headers,
+      <span class="hljs-attr">authorization</span>: token ? <span class="hljs-string">\`Bearer <span class="hljs-subst">\${token}</span>\`</span> : <span class="hljs-literal">null</span>,
+    },
+  }
+})
+
+<span class="hljs-keyword">const</span> httpLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({ <span class="hljs-attr">uri</span>: <span class="hljs-string">&#x27;http://localhost:4000&#x27;</span> })
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> wsLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">GraphQLWsLink</span>(
+  <span class="hljs-title function_">createClient</span>({
+    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;ws://localhost:4000&#x27;</span>,
+  }),
+)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> splitLink = <span class="hljs-title class_">ApolloLink</span>.<span class="hljs-title function_">split</span>(
+  ({ query }) =&amp;gt; {
+    <span class="hljs-keyword">const</span> definition = <span class="hljs-title function_">getMainDefinition</span>(query)
+    <span class="hljs-keyword">return</span> (
+      definition.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;OperationDefinition&#x27;</span> &amp;amp;&amp;amp;
+      definition.<span class="hljs-property">operation</span> === <span class="hljs-string">&#x27;subscription&#x27;</span>
+    )
+  },
+  wsLink,
+  authLink.<span class="hljs-title function_">concat</span>(httpLink),
+)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloClient</span>({
+  <span class="hljs-attr">cache</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryCache</span>(),
+  <span class="hljs-attr">link</span>: splitLink, <span class="hljs-comment">// HIGHLIGHT LINE</span>
+})
+
+<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">StrictMode</span>&amp;gt;
+    &amp;lt;<span class="hljs-title class_">ApolloProvider</span> client={client}&amp;gt;
+      &amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;
+    &amp;lt;/<span class="hljs-title class_">ApolloProvider</span>&amp;gt;
+  &amp;lt;/<span class="hljs-title class_">StrictMode</span>&amp;gt;,
+)
+</code></pre>
+<p>يعود الإعداد الجديد إلى أن التطبيق يجب أن يملك اتصال HTTP بالإضافة إلى اتصال WebSocket بخادم GraphQL:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> httpLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({ <span class="hljs-attr">uri</span>: <span class="hljs-string">&#x27;http://localhost:4000&#x27;</span> })
+
+<span class="hljs-keyword">const</span> wsLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">GraphQLWsLink</span>(
+  <span class="hljs-title function_">createClient</span>({
+    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;ws://localhost:4000&#x27;</span>,
+  }),
+)
+</code></pre>
+<p>لنعدّل بعد ذلك التطبيق ليُشترك في معلومات عن الأشخاص الجدد من الخادم. أضف الشيفرة التي تعرّف الاشتراك إلى ملف <em>queries.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PERSON_ADDED</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">subscription</span> <span class="hljs-punctuation">{</span>
+    personAdded <span class="hljs-punctuation">{</span>
+      <span class="hljs-punctuation">...</span>PersonDetails
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+
+  </span><span class="hljs-subst">\${PERSON_DETAILS}</span><span class="language-graphql">
+\`</span>
+</code></pre>
+<p>تُنشأ الاشتراكات باستخدام دالة الخطاف <a href="https://www.apollographql.com/docs/react/api/react/hooks/#usesubscription" target="_blank" rel="noreferrer noopener">useSubscription</a>. لننشئ اشتراكاً في مكوّن <em>App</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {
+  useApolloClient,
+  useQuery,
+  useSubscription, <span class="hljs-comment">// HIGHLIGHT LINE</span>
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+<span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">LoginForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/LoginForm&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Notify</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Notify&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">PersonForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/PersonForm&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Persons</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Persons&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">PhoneForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/PhoneForm&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">ALL_PERSONS</span>, <span class="hljs-variable constant_">PERSON_ADDED</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./queries&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [token, setToken] = <span class="hljs-title function_">useState</span>(
+    <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;phonebook-user-token&#x27;</span>),
+  )
+  <span class="hljs-keyword">const</span> [errorMessage, setErrorMessage] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>)
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+  <span class="hljs-keyword">const</span> client = <span class="hljs-title function_">useApolloClient</span>()
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-title function_">useSubscription</span>(<span class="hljs-variable constant_">PERSON_ADDED</span>, {
+    <span class="hljs-attr">onData</span>: ({ data }) =&amp;gt; {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data)
+    },
+  })
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>) {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>عند إضافة شخص جديد الآن إلى دفتر الهاتف، أياً كان مكان الإضافة، تُطبع تفاصيل الشخص الجديد في وحدة تحكم العميل:</p>
+<p><img src="/images/mooc/297ad348db44.webp" alt="أدوات المطوّر تعرض data personAdded Object مع Mainroad"></p>
+<p>عند إضافة شخص جديد إلى القائمة، يرسل الخادم التفاصيل إلى العميل، وتُستدعى دالة الاستدعاء المعرَّفة كقيمة للخاصية <code>onData</code> في خطاف <em>useSubscription</em>، ويُمرَّر إليها الشخص المُضاف على الخادم كمعامل.</p>
+<p>يمكننا إظهار إشعار للمستخدم عند إضافة شخص جديد كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">useSubscription</span>(<span class="hljs-variable constant_">PERSON_ADDED</span>, {
+    <span class="hljs-attr">onData</span>: ({ data }) =&amp;gt; {
+      <span class="hljs-keyword">const</span> addedPerson = data.<span class="hljs-property">data</span>.<span class="hljs-property">personAdded</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      <span class="hljs-title function_">notify</span>(<span class="hljs-string">\`<span class="hljs-subst">\${addedPerson.name}</span> added\`</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    }
+  })
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>الآن، مثلاً، يُعرض الشخص المُضاف عبر Apollo Studio Explorer فوراً في واجهة التطبيق.</p>
+<p>لكن هناك مشكلة صغيرة في الحل. فعند إضافة شخص جديد عبر نموذج التطبيق، ينتهي الشخص المُضاف في الذاكرة المؤقتة مرتين، لأن كلاً من خطاف <code>useSubscription</code> ومكوّن <code>PersonForm</code> يضيف الشخص الجديد إلى الذاكرة المؤقتة. ونتيجة لذلك، يُعرض الشخص المُضاف على الشاشة مرتين.</p>
+<p>أحد الحلول الممكنة هو تحديث الذاكرة المؤقتة في خطاف <em>useSubscription</em> فقط. لكن هذا غير مستحسن. فمن الممارسات الجيدة أن يرى المستخدم التغييرات التي يجريها في التطبيق فوراً. وقد يحدث تحديث الذاكرة المؤقتة الذي ينفّذه الاشتراك بتأخير ولا يمكن الاعتماد عليه كلياً. لذلك سنلتزم بحل تُحدَّث فيه الذاكرة المؤقتة في خطاف <code>useSubscription</code> وفي مكوّن <code>PersonForm</code> معاً.</p>
+<p>لنحل المشكلة بالتحقق من أن الشخص يُضاف إلى الذاكرة المؤقتة فقط إذا لم يكن قد أُضيف إليها سابقاً. وفي الوقت نفسه، سنستخرج عملية تحديث الذاكرة المؤقتة إلى دالة مساعدة خاصة بها في ملف <em>utils/apolloCache.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">ALL_PERSONS</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../queries&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> addPersonToCache = (cache, personToAdd) =&amp;gt; {
+  cache.<span class="hljs-title function_">updateQuery</span>({ <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">ALL_PERSONS</span> }, ({ allPersons }) =&amp;gt; {
+    <span class="hljs-keyword">const</span> personExists = allPersons.<span class="hljs-title function_">some</span>(
+      (person) =&amp;gt; person.<span class="hljs-property">id</span> === personToAdd.<span class="hljs-property">id</span>,
+    )
+
+    <span class="hljs-keyword">if</span> (personExists) {
+      <span class="hljs-keyword">return</span> { allPersons }
+    }
+
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">allPersons</span>: allPersons.<span class="hljs-title function_">concat</span>(personToAdd),
+    }
+  })
+}
+</code></pre>
+<p>تُحدّث الدالة المساعدة <code>addPersonToCache</code> الذاكرة المؤقتة باستخدام الطريقة المألوفة <code>cache.updateQuery</code>. وفي منطق تحديث الذاكرة المؤقتة، نتحقق أولاً مما إذا كان الشخص قد أُضيف إلى الذاكرة المؤقتة سابقاً. ونبحث عن الشخص المطلوب إضافته بين الأشخاص الموجودين حالياً في الذاكرة المؤقتة باستخدام طريقة <code>some</code> في مصفوفة JavaScript:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> personExists = allPersons.<span class="hljs-title function_">some</span>(
+    (person) =&amp;gt; person.<span class="hljs-property">id</span> === personToAdd.<span class="hljs-property">id</span>,
+  )
+</code></pre>
+<p><code>some</code> طريقة تبحث في مجموعة عن عنصر يطابق الشرط المعطى. وهي تعيد قيمة منطقية تشير إلى ما إذا عُثر على عنصر مطابق. وفي حالتنا، تعيد الطريقة <code>True</code> إذا كانت الذاكرة المؤقتة تحتوي بالفعل على شخص بهذا <em>id</em>، وإلا فإنها تعيد <code>False</code>.</p>
+<p>إذا كان الشخص موجوداً بالفعل في الذاكرة المؤقتة، نعيد محتوى الذاكرة المؤقتة كما هو ولا نضيف الشخص مرة أخرى. وإلا، نعيد محتوى الذاكرة المؤقتة مع إلحاق الشخص الجديد باستخدام الطريقة <code>concat</code>:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">if</span> (personExists) {
+    <span class="hljs-keyword">return</span> { allPersons }
+  }
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">allPersons</span>: allPersons.<span class="hljs-title function_">concat</span>(personToAdd),
+  }
+</code></pre>
+<p>لنعدّل خطاف <code>useSubscription</code> في مكوّن <code>App</code> ليحدّث الذاكرة المؤقتة باستخدام الدالة المساعدة <code>addPersonToCache</code> التي أنشأناها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { addPersonToCache } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./utils/apolloCache&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [token, setToken] = <span class="hljs-title function_">useState</span>(
+    <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;phonebook-user-token&#x27;</span>),
+  )
+  <span class="hljs-keyword">const</span> [errorMessage, setErrorMessage] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>)
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+  <span class="hljs-keyword">const</span> client = <span class="hljs-title function_">useApolloClient</span>()
+
+  <span class="hljs-title function_">useSubscription</span>(<span class="hljs-variable constant_">PERSON_ADDED</span>, {
+    <span class="hljs-attr">onData</span>: ({ data }) =&amp;gt; {
+      <span class="hljs-keyword">const</span> addedPerson = data.<span class="hljs-property">data</span>.<span class="hljs-property">personAdded</span>
+      <span class="hljs-title function_">notify</span>(<span class="hljs-string">\`<span class="hljs-subst">\${addedPerson.name}</span> added\`</span>)
+      <span class="hljs-title function_">addPersonToCache</span>(client.<span class="hljs-property">cache</span>, addedPerson) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    },
+  })
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>وسنستخدم الدالة أيضاً عند تحديث الذاكرة المؤقتة المتعلق بإضافة شخص جديد:</p>
+<pre><code class="language-sql">import { addPersonToCache } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../utils/apolloCache&#x27;</span> <span class="hljs-operator">/</span><span class="hljs-operator">/</span> HIGHLIGHT LINE
+
+const PersonForm <span class="hljs-operator">=</span> ({ setError }) <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+  const [name, setName] <span class="hljs-operator">=</span> useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [phone, setPhone] <span class="hljs-operator">=</span> useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [street, setStreet] <span class="hljs-operator">=</span> useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [city, setCity] <span class="hljs-operator">=</span> useState(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  const [createPerson] <span class="hljs-operator">=</span> useMutation(CREATE_PERSON, {
+    onError: (error) <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; setError(error.message),
+    <span class="hljs-keyword">update</span>: (cache, response) <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+      <span class="hljs-operator">/</span><span class="hljs-operator">/</span> <span class="hljs-keyword">BEGIN</span> HIGHLIGHT
+      const addedPerson <span class="hljs-operator">=</span> response.data.addPerson
+      addPersonToCache(cache, addedPerson)
+      <span class="hljs-operator">/</span><span class="hljs-operator">/</span> <span class="hljs-keyword">END</span> HIGHLIGHT
+    },
+  })
+
+  <span class="hljs-operator">/</span><span class="hljs-operator">/</span> ...
+}
+</code></pre>
+<p>الآن يعمل تحديث الذاكرة المؤقتة بشكل صحيح في جميع الحالات، أي أن الشخص الجديد يُضاف إلى الذاكرة المؤقتة فقط إذا لم يكن قد أُضيف إليها سابقاً.</p>
+<p>يمكن العثور على الشيفرة النهائية للعميل على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-6" target="_blank" rel="noreferrer noopener">GitHub</a>، في الفرع <em>part8-6</em>.</p>
+<h2 id="مشكلة-n1">مشكلة n+1</h2>
+<p>لنضف بعض الأشياء إلى الواجهة الخلفية. لنعدّل المخطط بحيث يصبح للنوع <em>Person</em> حقل <code>friendOf</code> يخبرنا في قائمة أصدقاء مَن يوجد هذا الشخص.</p>
+<pre><code>type Person {
+  name: String!
+  phone: String
+  address: Address!
+  friendOf: [User!]! // HIGHLIGHT LINE
+  id: ID!
+}
+</code></pre>
+<p>يجب أن يدعم التطبيق الاستعلام التالي:</p>
+<pre><code>query {
+  findPerson(name: &quot;Leevi Hellas&quot;) {
+    friendOf {
+      username
+    }
+  }
+}
+</code></pre>
+<p>ولأن <code>friendOf</code> ليس حقلاً من حقول كائنات <em>Person</em> في قاعدة البيانات، علينا إنشاء resolver له قادر على حل هذه المسألة. لننشئ أولاً resolver يعيد قائمة فارغة:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Person</span>: {
+  <span class="hljs-attr">address</span>: ({ street, city }) =&amp;gt; {
+    <span class="hljs-keyword">return</span> {
+      street,
+      city,
+    }
+  },
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">friendOf</span>: <span class="hljs-title function_">async</span> (root) =&amp;gt; {
+    <span class="hljs-keyword">return</span> []
+  }
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+},
+</code></pre>
+<p>المعامل <code>root</code> هو كائن الشخص الذي تُنشأ له قائمة أصدقاء، لذا نبحث في كل كائنات <code>User</code> عن تلك التي تحتوي <code>root._id</code> في قائمة أصدقائها:</p>
+<pre><code class="language-bash">  Person: {
+    // ...
+    friendOf: async (root) =&amp;gt; {
+      const friends = await User.find({
+        friends: {
+          <span class="hljs-variable">$in</span>: [root._id]
+        }
+      })
+
+      <span class="hljs-built_in">return</span> friends
+    }
+  },
+</code></pre>
+<p>الآن يعمل التطبيق.</p>
+<p>يمكننا فوراً تنفيذ استعلامات أكثر تعقيداً. فمن الممكن مثلاً إيجاد أصدقاء كل المستخدمين:</p>
+<pre><code>query {
+  allPersons {
+    name
+    friendOf {
+      username
+    }
+  }
+}
+</code></pre>
+<p>لكن التطبيق الآن لديه مشكلة واحدة: يجري عدد كبير غير معقول من استعلامات قاعدة البيانات. لنضف تسجيلاً في وحدة التحكم إلى أجزاء الـresolvers التي تنفّذ استعلامات قاعدة البيانات:</p>
+<pre><code class="language-js"><span class="hljs-attr">allPersons</span>: <span class="hljs-title function_">async</span> (root, args) =&amp;gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Person.find&#x27;</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">if</span> (!args.<span class="hljs-property">phone</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">find</span>({})
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">find</span>({ <span class="hljs-attr">phone</span>: { <span class="hljs-attr">$exists</span>: args.<span class="hljs-property">phone</span> === <span class="hljs-string">&#x27;YES&#x27;</span> } })
+}
+</code></pre>
+<pre><code class="language-bash">friendOf: async (root) =&amp;gt; {
+  console.log(<span class="hljs-string">&#x27;User.find&#x27;</span>) // HIGHLIGHT LINE
+  const friends = await User.find({
+    friends: {
+      <span class="hljs-variable">$in</span>: [root._id],
+    },
+  })
+
+  <span class="hljs-built_in">return</span> friends
+}
+</code></pre>
+<p>نلاحظ أنه إذا كان في قاعدة البيانات خمسة أشخاص، فإن استعلام <code>allPersons</code> المذكور سابقاً يسبّب استعلامات قاعدة البيانات التالية:</p>
+<pre><code>Person.find
+User.find
+User.find
+User.find
+User.find
+User.find
+</code></pre>
+<p>إذ على الرغم من أننا ننفّذ أساساً استعلاماً واحداً لكل الأشخاص، فإن كل شخص يسبّب استعلاماً إضافياً في الـresolver الخاص به.</p>
+<p>هذا تجلٍّ لمشكلة <a href="https://www.google.com/search?q=n%2B1+problem" target="_blank" rel="noreferrer noopener">n+1</a> الشهيرة، التي تظهر من وقت لآخر في سياقات مختلفة، وتتسلل أحياناً إلى المطورين دون أن ينتبهوا.</p>
+<p>يعتمد الحل الصحيح لمشكلة n+1 على الحالة. وغالباً ما يتطلب استخدام نوع من استعلام الدمج (join) بدلاً من استعلامات منفصلة متعددة.</p>
+<p>في حالتنا، سيكون الحل الأسهل هو حفظ، في كل كائن <code>Person</code>، قائمة أصدقاء مَن ينتمي إليها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> schema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">name</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">minlength</span>: <span class="hljs-number">5</span>
+  },
+  <span class="hljs-attr">phone</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">minlength</span>: <span class="hljs-number">5</span>
+  },
+  <span class="hljs-attr">street</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">minlength</span>: <span class="hljs-number">5</span>
+  },
+  <span class="hljs-attr">city</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">minlength</span>: <span class="hljs-number">3</span>
+  },
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">friendOf</span>: [
+    {
+      <span class="hljs-attr">type</span>: mongoose.<span class="hljs-property">Schema</span>.<span class="hljs-property">Types</span>.<span class="hljs-property">ObjectId</span>,
+      <span class="hljs-attr">ref</span>: <span class="hljs-string">&#x27;User&#x27;</span>
+    }
+  ],
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+})
+</code></pre>
+<p>ثم يمكننا تنفيذ &quot;استعلام دمج&quot;، أو تعبئة حقول <code>friendOf</code> للأشخاص عند جلب كائنات <code>Person</code>:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Query</span>: {
+  <span class="hljs-attr">allPersons</span>: (root, args) =&amp;gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Person.find&#x27;</span>)
+    <span class="hljs-keyword">if</span> (!args.<span class="hljs-property">phone</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">populate</span>(<span class="hljs-string">&#x27;friendOf&#x27;</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">find</span>({ <span class="hljs-attr">phone</span>: { <span class="hljs-attr">$exists</span>: args.<span class="hljs-property">phone</span> === <span class="hljs-string">&#x27;YES&#x27;</span> } })
+      .<span class="hljs-title function_">populate</span>(<span class="hljs-string">&#x27;friendOf&#x27;</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  },
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>بعد هذا التغيير، لن نحتاج إلى resolver منفصل لحقل <code>friendOf</code>.</p>
+<p>استعلام allPersons <em>لا يسبّب</em> مشكلة n+1 إذا جلبنا الاسم ورقم الهاتف فقط:</p>
+<pre><code>query {
+  allPersons {
+    name
+    phone
+  }
+}
+</code></pre>
+<p>إذا عدّلنا <code>allPersons</code> لتنفيذ استعلام دمج لأنها تسبّب أحياناً مشكلة n+1، فسيصبح أثقل عندما لا نحتاج إلى معلومات عن أشخاص ذوي صلة. وباستخدام <a href="https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments" target="_blank" rel="noreferrer noopener">المعامل الرابع</a> لدوال الـresolver، يمكننا تحسين الاستعلام أكثر. فالمعامل الرابع يمكن استخدامه لفحص الاستعلام نفسه، بحيث ننفّذ استعلام الدمج فقط في الحالات التي يُتوقَّع فيها خطر مشكلات n+1. لكن لا ينبغي أن نتعجل إلى هذا المستوى من التحسين قبل التأكد من أنه يستحق العناء.</p>
+<p><a href="https://en.wikiquote.org/wiki/Donald_Knuth" target="_blank" rel="noreferrer noopener">بكلمات دونالد نوث</a>:</p>
+<blockquote>
+<p><em>يهدر المبرمجون كميات هائلة من الوقت في التفكير في سرعة الأجزاء غير الحرجة من برامجهم أو القلق بشأنها، ولِمحاولات الكفاءة هذه في الواقع تأثير سلبي قوي عندما نأخذ تصحيح الأخطاء والصيانة في الحسبان. ينبغي أن ننسى التحسينات الصغيرة، في نحو 97% من الحالات: <strong>التحسين المُبكر هو أصل كل الشرور.</strong></em></p>
+</blockquote>
+<p>تقدّم مكتبة <a href="https://github.com/graphql/dataloader" target="_blank" rel="noreferrer noopener">DataLoader</a> من مؤسسة GraphQL حلاً جيداً لمشكلة n+1 بين مشكلات أخرى. والمزيد عن استخدام DataLoader مع خادم Apollo <a href="https://www.robinwieruch.de/graphql-apollo-server-tutorial/#graphql-server-data-loader-caching-batching" target="_blank" rel="noreferrer noopener">هنا</a> و<a href="http://www.petecorey.com/blog/2017/08/14/batching-graphql-queries-with-dataloader/" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<h2 id="خاتمة">خاتمة</h2>
+<p>التطبيق الذي بنيناه في هذا الجزء ليس منظّماً بالطريقة الأمثل. وقد أجرينا بعض التنظيف بنقل المخطط والـresolvers إلى ملفين خاصين بهما، لكن لا يزال هناك مجال كبير للتحسين. ويمكن العثور على أمثلة لطرق أفضل لتنظيم تطبيقات GraphQL على الإنترنت، مثلاً للخادم <a href="https://www.apollographql.com/blog/modularizing-your-graphql-schema-code" target="_blank" rel="noreferrer noopener">هنا</a> وللعميل <a href="https://medium.com/@peterpme/thoughts-on-structuring-your-apollo-queries-mutations-939ba4746cd8" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<p>GraphQL تقنية قديمة نسبياً بالفعل: فهي قيد الاستخدام الداخلي في Facebook منذ عام 2012، لذا يمكن القول إنها مجرَّبة عملياً. وقد أطلقت Facebook تقنية GraphQL عام 2015، ومنذ ذلك الحين ترسّخت مكانتها. حتى &quot;موت&quot; REST جرى التنبؤ به <a href="https://www.radiofreerabbit.com/podcast/52-is-2018-the-year-graphql-kills-rest" target="_blank" rel="noreferrer noopener">هنا</a> قبل عشرينيات هذا القرن، لكن ذلك لم يحدث. فلا يزال REST مستخدماً على نطاق واسع ولا يزال يعمل بامتياز في حالات كثيرة، ومن غير المرجح أن يحل GraphQL محل REST يوماً. لكن GraphQL أصبحت طريقة بديلة لبناء الـAPIs، ويستحق بالتأكيد أن تتعرّف عليها.</p>
+<div class="tasks">
+<p><strong>25. اختياري: الاشتراكات - الخادم</strong></p>
+</div>
+<div class="tasks">
+<p><strong>26. اختياري: الاشتراكات - العميل، الجزء 1</strong></p>
+</div>
+<div class="tasks">
+<p><strong>27. اختياري: الاشتراكات - العميل، الجزء 2</strong></p>
+</div>
+<div class="tasks">
+<p><strong>28. اختياري: n+1</strong></p>
+</div>
+<div class="tasks">
+<p><strong>29. مستودع GitHub الخاص بك</strong></p>
+</div>
+`,o={part:8,letter:"f",file:s,title:n,slug:a,mainImage:p,headings:l,html:e};export{o as default,s as file,l as headings,e as html,t as letter,p as mainImage,r as part,a as slug,n as title};

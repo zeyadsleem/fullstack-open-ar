@@ -1,0 +1,651 @@
+const e=9,c="c",s="c.md",n="الخطوات الأولى مع TypeScript",a="first_steps_with_typescript",p="/images/part-9.svg",l=[{depth:3,id:"إعداد-الأمور",text:"إعداد الأمور"},{depth:3,id:"إنشاء-أنواعك-الأولى",text:"إنشاء أنواعك الأولى"},{depth:3,id:"تضييق-الأنواع",text:"تضييق الأنواع"},{depth:3,id:"الوصول-إلى-معاملات-سطر-الأوامر",text:"الوصول إلى معاملات سطر الأوامر"},{depth:3,id:"حول-typesnpmpackage",text:"حول @types/{npm_package}"},{depth:3,id:"تحسين-المشروع",text:"تحسين المشروع"},{depth:3,id:"إضافة-express-إلى-المزيج",text:"إضافة Express إلى المزيج"},{depth:3,id:"أهوال-any",text:"أهوال any"},{depth:3,id:"تأكيد-النوع",text:"تأكيد النوع"}],t=`<p>بعد المقدمة الموجزة عن المبادئ الرئيسية لـ TypeScript، أصبحنا الآن مستعدين لبدء رحلتنا نحو أن نصبح مطوّري FullStack بلغة TypeScript. وبدلاً من تقديم مقدمة شاملة عن جميع جوانب TypeScript، سنركّز في هذا الجزء على أكثر المشكلات شيوعاً التي تظهر عند تطوير واجهة خلفية بـ Express أو واجهة أمامية بـ React باستخدام TypeScript. وإلى جانب ميزات اللغة، سنولي أيضاً اهتماماً قوياً بالأدوات.</p>
+<h3 id="إعداد-الأمور">إعداد الأمور</h3>
+<p>منذ الإصدار 22.6 الذي صدر في أغسطس 2024، أصبح Node.js قادراً على تشغيل شيفرة TypeScript. في الواقع، لا يفهم Node لغة TypeScript، بل يحذف فقط تعليقات الأنواع ويشغّل شيفرة JavaScript المتبقية.</p>
+<p>لا يجري Node.js فحصاً للأنواع، لذا لن تحصل إلا على مجموعة صغيرة من مزايا TypeScript بشكل جاهز. وللحصول على تجربة TypeScript الكاملة — فحص الأنواع والترجمة وأدوات أغنى — سنحتاج أيضاً إلى تثبيت حزمة npm المسماة <a href="https://www.npmjs.com/package/typescript" data-type="link" data-id="https://www.npmjs.com/package/typescript">TypeScript</a>، التي توفّر المترجم (tsc) وخدمات اللغة.</p>
+<p>كما نتذكّر من <a href="/part3" target="_blank" rel="noreferrer noopener">الجزء 3</a>، يُنشأ مشروع npm بتشغيل الأمر <code>npm init</code> في دليل فارغ. ثم يمكننا تثبيت الاعتمادية بتشغيل</p>
+<pre><code class="language-bash">npm install --save-dev typescript
+</code></pre>
+<p>لنُعِد أيضاً <em>scripts</em> داخل الملف <em>package.json</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;module&quot;</span><span class="hljs-punctuation">,</span>      <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+   <span class="hljs-attr">&quot;tsc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc --noEmit&quot;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;devDependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;typescript&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^5.9.3&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>يمكننا الآن استخدام السكربت لفحص أنواع ملف TypeScript:</p>
+<pre><code class="language-bash">npm run tsc file.ts
+</code></pre>
+<p>يخبر الخيار --noEmit مترجم TypeScript بألا يولّد مخرجات JavaScript. فهو يشغّل فحص الأنواع فقط، دون توليد ملف مترجم.</p>
+<p>لاحظ أننا عرّفنا <em>&quot;type&quot;: &quot;module&quot;</em> الذي يخبر Node.js بمعاملة الملفات في هذه الحزمة كوحدات ES (ESM) بدلاً من وحدات CommonJS، ما يعني أنه يمكننا استخدام صيغة <em>import/export </em>بدلاً من <em>require</em>، وهي الطريقة المفضّلة في TypeScript.</p>
+<p>لنضف ملف إعدادات <em>tsconfig.json</em> إلى المشروع بالمحتوى التالي:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;noImplicitAny&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noEmit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>يُستخدم ملف <em>tsconfig.json</em> لتحديد كيف ينبغي لمترجم TypeScript أن يفسّر الشيفرة، ومدى صرامة عمل المترجم، والملفات التي يجب مراقبتها أو تجاهلها، <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank" rel="noreferrer noopener">وأمور أخرى كثيرة</a>. في الوقت الحالي، سنعطّل فقط خيار المترجم <a href="https://www.typescriptlang.org/tsconfig#noImplicitAny" target="_blank" rel="noreferrer noopener">noImplicitAny</a>، بحيث لا يُشترط كتابة أنواع لجميع المتغيرات المستخدمة. عرّفنا أيضاً <a href="https://www.typescriptlang.org/tsconfig/#noEmit">&quot;noEmit&quot;: true</a> لأننا سنستخدم مترجم TypeScript للفحص فقط.</p>
+<p>يمكننا الآن حذف المعامل <em>--noEmit</em> من سكربت npm:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>&lt;br&gt;  <span class="hljs-comment">// ...&lt;br&gt;  &quot;scripts&quot;: {&lt;br&gt;   &quot;tsc&quot;: &quot;tsc&quot; // HIGHLIGHT LINE&lt;br&gt;  },&lt;br&gt;  // ...&lt;br&gt;}</span>
+</code></pre>
+<blockquote>
+<p>ملاحظة حول أسلوب كتابة الشيفرة</p>
+<p>JavaScript لغة متسامحة جداً بطبيعتها، ويمكن غالباً إنجاز الأمور بطرق مختلفة متعددة. على سبيل المثال، لدينا الدوال المسماة مقابل الدوال المجهولة، واستخدام const وlet أو var، والاستخدام الاختياري لـ<em>الفواصل المنقوطة</em>. يختلف هذا الجزء من المقرر عن بقية الأجزاء باستخدامه الفواصل المنقوطة. وهو ليس نمطاً خاصاً بـ TypeScript بل قرار عام في أسلوب كتابة الشيفرة يُتخذ عند إنشاء أي نوع من مشاريع JavaScript. وعادة ما يكون قرار استخدامها من عدمه بيد المبرمج، ولكن بما أنه يُتوقع من المرء أن يكيّف عاداته البرمجية مع قاعدة الشيفرة القائمة، فمن المتوقع أن تستخدم الفواصل المنقوطة وأن تتكيّف مع أسلوب كتابة الشيفرة في تمارين هذا الجزء. يحتوي هذا الجزء أيضاً على بعض الفروق الأخرى في أسلوب كتابة الشيفرة مقارنة ببقية المقرر، مثل اصطلاحات تسمية الأدلة.</p>
+</blockquote>
+<p>لنبدأ بإنشاء مضاعِف بسيط في الملف <em>multiplier.ts</em>. يبدو تماماً كما سيكون في JavaScript.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> multiplicator = (a, b, printText) =&amp;gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(printText,  a * b);
+}
+
+<span class="hljs-title function_">multiplicator</span>(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Multiplied numbers 2 and 4, the result is:&#x27;</span>);
+</code></pre>
+<p>كما ترى، هذه لا تزال شيفرة JavaScript أساسية عادية دون أي ميزات إضافية من TS. وعندما نستخدم مترجم TypeScript لفحص الأنواع بالأمر <code>npm run tsc multiplier.ts</code> لا تظهر أي شكاوى. لذا نعرف أن الشيفرة آمنة الأنواع، ويمكننا تشغيلها بثقة بالأمر <code>node multiplier.ts</code>.</p>
+<p>لتسريع الأمور، لننشئ سكربتاً يقوم أولاً بفحص الأنواع ثم يشغّل الشيفرة إذا نجحت الفحوصات.</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ..</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;tsc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;multiply&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc &amp;amp;&amp;amp; &lt;span style=&quot;</span>background-color<span class="hljs-punctuation">:</span> rgba(<span class="hljs-number">30</span><span class="hljs-punctuation">,</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.2</span>); font-family<span class="hljs-punctuation">:</span> inherit; text-align<span class="hljs-punctuation">:</span> initial;<span class="hljs-string">&quot;&gt;node multiplier.ts&lt;/span&gt;&quot;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ..</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>فالآن يكفي <code>npm run multiply</code> لفحص الأنواع وتشغيل الشيفرة.</p>
+<p>ماذا يحدث إذا انتهى بنا الأمر بتمرير <em>أنواع</em> خاطئة من المعاملات إلى الدالة multiplicator؟</p>
+<p>لنجرّب ذلك!</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">multiplicator</span> = (<span class="hljs-params">a, b, printText</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(printText,  a * b);
+}
+
+<span class="hljs-title function_">multiplicator</span>(<span class="hljs-string">&#x27;how about a string?&#x27;</span>, <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Multiplied a string and 4, the result is:&#x27;</span>);
+</code></pre>
+<p>الآن عندما نشغّل الشيفرة، يكون الناتج: <em>Multiplied a string and 4, the result is: NaN</em>.</p>
+<p>ألن يكون جميلاً لو استطاعت اللغة نفسها أن تمنعنا من الانتهاء في مواقف كهذه؟ هنا نرى أولى مزايا TypeScript. لنضف أنواعاً إلى المعاملات ونرَ إلى أين يأخذنا ذلك.</p>
+<p>تدعم TypeScript أصلاً أنواعاً متعددة منها <em>number</em> و<em>string</em> و<em>Array</em>. اطّلع على القائمة الشاملة <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noreferrer noopener">هنا</a>. ويمكن أيضاً إنشاء أنواع مخصّصة أكثر تعقيداً.</p>
+<p>المعاملان الأولان في دالتنا من النوع number والأخير من النوع string، وكلا النوعين من <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#the-primitives-string-number-and-boolean" target="_blank" rel="noreferrer noopener">الأنواع الأولية</a>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">multiplicator</span> = (<span class="hljs-params"><span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">printText</span>: <span class="hljs-built_in">string</span></span>) =&gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(printText,  a * b);
+}
+
+<span class="hljs-title function_">multiplicator</span>(<span class="hljs-string">&#x27;how about a string?&#x27;</span>, <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Multiplied a string and 4, the result is:&#x27;</span>);
+</code></pre>
+<p>الآن لم تعد الشيفرة صالحة في TypeScript. وعندما نحاول تشغيل الشيفرة، نلاحظ أنها لا تُترجم:</p>
+<p><img src="/images/mooc/e09f293805d1.webp" alt="صورة توضيحية"></p>
+<p>من أفضل ما في دعم TypeScript في المحرّر أنك لا تحتاج بالضرورة إلى تشغيل الشيفرة لترى المشكلات. فـ VSCode فعّال لدرجة أنه يخبرك فوراً عندما تحاول استخدام نوع غير صحيح:</p>
+<p><img src="/images/mooc/e11f787a659d.webp" alt="صورة توضيحية"></p>
+<h3 id="إنشاء-أنواعك-الأولى">إنشاء أنواعك الأولى</h3>
+<p>لنوسّع مضاعِفنا ليصبح آلة حاسبة أكثر تنوعاً تدعم أيضاً الجمع والقسمة. ينبغي أن تقبل الآلة الحاسبة ثلاث وسائط: عددين والعملية، إما <em>multiply</em> أو <em>add</em> أو <em>divide</em>، التي تخبرها ما تفعله بالعددين.</p>
+<p>في JavaScript، ستتطلب الشيفرة تحققاً إضافياً للتأكد من أن الوسيط الأخير نص بالفعل. تقدّم TypeScript طريقة لتعريف أنواع محددة للمدخلات، تصف بدقة نوع المدخل المقبول. علاوة على ذلك، تستطيع TypeScript أيضاً عرض معلومات القيم المقبولة على مستوى المحرّر نفسه.</p>
+<p>يمكننا إنشاء <em>نوع</em> باستخدام الكلمة المفتاحية الأصلية في TypeScript وهي <em>type</em>. لنصف نوعنا <em>Operation</em>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Operation</span> = <span class="hljs-string">&#x27;multiply&#x27;</span> | <span class="hljs-string">&#x27;add&#x27;</span> | <span class="hljs-string">&#x27;divide&#x27;</span>;
+</code></pre>
+<p>الآن لا يقبل نوع <em>Operation</em> سوى ثلاثة أنواع من القيم؛ تحديداً النصوص الثلاثة التي أردناها. وباستخدام المعامل OR وهو | يمكننا تعريف متغير ليقبل قيماً متعددة عبر إنشاء نوع اتحادي. في هذه الحالة، استخدمنا نصوصاً محددة (تُسمى بمصطلحات تقنية أنواع النصوص الحرفية)، لكن مع الأنواع الاتحادية يمكنك أيضاً جعل المترجم يقبل مثلاً النص والعدد معاً: <em>string | number</em>.</p>
+<p>تعريف الكلمة المفتاحية <em>type</em> اسم جديد لنوع: <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases" target="_blank" rel="noreferrer noopener">اسم مستعار للنوع</a>. وبما أن النوع المعرّف هو اتحاد لثلاث قيم محتملة، فمن المفيد إعطاؤه اسماً مستعاراً ذا اسم معبّر.</p>
+<p>لنلقِ نظرة على آلتنا الحاسبة الآن:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Operation</span> = <span class="hljs-string">&#x27;multiply&#x27;</span> | <span class="hljs-string">&#x27;add&#x27;</span> | <span class="hljs-string">&#x27;divide&#x27;</span>;
+
+<span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>) =&amp;gt; {
+  <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;multiply&#x27;</span>) {
+    <span class="hljs-keyword">return</span> a * b;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;add&#x27;</span>) {
+    <span class="hljs-keyword">return</span> a + b;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;divide&#x27;</span>) {
+    <span class="hljs-keyword">if</span> (b === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;can\\&#x27;t divide by 0!&#x27;</span>;
+    <span class="hljs-keyword">return</span> a / b;
+  }
+}
+</code></pre>
+<p>الآن، عندما نمرّر المؤشر فوق نوع <em>Operation</em> في دالة calculator، يمكننا أن نرى فوراً اقتراحات حول ما يمكن فعله به:</p>
+<p><img src="/images/mooc/09fe4d4fe943.webp" alt="صورة توضيحية"></p>
+<p>وإذا حاولنا استخدام قيمة ليست ضمن نوع <em>Operation</em>، نحصل على إشارة التحذير الحمراء المألوفة ومعلومات إضافية من محرّرنا:</p>
+<p><img src="/images/mooc/f8c733f3b516.webp" alt="صورة توضيحية"></p>
+<p>هذا جيد جداً بالفعل، لكن هناك أمر لم نلمسه بعد وهو كتابة نوع القيمة المُعادة من الدالة. عادةً، تريد معرفة ما تُعيده الدالة، وسيكون من الجميل ضمان أنها تُعيد ما تدّعي أنها تُعيده. لنضف نوع القيمة المُعادة <em>number</em> إلى دالة calculator:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Operation</span> = <span class="hljs-string">&#x27;multiply&#x27;</span> | <span class="hljs-string">&#x27;add&#x27;</span> | <span class="hljs-string">&#x27;divide&#x27;</span>;
+
+<span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>): <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;multiply&#x27;</span>) {
+    <span class="hljs-keyword">return</span> a * b;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;add&#x27;</span>) {
+    <span class="hljs-keyword">return</span> a + b;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (op === <span class="hljs-string">&#x27;divide&#x27;</span>) {
+    <span class="hljs-keyword">if</span> (b === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;this cannot be done&#x27;</span>;
+    <span class="hljs-keyword">return</span> a / b;
+  }
+}
+</code></pre>
+<p>يشتكي المترجم فوراً لأن الدالة تُعيد نصاً في إحدى الحالات. وهناك بضع طرق لإصلاح ذلك:</p>
+<p>يمكننا توسيع نوع القيمة المُعادة ليسمح بقيم نصية، هكذا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>): <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span> =&amp;gt;  {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>أو يمكننا إنشاء نوع للقيمة المُعادة يشمل كلا النوعين المحتملين، تماماً مثل نوع Operation لدينا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Result</span> = <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>;
+
+<span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>): <span class="hljs-title class_">Result</span> =&amp;gt;  {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لكن السؤال الآن هو: هل من <em>المقبول حقاً</em> أن تُعيد الدالة نصاً؟</p>
+<p>عندما يمكن أن تنتهي شيفرتك في موقف تُقسم فيه قيمة على 0، فقد حدث خطأ فادح على الأرجح، وينبغي رمي خطأ ومعالجته حيث استُدعيت الدالة. وعندما تقرّر إعادة قيم لم تكن تتوقعها أصلاً، فإن التحذيرات التي تراها من TypeScript تمنعك من اتخاذ قرارات متعجلة وتساعدك على إبقاء شيفرتك تعمل كما هو متوقع.</p>
+<p>هناك أمر آخر ينبغي مراعاته وهو أنه حتى مع تعريفنا أنواعاً لمعاملاتنا، فإن شيفرة JavaScript المولّدة والمستخدمة وقت التشغيل لا تحتوي على فحوصات الأنواع. لذا إذا كانت قيمة المعامل <em>Operation</em> مثلاً تأتي من واجهة خارجية، فلا يوجد ضمان مؤكد أنها ستكون إحدى القيم المسموح بها. لذلك، لا يزال من الأفضل تضمين معالجة الأخطاء والاستعداد لحدوث غير المتوقع. في هذه الحالة، عندما تكون هناك قيم مقبولة متعددة محتملة وينبغي أن تؤدي كل القيم غير المتوقعة إلى خطأ، تناسبنا عبارة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch" data-type="link" data-id="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch">switch...case</a> أكثر من if...else في شيفرتنا.</p>
+<p>ينبغي أن تبدو شيفرة آلتنا الحاسبة شيئاً كهذا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Operation</span> = <span class="hljs-string">&#x27;multiply&#x27;</span> | <span class="hljs-string">&#x27;add&#x27;</span> | <span class="hljs-string">&#x27;divide&#x27;</span>;
+
+<span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>) : <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> {   <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">switch</span>(op) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;multiply&#x27;</span>:
+      <span class="hljs-keyword">return</span> a * b;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;divide&#x27;</span>:
+      <span class="hljs-keyword">if</span> (b === <span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Can\\&#x27;t divide by 0!&#x27;</span>); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      <span class="hljs-keyword">return</span> a / b;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;add&#x27;</span>:
+      <span class="hljs-keyword">return</span> a + b;
+    <span class="hljs-attr">default</span>:
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Operation is not multiply, add or divide!&#x27;</span>); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  }
+}
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">calculator</span>(<span class="hljs-number">1</span>, <span class="hljs-number">5</span> , <span class="hljs-string">&#x27;divide&#x27;</span>));
+} <span class="hljs-keyword">catch</span> (<span class="hljs-attr">error</span>: <span class="hljs-built_in">unknown</span>) {
+  <span class="hljs-keyword">let</span> errorMessage = <span class="hljs-string">&#x27;Something went wrong: &#x27;</span>
+  <span class="hljs-keyword">if</span> (error <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>) {
+    errorMessage += error.<span class="hljs-property">message</span>;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(errorMessage);
+}
+</code></pre>
+<h3 id="تضييق-الأنواع">تضييق الأنواع</h3>
+<p>النوع الافتراضي لمعامل كتلة catch وهو <em>error</em> هو <em>unknown</em>. و<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type" target="_blank" rel="noreferrer noopener">unknown</a> نوع من أنواع القمة الذي أُدخل في الإصدار 3 من TypeScript ليكون النظير الآمن الأنواع لـ<em>any</em>. أي شيء يمكن إسناده إلى <em>unknown</em>، لكن <em>unknown</em> لا يمكن إسناده إلى أي شيء سوى نفسه و<em>any</em> دون تأكيد نوع أو تضييق نوع قائم على تدفق التحكم. وبالمثل، لا يُسمح بأي عمليات على قيمة من نوع <em>unknown</em> دون تأكيدها أو تضييقها أولاً إلى نوع أكثر تحديداً.</p>
+<p>كلا السببين المحتملين للاستثناء (معامل خاطئ أو قسمة على صفر) سيرمي كائن <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" target="_blank" rel="noreferrer noopener">Error</a> مع رسالة خطأ يطبعها برنامجنا للمستخدم.</p>
+<p>لو كانت شيفرتنا JavaScript، لأمكننا طباعة رسالة الخطأ بمجرد الإشارة إلى الحقل <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message" target="_blank" rel="noreferrer noopener">message</a> في الكائن <em>error</em> كما يلي:</p>
+<pre><code>try {
+  console.log(calculator(1, 5 , 'divide'));
+} catch (error) {
+  console.log('Something went wrong: ' + error.message); // HIGHLIGHT LINE
+}
+</code></pre>
+<p>بما أن النوع الافتراضي للكائن <em>error</em> في TypeScript هو <em>unknown</em>، علينا أن <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noreferrer noopener">نضيّق</a> النوع للوصول إلى الحقل:</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">calculator</span>(<span class="hljs-number">1</span>, <span class="hljs-number">5</span> , <span class="hljs-string">&#x27;divide&#x27;</span>));
+} <span class="hljs-keyword">catch</span> (<span class="hljs-attr">error</span>: unknown) {
+  <span class="hljs-keyword">let</span> errorMessage = <span class="hljs-string">&#x27;Something went wrong: &#x27;</span>
+  <span class="hljs-comment">// هنا لا يمكننا استخدام error.message</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">if</span> (error <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>) {
+   <span class="hljs-comment">// تم تضييق النوع ويمكننا الإشارة إلى error.message</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+    errorMessage += error.<span class="hljs-property">message</span>;
+}
+  <span class="hljs-comment">// هنا لا يمكننا استخدام error.message // HIGHLIGHT LINE</span>
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(errorMessage);
+}
+</code></pre>
+<p>هنا، أُجري التضييق باستخدام حارس النوع instanceof، وهو مجرد واحدة من طرق كثيرة لتضييق نوع. وسنرى طرقاً أخرى كثيرة لاحقاً في هذا الجزء.</p>
+<h3 id="الوصول-إلى-معاملات-سطر-الأوامر">الوصول إلى معاملات سطر الأوامر</h3>
+<p>البرامج التي كتبناها جيدة، لكن سيكون من الأفضل بالتأكيد لو استطعنا استخدام معاملات سطر الأوامر بدلاً من الاضطرار دائماً إلى تغيير الشيفرة لحساب أشياء مختلفة.</p>
+<p>لنجرّب ذلك، كما نفعل في تطبيق Node عادي، عبر الوصول إلى <em>process.argv</em>. ومع ذلك، هناك شيء غير صحيح:</p>
+<p><img src="/images/mooc/b48ba06e9482.webp" alt="صورة توضيحية"></p>
+<p>تعطينا رسالة الخطأ تلميحاً عن كيفية إصلاح المشكلة:</p>
+<pre><code class="language-bash">npm install --save-dev @types/node
+</code></pre>
+<p>عند تثبيت الحزمة <em>@types/node</em>، لا يشتكي المترجم من المتغير process. لاحظ أنه لا حاجة لاستيراد الأنواع في الشيفرة، فمجرد تثبيت الحزمة كافٍ!</p>
+<h3 id="حول-typesnpmpackage">حول @types/{npm_package}</h3>
+<p>ثبّتنا للتو حزمة npm المسماة <em>@types/node </em>للتخلص من خطأ في الأنواع. فما هي هذه الحزمة في الواقع؟</p>
+<p>تتوقع TypeScript وجود أنواع لكل شيفرة تستخدمها، بما في ذلك المكتبات الخارجية، حتى تستطيع توفير IntelliSense ودعم المحرّر وفحوصات وقت الترجمة. كثير من المكتبات لا تتضمن أنواعها الخاصة. وعندما يحدث ذلك، تُنشر تعريفات الأنواع التي يصونها المجتمع من <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped</a> على npm تحت منظمة @types.</p>
+<p>ثبّت حزم @types فقط إذا كانت المكتبة لا تتضمن أنواعاً بالفعل. يمكنك التحقق من توثيق الحزمة أو من حقل types في package.json. ثبّت هذه الحزم كـ<em>devDependencies</em>، لأنها لا تُحتاج إلا أثناء التطوير والبناء، وأبقِ إصداراتها متوافقة مع المكتبة لتجنب عدم التطابق.</p>
+<p>على سبيل المثال، تضيف <em>@types/express</em> أنواعاً لـ Request وResponse وRouter والوسيط، ما يحسّن الأمان وسهولة الاستخدام عند بناء المسارات. وبالمثل، يمكنك تثبيت أنواع لمكتبات أخرى تفتقر إلى أنواع مدمجة، مثل <em>@types/react</em> و<em>@types/lodash,</em> أو <em>@types/mongoose</em>.</p>
+<p>خلف هذه الحزم يقف مشروع <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped</a> ، وهو مجتمع نشط يصون ويحدّث تعريفات الأنواع لعدد هائل من مكتبات npm. وفي معظم الحالات، يمكنك الاعتماد على هذه بدلاً من كتابة تعريفاتك الخاصة. والخلاصة: فضّل الأنواع المدمجة عند توفرها؛ وإلا فثبّت حزم @types المناسبة كـ devDependencies وأبقِها متزامنة مع إصدارات مكتباتك.</p>
+<h3 id="تحسين-المشروع">تحسين المشروع</h3>
+<p>يمكننا جعل <em>multiplier</em> يعمل بمعاملات سطر الأوامر كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">multiplicator</span> = (<span class="hljs-params"><span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">printText</span>: <span class="hljs-built_in">string</span></span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(printText,  a * b);
+}
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-comment">// تبدأ معاملات سطر الأوامر من process.argv[2]</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title class_">Number</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>])
+<span class="hljs-keyword">const</span> <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title class_">Number</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">3</span>])
+
+<span class="hljs-title function_">multiplicator</span>(a, b, <span class="hljs-string">\`Multiplied <span class="hljs-subst">\${a}</span> and <span class="hljs-subst">\${b}</span>, the result is:\`</span>);
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>ويمكننا تشغيله بـ:</p>
+<pre><code class="language-bash">npm run multiply 5 2
+</code></pre>
+<p>إذا شُغّل البرنامج بمعاملات ليست من النوع الصحيح، مثل:</p>
+<pre><code class="language-bash">npm run multiply 5 lol
+</code></pre>
+<p>فإنه &quot;يعمل&quot; لكنه يعطينا الجواب:</p>
+<pre><code>Multiplied 5 and NaN, the result is: NaN
+</code></pre>
+<p>والسبب في ذلك أن <em>Number('lol')</em> تُعيد <em>NaN</em>، وهو في الواقع من النوع <em>number</em>، لذا لا تملك TypeScript أي قدرة على إنقاذنا من موقف كهذا.</p>
+<p>لمنع هذا النوع من السلوك، علينا التحقق من البيانات المعطاة لنا من سطر الأوامر.</p>
+<p>تبدو النسخة المحسّنة من المضاعِف هكذا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">MultiplyValues</span> {
+  <span class="hljs-attr">value1</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">value2</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">const</span> parseArguments = (<span class="hljs-attr">args</span>: <span class="hljs-built_in">string</span>[]): <span class="hljs-function"><span class="hljs-params">MultiplyValues</span> =&gt;</span> {
+  <span class="hljs-keyword">if</span> (args.<span class="hljs-property">length</span> &amp;lt; <span class="hljs-number">4</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Not enough arguments&#x27;</span>);
+  <span class="hljs-keyword">if</span> (args.<span class="hljs-property">length</span> &gt; <span class="hljs-number">4</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Too many arguments&#x27;</span>);
+
+  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">isNaN</span>(<span class="hljs-title class_">Number</span>(args[<span class="hljs-number">2</span>])) &amp;amp;&amp;amp; !<span class="hljs-built_in">isNaN</span>(<span class="hljs-title class_">Number</span>(args[<span class="hljs-number">3</span>]))) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">value1</span>: <span class="hljs-title class_">Number</span>(args[<span class="hljs-number">2</span>]),
+      <span class="hljs-attr">value2</span>: <span class="hljs-title class_">Number</span>(args[<span class="hljs-number">3</span>])
+    }
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Provided values were not numbers!&#x27;</span>);
+  }
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">multiplicator</span> = (<span class="hljs-params"><span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">printText</span>: <span class="hljs-built_in">string</span></span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(printText,  a * b);
+}
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">const</span> { value1, value2 } = <span class="hljs-title function_">parseArguments</span>(process.<span class="hljs-property">argv</span>);
+  <span class="hljs-title function_">multiplicator</span>(value1, value2, <span class="hljs-string">\`Multiplied <span class="hljs-subst">\${value1}</span> and <span class="hljs-subst">\${value2}</span>, the result is:\`</span>);
+} <span class="hljs-keyword">catch</span> (<span class="hljs-attr">error</span>: <span class="hljs-built_in">unknown</span>) {
+  <span class="hljs-keyword">let</span> errorMessage = <span class="hljs-string">&#x27;Something bad happened.&#x27;</span>
+  <span class="hljs-keyword">if</span> (error <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>) {
+    errorMessage += <span class="hljs-string">&#x27; Error: &#x27;</span> + error.<span class="hljs-property">message</span>;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(errorMessage);
+}
+</code></pre>
+<p>عندما نشغّل البرنامج الآن:</p>
+<pre><code class="language-bash">npm run multiply 1 lol
+</code></pre>
+<p>نحصل على رسالة خطأ مناسبة:</p>
+<pre><code>Something bad happened. Error: Provided values were not numbers!
+</code></pre>
+<p>هناك الكثير مما يجري في الشيفرة. وأهم إضافة هي الدالة <em>parseArguments</em> التي تضمن أن المعاملات المعطاة إلى <em>multiplicator</em> من النوع الصحيح. وإلا، يُرمى استثناء برسالة خطأ وصفية.</p>
+<p>في تعريف الدالة بضعة أمور مثيرة للاهتمام:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> parseArguments = (<span class="hljs-attr">args</span>: <span class="hljs-built_in">string</span>[]): <span class="hljs-title class_">MultiplyValues</span> =&amp;gt; {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>أولاً، المعامل <em>args</em> هو <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays" target="_blank" rel="noreferrer noopener">مصفوفة</a> من النصوص.</p>
+<p>القيمة المُعادة من الدالة من النوع <em>MultiplyValues</em>، المعرّف كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">MultiplyValues</span> {
+  <span class="hljs-attr">value1</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">value2</span>: <span class="hljs-built_in">number</span>;
+}
+</code></pre>
+<p>يستخدم التعريف الكلمة المفتاحية <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces" target="_blank" rel="noreferrer noopener">Interface</a> في TypeScript، وهي إحدى طرق تعريف &quot;الشكل&quot; الذي ينبغي أن يكون عليه الكائن. في حالتنا، من الواضح تماماً أن القيمة المُعادة ينبغي أن تكون كائناً بخاصيتين هما <em>value1</em> و<em>value2</em>، وينبغي أن يكون كلاهما من النوع number.</p>
+<h4 id="صيغة-المصفوفات-البديلة">صيغة المصفوفات البديلة</h4>
+<p>لاحظ أن هناك أيضاً صيغة بديلة لـ<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays" target="_blank" rel="noreferrer noopener">المصفوفات</a> في TypeScript. فبدلاً من كتابة</p>
+<pre><code class="language-ts"><span class="hljs-keyword">let</span> <span class="hljs-attr">values</span>: <span class="hljs-built_in">number</span>[];
+</code></pre>
+<p>يمكننا استخدام &quot;صيغة الأنواع العامة&quot; وكتابة</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> <span class="hljs-attr">values</span>: <span class="hljs-title class_">Array</span>&amp;lt;number&amp;gt;;
+</code></pre>
+<p>في هذا المقرر، سنتبع غالباً الاصطلاح الذي تفرضه قاعدة Eslint المسماة <a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">array-simple</a> التي تقترح كتابة المصفوفات البسيطة بصيغة [] واستخدام صيغة &lt;&gt; للمصفوفات الأكثر تعقيداً، انظر <a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">هنا</a> للأمثلة.</p>
+<div class="tasks">
+<p><strong>1. مؤشر كتلة الجسم</strong></p>
+</div>
+<div class="tasks">
+<p><strong>2. حاسبة التمارين</strong></p>
+</div>
+<div class="tasks">
+<p><strong>3. سطر الأوامر</strong></p>
+</div>
+<h3 id="إضافة-express-إلى-المزيج">إضافة Express إلى المزيج</h3>
+<p>نحن الآن في وضع جيد جداً. مشروعنا جاهز، ولدينا فيه آلتان حاسبتان قابلتان للتنفيذ. ومع ذلك، بما أننا نهدف إلى تعلّم تطوير الويب المتكامل، فقد حان الوقت للبدء بالعمل مع بعض طلبات HTTP.</p>
+<p>قبل ذلك، لنوسّع قليلاً إعداداتنا في الملف <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html">tsconfig.json</a>، الذي لم يحتوِ حتى الآن سوى على قاعدة tsconfig واحدة هي <a href="https://www.typescriptlang.org/tsconfig#noImplicitAny" target="_blank" rel="noreferrer noopener">noImplicitAny</a>. غيّر الملف ليكون بالمحتوى التالي:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esnext&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noEmit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;noUnusedLocals&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUnusedParameters&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noImplicitReturns&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noFallthroughCasesInSwitch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;nodenext&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;esModuleInterop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;allowImportingTsExtensions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>لا تقلق كثيراً بعد بشأن <em>compilerOptions</em>، فسيخضع لفحص أدق لاحقاً.</p>
+<p>إذا أردت، يمكنك العثور على شروحات لكل إعداد من توثيق TypeScript، أو من <a href="https://www.typescriptlang.org/tsconfig" target="_blank" rel="noreferrer noopener">صفحة tsconfig</a> المفيدة جداً، أو من <a href="http://json.schemastore.org/tsconfig" target="_blank" rel="noreferrer noopener">تعريف مخطط</a> tsconfig.</p>
+<p>لنبدأ البرمجة بتثبيت Express:</p>
+<pre><code class="language-bash">npm install express
+</code></pre>
+<p>ثم نضيف سكربت <em>start</em> إلى package.json:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;tsc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;multiply&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc  &amp;amp;&amp;amp; node multiplier.ts&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc &amp;amp;&amp;amp; node index.ts&quot;</span>  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ..</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>الآن يمكننا إنشاء الملف <em>index.ts</em> وكتابة نقطة نهاية HTTP GET المسماة <em>ping</em> فيه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();
+
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/ping&#x27;</span>, (req, res) =&amp;gt; {
+  res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;pong&#x27;</span>);
+});
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = <span class="hljs-number">3003</span>;
+
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>, () =&amp;gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Server running on port <span class="hljs-subst">\${PORT}</span>\`</span>);
+});
+</code></pre>
+<p>يبدو كل شيء آخر على ما يرام، لكن كما تتوقع، يحتاج المعاملان <em>req</em> و<em>res</em> في <em>app.get</em> إلى كتابة أنواع.</p>
+<p>إذا نظرت بعناية، ستجد أن VSCode يشتكي أيضاً من استيراد Express. يمكنك رؤية سطر أصفر قصير من النقاط تحت <em>require</em>. لنمرّر المؤشر فوق المشكلة:</p>
+<p><img src="/images/mooc/545769391140.webp" alt="صورة توضيحية"></p>
+<p>الشكوى هي أن <em>استدعاء 'require' يمكن تحويله إلى import</em>. لنتبع النصيحة ونكتب الاستيراد كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> express <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>;
+</code></pre>
+<blockquote>
+<p>يمنحك VSCode إمكانية إصلاح المشكلات تلقائياً بالنقر على زر <em>Quick Fix...</em>. أبقِ عينيك مفتوحتين على هذه المساعدات/الإصلاحات السريعة؛ فالاستماع إلى محرّرك يجعل شيفرتك عادةً أفضل وأسهل قراءة. ويمكن أن توفّر الإصلاحات التلقائية للمشكلات وقتاً كبيراً أيضاً.</p>
+</blockquote>
+<p>صيغة الاستيراد هي الخيار الأمثل مع TypeScript، لذا سنلتزم بها من هذه النقطة فصاعداً!</p>
+<p>الآن نصطدم بمشكلة أخرى: يشتكي المترجم من عبارة الاستيراد. ومرة أخرى، يكون المحرّر أفضل صديق لنا عند محاولة معرفة ماهية المشكلة:</p>
+<p><img src="/images/mooc/88ec93b02966.webp" alt="صورة توضيحية"></p>
+<p>سبب الخطأ هو أننا لم نثبّت أنواعاً لـ<em>Express</em>. لنفعل ما يقترحه الاقتراح ونشغّل:</p>
+<pre><code class="language-bash">npm install --save-dev @types/express
+</code></pre>
+<p>لا ينبغي أن تبقى أي أخطاء. لاحظ أنك قد تحتاج إلى إعادة فتح الملف في المحرّر ليتزامن VS Code.</p>
+<p>هناك مشكلة أخرى في الشيفرة:</p>
+<p><img src="/images/mooc/2eebb4d3ea9a.webp" alt="صورة توضيحية"></p>
+<p>وذلك لأننا منعنا المعاملات غير المستخدمة في ملف <em>tsconfig.json</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esnext&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noEmit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUnusedLocals&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUnusedParameters&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    <span class="hljs-attr">&quot;noImplicitReturns&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noFallthroughCasesInSwitch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;nodenext&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;esModuleInterop&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;allowImportingTsExtensions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>قد يخلق هذا الإعداد مشكلات إذا كانت لديك دوال معرّفة مسبقاً على مستوى المكتبة تتطلب تعريف متغير حتى لو لم يُستخدم إطلاقاً، كما هو الحال هنا. لحسن الحظ، هذه المشكلة محلولة بالفعل على مستوى الإعدادات. ومرة أخرى، يمنحنا تمرير المؤشر فوق المشكلة حلاً. هذه المرة، يمكننا فقط النقر على زر الإصلاح السريع:</p>
+<p><img src="/images/mooc/6ad212819a1c.webp" alt="صورة توضيحية"></p>
+<p>إذا كان من المستحيل تماماً التخلص من متغير غير مستخدم، يمكنك أن تسبقه بشرطة سفلية لإبلاغ المترجم بأنك فكّرت في الأمر ولا شيء يمكنك فعله.</p>
+<p>لنُعِد تسمية المتغير <em>req</em> إلى <em>_req</em>.</p>
+<p>أخيراً، أصبحنا مستعدين لبدء التطبيق. يبدو أنه يعمل بشكل جيد:</p>
+<p><img src="/images/mooc/3f2bf36fca3b.webp" alt="صورة توضيحية"></p>
+<p>لتبسيط عملية التطوير، ينبغي تمكين إعادة التحميل التلقائي. لقد استخدمت <em>node --watch </em>سابقاً في هذا المقرر،</p>
+<p>يمكننا تجربة ما يلي:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-comment">// ...</span>
+      <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc &amp;amp;&amp;amp; node --watch index.ts&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>ومع ذلك، هذا لا يعمل تماماً. إذ يجري فحص الأنواع في البداية فقط. وأحد الحلول سيكون تشغيل فحص الأنواع وNode في وضع المراقبة في الوقت نفسه. وهذا سهل باستخدام حزمة npm المسماة <a href="https://www.npmjs.com/package/concurrently">concurrently</a>. لنثبّتها:</p>
+<pre><code class="language-bash">npm install --save-dev concurrently
+</code></pre>
+<p>أضف سكربتاً إلى <em>package.json</em>:</p>
+<pre><code>  &quot;scripts&quot;: {
+    &quot;tsc&quot;: &quot;tsc&quot;,
+    &quot;multiply&quot;: &quot;tsc &amp;amp;&amp;amp; node multiplier.ts&quot;,
+    &quot;calculate&quot;: &quot;tsc &amp;amp;&amp;amp; node calculator.ts&quot;,
+// BEGIN HIGHLIGHT
+    &quot;start&quot;: &quot;node index.ts&quot;,
+    &quot;dev&quot;: &quot;concurrently \\&quot;tsc --watch\\&quot; \\&quot;node --watch index.ts\\&quot;&quot;
+// END HIGHLIGHT
+  },
+</code></pre>
+<p>أصبح <code>npm start</code> الآن أبسط، ويُفترض أن فحص الأنواع يجري <em>قبل</em> تشغيل الشيفرة.</p>
+<p>والآن، بتشغيل <code>npm run dev,</code> لدينا بيئة تطوير عاملة تعيد التحميل تلقائياً لمشروعنا! ومع ذلك، هناك أمر واحد جدير بالملاحظة. إذا أُدخل خطأ في الأنواع إلى البرنامج، يلاحظه فاحص الأنواع، لكن التطبيق يستمر في العمل، لذا عليك أن تراقب ما يحدث في الطرفية:</p>
+<p><img src="/images/mooc/5f8c905a4b47.webp" alt="صورة توضيحية"></p>
+<p>هناك أيضاً إعدادات من شأنها إيقاف البرنامج عن العمل في حال حدوث خطأ في الأنواع. لكننا نفضّل نهجاً أخف.</p>
+<p>الاتجاه الحالي هو الاعتماد إلى حد كبير على المحرّر في فحص الأنواع أثناء كتابة الشيفرة، وتشغيل <code>tsc --noEmit</code> في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-continuous-integration">خط أنابيب التكامل المستمر </a>أو كخطاف Git <a href="https://pre-commit.com/" data-type="link" data-id="https://pre-commit.com/">pre-commit</a>. هذا يبقي حلقة التطوير خفيفة. فـ <code>node --watch src/index.ts</code> يشغّل شيفرتك عند الحفظ فقط، بينما يعرض المحرّر أخطاء الأنواع في الوقت الفعلي. ويظل أمان الأنواع مفروضاً، لكن في اللحظات المهمة فقط بدلاً من إعاقة كل تشغيل.</p>
+<div class="tasks">
+<p><strong>4. Express</strong></p>
+</div>
+<div class="tasks">
+<p><strong>5. WebBmi</strong></p>
+</div>
+<h3 id="أهوال-any">أهوال <em>any</em></h3>
+<p>الآن بعد أن أكملنا أولى نقاط النهاية لدينا، قد تلاحظ أننا بالكاد استخدمنا أي شيء من TypeScript في هذه الأمثلة الصغيرة. وعند فحص الشيفرة عن قرب أكثر، يمكننا رؤية بعض المخاطر الكامنة فيها.</p>
+<p>لنضف نقطة نهاية HTTP POST المسماة <em>calculate</em> إلى تطبيقنا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { calculator } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./calculator.ts&#x27;</span>;
+
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>());
+
+<span class="hljs-comment">// ...</span>
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(value1, value2, op);
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<p>لجعل هذا يعمل، علينا إضافة <em>export</em> إلى الدالة <em>calculator</em>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> calculator = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">op</span>: <span class="hljs-title class_">Operation</span>) : <span class="hljs-built_in">number</span> =&amp;gt; {
+</code></pre>
+<p>عندما تمرّر المؤشر فوق الدالة <em>calculate</em>، يمكنك رؤية أنواع <em>calculator</em> حتى مع أن الشيفرة نفسها لا تحتوي على أي كتابة أنواع:</p>
+<p><img src="/images/mooc/bb9e398fffda.webp" alt="صورة توضيحية"></p>
+<p>لكن إذا مرّرت المؤشر فوق القيم المستخرجة من الطلب، تظهر مشكلة:</p>
+<p><img src="/images/mooc/a75fc1a7f6ca.webp" alt="صورة توضيحية"></p>
+<p>جميع المتغيرات من النوع <em>any</em>. وهذا ليس مفاجئاً كثيراً، إذ لم يمنحها أحد نوعاً بعد. وهناك بضع طرق لإصلاح ذلك، لكن أولاً، علينا التفكير في سبب قبول هذا ومن أين جاء النوع <em>any</em>.</p>
+<p>في TypeScript، يصبح كل متغير غير منمّط يتعذّر استنتاج نوعه ضمنياً من النوع <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any" target="_blank" rel="noreferrer noopener">any</a>. وany نوع يشبه &quot;بطاقة جامحة&quot;، يمثل <em>أي</em> نوع. وتصبح الأشياء من نوع any ضمنياً في كثير من الأحيان عندما ينسى المرء كتابة أنواع الدوال.</p>
+<p>يمكننا أيضاً كتابة الأنواع <em>any</em> صراحةً. والفرق الوحيد بين النوع any الضمني والصراحي هو شكل الشيفرة؛ فلا يهتم المترجم بالفرق.</p>
+<p>لكن المبرمجين يرون الشيفرة بشكل مختلف عندما يُفرض <em>any</em> صراحةً عما عندما يُستنتج ضمنياً. وعادة ما تُعتبر كتابات <em>any</em> الضمنية مشكلة لأنها كثيراً ما تكون بسبب نسيان المبرمج إسناد الأنواع (أو تكاسله عن ذلك)، وتعني أيضاً أن قوة TypeScript الكاملة لا تُستغل استغلالاً صحيحاً.</p>
+<p>لهذا السبب توجد قاعدة الإعدادات <a href="https://www.typescriptlang.org/tsconfig#noImplicitAny" target="_blank" rel="noreferrer noopener">noImplicitAny</a> على مستوى المترجم، ويوصى بشدة بإبقائها مفعّلة في جميع الأوقات. وفي المناسبات النادرة التي لا يمكنك فيها حقاً معرفة نوع متغير ما، ينبغي أن تذكر ذلك صراحةً في الشيفرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> a : any = <span class="hljs-comment">/* no clue what the type will be! */</span>.
+</code></pre>
+<p>لدينا بالفعل <em>noImplicitAny: true</em> مضبوط في مثالنا، فلماذا لا يشتكي المترجم من أنواع <em>any</em> الضمنية؟ السبب هو أن حقل <em>body</em> في كائن <a href="https://expressjs.com/en/5x/api.html#req" target="_blank" rel="noreferrer noopener">Request</a> الخاص بـ Express منمّط صراحةً بـ<em>any</em>. وينطبق الشيء نفسه على حقل <em>request.query</em> الذي يستخدمه Express لمعاملات الاستعلام.</p>
+<blockquote>
+<p><strong>ملاحظة حول الاستيراد</strong></p>
+<p>إذا نظرت بدقة إلى الشيفرة، لاحظت على الأرجح أن الاستيراد يستخدم اسم الملف الكامل بما في ذلك الامتداد:</p>
+<p>import { calculator } from './calculator.ts';</p>
+<p>وذلك لأن Node.js يحتاج إلى التمييز بين الملف المصدر <em>.ts</em> وملف <em>.js</em> المترجم المحتمل بالاسم نفسه، رغم أننا في حالتنا لن نملك حتى ملفات <em>.js</em>.</p>
+</blockquote>
+<p>ماذا لو أردنا تقييد المطورين من استخدام النوع <em>any</em>؟ لحسن الحظ، لدينا طرق غير <em>tsconfig.json</em> لفرض أسلوب كتابة الشيفرة. ما يمكننا فعله هو استخدام <em>ESlint</em> لإدارة شيفرتنا. لنثبّت ESlint وإضافاته الخاصة بـ TypeScript:</p>
+<pre><code class="language-bash">npm install --save-dev eslint @eslint/js typescript-eslint
+</code></pre>
+<blockquote>
+<p><strong>ملاحظة:</strong> في وقت كتابة هذا النص (28.3.2026)، فإن أحدث إصدار من <a href="https://www.npmjs.com/package/typescript-eslint">typescript-eslint</a> (وهو 5.57.2) غير متوافق مع TypeScript 6، الذي صدر في 23.3.2026. وبسبب ذلك، يفشل الأمر <code>npm install</code>. وإلى أن يصدر إصدار جديد، عليك تشغيل الأمر بالصيغة <code>npm install --legacy-peer-deps</code></p>
+</blockquote>
+<p>سنضبط ESlint على <a href="https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-explicit-any.mdx" target="_blank" rel="noreferrer noopener">منع any الصراحي</a>. اكتب القواعد التالية في <em>eslint.config.mjs</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> eslint <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@eslint/js&#x27;</span>;
+<span class="hljs-keyword">import</span> tseslint <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;typescript-eslint&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> tseslint.<span class="hljs-title function_">config</span>({
+  <span class="hljs-attr">files</span>: [<span class="hljs-string">&#x27;**/*.ts&#x27;</span>],
+  <span class="hljs-attr">extends</span>: [
+    eslint.<span class="hljs-property">configs</span>.<span class="hljs-property">recommended</span>,
+    ...tseslint.<span class="hljs-property">configs</span>.<span class="hljs-property">recommendedTypeChecked</span>,
+  ],
+  <span class="hljs-attr">languageOptions</span>: {
+    <span class="hljs-attr">parserOptions</span>: {
+      <span class="hljs-attr">project</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">tsconfigRootDir</span>: <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">dirname</span>,
+    },
+  },
+  <span class="hljs-attr">rules</span>: {
+    <span class="hljs-string">&#x27;@typescript-eslint/no-explicit-any&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+  },
+});
+
+</code></pre>
+<p>لنُعِد أيضاً سكربت npm باسم <em>lint</em> لفحص الملفات عبر تعديل ملف <em>package.json</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;tsc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;calculate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc &amp;amp;&amp;amp; node calculator.ts&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;multiply&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tsc &amp;amp;&amp;amp; node multiplier.ts&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node index.ts&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;concurrently \\&quot;tsc --watch\\&quot; \\&quot;node --watch index.ts\\&quot;&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eslint .&quot;</span>      <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      <span class="hljs-comment">//  ...</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>الآن سيشكو lint إذا حاولنا تعريف متغير من النوع <em>any</em>:</p>
+<p><img src="/images/mooc/dc0e824278bf.webp" alt="صورة توضيحية"></p>
+<p>لدى typescript-eslint الكثير من قواعد ESLint الخاصة بـ TypeScript، لكن يمكنك أيضاً استخدام جميع قواعد ESLint الأساسية في مشاريع TypeScript. في الوقت الحالي، ينبغي أن نمضي غالباً مع الإعدادات الموصى بها، وسنعدّل القواعد أثناء تقدمنا كلما وجدنا شيئاً نريد تغيير سلوكه.</p>
+<p>علاوة على الإعدادات الموصى بها، ينبغي أن نحاول التعرّف على أسلوب كتابة الشيفرة المطلوب في هذا الجزء و<em>جعل الفاصلة المنقوطة في نهاية كل سطر شيفرة مطلوبة</em>. ولذلك، ينبغي أن نثبّت ونضبط <a href="https://eslint.style/packages/default" target="_blank" rel="noreferrer noopener">@stylistic/eslint-plugin</a>:</p>
+<pre><code class="language-bash">npm install --save-dev @stylistic/eslint-plugin
+</code></pre>
+<p>يبدو ملفنا النهائي <em>eslint.config.mjs</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> eslint <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@eslint/js&#x27;</span>;
+<span class="hljs-keyword">import</span> tseslint <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;typescript-eslint&#x27;</span>;
+<span class="hljs-keyword">import</span> stylistic <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@stylistic/eslint-plugin&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> tseslint.<span class="hljs-title function_">config</span>({
+  <span class="hljs-attr">files</span>: [<span class="hljs-string">&#x27;**/*.ts&#x27;</span>],
+  <span class="hljs-attr">extends</span>: [
+    eslint.<span class="hljs-property">configs</span>.<span class="hljs-property">recommended</span>,
+    ...tseslint.<span class="hljs-property">configs</span>.<span class="hljs-property">recommendedTypeChecked</span>,
+  ],
+  <span class="hljs-attr">languageOptions</span>: {
+    <span class="hljs-attr">parserOptions</span>: {
+      <span class="hljs-attr">project</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">tsconfigRootDir</span>: <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">dirname</span>,
+    },
+  },
+  <span class="hljs-attr">plugins</span>: {
+    <span class="hljs-string">&quot;@stylistic&quot;</span>: stylistic,
+  },
+  <span class="hljs-attr">rules</span>: {
+    <span class="hljs-string">&#x27;@stylistic/semi&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/no-unsafe-assignment&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/no-explicit-any&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/explicit-function-return-type&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/explicit-module-boundary-types&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/restrict-template-expressions&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/restrict-plus-operands&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/no-unused-vars&#x27;</span>: [
+      <span class="hljs-string">&#x27;error&#x27;</span>,
+      { <span class="hljs-string">&#x27;argsIgnorePattern&#x27;</span>: <span class="hljs-string">&#x27;^_&#x27;</span> }
+    ],
+  },
+});
+</code></pre>
+<p>هناك عدد لا بأس به من الفواصل المنقوطة المفقودة، لكن إضافتها سهلة. وعلينا أيضاً حل مشكلات ESLint المتعلقة بنوع <em>any</em>:</p>
+<p><img src="/images/mooc/ef9805eea404.webp" alt="صورة توضيحية"></p>
+<p>يمكننا، بل ينبغي لنا على الأرجح، تعطيل بعض قواعد ESlint للحصول على البيانات من جسم الطلب.</p>
+<p>تعطيل <em>@typescript-eslint/no-unsafe-assignment</em> من أجل إسناد التفكيك واستدعاء دالة بناء <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number" target="_blank" rel="noreferrer noopener">Number</a> على القيم يكاد يكون كافياً:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment</span>
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(<span class="hljs-title class_">Number</span>(value1), <span class="hljs-title class_">Number</span>(value2), op);   <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<p>لكن هذا لا يزال يترك مشكلة واحدة للتعامل معها، وهي أن المعامل الأخير في استدعاء الدالة غير آمن:</p>
+<p><img src="/images/mooc/299688d2f185.webp" alt="صورة توضيحية"></p>
+<p>يمكننا فقط تعطيل قاعدة ESlint أخرى للتخلص من ذلك:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment</span>
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-argument</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(<span class="hljs-title class_">Number</span>(value1), <span class="hljs-title class_">Number</span>(value2), op);
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<p>لقد أسكتنا ESlint الآن، لكننا تحت رحمة المستخدم تماماً. ينبغي بالتأكيد أن نجري بعض التحقق على بيانات POST ونعطي رسالة خطأ مناسبة إذا كانت البيانات غير صالحة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment</span>
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">if</span> ( !value1 || <span class="hljs-built_in">isNaN</span>(<span class="hljs-title class_">Number</span>(value1)) ) {
+     <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;...&#x27;</span>});
+  }
+  <span class="hljs-comment">// المزيد من عمليات التحقق هنا...</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-argument</span>
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(<span class="hljs-title class_">Number</span>(value1), <span class="hljs-title class_">Number</span>(value2), op);
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<p>سنرى لاحقاً في هذا الجزء بعض التقنيات التي يمكن بها <em>تضييق</em> البيانات من النوع <em>any</em> (مثل المدخلات التي يستقبلها التطبيق من المستخدم) إلى نوع أكثر تحديداً (مثل number). ومع التضييق الصحيح للأنواع، لن تبقى هناك حاجة لإسكات قواعد ESlint.</p>
+<blockquote>
+<p><strong>تحذير</strong></p>
+<p>كثيراً ما يفقد VS code تتبّع ما يجري فعلاً في الشيفرة ويعرض تحذيرات متعلقة بالأنواع أو الأسلوب رغم إصلاح الشيفرة. إذا حدث هذا (وقد حدث معي كثيراً)، فأغلق الملف الذي يسبب لك المشكلة وافتحه، أو أعد تشغيل المحرّر فقط. ومن الجيد أيضاً التأكد مرتين من أن كل شيء يعمل فعلاً بتشغيل المترجم وESlint من سطر الأوامر بالأمرين:</p>
+<p>npm run tsc
+npm run lint</p>
+<p>فعند التشغيل من سطر الأوامر تحصل على &quot;النتيجة الحقيقية&quot; بالتأكيد. لذا، لا تثق بالمحرّر كثيراً أبداً!</p>
+</blockquote>
+<h3 id="تأكيد-النوع">تأكيد النوع</h3>
+<p>استخدام <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions" target="_blank" rel="noreferrer noopener">تأكيد النوع</a> هو &quot;حيلة ملتوية&quot; أخرى يمكن القيام بها لإبقاء مترجم TypeScript وEslint صامتين. لنصدّر النوع Operation في <em>calculator.ts</em>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">Operation</span> = <span class="hljs-string">&#x27;multiply&#x27;</span> | <span class="hljs-string">&#x27;add&#x27;</span> | <span class="hljs-string">&#x27;divide&#x27;</span>;
+</code></pre>
+<p>الآن يمكننا استيراد النوع واستخدام تأكيد النوع <em>as</em> لإخبار مترجم TypeScript بنوع المتغير:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { calculator, type <span class="hljs-title class_">Operation</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./calculator&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-comment">// ...</span>
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req: Request, res: Response</span>) =&gt;</span> {
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment</span>
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+
+  <span class="hljs-keyword">if</span> ( !value1 || <span class="hljs-built_in">isNaN</span>(<span class="hljs-title class_">Number</span>(value1)) ) {
+     <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;...&#x27;</span>});
+  }
+
+  <span class="hljs-keyword">const</span> operation = op <span class="hljs-keyword">as</span> <span class="hljs-title class_">Operation</span>;  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(<span class="hljs-title class_">Number</span>(value1), <span class="hljs-title class_">Number</span>(value2), operation);  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<blockquote>
+<p>لاحظ أننا استوردنا النوع Operation باستخدام الكلمة المفتاحية <em>type</em>:</p>
+<p>import { calculator, type Operation } from './calculator';</p>
+<p>وهذا مطلوب لأننا نشغّل الشيفرة مباشرةً بـ Node.js، الذي يزيل أنواع TypeScript وقت التشغيل، لذا يجب وسم أي استيرادات للأنواع فقط بهذا الشكل صراحةً.</p>
+</blockquote>
+<p>أصبح للمتغير المعرّف <em>operation</em> الآن نوع Operation، والمترجم راضٍ تماماً، ولا حاجة لإسكات قاعدة Eslint في استدعاء الدالة التالي. وفي الواقع، المتغير الجديد غير مطلوب، إذ يمكن إجراء تأكيد النوع عند تمرير وسيط إلى الدالة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/calculate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req: Request, res: Response</span>) =&gt;</span> {
+  <span class="hljs-comment">// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment</span>
+  <span class="hljs-keyword">const</span> { value1, value2, op } = req.<span class="hljs-property">body</span>;
+
+  <span class="hljs-comment">// التحقق من البيانات هنا</span>
+
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">calculator</span>(<span class="hljs-title class_">Number</span>(value1), <span class="hljs-title class_">Number</span>(value2), op <span class="hljs-keyword">as</span> <span class="hljs-title class_">Operation</span>); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">send</span>({ result });
+});
+</code></pre>
+<p>استخدام تأكيد النوع (أو إسكات قاعدة ESLint) ينطوي دائماً على بعض المخاطرة. فهو يُعفي مترجم TypeScript من المسؤولية، ويثق المترجم فقط بأننا، كمطورين، نعرف ما نفعله. وإذا لم يكن للنوع المؤكَّد <em>القيمة</em> الصحيحة، ستكون النتيجة خطأ وقت التشغيل، لذا يجب أن يكون المرء حذراً جداً عند التحقق من البيانات إذا استُخدم تأكيد النوع.</p>
+<p>في الفصل التالي، سنلقي نظرة على <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noreferrer noopener">تضييق الأنواع</a> الذي سيوفر طريقة أكثر أماناً بكثير لإعطاء نوع أكثر صرامة للبيانات القادمة من مصدر خارجي.</p>
+<div class="tasks">
+<p><strong>6. Eslint</strong></p>
+</div>
+<div class="tasks">
+<p><strong>7. WebExercises</strong></p>
+</div>
+<div class="tasks">
+<p><strong>8. Checkup</strong></p>
+</div>
+`,r={part:9,letter:"c",file:s,title:n,slug:a,mainImage:p,headings:l,html:t};export{r as default,s as file,l as headings,t as html,c as letter,p as mainImage,e as part,a as slug,n as title};

@@ -1,0 +1,648 @@
+const p=5,c="c",s="part5c.md",n="اختبار تطبيقات React",a="testing_react_apps",t="/images/part-5.svg",l=[{depth:3,id:"عرض-المكون-للاختبارات",text:"عرض المكوّن للاختبارات"},{depth:3,id:"موقع-ملف-الاختبار",text:"موقع ملف الاختبار"},{depth:3,id:"البحث-عن-محتوى-في-مكون",text:"البحث عن محتوى في مكوّن"},{depth:3,id:"تصحيح-أخطاء-الاختبارات",text:"تصحيح أخطاء الاختبارات"},{depth:3,id:"النقر-على-الأزرار-في-الاختبارات",text:"النقر على الأزرار في الاختبارات"},{depth:3,id:"اختبارات-لمكون-togglable",text:"اختبارات لمكوّن Togglable"},{depth:3,id:"اختبار-النماذج",text:"اختبار النماذج"},{depth:3,id:"حول-العثور-على-العناصر",text:"حول العثور على العناصر"},{depth:3,id:"تغطية-الاختبار",text:"تغطية الاختبار"},{depth:3,id:"تمارين-513-516",text:"تمارين 5.13.-5.16."},{depth:3,id:"اختبارات-تكامل-الواجهة-الأمامية",text:"اختبارات تكامل الواجهة الأمامية"},{depth:3,id:"اختبار-اللقطات",text:"اختبار اللقطات"}],e=`<div class="content">
+<p>هناك طرق مختلفة عديدة لاختبار تطبيقات React. لنلقِ نظرة عليها فيما يلي.</p>
+<p>استخدمت الدورة سابقاً مكتبة <a href="http://jestjs.io/">Jest</a> التي طوّرتها Facebook لاختبار مكوّنات React. نحن الآن نستخدم الجيل الجديد من أدوات الاختبار من مطوّري Vite وتُسمى <a href="https://vitest.dev/">Vitest</a>. بصرف النظر عن الإعدادات، تقدّم المكتبتان واجهة برمجة واحدة نفسها، لذا لا يوجد عملياً أي فرق في شيفرة الاختبار.</p>
+<p>لنبدأ بتثبيت Vitest ومكتبة <a href="https://github.com/jsdom/jsdom">jsdom</a> التي تحاكي متصفح الويب:</p>
+<pre><code>npm install --save-dev vitest jsdom
+</code></pre>
+<p>بالإضافة إلى Vitest، نحتاج أيضاً إلى مكتبة اختبار أخرى تساعدنا على عرض المكوّنات لأغراض الاختبار. الخيار الأفضل حالياً لذلك هو <a href="https://github.com/testing-library/react-testing-library">react-testing-library</a> الذي شهد نمواً سريعاً في الشعبية في الآونة الأخيرة. يجدر أيضاً توسيع القدرة التعبيرية للاختبارات بمكتبة <a href="https://github.com/testing-library/jest-dom">jest-dom</a>.</p>
+<p>لنثبّت المكتبات بالأمر:</p>
+<pre><code class="language-js">npm install --save-dev @testing-library/react @testing-library/jest-dom
+</code></pre>
+<p>قبل أن نتمكن من إجراء الاختبار الأول، نحتاج إلى بعض الإعدادات.</p>
+<p>نضيف سكربتاً إلى ملف <i>package.json</i> لتشغيل الاختبارات:</p>
+<pre><code class="language-js">{
+  <span class="hljs-string">&quot;scripts&quot;</span>: {
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;vitest run&quot;</span>
+  }
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لننشئ ملف <em>testSetup.js</em> في جذر المشروع بالمحتوى التالي</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { afterEach } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>
+<span class="hljs-keyword">import</span> { cleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@testing-library/jest-dom/vitest&#x27;</span>
+
+<span class="hljs-title function_">afterEach</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">cleanup</span>()
+})
+</code></pre>
+<p>الآن، بعد كل اختبار، تُنفَّذ الدالة <em>cleanup</em> لإعادة ضبط jsdom الذي يحاكي المتصفح.</p>
+<p>وسّع ملف <em>vite.config.js</em> كما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">test</span>: {
+    <span class="hljs-attr">environment</span>: <span class="hljs-string">&#x27;jsdom&#x27;</span>,
+    <span class="hljs-attr">globals</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">setupFiles</span>: <span class="hljs-string">&#x27;./testSetup.js&#x27;</span>, 
+  }
+})
+</code></pre>
+<p>مع <em>globals: true</em>، لا حاجة لاستيراد كلمات مفتاحية مثل <em>describe</em> و <em>test</em> و <em>expect</em> في الاختبارات.</p>
+<p>لنكتب أولاً اختبارات للمكوّن المسؤول عن عرض ملاحظة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Note</span> = (<span class="hljs-params">{ note, toggleImportance }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> label = note.<span class="hljs-property">important</span>
+    ? <span class="hljs-string">&#x27;make not important&#x27;</span>
+    : <span class="hljs-string">&#x27;make important&#x27;</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&#x27;note&#x27;</span>&gt;</span> // highlight-line
+      {note.content}
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggleImportance}</span>&gt;</span>{label}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>لاحظ أن عنصر <i>li</i> يحمل القيمة <i>note</i> للخاصية className الخاصة بـ <a href="https://react.dev/learn#adding-styles">CSS</a>، والتي يمكن استخدامها للوصول إلى المكوّن في اختباراتنا.</p>
+<h3 id="عرض-المكون-للاختبارات">عرض المكوّن للاختبارات</h3>
+<p>سنكتب اختبارنا في الملف <i>src/components/Note.test.jsx</i>، الموجود في الدليل نفسه الذي يوجد فيه المكوّن نفسه.</p>
+<p>يتحقق الاختبار الأول من أن المكوّن يعرض محتوى الملاحظة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>)
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeDefined</span>()
+})
+</code></pre>
+<p>بعد الإعداد الأولي، يعرض الاختبار المكوّن باستخدام دالة <a href="https://testing-library.com/docs/react-testing-library/api#render">render</a> التي توفّرها react-testing-library:</p>
+<pre><code class="language-js"><span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+</code></pre>
+<p>عادةً تُعرض مكوّنات React في <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model">DOM</a>. دالة render التي استخدمناها تعرض المكوّنات بصيغة مناسبة للاختبارات دون عرضها في DOM.</p>
+<p>يمكننا استخدام الكائن <a href="https://testing-library.com/docs/queries/about#screen">screen</a> للوصول إلى المكوّن المعروض. نستخدم دالة screen المسماة <a href="https://testing-library.com/docs/queries/bytext">getByText</a> للبحث عن عنصر يحوي محتوى الملاحظة والتأكد من وجوده:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>)
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeDefined</span>()
+</code></pre>
+<p>يُفحص وجود عنصر باستخدام أمر <a href="https://vitest.dev/api/expect.html#expect">expect</a> الخاص بـ Vitest. يولّد expect تأكيداً (assertion) لوسيطه، ويمكن اختبار صحته باستخدام دوال شرطية مختلفة. استخدمنا الآن <a href="https://vitest.dev/api/expect.html#tobedefined">toBeDefined</a> الذي يختبر ما إذا كان وسيط expect المسمى <em>element</em> موجوداً.</p>
+<p>شغّل الاختبار بالأمر <em>npm test</em>:</p>
+<pre><code class="language-js">$ npm test
+
+&gt; notes-frontend@<span class="hljs-number">0.0</span><span class="hljs-number">.0</span> test
+&gt; vitest run
+
+
+ <span class="hljs-variable constant_">RUN</span>  v3<span class="hljs-number">.2</span><span class="hljs-number">.3</span> /home/vejolkko/repot/fullstack-examples/notes-frontend
+
+ ✓ src/components/<span class="hljs-title class_">Note</span>.<span class="hljs-property">test</span>.<span class="hljs-property">jsx</span> (<span class="hljs-number">1</span> test) 19ms
+   ✓ renders content 18ms
+
+ <span class="hljs-title class_">Test</span> <span class="hljs-title class_">Files</span>  <span class="hljs-number">1</span> <span class="hljs-title function_">passed</span> (<span class="hljs-number">1</span>)
+      <span class="hljs-title class_">Tests</span>  <span class="hljs-number">1</span> <span class="hljs-title function_">passed</span> (<span class="hljs-number">1</span>)
+   <span class="hljs-title class_">Start</span> at  <span class="hljs-number">14</span>:<span class="hljs-number">31</span>:<span class="hljs-number">54</span>
+   <span class="hljs-title class_">Duration</span>  874ms (transform 51ms, setup 169ms, collect 19ms, tests 19ms, environment 454ms, prepare 87ms)
+</code></pre>
+<p>يشتكي Eslint من الكلمتين المفتاحيتين <em>test</em> و <em>expect</em> في الاختبارات. يمكن حل المشكلة بإضافة الإعداد التالي إلى ملف <i>eslint.config.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> [
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-comment">// highlight-start</span>
+  {
+    <span class="hljs-attr">files</span>: [<span class="hljs-string">&#x27;**/*.test.{js,jsx}&#x27;</span>],
+    <span class="hljs-attr">languageOptions</span>: {
+      <span class="hljs-attr">globals</span>: {
+        ...globals.<span class="hljs-property">vitest</span>
+      }
+    }
+  }
+  <span class="hljs-comment">// highlight-end</span>
+]
+</code></pre>
+<p>هكذا يُبلَّغ ESLint بأن كلمات Vitest المفتاحية متاحة عالمياً في ملفات الاختبار.</p>
+<h3 id="موقع-ملف-الاختبار">موقع ملف الاختبار</h3>
+<p>في React يوجد (على الأقل) <a href="https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850">اصطلاحان مختلفان</a> لموقع ملف الاختبار. أنشأنا ملفات اختبارنا وفق المعيار الحالي بوضعها في الدليل نفسه الذي يوجد فيه المكوّن المُختبَر.</p>
+<p>الاصطلاح الآخر هو تخزين ملفات الاختبار &quot;بشكل عادي&quot; في دليل <em>test</em> منفصل. أياً كان الاصطلاح الذي نختاره، يكاد يكون من المؤكد أنه خطأ في نظر أحدهم.</p>
+<p>لا يعجبني تخزين الاختبارات وشيفرة التطبيق في الدليل نفسه. مع ذلك، سنتبع هذا النهج الآن، لأنه الممارسة الأكثر شيوعاً في المشاريع الصغيرة.</p>
+<h3 id="البحث-عن-محتوى-في-مكون">البحث عن محتوى في مكوّن</h3>
+<p>تقدّم حزمة react-testing-library طرقاً مختلفة عديدة لفحص محتوى المكوّن المُختبَر. في الواقع، لا حاجة إلى <em>expect</em> في اختبارنا على الإطلاق:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>)
+
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeDefined</span>() <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>يفشل الاختبار إذا لم يجد <em>getByText</em> العنصر الذي يبحث عنه.</p>
+<p>يبحث الأمر <em>getByText</em> افتراضياً عن عنصر يحتوي فقط على <strong>النص المقدَّم كوسيط</strong> ولا شيء غير ذلك. لنفترض أن مكوّناً يعرض نصاً في عنصر HTML كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Note</span> = (<span class="hljs-params">{ note, toggleImportance }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> label = note.<span class="hljs-property">important</span>
+    ? <span class="hljs-string">&#x27;make not important&#x27;</span> : <span class="hljs-string">&#x27;make important&#x27;</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&#x27;note&#x27;</span>&gt;</span>
+      Your awesome note: {note.content} // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggleImportance}</span>&gt;</span>{label}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Note</span>
+</code></pre>
+<p>دالة <em>getByText</em> التي يستخدمها الاختبار <i>لا</i> تجد العنصر:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Does not work anymore :(&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Does not work anymore :(&#x27;</span>)
+
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeDefined</span>()
+})
+</code></pre>
+<p>إذا أردنا البحث عن عنصر <i>يحتوي</i> على النص، يمكننا استخدام خيار إضافي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(
+  <span class="hljs-string">&#x27;Does not work anymore :(&#x27;</span>, { <span class="hljs-attr">exact</span>: <span class="hljs-literal">false</span> }
+)
+</code></pre>
+<p>أو يمكننا استخدام الدالة <em>findByText</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> element = <span class="hljs-keyword">await</span> screen.<span class="hljs-title function_">findByText</span>(<span class="hljs-string">&#x27;Does not work anymore :(&#x27;</span>)
+</code></pre>
+<p>من المهم ملاحظة أن <em>findByText</em>، بخلاف دوال <em>ByText</em> الأخرى، تُعيد promise!</p>
+<p>هناك حالات تكون فيها صيغة أخرى من الدالة <em>queryByText</em> مفيدة. تُعيد الدالة العنصر لكن <i>لا تُسبب استثناءً</i> إذا لم يُعثر عليه.</p>
+<p>يمكننا مثلاً استخدام الدالة للتأكد من أن شيئاً ما <i>غير معروض</i> في المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;does not render this&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;This is a reminder&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">queryByText</span>(<span class="hljs-string">&#x27;do not want this thing to be rendered&#x27;</span>)
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeNull</span>()
+})
+</code></pre>
+<p>توجد دوال أخرى أيضاً، مثل <a href="https://testing-library.com/docs/queries/bytestid/">getByTestId</a>، التي تبحث عن العناصر بناءً على حقول id مُنشأة خصيصاً لأغراض الاختبار.</p>
+<p>يمكننا أيضاً استخدام <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">محدّدات CSS</a> للعثور على العناصر المعروضة باستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector">querySelector</a> الخاصة بالكائن <a href="https://testing-library.com/docs/react-testing-library/api/#container-1">container</a> الذي هو أحد الحقول التي تُعيدها render:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-keyword">const</span> { container } = <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> div = container.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.note&#x27;</span>)
+  <span class="hljs-title function_">expect</span>(div).<span class="hljs-title function_">toHaveTextContent</span>(
+    <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>
+  )
+  <span class="hljs-comment">// highlight-end</span>
+})
+</code></pre>
+<p>يُوصى مع ذلك بالبحث عن العناصر أساساً باستخدام دوال غير كائن <i>container</i> ومحدّدات CSS. فغالباً ما يمكن تغيير خصائص CSS دون التأثير على وظائف التطبيق، ولا يكون المستخدمون على دراية بها. الأفضل البحث عن العناصر بناءً على خصائص مرئية للمستخدم، مثلاً باستخدام الدالة <em>getByText</em>. بهذه الطريقة، تحاكي الاختبارات الطبيعة الفعلية للمكوّن وكيف سيجد المستخدم العنصر على الشاشة بشكل أفضل.</p>
+<h3 id="تصحيح-أخطاء-الاختبارات">تصحيح أخطاء الاختبارات</h3>
+<p>نصادف عادةً أنواعاً مختلفة عديدة من المشكلات عند كتابة اختباراتنا.</p>
+<p>يمتلك الكائن <em>screen</em> دالة <a href="https://testing-library.com/docs/dom-testing-library/api-debugging#screendebug">debug</a> يمكن استخدامها لطباعة HTML الخاص بمكوّن في الطرفية. إذا غيّرنا الاختبار كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  screen.<span class="hljs-title function_">debug</span>() <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-comment">// ...</span>
+
+})
+</code></pre>
+<p>يُطبع HTML في وحدة التحكم:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-property">log</span>
+  &lt;body&gt;
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">li</span>
+        <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;note&quot;</span>
+      &gt;</span>
+        Component testing is done with react-testing-library
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>
+          make not important
+        <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  &lt;/body&gt;
+</code></pre>
+<p>من الممكن أيضاً استخدام الدالة نفسها لطباعة عنصر مرغوب في وحدة التحكم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders content&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>)
+
+  screen.<span class="hljs-title function_">debug</span>(element)  <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeDefined</span>()
+})
+</code></pre>
+<p>الآن يُطبع HTML الخاص بالعنصر المرغوب:</p>
+<pre><code class="language-js">  &lt;li
+    <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;note&quot;</span>
+  &gt;
+    <span class="hljs-title class_">Component</span> testing is done <span class="hljs-keyword">with</span> react-testing-library
+    &lt;button&gt;
+      make not important
+    &lt;/button&gt;
+  &lt;/li&gt;
+</code></pre>
+<h3 id="النقر-على-الأزرار-في-الاختبارات">النقر على الأزرار في الاختبارات</h3>
+<p>بالإضافة إلى عرض المحتوى، يحرص مكوّن <i>Note</i> أيضاً على أنه عند الضغط على الزر المرتبط بالملاحظة، تُستدعى دالة معالج الحدث <em>toggleImportance</em>.</p>
+<p>لنثبّت مكتبة <a href="https://testing-library.com/docs/user-event/intro">user-event</a> التي تجعل محاكاة إدخال المستخدم أسهل قليلاً:</p>
+<pre><code class="language-bash">npm install --save-dev @testing-library/user-event
+</code></pre>
+<p>يمكن اختبار هذه الوظيفة هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> userEvent <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/user-event&#x27;</span> <span class="hljs-comment">// highlight-line</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;clicking the button calls event handler once&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> note = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Component testing is done with react-testing-library&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+  
+  <span class="hljs-keyword">const</span> mockHandler = vi.<span class="hljs-title function_">fn</span>()  <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-title function_">render</span>(
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> <span class="hljs-attr">toggleImportance</span>=<span class="hljs-string">{mockHandler}</span> /&gt;</span></span>  <span class="hljs-comment">// highlight-line</span>
+  )
+
+  <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()  <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> button = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make not important&#x27;</span>)  <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(button)  <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-title function_">expect</span>(mockHandler.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">1</span>)  <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>هناك بضعة أمور مثيرة للاهتمام تتعلق بهذا الاختبار. معالج الحدث هو دالة <a href="https://vitest.dev/api/mock">mock</a> مُعرَّفة بـ Vitest:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mockHandler = vi.<span class="hljs-title function_">fn</span>()
+</code></pre>
+<p>تُبدأ <a href="https://testing-library.com/docs/user-event/setup/">جلسة</a> للتفاعل مع المكوّن المعروض:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+</code></pre>
+<p>يجد الاختبار الزر <i>بناءً على النص</i> من المكوّن المعروض وينقر العنصر:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> button = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make not important&#x27;</span>)
+<span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(button)
+</code></pre>
+<p>يحدث النقر بالدالة <a href="https://testing-library.com/docs/user-event/convenience/#click">click</a> الخاصة بمكتبة userEvent.</p>
+<p>يستخدم توقع الاختبار <a href="https://vitest.dev/api/expect.html#tohavelength">toHaveLength</a> للتحقق من أن <i>دالة mock</i> قد استُدعيت مرة واحدة بالضبط:</p>
+<pre><code class="language-js"><span class="hljs-title function_">expect</span>(mockHandler.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">1</span>)
+</code></pre>
+<p>تُحفظ الاستدعاءات إلى دالة mock في المصفوفة <a href="https://vitest.dev/api/mock#mock-calls">mock.calls</a> داخل كائن دالة mock.</p>
+<p>تُستخدم <a href="https://en.wikipedia.org/wiki/Mock_object">كائنات ودوال mock</a> عادةً كمكوّنات <a href="https://en.wikipedia.org/wiki/Method_stub">stub</a> في الاختبار لاستبدال اعتماديات المكوّنات المُختبَرة. تتيح mocks إعادة استجابات ثابتة، والتحقق من عدد المرات التي تُستدعى فيها دوال mock وبأي معاملات.</p>
+<p>في مثالنا، دالة mock خيار مثالي لأنه يمكن استخدامها بسهولة للتحقق من أن الدالة تُستدعى مرة واحدة بالضبط.</p>
+<h3 id="اختبارات-لمكون-togglable">اختبارات لمكوّن <i>Togglable</i></h3>
+<p>لنكتب بضعة اختبارات لمكوّن <i>Togglable</i>. تظهر الاختبارات أدناه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> userEvent <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/user-event&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Togglable</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Togglable&#x27;</span>
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;&lt;Togglable /&gt;&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">render</span>(
+      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Togglable</span> <span class="hljs-attr">buttonLabel</span>=<span class="hljs-string">&quot;show...&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>togglable content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Togglable</span>&gt;</span></span>
+    )
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;renders its children&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;togglable content&#x27;</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;at start the children are not displayed&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;togglable content&#x27;</span>)
+    <span class="hljs-title function_">expect</span>(element).<span class="hljs-property">not</span>.<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;after clicking the button, children are displayed&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+    <span class="hljs-keyword">const</span> button = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;show...&#x27;</span>)
+    <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(button)
+
+    <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;togglable content&#x27;</span>)
+    <span class="hljs-title function_">expect</span>(element).<span class="hljs-title function_">toBeVisible</span>()
+  })
+})
+</code></pre>
+<p>تُستدعى الدالة <em>beforeEach</em> قبل كل اختبار، فتعرض مكوّن <i>Togglable</i>.</p>
+<p>يتحقق الاختبار الأول من أن مكوّن <i>Togglable</i> يعرض مكوّنه الفرعي</p>
+<pre><code class="language-js">&lt;div&gt;
+  togglable content
+&lt;/div&gt;
+</code></pre>
+<p>تستخدم الاختبارات المتبقية الدالة <em>toBeVisible</em> للتحقق من أن المكوّن الفرعي لمكوّن <i>Togglable</i> غير مرئي في البداية، أي أن نمط عنصر <i>div</i> يحتوي على <em>{ display: 'none' }</em>. ويتحقق اختبار آخر من أنه عند الضغط على الزر يصبح المكوّن مرئياً، أي أن نمط إخفائه <i>لم يعد</i> مُسنَداً إلى المكوّن.</p>
+<p>لنضف أيضاً اختباراً يمكن استخدامه للتحقق من أنه يمكن إخفاء المحتوى المرئي بالنقر على الزر الثاني في المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;&lt;Togglable /&gt;&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;toggled content can be closed&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+    <span class="hljs-keyword">const</span> button = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;show...&#x27;</span>)
+    <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(button)
+
+    <span class="hljs-keyword">const</span> closeButton = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;cancel&#x27;</span>)
+    <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(closeButton)
+
+    <span class="hljs-keyword">const</span> element = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;togglable content&#x27;</span>)
+    <span class="hljs-title function_">expect</span>(element).<span class="hljs-property">not</span>.<span class="hljs-title function_">toBeVisible</span>()
+  })
+})
+</code></pre>
+<h3 id="اختبار-النماذج">اختبار النماذج</h3>
+<p>استخدمنا بالفعل دالة <em>click</em> الخاصة بـ <a href="https://testing-library.com/docs/user-event/intro">user-event</a> في اختباراتنا السابقة للنقر على الأزرار.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+<span class="hljs-keyword">const</span> button = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;show...&#x27;</span>)
+<span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(button)
+</code></pre>
+<p>يمكننا أيضاً محاكاة إدخال النص باستخدام <i>userEvent</i>.</p>
+<p>لنجرِ اختباراً لمكوّن <i>NoteForm</i>. شيفرة المكوّن كما يلي.</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params">{ createNote }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = event =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-title function_">createNote</span>({
+      <span class="hljs-attr">content</span>: newNote,
+      <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+    })
+
+    <span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Create a new note<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setNewNote(event.target.value)}
+        /&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">NoteForm</span>
+</code></pre>
+<p>يعمل النموذج باستدعاء الدالة المستلمة كـ props المسماة <em>createNote</em>، مع تفاصيل الملاحظة الجديدة.</p>
+<p>الاختبار كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">NoteForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./NoteForm&#x27;</span>
+<span class="hljs-keyword">import</span> userEvent <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/user-event&#x27;</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;&lt;NoteForm /&gt; updates parent state and calls onSubmit&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> createNote = vi.<span class="hljs-title function_">fn</span>()
+  <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">NoteForm</span> <span class="hljs-attr">createNote</span>=<span class="hljs-string">{createNote}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> input = screen.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+  <span class="hljs-keyword">const</span> sendButton = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;save&#x27;</span>)
+
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">type</span>(input, <span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(sendButton)
+
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">1</span>)
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>].<span class="hljs-property">content</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+})
+</code></pre>
+<p>تصل الاختبارات إلى حقل الإدخال باستخدام الدالة <a href="https://testing-library.com/docs/queries/byrole">getByRole</a>.</p>
+<p>تُستخدم الدالة <a href="https://testing-library.com/docs/user-event/utility#type">type</a> الخاصة بـ userEvent لكتابة نص في حقل الإدخال.</p>
+<p>يضمن توقع الاختبار الأول أن إرسال النموذج يستدعي دالة <em>createNote</em>.
+ويتحقق التوقع الثاني من أن معالج الحدث يُستدعى بالمعاملات الصحيحة - أي إن ملاحظة بالمحتوى الصحيح تُنشأ عند ملء النموذج.</p>
+<p>يجدر بالذكر أن <em>console.log</em> القديم الجيد يعمل كالمعتاد في الاختبارات. مثلاً، إذا أردت رؤية شكل الاستدعاءات المحفوظة بواسطة كائن mock، يمكنك فعل ما يلي</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;&lt;NoteForm /&gt; updates parent state and calls onSubmit&#x27;</span>, <span class="hljs-title function_">async</span>() =&gt; {
+  <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+  <span class="hljs-keyword">const</span> createNote = vi.<span class="hljs-title function_">fn</span>()
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">NoteForm</span> <span class="hljs-attr">createNote</span>=<span class="hljs-string">{createNote}</span> /&gt;</span></span>)
+
+  <span class="hljs-keyword">const</span> input = screen.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+  <span class="hljs-keyword">const</span> sendButton = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;save&#x27;</span>)
+
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">type</span>(input, <span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(sendButton)
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>) <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>في منتصف تشغيل الاختبارات، يُطبع ما يلي في وحدة التحكم:</p>
+<pre><code>[ [ { content: 'testing a form...', important: true } ] ]
+</code></pre>
+<h3 id="حول-العثور-على-العناصر">حول العثور على العناصر</h3>
+<p>لنفترض أن النموذج يحتوي على حقلي إدخال</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params">{ createNote }</span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Create a new note<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setNewNote(event.target.value)}
+        /&gt;
+        // highlight-start
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{...}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{...}</span>
+        /&gt;</span>
+        // highlight-end
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الآن النهج الذي يستخدمه اختبارنا للعثور على حقل الإدخال</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> input = screen.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+</code></pre>
+<p>سيسبب خطأ:</p>
+<p><img src="/images/content/5/40.webp" alt="خطأ node يُظهر عنصرين مع textbox لأننا نستخدم getByRole"></p>
+<p>تقترح رسالة الخطأ استخدام <i>getAllByRole</i>. يمكن إصلاح الاختبار كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> inputs = screen.<span class="hljs-title function_">getAllByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+
+<span class="hljs-keyword">await</span> user.<span class="hljs-title function_">type</span>(inputs[<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+</code></pre>
+<p>تُعيد الدالة <i>getAllByRole</i> الآن مصفوفة، وحقل الإدخال الصحيح هو العنصر الأول في المصفوفة. لكن هذا النهج مريب قليلاً لأنه يعتمد على ترتيب حقول الإدخال.</p>
+<p>إذا عُرّف <i>label</i> لحقل الإدخال، يمكن تحديد حقل الإدخال باستخدامه مع دالة getByLabelText. مثلاً، إذا أضفنا label إلى حقل الإدخال:</p>
+<pre><code class="language-js">  <span class="hljs-comment">// ...</span>
+  &lt;label&gt; <span class="hljs-comment">// highlight-line</span>
+    content <span class="hljs-comment">// highlight-line</span>
+    &lt;input
+      value={newNote}
+      onChange={<span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)}
+    /&gt;
+  &lt;<span class="hljs-regexp">/label&gt; /</span>/ highlight-line
+  <span class="hljs-comment">// ...</span>
+</code></pre>
+<p>يمكن للاختبار تحديد حقل الإدخال كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;&lt;NoteForm /&gt; updates parent state and calls onSubmit&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+  <span class="hljs-keyword">const</span> createNote = vi.<span class="hljs-title function_">fn</span>()
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">NoteForm</span> <span class="hljs-attr">createNote</span>=<span class="hljs-string">{createNote}</span> /&gt;</span></span>) 
+
+  <span class="hljs-keyword">const</span> input = screen.<span class="hljs-title function_">getByLabelText</span>(<span class="hljs-string">&#x27;content&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> sendButton = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;save&#x27;</span>)
+
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">type</span>(input, <span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(sendButton)
+
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">1</span>)
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>].<span class="hljs-property">content</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+})
+</code></pre>
+<p>غالباً ما تحتوي حقول الإدخال على نص <i>placeholder</i> يلمّح للمستخدم إلى نوع الإدخال المتوقع. لنضف placeholder إلى نموذجنا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params">{ createNote }</span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Create a new note<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setNewNote(event.target.value)}
+          placeholder=&#x27;write note content here&#x27; // highlight-line 
+        /&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{...}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{...}</span>
+        /&gt;</span>    
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الآن العثور على حقل الإدخال الصحيح سهل باستخدام الدالة <a href="https://testing-library.com/docs/queries/byplaceholdertext">getByPlaceholderText</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;&lt;NoteForm /&gt; updates parent state and calls onSubmit&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> user = userEvent.<span class="hljs-title function_">setup</span>()
+  <span class="hljs-keyword">const</span> createNote = vi.<span class="hljs-title function_">fn</span>()
+
+  <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">NoteForm</span> <span class="hljs-attr">createNote</span>=<span class="hljs-string">{createNote}</span> /&gt;</span></span>) 
+
+  <span class="hljs-keyword">const</span> input = screen.<span class="hljs-title function_">getByPlaceholderText</span>(<span class="hljs-string">&#x27;write note content here&#x27;</span>) <span class="hljs-comment">// highlight-line </span>
+  <span class="hljs-keyword">const</span> sendButton = screen.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;save&#x27;</span>)
+
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">type</span>(input, <span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+  <span class="hljs-keyword">await</span> user.<span class="hljs-title function_">click</span>(sendButton)
+
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">1</span>)
+  <span class="hljs-title function_">expect</span>(createNote.<span class="hljs-property">mock</span>.<span class="hljs-property">calls</span>[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>].<span class="hljs-property">content</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;testing a form...&#x27;</span>)
+})
+</code></pre>
+<p>أحياناً قد يكون العثور على العنصر الصحيح باستخدام الدوال الموصوفة أعلاه صعباً. في مثل هذه الحالات، البديل هو الدالة <i>querySelector</i> الخاصة بالكائن <em>container</em>، الذي تُعيده <em>render</em>، كما ذُكر <a href="/part5/testing_react_apps#searching-for-content-in-a-component">سابقاً في هذا الجزء</a>. يمكن استخدام أي محدّد CSS مع هذه الدالة للبحث عن العناصر في الاختبارات.</p>
+<p>تأمّل مثلاً أننا سنعرّف <em>id</em> فريداً لحقل الإدخال:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params">{ createNote }</span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Create a new note<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setNewNote(event.target.value)}
+          id=&#x27;note-input&#x27; // highlight-line 
+        /&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{...}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{...}</span>
+        /&gt;</span>    
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يمكن الآن العثور على عنصر الإدخال في الاختبار كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { container } = <span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">NoteForm</span> <span class="hljs-attr">createNote</span>=<span class="hljs-string">{createNote}</span> /&gt;</span></span>)
+
+<span class="hljs-keyword">const</span> input = container.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#note-input&#x27;</span>)
+</code></pre>
+<p>مع ذلك، سنلتزم بنهج استخدام <em>getByPlaceholderText</em> في الاختبار.</p>
+<h3 id="تغطية-الاختبار">تغطية الاختبار</h3>
+<p>يمكننا معرفة <a href="https://vitest.dev/guide/coverage.html#coverage">التغطية</a> لاختباراتنا بسهولة بتشغيلها بالأمر.</p>
+<pre><code class="language-js">npm test -- --coverage
+</code></pre>
+<p>في المرة الأولى التي تشغّل فيها الأمر، سيسألك Vitest إذا كنت تريد تثبيت المكتبة المطلوبة <em>@vitest/coverage-v8</em>. ثبّتها، ثم شغّل الأمر مجدداً:</p>
+<p><img src="/images/content/5/18new.webp" alt="مخرجات الطرفية لتغطية الاختبار"></p>
+<p>سيُنشأ تقرير HTML في دليل <i>coverage</i>.
+سيخبرنا التقرير بأسطر الشيفرة غير المُختبَرة في كل مكوّن:</p>
+<p><img src="/images/content/5/19newer.webp" alt="تقرير HTML لتغطية الاختبار"></p>
+<p>لنضف الدليل <i>coverage/</i> إلى ملف <i>.gitignore</i> لاستبعاد محتوياته من التحكم بالإصدارات:</p>
+<pre><code class="language-js"><span class="hljs-comment">//...</span>
+
+coverage/
+</code></pre>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part5-8</i> من <a href="https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-8">مستودع GitHub هذا</a>.</p>
+</div>
+<div class="tasks">
+<h3 id="تمارين-513-516">تمارين 5.13.-5.16.</h3>
+<h4 id="513-اختبارات-قائمة-المدونات-الخطوة-1">5.13: اختبارات قائمة المدونات، الخطوة 1</h4>
+<p>أنشئ اختباراً يتحقق من أن المكوّن الذي يعرض مدونة يعرض عنوان المدونة وكاتبها، لكنه لا يعرض رابطها ولا عدد الإعجابات افتراضياً.</p>
+<p>أضف أصناف CSS إلى المكوّن للمساعدة في الاختبار حسب الحاجة.</p>
+<h4 id="514-اختبارات-قائمة-المدونات-الخطوة-2">5.14: اختبارات قائمة المدونات، الخطوة 2</h4>
+<p>أنشئ اختباراً يتحقق من ظهور رابط المدونة وعدد الإعجابات عند النقر على الزر المتحكم في التفاصيل المعروضة.</p>
+<h4 id="515-اختبارات-قائمة-المدونات-الخطوة-3">5.15: اختبارات قائمة المدونات، الخطوة 3</h4>
+<p>أنشئ اختباراً يضمن أنه إذا نُقر على زر <i>like</i> مرتين، فإن معالج الحدث الذي استقبله المكوّن كـ props يُستدعى مرتين.</p>
+<h4 id="516-اختبارات-قائمة-المدونات-الخطوة-4">5.16: اختبارات قائمة المدونات، الخطوة 4</h4>
+<p>أنشئ اختباراً لنموذج المدونة الجديد. يجب أن يتحقق الاختبار من أن النموذج يستدعي معالج الحدث الذي استقبله كـ props بالتفاصيل الصحيحة عند إنشاء مدونة جديدة.</p>
+</div>
+<div class="content">
+<h3 id="اختبارات-تكامل-الواجهة-الأمامية">اختبارات تكامل الواجهة الأمامية</h3>
+<p>في الجزء السابق من مواد الدورة، كتبنا اختبارات تكامل للواجهة الخلفية تختبر منطقها وتربط قاعدة البيانات عبر API الذي توفره الواجهة الخلفية. عند كتابة هذه الاختبارات، اتخذنا قراراً واعياً بعدم كتابة اختبارات وحدة، لأن شيفرة تلك الواجهة الخلفية بسيطة إلى حد كبير، ومن المحتمل أن تحدث الأخطاء في تطبيقنا في سيناريوهات أكثر تعقيداً مما تصلح له اختبارات الوحدة.</p>
+<p>حتى الآن كانت جميع اختباراتنا للواجهة الأمامية اختبارات وحدة تحققت من الأداء الصحيح للمكوّنات الفردية. اختبار الوحدة مفيد أحياناً، لكن حتى مجموعة شاملة من اختبارات الوحدة لا تكفي للتحقق من أن التطبيق يعمل ككل.</p>
+<p>يمكننا أيضاً إنشاء اختبارات تكامل للواجهة الأمامية. يختبر اختبار التكامل تعاون مكوّنات متعددة. وهو أصعب بكثير من اختبار الوحدة، إذ سيتعين علينا مثلاً محاكاة بيانات من الخادم.
+اخترنا التركيز على إنشاء اختبارات من طرف إلى طرف لاختبار التطبيق بأكمله. سنعمل على اختبارات من طرف إلى طرف في الفصل التالي من هذا الجزء.</p>
+<h3 id="اختبار-اللقطات">اختبار اللقطات</h3>
+<p>تقدّم Vitest بديلاً مختلفاً تماماً عن الاختبار &quot;التقليدي&quot; يُسمى اختبار <a href="https://vitest.dev/guide/snapshot">اللقطات (snapshot)</a>. الميزة المثيرة في اختبار اللقطات هي أن المطورين لا يحتاجون إلى تعريف أي اختبارات بأنفسهم، فاعتماد اختبار اللقطات بسيط بما يكفي.</p>
+<p>المبدأ الأساسي هو مقارنة شيفرة HTML التي يعرّفها المكوّن بعد تغيّرها بشيفرة HTML التي كانت موجودة قبل تغيّرها.</p>
+<p>إذا لاحظت اللقطة تغيّراً ما في HTML الذي يعرّفه المكوّن، فهو إما وظيفة جديدة أو &quot;خطأ&quot; ناتج عن غير قصد. تُخطر اختبارات اللقطات المطوّر إذا تغيّرت شيفرة HTML للمكوّن. وعلى المطوّر أن يخبر Vitest إن كان التغيير مرغوباً أم غير مرغوب. إذا كان التغيير في شيفرة HTML غير متوقع، فهو يشير بقوة إلى خطأ، ويمكن للمطوّر أن يصبح على دراية بهذه المشكلات المحتملة بسهولة بفضل اختبار اللقطات.</p>
+</div>
+`,o={part:5,letter:"c",file:s,title:n,slug:a,mainImage:t,headings:l,html:e};export{o as default,s as file,l as headings,e as html,c as letter,t as mainImage,p as part,a as slug,n as title};

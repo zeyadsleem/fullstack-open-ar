@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على CI/CD وGitHub Actions والنشر الآلي ومراقبة الجودة."/><!----><title>التوسع أكثر - الجزء 11 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#الرؤية-والفهم">الرؤية والفهم</a></li><li class="toc__depth-3"><a href="#الإشعارات">الإشعارات</a></li><li class="toc__depth-3"><a href="#المقاييس">المقاييس</a></li><li class="toc__depth-3"><a href="#المهام-الدورية">المهام الدورية</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#D4A8E2"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part11">الجزء 11: التكامل والتسليم المستمر</a></p> <h1>التوسع أكثر</h1></div> <div class="course-content"><!----><p>يركّز هذا الجزء على بناء نظام CI بسيط وفعّال ومتين يساعد المطوّرين على العمل معاً، والحفاظ على جودة الشيفرة، والنشر بأمان. ماذا عسى المرء أن يريد أكثر من ذلك؟ في العالم الحقيقي، هناك أطراف فاعلة أكثر من مجرد المطوّرين والمستخدمين. وحتى لو لم يكن ذلك صحيحاً، فحتى بالنسبة للمطوّرين، هناك قيمة أكبر بكثير يمكن اكتسابها من أنظمة CI تتجاوز ما ذُكر أعلاه.</p>
+<h3 id="الرؤية-والفهم">الرؤية والفهم</h3>
+<p>في جميع الشركات باستثناء أصغرها، لا يتّخذ المطوّرون وحدهم قرارات ما الذي يجب تطويره. غالباً ما يُستخدم مصطلح «صاحب المصلحة» (stakeholder) للإشارة إلى أشخاص، داخل فريق التطوير وخارجه، قد تكون لديهم مصلحة في متابعة تقدّم التطوير. وتحقيقاً لذلك، توجد غالباً تكاملات بين Git وأي برنامج لإدارة المشاريع/تتبّع الأخطاء يستخدمه الفريق.</p>
+<p>من الاستخدامات الشائعة لذلك وجود إشارة ما إلى نظام التتبّع في طلبات السحب أو الـ commits في Git. بهذه الطريقة، مثلاً، عندما تعمل على المشكلة رقم 123، قد تسمّي طلب السحب <em>BUG-123: إصلاح مشكلة نسخ المستخدم،</em> فيلاحظ نظام تتبّع الأخطاء الجزء الأول من اسم طلب السحب وينقل المشكلة تلقائياً إلى <em>تم</em> عند دمج طلب السحب.</p>
+<h3 id="الإشعارات">الإشعارات</h3>
+<p>عندما تنتهي عملية CI بسرعة، قد يكون من المريح مجرّد مراقبتها أثناء التنفيذ وانتظار النتيجة. ومع ازدياد تعقيد المشاريع، تزداد عملية بناء الشيفرة واختبارها تعقيداً أيضاً. وقد يؤدي هذا سريعاً إلى موقف يستغرق فيه توليد نتيجة البناء وقتاً طويلاً بما يكفي لأن يرغب المطوّر في البدء بمهمة أخرى. وهذا بدوره يؤدي إلى نسيان عملية البناء.</p>
+<p>وتكون هذه المشكلة أكبر إذا كنا نتحدث عن دمج طلبات سحب قد تؤثر على عمل مطوّر آخر، سواء بإحداث مشكلات له أو تأخيره. وقد يؤدي هذا أيضاً إلى موقف تظن فيه أنك نشرت شيئاً بينما لم تُكمل النشر فعلياً، ما قد يؤدي إلى سوء تواصل مع الزملاء والعملاء (مثل: «تفضل وجرّب ذلك مرة أخرى، فقد أُصلح الخطأ»).</p>
+<p>هناك عدة حلول لهذه المشكلة تتراوح بين إشعارات بسيطة وعمليات أكثر تعقيداً تدمج ببساطة الشيفرة الناجحة إذا تحققت شروط معيّنة. سنناقش الإشعارات كحل بسيط لأنها الأقل تدخلاً في سير عمل الفريق.</p>
+<p>افتراضياً، يرسل GitHub Actions بريداً إلكترونياً عند فشل البناء. يمكن تغيير ذلك لإرسال إشعارات بغض النظر عن حالة البناء، ويمكن أيضاً إعداده لتنبيهك في واجهة GitHub على الويب. رائع. لكن ماذا لو أردنا المزيد؟ ماذا لو لم يناسبنا هذا لأي سبب كان في حالة استخدامنا.</p>
+<p>توجد تكاملات، على سبيل المثال، مع تطبيقات مراسلة متنوعة مثل <a href="https://slack.com/intl/en-fi/" target="_blank" rel="noreferrer noopener">Slack</a> أو <a href="https://discord.com/" target="_blank" rel="noreferrer noopener">Discord</a>، لإرسال الإشعارات. لكن هذه التكاملات لا تزال تقرر ما ترسله ومتى ترسله بناءً على منطق من GitHub.</p>
+<div class="tasks">
+<p><strong>18. إجراء إشعار حالة البناء</strong></p>
+</div>
+<h3 id="المقاييس">المقاييس</h3>
+<p>في القسم السابق، ذكرنا أنه مع ازدياد تعقيد المشاريع تزداد عمليات البناء تعقيداً أيضاً، ويزداد زمن تنفيذها. وهذا ليس مثالياً بوضوح: فكلما طالت حلقة التغذية الراجعة، تباطأ التطوير.</p>
+<p>رغم وجود أمور يمكن فعلها حيال هذه الزيادة في أزمنة البناء، فمن المفيد الحصول على رؤية أفضل للصورة الكاملة. من المفيد معرفة كم كان البناء يستغرق قبل بضعة أشهر مقابل ما يستغرقه الآن. هل كان التطور خطياً أم قفز فجأة؟ إن معرفة سبب زيادة زمن البناء يمكن أن تكون مفيدة جداً في المساعدة على حلّه. إذا زاد زمن البناء خطياً من 5 دقائق إلى 10 دقائق خلال السنة الماضية، فربما يمكننا توقع أن يستغرق بضعة أشهر أخرى ليصل إلى 15 دقيقة، ويكون لدينا تصور عن قيمة الوقت الذي ننفقه في تسريع عملية CI.</p>
+<p>يمكن أن تكون المقاييس ذاتية الإبلاغ (وتسمى أيضاً مقاييس «الدفع» (push)، حيث يبلّغ كل بناء عن المدة التي استغرقها)، أو يمكن جلب البيانات من API لاحقاً (وتسمى أحياناً مقاييس «السحب» (pull)). والخطر في الإبلاغ الذاتي هو أن الإبلاغ الذاتي نفسه يستغرق وقتاً وقد يكون له تأثير كبير على «إجمالي الوقت المستغرق لجميع عمليات البناء».</p>
+<p>يمكن إرسال هذه البيانات إلى قاعدة بيانات سلاسل زمنية أو إلى أرشيف من نوع آخر. وهناك العديد من الخدمات السحابية التي يمكنك من خلالها تجميع المقاييس بسهولة، ومن الخيارات الجيدة <a href="https://www.datadoghq.com/" target="_blank" rel="noreferrer noopener">Datadog</a>.</p>
+<div class="tasks">
+<p><strong>19. سير عمل أكثر قابلية للإدارة</strong></p>
+</div>
+<h3 id="المهام-الدورية">المهام الدورية</h3>
+<p>غالباً ما تكون هناك مهام دورية يجب إنجازها في فريق تطوير البرمجيات. بعضها يمكن أتمتته بأدوات متاحة عموماً، وبعضها ستحتاج إلى أتمتته بنفسك.</p>
+<p>تشمل الفئة الأولى أشياء مثل فحص الحزم بحثاً عن ثغرات أمنية. وهناك عدة أدوات يمكنها فعل ذلك نيابة عنك بالفعل. بل إن بعض هذه الأدوات قد يكون مجانياً لأنواع معينة من المشاريع (مثل المشاريع مفتوحة المصدر). ويوفّر GitHub إحدى هذه الأدوات، <a href="https://dependabot.com/" target="_blank" rel="noreferrer noopener">Dependabot</a>.</p>
+<p>نصيحة جديرة بالاعتبار: إذا سمحت ميزانيتك بذلك، فمن الأفضل دائماً تقريباً استخدام أداة تؤدي المهمة بالفعل بدلاً من بناء حلّك الخاص. فإذا لم يكن الأمن هو المجال الذي تستهدفه، على سبيل المثال، فاستخدم Dependabot لفحص الثغرات الأمنية بدلاً من صنع أداتك الخاصة.</p>
+<p>وماذا عن المهام التي لا توجد لها أداة؟ يمكنك أتمتة هذه بنفسك باستخدام GitHub Actions أيضاً. يوفّر GitHub Actions محفّزاً مجدولاً (scheduled trigger) يمكن استخدامه لتنفيذ مهمة في وقت معيّن.</p>
+<div class="tasks">
+<p><strong>20. فحص صحي دوري</strong></p>
+</div>
+<div class="tasks">
+<p><strong>21. خط الأنابيب الخاص بك</strong></p>
+</div>
+<div class="tasks">
+<p><strong>22. احمِ فرعك الرئيسي واطلب فتح طلب سحب</strong></p>
+</div>
+<div class="tasks">
+<p><strong>23. مستودع GitHub الخاص بك</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part11/keeping_green"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">الحفاظ على اللون الأخضر</span></a><!--]--> <!--[-1--><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

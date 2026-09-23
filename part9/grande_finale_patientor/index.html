@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعلّم TypeScript وطبّقه على تطبيقات Express وتطبيقات React."/><!----><title>الختام الكبير: Patientor - الجزء 9 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#العمل-مع-قاعدة-شيفرة-قائمة">العمل مع قاعدة شيفرة قائمة</a></li><li class="toc__depth-3"><a href="#واجهة-patientor-الأمامية">واجهة Patientor الأمامية</a></li><li class="toc__depth-3"><a href="#المدخلات-الكاملة">المدخلات الكاملة</a></li><li class="toc__depth-3"><a href="#omit-مع-الاتحادات">Omit مع الاتحادات</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#D4FCB5"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part9">الجزء 9: TypeScript</a></p> <h1>الختام الكبير: Patientor</h1></div> <div class="course-content"><!----><h3 id="العمل-مع-قاعدة-شيفرة-قائمة">العمل مع قاعدة شيفرة قائمة</h3>
+<p>عند الغوص في قاعدة شيفرة قائمة للمرة الأولى، من الجيد أن تحصل على نظرة شاملة على أعراف المشروع وبنيته. يمكنك أن تبدأ بحثك بقراءة <em>README.md</em> في جذر المستودع. يحتوي README عادةً على وصف موجز للتطبيق ومتطلبات استخدامه، وكذلك كيفية تشغيله للتطوير. وإذا لم يكن README متوفراً أو «وفّر» أحدهم وقته وتركه مجرد هيكل فارغ، يمكنك إلقاء نظرة على <em>package.json</em>. ومن الأفكار الجيدة دائماً أن تشغّل التطبيق وتتنقّل فيه للتأكد من أن بيئة التطوير لديك صالحة للعمل.</p>
+<p>يمكنك أيضاً تصفّح بنية المجلدات للحصول على بعض الإلمام بوظائف التطبيق و/أو البنية المعمارية المستخدمة. ليست هذه الأمور واضحة دائماً، وقد يكون المطوّرون قد اختاروا طريقة لتنظيم الشيفرة غير مألوفة لك. <a href="https://github.com/fullstack-hy2020/fs-typescript/tree/main/patientor/frontend" target="_blank" rel="noreferrer noopener">المشروع النموذجي</a> المستخدم في بقية هذا الجزء منظَّم حسب الميزات. يمكنك أن ترى ما الصفحات التي يضمها التطبيق، وبعض المكوّنات العامة، مثل النوافذ المنبثقة (modals) والحالة. ضع في اعتبارك أن الميزات قد تختلف في نطاقها. فالنوافذ المنبثقة، مثلاً، مكوّنات ظاهرة على مستوى واجهة المستخدم، أما الحالة فتقارب منطق العمل وتحافظ على تنظيم البيانات في الخفاء لتستخدمها بقية أجزاء التطبيق.</p>
+<p>يوفّر TypeScript أنواعاً لما ينبغي توقّعه من بنى بيانات ودوال ومكوّنات وحالة. يمكنك أن تحاول البحث عن <em>types.ts</em> أو شيء مشابه للبدء. VSCode عون كبير، ومجرد تظليل المتغيرات والمعاملات قد يمنحك قدراً كبيراً من الفهم. يعتمد كل هذا بطبيعة الحال على كيفية استخدام الأنواع في المشروع.</p>
+<p>إذا كان المشروع يضم اختبارات وحدة أو تكامل أو من الطرف إلى الطرف، فمن المرجح أن تكون قراءتها مفيدة. فحالات الاختبار هي أداتك الأهم عند إعادة هيكلة التطبيق أو إضافة ميزات جديدة إليه. أنت تريد أن تتأكد من عدم كسر أي ميزة قائمة أثناء العبث بالشيفرة. ويمكن أن يرشدك TypeScript أيضاً في أنواع المعاملات والقيم المُعادة عند تغيير الشيفرة.</p>
+<p>تذكّر أن قراءة الشيفرة مهارة بحد ذاتها، فلا تقلق إن لم تفهم الشيفرة من القراءة الأولى. فقد تحتوي الشيفرة على حالات حافة كثيرة، وربما أُضيفت أجزاء من المنطق هنا وهناك طوال دورة تطويرها. من الصعب تخيّل نوع المشكلات التي صارعها المطوّر السابق. فكّر في الأمر كله مثل <a href="https://en.wikipedia.org/wiki/Dendrochronology#Growth_rings" target="_blank" rel="noreferrer noopener">حلقات النمو في الأشجار</a>. يتطلب فهم كل شيء التعمق في الشيفرة ومتطلبات مجال العمل. وكلما قرأت شيفرة أكثر، تحسّنت في فهمها. ومن المرجح أن تقرأ في حياتك شيفرة أكثر بكثير مما ستكتبه.</p>
+<h3 id="واجهة-patientor-الأمامية">واجهة Patientor الأمامية</h3>
+<p>حان وقت العمل الجاد لإتمام الواجهة الأمامية للواجهة الخلفية التي بنيناها في التمارين <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript/chapter-4" target="_blank" rel="noreferrer noopener">9-16</a>. بل سنحتاج فعلاً إلى إضافة بعض الميزات الجديدة إلى الواجهة الخلفية لإنجاز التطبيق.</p>
+<p>قبل الغوص في الشيفرة، لنشغّل كلاً من الواجهة الأمامية والواجهة الخلفية.</p>
+<p>إذا سار كل شيء على ما يرام، ينبغي أن ترى صفحة لقائمة المرضى. تجلب هذه الصفحة قائمة المرضى من واجهتنا الخلفية، وتعرضها على الشاشة في جدول بسيط. وهناك أيضاً زر لإنشاء مرضى جدد في الواجهة الخلفية. ولأننا نستخدم بيانات وهمية بدلاً من قاعدة بيانات، لن تبقى البيانات محفوظة - فإغلاق الواجهة الخلفية سيحذف كل البيانات التي أضفناها. لم يكن تصميم واجهة المستخدم نقطة قوة لدى المنشئين، لذا لنتجاهل واجهة المستخدم في الوقت الحالي.</p>
+<p>بعد التحقق من أن كل شيء يعمل، يمكننا البدء بدراسة الشيفرة. كل الأمور المثيرة موجودة في <em>src</em>. ومن باب التسهيل، يوجد بالفعل ملف <em>types.ts</em> للأنواع الأساسية المستخدمة في التطبيق، وسيتعين عليك توسيعه أو إعادة هيكلته في التمارين.</p>
+<p>من حيث المبدأ، يمكننا استخدام الأنواع نفسها لكل من الواجهة الخلفية والواجهة الأمامية، لكن الواجهة الأمامية عادةً ما تكون لها بنى بيانات وحالات استخدام مختلفة للبيانات، ما يجعل الأنواع مختلفة. فمثلاً، للواجهة الأمامية حالة وقد ترغب في حفظ البيانات في كائنات أو خرائط بينما تستخدم الواجهة الخلفية مصفوفة. وقد لا تحتاج الواجهة الأمامية إلى كل حقول كائن البيانات المحفوظ في الواجهة الخلفية، وقد تحتاج إلى إضافة بعض الحقول الجديدة لاستخدامها في العرض.</p>
+<p>تبدو بنية المجلدات كما يلي:</p>
+<p><img src="../../images/mooc/a51b184e0625.webp" alt="بنية مجلدات الواجهة الأمامية"></p>
+<p>إلى جانب مكوّن <em>App</em> ومجلد للخدمات، هناك حالياً ثلاثة مكوّنات رئيسية: <em>AddPatientModal</em> و <em>PatientListPage</em> وكلاهما معرّف في مجلد، ومكوّن <em>HealthRatingBar</em> المعرّف في ملف. وإذا كان لمكوّن ما بعض المكوّنات الفرعية غير المستخدمة في مكان آخر في التطبيق، فقد تكون فكرة جيدة تعريف المكوّن ومكوّناته الفرعية في مجلد. فمثلاً، الآن يُعرَّف AddPatientModal في الملف <em>components/AddPatientModal/index.tsx</em> ومكوّنه الفرعي <em>AddPatientForm</em> في ملف خاص به ضمن المجلد نفسه.</p>
+<p>لا شيء مفاجئاً كثيراً في الشيفرة. الحالة والتواصل مع الواجهة الخلفية مُنفَّذان بخطاف <em>useState</em> وAxios، على غرار تطبيق الملاحظات في القسم السابق. وتُستخدم <a href="../../part5/react_router_ui_frameworks#ui-libraries" target="_blank" rel="noreferrer noopener">Material UI</a> لتنسيق التطبيق، وبنية التنقّل مُنفَّذة بـ<a href="../../part5/react_router_ui_frameworks#react-router" target="_blank" rel="noreferrer noopener">React Router</a>، وكلاهما مألوف لنا من الجزء 5 من المقرر.</p>
+<p>من ناحية الأنواع، هناك أمران مثيران للاهتمام. يمرّر مكوّن <em>App</em> الدالة <em>setPatients</em> كـ prop إلى مكوّن <em>PatientListPage</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [patients, setPatients] = useState&amp;lt;<span class="hljs-title class_">Patient</span>[]&gt;([]);
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div className=<span class="hljs-string">&quot;App&quot;</span>&gt;
+      &amp;lt;<span class="hljs-title class_">Router</span>&gt;
+        &amp;lt;<span class="hljs-title class_">Container</span>&gt;
+          &amp;lt;<span class="hljs-title class_">Routes</span>&gt;
+            <span class="hljs-comment">// ...</span>
+            &amp;lt;<span class="hljs-title class_">Route</span> path=<span class="hljs-string">&quot;/&quot;</span> element={
+              &amp;lt;<span class="hljs-title class_">PatientListPage</span>
+                patients={patients}
+                setPatients={setPatients} <span class="hljs-comment">// HIGHLIGHT LINE</span>
+              /&gt;}
+            /&gt;
+          &amp;lt;/<span class="hljs-title class_">Routes</span>&gt;
+        &amp;lt;/<span class="hljs-title class_">Container</span>&gt;
+      &amp;lt;/<span class="hljs-title class_">Router</span>&gt;
+    &amp;lt;/div&gt;
+  );
+};
+</code></pre>
+<p>لإبقاء مترجم TypeScript راضياً، تُكتب الـ props بالأنواع كما يلي:</p>
+<pre><code class="language-js">interface <span class="hljs-title class_">Props</span> {
+  patients : <span class="hljs-title class_">Patient</span>[]
+  <span class="hljs-attr">setPatients</span>: <span class="hljs-title class_">React</span>.<span class="hljs-property">Dispatch</span>&amp;lt;<span class="hljs-title class_">React</span>.<span class="hljs-property">SetStateAction</span>&amp;lt;<span class="hljs-title class_">Patient</span>[]&amp;gt;&amp;gt;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">PatientListPage</span> = ({ patients, setPatients } : <span class="hljs-title class_">Props</span> ) =&amp;gt; {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>إذن نوع الدالة <em>setPatients</em> هو <em>React.Dispatch&lt;React.SetStateAction&lt;Patient[]&gt;&gt;</em>. يمكننا رؤية النوع في المحرر عند مرور المؤشر فوق الدالة:</p>
+<p><img src="../../images/mooc/f0bade821134.webp" alt="يوضّح VS Code نوع setPatients"></p>
+<p>يضم <a href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example#basic-prop-types-examples" target="_blank" rel="noreferrer noopener">React TypeScript cheatsheet</a> قائمة جميلة جداً بأنواع الـ props النموذجية، ويمكننا الاستعانة بها إذا لم يكن إيجاد الكتابة المناسبة للأنواع لـ props أمراً بديهياً.</p>
+<p>يمرّر <em>PatientListPage</em> أربعة props إلى مكوّن <em>AddPatientModal</em>. اثنان من هذه الـ props دالتان. لنلقِ نظرة على كيفية كتابتهما بالأنواع:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">PatientListPage</span> = (<span class="hljs-params">{ patients, setPatients } : Props </span>) =&gt; {
+
+  <span class="hljs-keyword">const</span> [modalOpen, setModalOpen] = useState&amp;lt;boolean&gt;(<span class="hljs-literal">false</span>);
+  <span class="hljs-keyword">const</span> [error, setError] = useState&amp;lt;string&gt;();
+
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">const</span> closeModal = (): <span class="hljs-function"><span class="hljs-params">void</span> =&gt;</span> { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    <span class="hljs-title function_">setModalOpen</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-title function_">setError</span>(<span class="hljs-literal">undefined</span>);
+  };
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">submitNewPatient</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">values: PatientFormValues</span>) =&gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    <span class="hljs-comment">// ...</span>
+  };
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div className=<span class="hljs-string">&quot;App&quot;</span>&gt;
+      <span class="hljs-comment">// ...</span>
+      &amp;lt;<span class="hljs-title class_">AddPatientModal</span>
+        modalOpen={modalOpen}
+        onSubmit={submitNewPatient} <span class="hljs-comment">// HIGHLIGHT LINE</span>
+        error={error}
+        onClose={closeModal} <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      /&gt;
+    &amp;lt;/div&gt;
+  );
+};
+</code></pre>
+<p>تبدو الأنواع كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Props</span> {
+  <span class="hljs-attr">modalOpen</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">onClose</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">values</span>: <span class="hljs-title class_">PatientFormValues</span></span>) =&gt;</span> <span class="hljs-title class_">Promise</span>&amp;lt;<span class="hljs-built_in">void</span>&gt;;
+  <span class="hljs-attr">error</span>?: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">AddPatientModal</span> = (<span class="hljs-params">{ modalOpen, onClose, onSubmit, error }: <span class="hljs-title class_">Props</span></span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p><em>onClose</em> مجرد دالة لا تأخذ أي معاملات ولا تعيد شيئاً، لذا فنوعها هو:</p>
+<pre><code>() =&amp;gt; void
+</code></pre>
+<p>&quot;نوع <code>onSubmit</code> أكثر إثارة للاهتمام قليلاً. فهو يأخذ معاملاً واحداً من النوع <code>PatientFormValues</code>، ولأنه دالة غير متزامنة، يعيد <code>Promise</code>. ولأن الدالة لا تعيد قيمة، فالنوع الكامل هو:</p>
+<pre><code>(values: PatientFormValues) =&gt; Promise&amp;lt;void&gt;
+</code></pre>
+<div class="tasks">
+<p><strong>23. Patientor، الخطوة 1</strong></p>
+</div>
+<div class="tasks">
+<p><strong>24. Patientor، الخطوة 2</strong></p>
+</div>
+<h3 id="المدخلات-الكاملة">المدخلات الكاملة</h3>
+<p>في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript/chapter-4#5d956dd3-2171-4755-a813-550d9bc68124">التمرين 11</a>، نفّذنا نقطة نهاية لجلب معلومات عن تشخيصات مختلفة، لكننا ما زلنا لا نستخدم تلك النقطة إطلاقاً. ولأن لدينا الآن صفحة لعرض معلومات المريض، سيكون من الجميل توسيع بياناتنا قليلاً. لنضف حقلاً من نوع <em>Entry</em> إلى بيانات المريض بحيث تحتوي بيانات المريض على مدخلاته الطبية، بما في ذلك التشخيصات المحتملة.</p>
+<p>لنتخلّص من بيانات المرضى الأولية القديمة في الواجهة الخلفية ونبدأ باستخدام <a href="https://github.com/fullstack-hy2020/misc/blob/master/patients-full.ts" target="_blank" rel="noreferrer noopener">هذه الصيغة الموسّعة</a>.</p>
+<p>لننشئ الآن نوع <em>Entry</em> مناسباً استناداً إلى البيانات التي لدينا.</p>
+<p>إذا أمعنّا النظر في البيانات، نرى أن المدخلات مختلفة تماماً عن بعضها. فلنلقِ نظرة، مثلاً، على المدخلين الأولين:</p>
+<pre><code>{
+  id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+  date: '2015-01-02',
+  type: 'Hospital',
+  specialist: 'MD House',
+  diagnosisCodes: ['S62.5'],
+  description:
+    &quot;Healing time appr. 2 weeks. patient doesn't remember how he got the injury.&quot;,
+  discharge: {
+    date: '2015-01-16',
+    criteria: 'Thumb has healed.',
+  }
+}
+...
+{
+  id: 'fcd59fa6-c4b4-4fec-ac4d-df4fe1f85f62',
+  date: '2019-08-05',
+  type: 'OccupationalHealthcare',
+  specialist: 'MD House',
+  employerName: 'HyPD',
+  diagnosisCodes: ['Z57.1', 'Z74.3', 'M51.2'],
+  description:
+    'Patient mistakenly found himself in a nuclear plant waste site without protection gear. Very minor radiation poisoning. ',
+  sickLeave: {
+    startDate: '2019-08-05',
+    endDate: '2019-08-28'
+  }
+}
+</code></pre>
+<p>نلاحظ فوراً أنه في حين أن الحقول الأولى متماثلة، يحتوي المدخل الأول على حقل <em>discharge</em> ويحتوي المدخل الثاني على الحقلين <em>employerName</em> و<em>sickLeave</em>. ويبدو أن لجميع المدخلات بعض الحقول المشتركة، لكن بعض الحقول خاصة بكل مدخل.</p>
+<p>عند النظر إلى <em>type</em>، نرى أن هناك ثلاثة أنواع من المدخلات:</p>
+<ul>
+<li><em>OccupationalHealthcare</em></li>
+<li><em>Hospital</em></li>
+<li><em>HealthCheck</em></li>
+</ul>
+<p>يشير هذا إلى أننا بحاجة إلى ثلاثة أنواع منفصلة. ولأنها جميعاً تشترك في بعض الحقول، قد نرغب ببساطة في إنشاء واجهة مدخل أساسية يمكننا توسيعها بالحقول المختلفة في كل نوع.</p>
+<p>عند النظر إلى البيانات، يبدو أن الحقول <em>id</em> و <em>description</em> و <em>date</em> و <em>specialist</em> موجودة في كل مدخل. علاوة على ذلك، يبدو أن <em>diagnosisCodes</em> موجود فقط في مدخل واحد من نوع <em>OccupationalHealthcare</em> ومدخل واحد من نوع <em>Hospital</em>. ولأنه لا يُستخدم دائماً حتى في هذين النوعين من المدخلات، فمن الآمن افتراض أن الحقل اختياري. ويمكننا أن نفكر في إضافته إلى نوع <em>HealthCheck</em> أيضاً لأنه ربما لم يُستخدم فقط في هذه المدخلات تحديداً.</p>
+<p>إذن سيكون <em>BaseEntry</em> الذي يمكن توسيع كل نوع منه كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">BaseEntry</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">date</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">specialist</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">diagnosisCodes</span>?: <span class="hljs-built_in">string</span>[];
+}
+</code></pre>
+<p>إذا أردنا ضبطه أكثر قليلاً، فبما أن لدينا بالفعل نوع <em>Diagnosis</em> معرّفاً في الواجهة الخلفية، قد نرغب ببساطة في الإشارة إلى حقل <em>code</em> من نوع <em>Diagnosis</em> مباشرةً في حال تغيّر نوعه يوماً ما. يمكننا فعل ذلك هكذا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">BaseEntry</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">date</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">specialist</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">diagnosisCodes</span>?: <span class="hljs-title class_">Diagnosis</span>[<span class="hljs-string">&#x27;code&#x27;</span>][]; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+}
+</code></pre>
+<p>كما ذُكر <a href="../../part9/first_steps_with_typescript#the-alternative-array-syntax" target="_blank" rel="noreferrer noopener">سابقاً في هذا الجزء</a>، يمكننا تعريف مصفوفة بالصيغة <em>Array&lt;Type&gt;</em> بدلاً من تعريفها <em>Type[]</em>. في هذه الحالة تحديداً، تبدأ كتابة <em>Diagnosis['code'][]</em> تبدو غريبة بعض الشيء، لذا سنقرر استخدام الصيغة البديلة (التي توصي بها أيضاً قاعدة ESlint المسماة <a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">array-simple</a>):</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">BaseEntry</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">date</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">specialist</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">diagnosisCodes</span>?: <span class="hljs-title class_">Array</span>&amp;lt;<span class="hljs-title class_">Diagnosis</span>[<span class="hljs-string">&#x27;code&#x27;</span>]&gt;; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+}
+</code></pre>
+<p>الآن وقد عرّفنا <em>BaseEntry</em>، يمكننا البدء بإنشاء أنواع المدخلات الموسّعة التي سنستخدمها فعلاً. لنبدأ بإنشاء نوع <em>HealthCheckEntry</em>.</p>
+<p>تحتوي المدخلات من نوع <em>HealthCheck</em> على الحقل <em>HealthCheckRating</em>، وهو عدد صحيح من 0 إلى 3، حيث يعني الصفر <em>Healthy</em> ويعني الثلاثة <em>CriticalRisk</em>. هذه حالة مثالية لـ<em>const as object</em>. وبهذه المواصفات، يمكننا كتابة تعريف نوع <em>HealthCheckEntry</em> كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title class_">HealthCheckRating</span> = {
+  <span class="hljs-title class_">Healthy</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-title class_">LowRisk</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-title class_">HighRisk</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-title class_">CriticalRisk</span>: <span class="hljs-number">3</span>,
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">HealthCheckRating</span> = <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">HealthCheckRating</span>[keyof <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">HealthCheckRating</span>];
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">HealthCheckEntry</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">BaseEntry</span> {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;HealthCheck&quot;</span>;
+  <span class="hljs-attr">healthCheckRating</span>: <span class="hljs-title class_">HealthCheckRating</span>;
+}
+</code></pre>
+<p>الآن نحتاج فقط إلى إنشاء نوعي <em>OccupationalHealthcareEntry</em> و <em>HospitalEntry</em> حتى نتمكن من دمجهما في اتحاد (union) وتصديرهما كنوع Entry هكذا:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">Entry</span> =
+  | <span class="hljs-title class_">HospitalEntry</span>
+  | <span class="hljs-title class_">OccupationalHealthcareEntry</span>
+  | <span class="hljs-title class_">HealthCheckEntry</span>;
+</code></pre>
+<h3 id="omit-مع-الاتحادات">Omit مع الاتحادات</h3>
+<p>ثمة نقطة مهمة تتعلق بالاتحادات: عندما تستخدمها مع <em>Omit</em> لاستبعاد خاصية ما، فإنها تعمل بطريقة قد تكون غير متوقعة. لنفترض أننا نريد إزالة <em>id</em> من كل <em>Entry</em>. قد نفكر في استخدام</p>
+<pre><code>Omit&amp;lt;Entry, 'id'&amp;gt;
+</code></pre>
+<p>لكن <a href="https://github.com/microsoft/TypeScript/issues/42680" target="_blank" rel="noreferrer noopener">ذلك لن يعمل كما قد نتوقع</a>. في الواقع، سيحتوي النوع الناتج على الخصائص المشتركة فقط، وليس الخصائص غير المشتركة بينها. ومن الحلول البديلة الممكنة تعريف دالة خاصة شبيهة بـOmit للتعامل مع مثل هذه الحالات:</p>
+<pre><code class="language-ts"><span class="hljs-comment">// تعريف Omit خاص للاتحادات</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">UnionOmit</span>&amp;lt;T, K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> | <span class="hljs-built_in">symbol</span>&amp;gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">unknown</span> ? <span class="hljs-title class_">Omit</span>&amp;lt;T, K&amp;gt; : <span class="hljs-built_in">never</span>;
+<span class="hljs-comment">// تعريف Entry بدون خاصية &#x27;id&#x27;</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">EntryWithoutId</span> = <span class="hljs-title class_">UnionOmit</span>&amp;lt;<span class="hljs-title class_">Entry</span>, <span class="hljs-string">&#x27;id&#x27;</span>&amp;gt;;
+</code></pre>
+<p>الآن أصبحنا مستعدين لوضع اللمسات الأخيرة على التطبيق!</p>
+<div class="tasks">
+<p><strong>25. Patientor، الخطوة 3</strong></p>
+</div>
+<div class="tasks">
+<p><strong>26. Patientor، الخطوة 4</strong></p>
+</div>
+<div class="tasks">
+<p><strong>27. Patientor، الخطوة 5</strong></p>
+</div>
+<div class="tasks">
+<p><strong>28. Patientor، الخطوة 6</strong></p>
+</div>
+<div class="tasks">
+<p><strong>29. Patientor، الخطوة 7</strong></p>
+</div>
+<div class="tasks">
+<p><strong>30. Patientor، الخطوة 8</strong></p>
+</div>
+<div class="tasks">
+<p><strong>31. Patientor، الخطوة 9</strong></p>
+</div>
+<div class="tasks">
+<p><strong>32. Patientor، الخطوة 10</strong></p>
+</div>
+<div class="tasks">
+<p><strong>33. Patientor، الفحص النهائي</strong></p>
+</div>
+<div class="tasks">
+<p><strong>34. مستودع GitHub الخاص بك</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part9/react_with_types"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">React مع الأنواع</span></a><!--]--> <!--[-1--><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

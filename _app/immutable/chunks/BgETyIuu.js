@@ -1,0 +1,462 @@
+const t=10,o="d",s="d.md",a="التواصل مع الخادم",n="communicating_with_server",e="/images/part-10.svg",p=[{depth:2,id:"طلبات-http",text:"طلبات HTTP"},{depth:2,id:"graphql-وapollo-client",text:"GraphQL وApollo Client"},{depth:2,id:"تنظيم-الشيفرة-المتعلقة-بـ-graphql",text:"تنظيم الشيفرة المتعلقة بـ GraphQL"},{depth:2,id:"تطوير-البنية",text:"تطوير البنية"},{depth:2,id:"تمرين-1011",text:"تمرين 10.11"},{depth:3,id:"تمرين-1011-جلب-المستودعات-باستخدام-apollo-client",text:"تمرين 10.11: جلب المستودعات باستخدام Apollo Client"},{depth:2,id:"متغيرات-البيئة",text:"متغيرات البيئة"},{depth:2,id:"تخزين-البيانات-في-جهاز-المستخدم",text:"تخزين البيانات في جهاز المستخدم"},{depth:2,id:"تحسين-طلبات-apollo-client",text:"تحسين طلبات Apollo Client"},{depth:2,id:"استخدام-react-context-لحقن-الاعتماديات",text:"استخدام React Context لحقن الاعتماديات"}],l=`<p>حتى الآن، نفّذنا ميزات في تطبيقنا دون أي تواصل فعلي مع الخادم. فمثلاً، قائمة المستودعات المُقيَّمة التي نفّذناها تستخدم بيانات وهمية، ونموذج تسجيل الدخول لا يرسل بيانات اعتماد المستخدم إلى أي نقطة نهاية للمصادقة. في هذا القسم، سنتعلم كيفية التواصل مع خادم باستخدام طلبات HTTP، وكيفية استخدام Apollo Client في تطبيق React Native، وكيفية تخزين البيانات في جهاز المستخدم.</p>
+<p>قريباً سنتعلم كيفية التواصل مع خادم في تطبيقنا. وقبل أن نصل إلى ذلك، نحتاج إلى خادم لنتواصل معه. ولهذا الغرض، لدينا تنفيذ خادم مكتمل في مستودع <a href="https://github.com/fullstack-hy2020/rate-repository-api" target="_blank" rel="noreferrer noopener">rate-repository-api</a>. ويلبي خادم rate-repository-api كل احتياجات تطبيقنا من API خلال هذا الجزء. وهو يستخدم قاعدة بيانات <a href="https://www.sqlite.org/index.html" target="_blank" rel="noreferrer noopener">SQLite</a> التي لا تحتاج إلى أي إعداد، ويوفّر واجهة Apollo GraphQL API إلى جانب بضع نقاط نهاية REST API.</p>
+<p>قبل التقدم أكثر في المادة، أعدّ خادم rate-repository-api باتباع تعليمات الإعداد في ملف <a href="https://github.com/fullstack-hy2020/rate-repository-api/blob/master/README.md" target="_blank" rel="noreferrer noopener">README</a> الخاص بالمستودع. لاحظ أنه إذا كنت تستخدم محاكياً للتطوير، فمن المستحسن تشغيل الخادم والمحاكي <em>على الحاسوب نفسه</em>. فهذا يسهّل طلبات الشبكة بدرجة كبيرة.</p>
+<h2 id="طلبات-http">طلبات HTTP</h2>
+<p>يوفّر React Native واجهة <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank" rel="noreferrer noopener">Fetch API</a> لإرسال طلبات HTTP في تطبيقاتنا. كما يدعم React Native واجهة <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest" target="_blank" rel="noreferrer noopener">XMLHttpRequest API</a> القديمة الجيدة، وهو ما يتيح استخدام مكتبات طرف ثالث مثل <a href="https://github.com/axios/axios" target="_blank" rel="noreferrer noopener">Axios</a>. وهاتان الواجهتان مماثلتان للواجهات الموجودة في بيئة المتصفح، وهما متاحتان عالمياً دون الحاجة إلى استيراد.</p>
+<p>من استخدم واجهتي Fetch API وXMLHttpRequest API معاً يوافق على الأرجح على أن Fetch API أسهل استخداماً وأكثر حداثة. لكن هذا لا يعني أن واجهة XMLHttpRequest API بلا استخدامات. ومن أجل البساطة، سنستخدم Fetch API فقط في أمثلتنا.</p>
+<p>يمكن إرسال طلبات HTTP باستخدام Fetch API عبر دالة <code>fetch</code>. والوسيط الأول للدالة هو عنوان URL الخاص بالمورد:</p>
+<pre><code>fetch('https://my-api.com/get-end-point');
+</code></pre>
+<p>طريقة الطلب الافتراضية هي <em>GET</em>. والوسيط الثاني لدالة <code>fetch</code> هو كائن خيارات، يمكنك استخدامه مثلاً لتحديد طريقة طلب مختلفة، أو ترويسات الطلب، أو جسم الطلب:</p>
+<pre><code>fetch('https://my-api.com/post-end-point', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    firstParam: 'firstValue',
+    secondParam: 'secondValue',
+  }),
+});
+</code></pre>
+<p>لاحظ أن عناوين URL هذه وهمية و(على الأرجح) لن ترسل استجابة لطلباتك. وبالمقارنة مع Axios، تعمل Fetch API على مستوى أدنى قليلاً. فمثلاً، لا توجد أي عملية تسلسل أو تحليل لجسم الطلب أو الاستجابة. وهذا يعني أنه عليك مثلاً ضبط ترويسة <em>Content-Type</em> بنفسك واستخدام دالة <code>JSON.stringify</code> لتسلسل جسم الطلب.</p>
+<p>تُعيد دالة <code>fetch</code> قيمة promise تُحلّ إلى كائن <a href="https://developer.mozilla.org/en-US/docs/Web/API/Response" target="_blank" rel="noreferrer noopener">Response</a>. لاحظ أن رموز حالة الأخطاء مثل 400 و500 <em>لا تُرفض</em> كما يحدث مثلاً في Axios. وفي حالة استجابة بصيغة JSON، يمكننا تحليل جسم الاستجابة باستخدام دالة <code>Response.json</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> fetchMovies = <span class="hljs-title function_">async</span> () =&amp;gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://reactnative.dev/movies.json&#x27;</span>);
+  <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+
+  <span class="hljs-keyword">return</span> json;
+};
+</code></pre>
+<p>لمقدمة أكثر تفصيلاً عن Fetch API، اقرأ مقال <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noreferrer noopener">Using Fetch</a> في وثائق MDN.</p>
+<p>بعد ذلك، لنجرّب Fetch API عملياً. يوفّر خادم rate-repository-api نقطة نهاية لإرجاع قائمة مُقسَّمة إلى صفحات من المستودعات المُقيَّمة. وبعد تشغيل الخادم، ينبغي أن تكون قادراً على الوصول إلى نقطة النهاية على <a href="http://localhost:5000/api/repositories" target="_blank" rel="noreferrer noopener">http://localhost:5000/api/repositories</a> (إلا إذا غيّرت المنفذ). والبيانات مُقسَّمة إلى صفحات بصيغة <a href="https://graphql.org/learn/pagination/" target="_blank" rel="noreferrer noopener">ترقيم صفحات معتمد على المؤشر (cursor based pagination)</a> الشائعة. وتوجد بيانات المستودعات الفعلية خلف مفتاح <em>node</em> في مصفوفة <em>edges</em>.</p>
+<p>لسوء الحظ، إذا كنا نستخدم جهازاً خارجياً، فلا يمكننا الوصول إلى الخادم مباشرةً في تطبيقنا باستخدام عنوان <em><a href="http://localhost:5000/api/repositories" target="_blank" rel="noreferrer noopener">http://localhost:5000/api/repositories</a></em>. ولإرسال طلب إلى نقطة النهاية هذه في تطبيقنا، نحتاج إلى الوصول إلى الخادم باستخدام عنوان IP الخاص به في شبكته المحلية. ولمعرفة ما هو هذا العنوان، افتح أدوات تطوير Expo بتشغيل <code>npm start</code>. في الطرفية ينبغي أن ترى عنوان URL يبدأ بـ <em>exp://</em> أسفل رمز QR، بعد نص &quot;Metro waiting on&quot;:</p>
+<p><img src="/images/mooc/306b11b5055e.webp" alt="مخرجات طرفية Metro مع إبراز عنوان exp://&lt;ip&gt;"></p>
+<p>انسخ عنوان IP الواقع بين <em>exp://</em> و <em>:</em>، وهو في هذا المثال <em>192.168.1.33</em>. أنشئ عنوان URL بالصيغة <em>http://&lt;IP_ADDRESS&gt;:5000/api/repositories</em> وافتحه في المتصفح. ينبغي أن ترى الاستجابة نفسها التي رأيتها مع عنوان <em>localhost</em>.</p>
+<p>الآن بعد أن عرفنا عنوان URL لنقطة النهاية، لنستخدم البيانات الفعلية التي يوفّرها الخادم في قائمة المستودعات المُقيَّمة. نستخدم حالياً بيانات وهمية مخزّنة في متغير <code>repositories</code>. احذف متغير <code>repositories</code> واستبدل استخدام البيانات الوهمية بهذه القطعة من الشيفرة في ملف <em>RepositoryList.jsx</em> في مجلد <em>components</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">RepositoryList</span> = () =&amp;gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> [repositories, setRepositories] = <span class="hljs-title function_">useState</span>();
+
+  <span class="hljs-keyword">const</span> fetchRepositories = <span class="hljs-title function_">async</span> () =&amp;gt; {
+    <span class="hljs-comment">// استبدل جزء عنوان IP بعنوان IP الخاص بك!</span>
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;http://192.168.1.33:5000/api/repositories&#x27;</span>);
+    <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(json);
+
+    <span class="hljs-title function_">setRepositories</span>(json);
+  };
+
+  <span class="hljs-title function_">useEffect</span>(() =&amp;gt; {
+    <span class="hljs-title function_">fetchRepositories</span>();
+  }, []);
+
+  <span class="hljs-comment">// احصل على العناصر (nodes) من مصفوفة edges</span>
+  <span class="hljs-keyword">const</span> repositoryNodes = repositories
+    ? repositories.<span class="hljs-property">edges</span>.<span class="hljs-title function_">map</span>(edge =&amp;gt; edge.<span class="hljs-property">node</span>)
+    : [];
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;<span class="hljs-title class_">FlatList</span>
+      data={repositoryNodes}  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      <span class="hljs-comment">// props أخرى</span>
+    /&amp;gt;
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">RepositoryList</span>;
+</code></pre>
+<p>نستخدم خطاف <code>useState</code> من React للحفاظ على حالة قائمة المستودعات، وخطاف <code>useEffect</code> لاستدعاء دالة <code>fetchRepositories</code> عند تركيب مكوّن <code>RepositoryList</code>. ونستخرج المستودعات الفعلية إلى متغير <code>repositoryNodes</code> ونستبدل به المتغير <code>repositories</code> المستخدم سابقاً في خاصية <code>data</code> لمكوّن <code>FlatList</code>. والآن ينبغي أن ترى بيانات فعلية يوفّرها الخادم في قائمة المستودعات المُقيَّمة.</p>
+<p>من المفيد عادةً تسجيل استجابة الخادم خلال مرحلة التطوير لتتمكن من فحصها كما فعلنا في دالة <code>fetchRepositories</code>. ينبغي أن ترى رسالة السجل هذه في طرفية Expo CLI أو في أدوات تطوير Expo إذا انتقلت إلى سجلات جهازك كما تعلمنا في قسم <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-react-native/chapter-2#debugging" target="_blank" rel="noreferrer noopener">تصحيح الأخطاء</a>. وإذا كنت تستخدم تطبيق Expo للهواتف المحمولة في التطوير وفشل طلب الشبكة، فتأكد من أن الحاسوب الذي تشغّل عليه الخادم وهاتفك <em>متصلان بشبكة Wi-Fi نفسها</em>. وإذا لم يكن ذلك ممكناً، فإما أن تستخدم محاكياً على الحاسوب نفسه الذي يعمل عليه الخادم، أو <a href="/part10/introduction_to_react_native#using-your-own-phone-with-expo-go" target="_blank" rel="noreferrer noopener">أن تستخدم خيار النفق</a>.</p>
+<p>يمكن تحسين شيفرة جلب البيانات الحالية في مكوّن <code>RepositoryList</code> ببعض إعادة الهيكلة. فمثلاً، المكوّن على علم بتفاصيل طلب الشبكة مثل عنوان URL لنقطة النهاية. وإضافةً إلى ذلك، لشيفرة جلب البيانات إمكانات كبيرة لإعادة الاستخدام. لنُعِد هيكلة شيفرة المكوّن باستخراج شيفرة جلب البيانات إلى خطاف خاص بها. أنشئ مجلد <em>hooks</em> في مجلد <em>src</em>، وأنشئ في مجلد <em>hooks</em> هذا ملف <em>useRepositories.js</em> بالمحتوى التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> useRepositories = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [repositories, setRepositories] = <span class="hljs-title function_">useState</span>();
+  <span class="hljs-keyword">const</span> [loading, setLoading] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
+
+  <span class="hljs-keyword">const</span> fetchRepositories = <span class="hljs-title function_">async</span> () =&amp;gt; {
+    <span class="hljs-title function_">setLoading</span>(<span class="hljs-literal">true</span>);
+
+    <span class="hljs-comment">// استبدل جزء عنوان IP بعنوان IP الخاص بك!</span>
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;http://192.168.1.33:5000/api/repositories&#x27;</span>);
+    <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+
+    <span class="hljs-title function_">setLoading</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-title function_">setRepositories</span>(json);
+  };
+
+  <span class="hljs-title function_">useEffect</span>(() =&amp;gt; {
+    <span class="hljs-title function_">fetchRepositories</span>();
+  }, []);
+
+  <span class="hljs-keyword">return</span> { repositories, loading, <span class="hljs-attr">refetch</span>: fetchRepositories };
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> useRepositories;
+</code></pre>
+<p>الآن بعد أن أصبح لدينا تجريد نظيف لجلب المستودعات المُقيَّمة، لنستخدم خطاف <code>useRepositories</code> في مكوّن <code>RepositoryList</code>:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">import</span> useRepositories <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../hooks/useRepositories&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">RepositoryList</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> { repositories } = <span class="hljs-title function_">useRepositories</span>(); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">const</span> repositoryNodes = repositories
+    ? repositories.<span class="hljs-property">edges</span>.<span class="hljs-title function_">map</span>(edge =&amp;gt; edge.<span class="hljs-property">node</span>)
+    : [];
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;<span class="hljs-title class_">FlatList</span>
+      data={repositoryNodes}
+      <span class="hljs-comment">// props أخرى</span>
+    /&amp;gt;
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">RepositoryList</span>;
+</code></pre>
+<p>وهذا كل شيء، الآن لم يعد مكوّن <code>RepositoryList</code> على علم بطريقة الحصول على المستودعات. وربما في المستقبل سنحصل عليها عبر GraphQL API بدلاً من REST API. سنرى ما سيحدث.</p>
+<h2 id="graphql-وapollo-client">GraphQL وApollo Client</h2>
+<p>في <a href="/part8" target="_blank" rel="noreferrer noopener">الجزء 8</a> تعلمنا عن GraphQL وكيفية إرسال استعلامات GraphQL إلى خادم Apollo باستخدام <a href="https://www.apollographql.com/docs/react/" target="_blank" rel="noreferrer noopener">Apollo Client</a> في تطبيقات React. والخبر السار أننا نستطيع استخدام Apollo Client في تطبيق React Native تماماً كما نفعل في تطبيق React للويب.</p>
+<p>كما ذُكر سابقاً، يوفّر خادم rate-repository-api واجهة GraphQL API منفَّذة باستخدام Apollo Server. وبعد تشغيل الخادم، يمكنك الوصول إلى <a href="https://www.apollographql.com/docs/graphos/platform/sandbox" target="_blank" rel="noreferrer noopener">Apollo Sandbox</a> على <a href="http://localhost:4000/" target="_blank" rel="noreferrer noopener">http://localhost:4000</a>. وApollo Sandbox أداة لإنشاء استعلامات GraphQL وفحص مخطط GraphQL APIs وتوثيقها. وإذا احتجت إلى إرسال استعلام في تطبيقك <em>فاختبره دائماً</em> أولاً باستخدام Apollo Sandbox قبل تنفيذه في الشيفرة. فتصحيح المشكلات المحتملة في الاستعلام أسهل بكثير في Apollo Sandbox منه في التطبيق. وإذا لم تكن متأكداً من الاستعلامات المتاحة أو كيفية استخدامها، فيمكنك الاطلاع على التوثيق بجوار محرّر العمليات:</p>
+<p><img src="/images/mooc/1bf23e6ced47.webp" alt="Apollo Sandbox"></p>
+<p>في تطبيق React Native الخاص بنا، سنستخدم مكتبة <a href="https://www.npmjs.com/package/@apollo/client" target="_blank" rel="noreferrer noopener">@apollo/client</a> نفسها كما في الجزء 8. لنبدأ بتثبيت المكتبة إلى جانب مكتبة <a href="https://www.npmjs.com/package/graphql" target="_blank" rel="noreferrer noopener">graphql</a> المطلوبة كاعتمادية نظيرة (peer dependency):</p>
+<pre><code class="language-bash">npm install @apollo/client graphql
+</code></pre>
+<p>لننشئ دالة مساعدة لإنشاء Apollo Client بالإعدادات المطلوبة. أنشئ مجلد <em>utils</em> في مجلد <em>src</em>، وأنشئ في مجلد <em>utils</em> هذا ملف <em>apolloClient.js</em>. وفي ذلك الملف اضبط Apollo Client للاتصال بخادم Apollo:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloClient</span>, <span class="hljs-title class_">HttpLink</span>, <span class="hljs-title class_">InMemoryCache</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>;
+
+<span class="hljs-keyword">const</span> httpLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({
+  <span class="hljs-attr">uri</span>: <span class="hljs-string">&#x27;http://192.168.1.100:4000/graphql&#x27;</span>,
+});
+
+<span class="hljs-keyword">const</span> createApolloClient = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloClient</span>({
+    <span class="hljs-attr">link</span>: httpLink,
+    <span class="hljs-attr">cache</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryCache</span>(),
+  });
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createApolloClient;
+</code></pre>
+<p>عنوان URL المستخدم للاتصال بخادم Apollo هو نفسه الذي استخدمته مع Fetch API، باستثناء أن المنفذ هو <em>4000</em> والمسار هو <em>/graphql</em>. وأخيراً، نحتاج إلى توفير Apollo Client باستخدام سياق <a href="https://www.apollographql.com/docs/react/api/react/ApolloProvider" target="_blank" rel="noreferrer noopener">ApolloProvider</a>. وسنضيفه إلى مكوّن <code>App</code> في ملف <em>App.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>;  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">StatusBar</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;expo-status-bar&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NativeRouter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-native&#x27;</span>;
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Main</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/components/Main&#x27;</span>;
+<span class="hljs-keyword">import</span> createApolloClient <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/apolloClient&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> apolloClient = <span class="hljs-title function_">createApolloClient</span>(); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;<span class="hljs-title class_">StatusBar</span> style=<span class="hljs-string">&quot;light&quot;</span> /&amp;gt;
+    &amp;lt;<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+      &amp;lt;<span class="hljs-title class_">ApolloProvider</span> client={apolloClient}&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+        &amp;lt;<span class="hljs-title class_">Main</span> /&amp;gt;
+      &amp;lt;<span class="hljs-regexp">/ApolloProvider&amp;gt; /</span>/ <span class="hljs-variable constant_">HIGHLIGHT</span> <span class="hljs-variable constant_">LINE</span>
+    &amp;lt;/<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;
+</code></pre>
+<h2 id="تنظيم-الشيفرة-المتعلقة-بـ-graphql">تنظيم الشيفرة المتعلقة بـ GraphQL</h2>
+<p>الأمر متروك لك في كيفية تنظيم الشيفرة المتعلقة بـ GraphQL في تطبيقك. لكن من أجل بنية مرجعية، لنلقِ نظرة على طريقة بسيطة وفعّالة إلى حد كبير لتنظيم الشيفرة المتعلقة بـ GraphQL. في هذه البنية، نعرّف الاستعلامات وmutations وfragments وربما كيانات أخرى في ملفات خاصة بها. وتقع هذه الملفات في المجلد نفسه. وإليك مثالاً على البنية التي يمكنك استخدامها للبدء:</p>
+<p><img src="/images/mooc/2acedef0ee2f.webp" alt="بنية GraphQL"></p>
+<p>يمكنك استيراد وسم القالب النصي (template literal tag) <code>gql</code> المستخدم لتعريف استعلامات GraphQL من مكتبة <em>@apollo/client</em>. وإذا اتبعنا البنية المقترحة أعلاه، فيمكن أن يكون لدينا ملف <em>queries.js</em> في مجلد <em>graphql</em> لاستعلامات GraphQL الخاصة بتطبيقنا. ويمكن تخزين كل استعلام في متغير وتصديره هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { gql } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">GET_REPOSITORIES</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> <span class="hljs-punctuation">{</span>
+    repositories <span class="hljs-punctuation">{</span>
+      </span><span class="hljs-subst">\${/* ... */}</span><span class="language-graphql">
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>;
+
+<span class="hljs-comment">// استعلامات أخرى...</span>
+</code></pre>
+<p>يمكننا استيراد هذه المتغيرات واستخدامها مع خطاف <code>useQuery</code> هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>;
+
+<span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">GET_REPOSITORIES</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../graphql/queries&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Component</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> { data, error, loading } = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">GET_REPOSITORIES</span>);
+  <span class="hljs-comment">// ...</span>
+};
+</code></pre>
+<p>والأمر نفسه ينطبق على تنظيم mutations. والفرق الوحيد أننا نعرّفها في ملف مختلف هو <em>mutations.js</em>. ويُوصى باستخدام <a href="https://www.apollographql.com/docs/react/data/fragments/" target="_blank" rel="noreferrer noopener">fragments</a> في الاستعلامات لتجنب إعادة كتابة الحقول نفسها مراراً وتكراراً.</p>
+<h2 id="تطوير-البنية">تطوير البنية</h2>
+<p>عندما يكبر تطبيقنا، قد تأتي أوقات تصبح فيها ملفات معيّنة أكبر من أن يمكن إدارتها. فمثلاً، لدينا مكوّن <code>A</code> يعرض المكوّنين <code>B</code> و <code>C</code>. وكل هذه المكوّنات معرَّفة في ملف <em>A.jsx</em> في مجلد <em>components</em>. ونريد استخراج المكوّنين <code>B</code> و <code>C</code> إلى ملفين خاصين بهما <em>B.jsx</em> و <em>C.jsx</em> دون إعادة هيكلة كبيرة. ولدينا خياران:</p>
+<ul>
+<li>أنشئ ملفين <em>B.jsx</em> و <em>C.jsx</em> في مجلد <em>components</em>. وينتج عن ذلك البنية التالية:</li>
+</ul>
+<pre><code>components/
+  A.jsx
+  B.jsx
+  C.jsx
+  ...
+</code></pre>
+<ul>
+<li>أنشئ مجلد <em>A</em> في مجلد <em>components</em> وأنشئ فيه ملفي <em>B.jsx</em> و <em>C.jsx</em>. ولتجنب كسر المكوّنات التي تستورد ملف <em>A.jsx</em>، انقل ملف <em>A.jsx</em> إلى مجلد <em>A</em> وأعد تسميته إلى <em>index.jsx</em>. وينتج عن ذلك البنية التالية:</li>
+</ul>
+<pre><code>components/
+  A/
+    B.jsx
+    C.jsx
+    index.jsx
+  ...
+</code></pre>
+<p>الخيار الأول مقبول تماماً، لكن إذا لم يكن المكوّنان <code>B</code> و <code>C</code> قابلين لإعادة الاستخدام خارج المكوّن <code>A</code>، فلا فائدة من تضخيم مجلد <em>components</em> بإضافتهما كملفين منفصلين. والخيار الثاني معياري (modular) تماماً ولا يكسر أي عمليات استيراد، لأن استيراد مسار مثل <em>./A</em> سيتطابق مع كلٍّ من <em>A.jsx</em> و <em>A/index.jsx</em>.</p>
+<h2 id="تمرين-1011">تمرين 10.11</h2>
+<h3 id="تمرين-1011-جلب-المستودعات-باستخدام-apollo-client">تمرين 10.11: جلب المستودعات باستخدام Apollo Client</h3>
+<div class="tasks">
+<p><strong>11. جلب المستودعات باستخدام Apollo Client</strong></p>
+</div>
+<h2 id="متغيرات-البيئة">متغيرات البيئة</h2>
+<p>من المرجّح أن يعمل كل تطبيق في أكثر من بيئة واحدة. ومن أبرز هاتين البيئتين بيئة التطوير وبيئة الإنتاج. ومن بين هاتين، بيئة التطوير هي التي نشغّل فيها التطبيق الآن. وعادةً ما تكون لبيئات مختلفة اعتماديات مختلفة، فمثلاً قد يستخدم الخادم الذي نطوّره محلياً قاعدة بيانات محلية، بينما يستخدم الخادم المنشور في بيئة الإنتاج قاعدة بيانات الإنتاج. ولجعل الشيفرة مستقلة عن البيئة، نحتاج إلى جعل هذه الاعتماديات قابلة للضبط عبر معاملات. في الوقت الحالي، نستخدم في تطبيقنا قيمة مثبّتة في الشيفرة تعتمد اعتماداً كبيراً على البيئة: عنوان URL الخاص بالخادم.</p>
+<p>تعلمنا سابقاً أنه يمكننا تزويد البرامج قيد التشغيل بمتغيرات البيئة. ويمكن تعريف هذه المتغيرات في سطر الأوامر أو باستخدام ملفات إعداد البيئة مثل ملفات <em>.env</em>. وقد استخدمنا سابقاً في المقرر مكتبة <em>dotenv</em> لقراءة ملفات <em>.env</em>. ويقرأ Expo تلقائياً ملف <em>.env</em> المعرَّف في جذر المشروع، لذا لا حاجة إلى مكتبة dotenv. غير أن كل متغير بيئة يجب أن يبدأ بالبادئة <code>EXPO_PUBLIC_</code>. يمكنك قراءة المزيد في <a href="https://docs.expo.dev/guides/environment-variables/" target="_blank" rel="noreferrer noopener">وثائق Expo</a>.</p>
+<p>لننشئ ملف <em>.env</em> في جذر المشروع بالمحتوى التالي:</p>
+<pre><code>EXPO_PUBLIC_ENV=test
+</code></pre>
+<p>هنا نعرّف متغير بيئة باسم <code>EXPO_PUBLIC_ENV</code>. وقد تحتاج إلى إعادة تشغيل أدوات تطوير Expo لتطبيق التغييرات التي أجريتها على ملف <em>.env</em>.</p>
+<p>وكالعادة، يمكنك الوصول إلى متغير البيئة في التطبيق باستخدام الصيغة <code>process.env.EXPO_PUBLIC_ENV</code>. وكاختبار سريع، يمكننا تسجيل متغير البيئة في مكوّن App:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">StatusBar</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;expo-status-bar&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NativeRouter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-native&#x27;</span>;
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Main</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/components/Main&#x27;</span>;
+<span class="hljs-keyword">import</span> createApolloClient <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/apolloClient&#x27;</span>;
+
+<span class="hljs-keyword">const</span> apolloClient = <span class="hljs-title function_">createApolloClient</span>();
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;env check:&quot;</span>, process.<span class="hljs-property">env</span>.<span class="hljs-property">EXPO_PUBLIC_ENV</span>);  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-comment">// ...</span>
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;
+</code></pre>
+<p>ينبغي أن ترى الآن 'env check: test' في السجلات.</p>
+<p>لاحظ أنه <em>ليس</em> من الجيد أبداً وضع بيانات حساسة في إعدادات التطبيق. والسبب في ذلك أنه بمجرد أن ينزّل المستخدم تطبيقك، يمكنه نظرياً على الأقل إجراء هندسة عكسية لتطبيقك واكتشاف البيانات الحساسة التي خزّنتها في الشيفرة. فمتغيرات البيئة التي يستخدمها Expo يمكن العثور عليها كنص صريح في التطبيق المُصرَّف، لذا لا تُضمّن معلومات حساسة مثل المفاتيح الخاصة في متغيرات <code>EXPO_PUBLIC_</code>.</p>
+<div class="tasks">
+<p><strong>12. متغيرات البيئة</strong></p>
+</div>
+<h2 id="تخزين-البيانات-في-جهاز-المستخدم">تخزين البيانات في جهاز المستخدم</h2>
+<p>هناك أوقات نحتاج فيها إلى تخزين بعض البيانات الدائمة في جهاز المستخدم. ومن السيناريوهات الشائعة لذلك تخزين رمز مصادقة المستخدم (authentication token) حتى نتمكن من استرجاعه حتى لو أغلق المستخدم تطبيقنا وأعاد فتحه. وقد استخدمنا في تطوير الويب كائن <code>localStorage</code> في المتصفح لتحقيق هذه الوظيفة. ويوفّر React Native تخزيناً دائماً مماثلاً هو <a href="https://github.com/react-native-async-storage/async-storage?tab=readme-ov-file#usage" target="_blank" rel="noreferrer noopener">AsyncStorage</a>.</p>
+<p>يمكننا استخدام <code>npx expo install</code> لتثبيت إصدار حزمة <em>@react-native-async-storage/async-storage</em> المناسب لإصدار Expo SDK لدينا:</p>
+<pre><code class="language-bash">npx expo install @react-native-async-storage/async-storage
+</code></pre>
+<p>تتشابه واجهة <code>AsyncStorage</code> من نواحٍ كثيرة مع واجهة <code>localStorage</code>. فكلاهما تخزين مفتاح-قيمة بدوال متشابهة. وأكبر فرق بينهما هو أن عمليات <code>AsyncStorage</code> <em>غير متزامنة</em> كما يوحي الاسم.</p>
+<p>ولأن <code>AsyncStorage</code> يعمل بمفاتيح نصية في نطاق أسماء عام، فمن الجيد إنشاء تجريد بسيط لعملياته. ويمكن تنفيذ هذا التجريد مثلاً باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noreferrer noopener">صنف (class)</a>. وكمثال، يمكننا تنفيذ تخزين لسلة تسوق لتخزين المنتجات التي يريد المستخدم شراءها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">AsyncStorage</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@react-native-async-storage/async-storage&#x27;</span>;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ShoppingCartStorage</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">namespace = <span class="hljs-string">&#x27;shoppingCart&#x27;</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">namespace</span> = namespace;
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">getProducts</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> rawProducts = <span class="hljs-keyword">await</span> <span class="hljs-title class_">AsyncStorage</span>.<span class="hljs-title function_">getItem</span>(
+      <span class="hljs-string">\`<span class="hljs-subst">\${<span class="hljs-variable language_">this</span>.namespace}</span>:products\`</span>,
+    );
+
+    <span class="hljs-keyword">return</span> rawProducts ? <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(rawProducts) : [];
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">addProduct</span>(<span class="hljs-params">productId</span>) {
+    <span class="hljs-keyword">const</span> currentProducts = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getProducts</span>();
+    <span class="hljs-keyword">const</span> newProducts = [...currentProducts, productId];
+
+    <span class="hljs-keyword">await</span> <span class="hljs-title class_">AsyncStorage</span>.<span class="hljs-title function_">setItem</span>(
+      <span class="hljs-string">\`<span class="hljs-subst">\${<span class="hljs-variable language_">this</span>.namespace}</span>:products\`</span>,
+      <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(newProducts),
+    );
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">clearProducts</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">await</span> <span class="hljs-title class_">AsyncStorage</span>.<span class="hljs-title function_">removeItem</span>(<span class="hljs-string">\`<span class="hljs-subst">\${<span class="hljs-variable language_">this</span>.namespace}</span>:products\`</span>);
+  }
+}
+
+<span class="hljs-keyword">const</span> doShopping = <span class="hljs-title function_">async</span> () =&amp;gt; {
+  <span class="hljs-keyword">const</span> shoppingCartA = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ShoppingCartStorage</span>(<span class="hljs-string">&#x27;shoppingCartA&#x27;</span>);
+  <span class="hljs-keyword">const</span> shoppingCartB = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ShoppingCartStorage</span>(<span class="hljs-string">&#x27;shoppingCartB&#x27;</span>);
+
+  <span class="hljs-keyword">await</span> shoppingCartA.<span class="hljs-title function_">addProduct</span>(<span class="hljs-string">&#x27;chips&#x27;</span>);
+  <span class="hljs-keyword">await</span> shoppingCartA.<span class="hljs-title function_">addProduct</span>(<span class="hljs-string">&#x27;soda&#x27;</span>);
+
+  <span class="hljs-keyword">await</span> shoppingCartB.<span class="hljs-title function_">addProduct</span>(<span class="hljs-string">&#x27;milk&#x27;</span>);
+
+  <span class="hljs-keyword">const</span> productsA = <span class="hljs-keyword">await</span> shoppingCartA.<span class="hljs-title function_">getProducts</span>();
+  <span class="hljs-keyword">const</span> productsB = <span class="hljs-keyword">await</span> shoppingCartB.<span class="hljs-title function_">getProducts</span>();
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(productsA, productsB);
+
+  <span class="hljs-keyword">await</span> shoppingCartA.<span class="hljs-title function_">clearProducts</span>();
+  <span class="hljs-keyword">await</span> shoppingCartB.<span class="hljs-title function_">clearProducts</span>();
+};
+
+<span class="hljs-title function_">doShopping</span>();
+</code></pre>
+<p>ولأن مفاتيح <code>AsyncStorage</code> عامة، فمن الجيد عادةً إضافة <em>نطاق أسماء (namespace)</em> للمفاتيح. وفي هذا السياق، نطاق الأسماء مجرد بادئة نوفّرها لمفاتيح تجريد التخزين. ويحمي استخدام نطاق الأسماء مفاتيح التخزين من التعارض مع مفاتيح <code>AsyncStorage</code> أخرى. وفي هذا المثال، عُرِّف نطاق الأسماء كوسيط للمُنشئ (constructor)، ونستخدم الصيغة <code>namespace:key</code> للمفاتيح.</p>
+<p>يمكننا إضافة عنصر إلى التخزين باستخدام دالة <code>AsyncStorage.setItem</code>. والوسيط الأول للدالة هو مفتاح العنصر والوسيط الثاني قيمته. ويجب أن تكون القيمة <em>نصاً</em>، لذا نحتاج إلى تسلسل القيم غير النصية كما فعلنا باستخدام دالة <code>JSON.stringify</code> سابقاً. ويمكن استخدام دالة <code>AsyncStorage.getItem</code> لجلب عنصر من التخزين. ووسيط الدالة هو مفتاح العنصر، الذي ستُحلّ قيمته. ويمكن استخدام دالة <code>AsyncStorage.removeItem</code> لحذف العنصر ذي المفتاح المقدَّم من التخزين.</p>
+<p><strong>ملاحظة:</strong> <a href="https://docs.expo.dev/versions/latest/sdk/securestore/" target="_blank" rel="noreferrer noopener">SecureStore</a> تخزين دائم مماثل لـ <code>AsyncStorage</code> لكنه يشفّر البيانات المخزّنة. وهذا يجعله أكثر ملاءمة لتخزين بيانات أكثر حساسية.</p>
+<div class="tasks">
+<p><strong>13. mutation نموذج تسجيل الدخول</strong></p>
+</div>
+<div class="tasks">
+<p><strong>14. تخزين رمز الوصول، الخطوة 1</strong></p>
+</div>
+<h2 id="تحسين-طلبات-apollo-client">تحسين طلبات Apollo Client</h2>
+<p>الآن بعد أن نفّذنا تخزيناً لتخزين رمز وصول المستخدم، حان وقت البدء في استخدامه. هيّئ التخزين في مكوّن <code>App</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">StatusBar</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;expo-status-bar&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NativeRouter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-native&#x27;</span>;
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Main</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/components/Main&#x27;</span>;
+<span class="hljs-keyword">import</span> createApolloClient <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/apolloClient&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">AuthStorage</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/authStorage&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> authStorage = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AuthStorage</span>(); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-keyword">const</span> apolloClient = <span class="hljs-title function_">createApolloClient</span>(authStorage); <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;&amp;gt;
+      &amp;lt;<span class="hljs-title class_">StatusBar</span> style=<span class="hljs-string">&quot;light&quot;</span> /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+        &amp;lt;<span class="hljs-title class_">ApolloProvider</span> client={apolloClient}&amp;gt;
+          &amp;lt;<span class="hljs-title class_">Main</span> /&amp;gt;
+        &amp;lt;/<span class="hljs-title class_">ApolloProvider</span>&amp;gt;
+      &amp;lt;/<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+    &amp;lt;/&amp;gt;
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;
+</code></pre>
+<p>كما قدّمنا نسخة التخزين إلى دالة <code>createApolloClient</code> كوسيط. وذلك لأننا سنرسل بعد ذلك رمز الوصول إلى خادم Apollo في كل طلب. وسيتوقع خادم Apollo وجود رمز الوصول في ترويسة <em>Authorization</em> بالصيغة <em>Bearer &lt;ACCESS_TOKEN&gt;</em>. ويمكننا تحسين طلب Apollo Client باستخدام دالة <a href="https://www.apollographql.com/docs/react/api/link/apollo-link-context" target="_blank" rel="noreferrer noopener">setContextLink</a>. لنرسل رمز الوصول إلى خادم Apollo بتعديل دالة <code>createApolloClient</code> في ملف <em>apolloClient.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloClient</span>, <span class="hljs-title class_">HttpLink</span>, <span class="hljs-title class_">InMemoryCache</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">SetContextLink</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/link/context&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> httpLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({
+  <span class="hljs-attr">uri</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">EXPO_PUBLIC_APOLLO_URI</span>,
+});
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> createApolloClient = (authStorage) =&amp;gt; {
+  <span class="hljs-keyword">const</span> authLink = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SetContextLink</span>(<span class="hljs-title function_">async</span> ({ headers }) =&amp;gt; {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> accessToken = <span class="hljs-keyword">await</span> authStorage.<span class="hljs-title function_">getAccessToken</span>();
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">headers</span>: {
+          ...headers,
+          <span class="hljs-attr">authorization</span>: accessToken ? <span class="hljs-string">\`Bearer <span class="hljs-subst">\${accessToken}</span>\`</span> : <span class="hljs-string">&#x27;&#x27;</span>,
+        },
+      };
+    } <span class="hljs-keyword">catch</span> (e) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e);
+      <span class="hljs-keyword">return</span> {
+        headers,
+      };
+    }
+  });
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloClient</span>({
+    <span class="hljs-attr">link</span>: authLink.<span class="hljs-title function_">concat</span>(httpLink),
+    <span class="hljs-attr">cache</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryCache</span>(),
+  });
+};
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> createApolloClient;
+</code></pre>
+<h2 id="استخدام-react-context-لحقن-الاعتماديات">استخدام React Context لحقن الاعتماديات</h2>
+<p>القطعة الأخيرة في أحجية تسجيل الدخول هي دمج التخزين في خطاف <code>useSignIn</code>. ولتحقيق ذلك، يجب أن يكون الخطاف قادراً على الوصول إلى نسخة تخزين الرمز التي هيّأناها في مكوّن <code>App</code>. و<a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noreferrer noopener">React Context</a> هو بالضبط الأداة التي نحتاجها لهذه المهمة. أنشئ مجلد <em>contexts</em> في مجلد <em>src</em>، وفي ذلك المجلد أنشئ ملف <em>AuthStorageContext.js</em> بالمحتوى التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { createContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AuthStorageContext</span> = <span class="hljs-title function_">createContext</span>();
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">AuthStorageContext</span>;
+</code></pre>
+<p>الآن يمكننا استخدام <code>AuthStorageContext.Provider</code> لتوفير نسخة التخزين إلى الأبناء في السياق. لنضفه إلى مكوّن <code>App</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">StatusBar</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;expo-status-bar&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NativeRouter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-native&#x27;</span>;
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Main</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/components/Main&#x27;</span>;
+<span class="hljs-keyword">import</span> createApolloClient <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/apolloClient&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">AuthStorage</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/utils/authStorage&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">AuthStorageContext</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./src/contexts/AuthStorageContext&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> authStorage = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AuthStorage</span>();
+<span class="hljs-keyword">const</span> apolloClient = <span class="hljs-title function_">createApolloClient</span>(authStorage);
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;&amp;gt;
+      &amp;lt;<span class="hljs-title class_">StatusBar</span> style=<span class="hljs-string">&quot;light&quot;</span> /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+        &amp;lt;<span class="hljs-title class_">ApolloProvider</span> client={apolloClient}&amp;gt;
+          &amp;lt;<span class="hljs-title class_">AuthStorageContext</span>.<span class="hljs-property">Provider</span> value={authStorage}&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+            &amp;lt;<span class="hljs-title class_">Main</span> /&amp;gt;
+          &amp;lt;<span class="hljs-regexp">/AuthStorageContext.Provider&amp;gt; /</span>/ <span class="hljs-variable constant_">HIGHLIGHT</span> <span class="hljs-variable constant_">LINE</span>
+        &amp;lt;/<span class="hljs-title class_">ApolloProvider</span>&amp;gt;
+      &amp;lt;/<span class="hljs-title class_">NativeRouter</span>&amp;gt;
+    &amp;lt;/&amp;gt;
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;
+</code></pre>
+<p>أصبح الوصول إلى نسخة التخزين في خطاف <code>useSignIn</code>  ممكناً الآن باستخدام خطاف <a href="https://react.dev/reference/react/useContext" target="_blank" rel="noreferrer noopener">useContext</a> من React هكذا:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">import</span> { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">AuthStorageContext</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../contexts/AuthStorageContext&#x27;</span>;
+<span class="hljs-keyword">const</span> useSignIn = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> authStorage = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">AuthStorageContext</span>);  <span class="hljs-comment">// ...</span>
+};
+</code></pre>
+<p>لاحظ أن الوصول إلى قيمة سياق باستخدام خطاف <code>useContext</code> لا يعمل إلا إذا استُخدم خطاف <code>useContext</code> في مكوّن <em>ابن</em> لمكوّن <a href="https://react.dev/reference/react/createContext#provider" target="_blank" rel="noreferrer noopener">Context.Provider</a>.</p>
+<p>الوصول إلى نسخة <code>AuthStorage</code> باستخدام <code>useContext(AuthStorageContext)</code> مطوّل بعض الشيء ويكشف تفاصيل التنفيذ. لنحسّن ذلك بتنفيذ خطاف <code>useAuthStorage</code> في ملف <em>useAuthStorage.js</em> في مجلد <em>hooks</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">AuthStorageContext</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../contexts/AuthStorageContext&#x27;</span>;
+
+<span class="hljs-keyword">const</span> useAuthStorage = () =&amp;gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">AuthStorageContext</span>);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> useAuthStorage;
+</code></pre>
+<p>تنفيذ الخطاف بسيط جداً، لكنه يحسّن قابلية قراءة وصيانة الخطافات والمكوّنات التي تستخدمه. ويمكننا استخدام الخطاف لإعادة هيكلة خطاف <code>useSignIn</code> هكذا:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">import</span> useAuthStorage <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../hooks/useAuthStorage&#x27;</span>; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> useSignIn = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> authStorage = <span class="hljs-title function_">useAuthStorage</span>();  <span class="hljs-comment">// ...</span>
+};
+</code></pre>
+<p>تفتح القدرة على توفير البيانات لأبناء المكوّن الكثير من حالات الاستخدام لـ React Context، كما رأينا سابقاً في <a href="/part6" target="_blank" rel="noreferrer noopener">الفصل الأخير</a> من الجزء 6.</p>
+<p>لمعرفة المزيد عن حالات الاستخدام هذه، اقرأ مقال Kent C. Dodds الملهِم <a href="https://kentcdodds.com/blog/how-to-use-react-context-effectively" target="_blank" rel="noreferrer noopener">How to use React Context effectively</a> لتكتشف كيفية الجمع بين خطاف <a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noreferrer noopener">useReducer</a> والسياق لتنفيذ إدارة الحالة. وربما تجد طريقة لاستخدام هذه المعرفة في التمارين القادمة.</p>
+<div class="tasks">
+<p><strong>15. تخزين رمز الوصول، الخطوة 2</strong></p>
+</div>
+<div class="tasks">
+<p><strong>16. تسجيل الخروج</strong></p>
+</div>
+`,c={part:10,letter:"d",file:s,title:a,slug:n,mainImage:e,headings:p,html:l};export{c as default,s as file,p as headings,l as html,o as letter,e as mainImage,t as part,n as slug,a as title};

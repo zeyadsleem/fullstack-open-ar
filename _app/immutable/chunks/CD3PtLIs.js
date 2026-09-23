@@ -1,0 +1,1010 @@
+const e=5,c="d",s="part5d.md",n="اختبار شامل من الطرف إلى الطرف",a="end_to_end_testing",t="/images/part-5.svg",l=[{depth:3,id:"تهيئة-الاختبارات",text:"تهيئة الاختبارات"},{depth:3,id:"اختبار-شيفرتنا",text:"اختبار شيفرتنا"},{depth:3,id:"الكتابة-في-النموذج",text:"الكتابة في النموذج"},{depth:3,id:"تهيئة-الاختبار",text:"تهيئة الاختبار"},{depth:3,id:"اختبار-إنشاء-ملاحظة",text:"اختبار إنشاء ملاحظة"},{depth:3,id:"التحكم-في-حالة-قاعدة-البيانات",text:"التحكم في حالة قاعدة البيانات"},{depth:3,id:"اختبار-فشل-تسجيل-الدخول",text:"اختبار فشل تسجيل الدخول"},{depth:3,id:"تشغيل-الاختبارات-واحدا-تلو-الآخر",text:"تشغيل الاختبارات واحداً تلو الآخر"},{depth:3,id:"دوال-مساعدة-للاختبارات",text:"دوال مساعدة للاختبارات"},{depth:3,id:"إعادة-النظر-في-تغيير-أهمية-الملاحظة",text:"إعادة النظر في تغيير أهمية الملاحظة"},{depth:3,id:"تطوير-الاختبارات-وتصحيح-الأخطاء",text:"تطوير الاختبارات وتصحيح الأخطاء"},{depth:3,id:"تمارين-517-523",text:"تمارين 5.17.-5.23."}],p=`<div class="content">
+<p>حتى الآن اختبرنا الواجهة الخلفية ككل على مستوى API باستخدام اختبارات التكامل، واختبرنا بعض مكوّنات الواجهة الأمامية باستخدام اختبارات الوحدات.</p>
+<p>بعد ذلك، سنتناول طريقة لاختبار <a href="https://en.wikipedia.org/wiki/System_testing">النظام ككل</a> باستخدام اختبارات <i>من الطرف إلى الطرف</i> (E2E).</p>
+<p>يمكننا إجراء اختبارات E2E لتطبيق ويب باستخدام متصفح ومكتبة اختبار. وتتوفر مكتبات متعددة. ومن الأمثلة عليها <a href="http://www.seleniumhq.org/">Selenium</a> الذي يمكن استخدامه مع أي متصفح تقريباً.
+ومن خيارات المتصفحات أيضاً ما يُسمى <a href="https://en.wikipedia.org/wiki/Headless_browser">المتصفحات بلا واجهة رسومية</a>، وهي متصفحات بلا واجهة مستخدم رسومية. فمثلاً يمكن استخدام Chrome في الوضع بلا واجهة.</p>
+<p>اختبارات E2E هي على الأرجح أكثر فئات الاختبارات فائدة لأنها تختبر النظام عبر الواجهة نفسها التي يستخدمها المستخدمون الحقيقيون.</p>
+<p>لكن لها بعض العيوب أيضاً. فإعداد اختبارات E2E أصعب من اختبارات الوحدات أو التكامل. كما أنها تميل إلى البطء الشديد، وفي نظام كبير قد يستغرق تنفيذها دقائق أو حتى ساعات. وهذا سيئ أثناء التطوير، لأنه من المفيد أثناء كتابة الشيفرة أن تكون قادراً على تشغيل الاختبارات بأكبر قدر ممكن من التكرار تحسباً لحدوث <a href="https://en.wikipedia.org/wiki/Regression_testing">انحدارات</a> في الشيفرة.</p>
+<p>قد تكون اختبارات E2E أيضاً <a href="https://hackernoon.com/flaky-tests-a-war-that-never-ends-9aa32fdef359">متقلبة</a>.
+فقد تنجح بعض الاختبارات مرة وتفشل أخرى، حتى لو لم تتغير الشيفرة إطلاقاً.</p>
+<p>ربما تكون أسهل مكتبتين لاختبار الطرف إلى الطرف في الوقت الحالي هما <a href="https://playwright.dev/">Playwright</a> و<a href="https://www.cypress.io/">Cypress</a>.</p>
+<p>من الإحصاءات على <a href="https://npmtrends.com/cypress-vs-playwright">npmtrends.com</a> نرى أن Playwright تجاوزت Cypress في أعداد التنزيلات خلال عام 2024، ولا تزال شعبيتها تنمو:</p>
+<p><img src="/images/content/5/pwc.webp" alt="مقارنة cypress وplaywright على npm trends"></p>
+<p>استخدمت هذه الدورة Cypress لسنوات. أما الآن فخيارنا هو Playwright.</p>
+<p>إذن <a href="https://playwright.dev/">Playwright</a> وافد جديد إلى اختبارات الطرف إلى الطرف، وقد بدأت شعبيتها تنفجر نحو نهاية عام 2023. وPlaywright تكاد تكون على قدم المساواة مع Cypress من حيث سهولة الاستخدام. وتختلف المكتبتان قليلاً في طريقة عملهما. فـ Cypress مختلفة جذرياً عن معظم المكتبات المناسبة لاختبارات E2E، لأن اختبارات Cypress تُنفَّذ بالكامل داخل المتصفح. أما اختبارات Playwright فتُنفَّذ في عملية Node المتصلة بالمتصفح عبر واجهات برمجية.</p>
+<p>لنستكشف Playwright الآن.</p>
+<h3 id="تهيئة-الاختبارات">تهيئة الاختبارات</h3>
+<p>خلافاً لاختبارات الواجهة الخلفية أو اختبارات الوحدات المُجراة على واجهة React الأمامية، لا يلزم أن تكون اختبارات الطرف إلى الطرف في مشروع npm نفسه الذي توجد فيه الشيفرة. لننشئ مشروعاً منفصلاً تماماً لاختبارات E2E بالأمر <em>npm init</em>. ثم ثبّت Playwright بتشغيل الأمر التالي في مجلد المشروع الجديد:</p>
+<pre><code class="language-js">npm init playwright@latest
+</code></pre>
+<p>سيسألك سكربت التثبيت بضعة أسئلة، أجب عنها كما يلي:</p>
+<p><img src="/images/content/5/play0.webp" alt="الإجابة: javascript، tests، false، true"></p>
+<p>لاحظ أنه عند تثبيت Playwright قد لا يدعم نظام تشغيلك جميع المتصفحات التي توفرها Playwright، وقد تظهر لك رسالة خطأ مثل التالية:</p>
+<pre><code>Webkit 18.0 (playwright build v2070) downloaded to /home/user/.cache/ms-playwright/webkit-2070
+Playwright Host validation warning: 
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Missing libraries:                                   ║
+║     libicudata.so.66                                 ║
+║     libicui18n.so.66                                 ║
+║     libicuuc.so.66                                   ║
+║     libjpeg.so.8                                     ║
+║     libwebp.so.6                                     ║
+║     libpcre.so.3                                     ║
+║     libffi.so.7                                      ║
+╚══════════════════════════════════════════════════════╝
+</code></pre>
+<p>إذا كان الأمر كذلك، يمكنك إما تحديد متصفحات معينة للاختبار بـ <code>--project=</code> في ملف <em>package.json</em>:</p>
+<pre><code class="language-js">    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;playwright test --project=chromium --project=firefox&quot;</span>,
+</code></pre>
+<p>أو إزالة الإدخال الخاص بأي متصفحات مشكِلة من ملف <em>playwright.config.js</em>:</p>
+<pre><code class="language-js">  <span class="hljs-attr">projects</span>: [
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-comment">//{</span>
+    <span class="hljs-comment">//  name: &#x27;webkit&#x27;,</span>
+    <span class="hljs-comment">//  use: { ...devices[&#x27;Desktop Safari&#x27;] },</span>
+    <span class="hljs-comment">//},</span>
+    <span class="hljs-comment">// ...</span>
+  ]
+</code></pre>
+<p>لنعرّف سكربت npm لتشغيل الاختبارات وتقارير الاختبار في <em>package.json</em>:</p>
+<pre><code class="language-js">{
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-string">&quot;scripts&quot;</span>: {
+    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;playwright test&quot;</span>,
+    <span class="hljs-string">&quot;test:report&quot;</span>: <span class="hljs-string">&quot;playwright show-report&quot;</span>
+  },
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>أثناء التثبيت، تُطبع الرسالة التالية في الطرفية:</p>
+<pre><code>And check out the following files:
+  - ./tests/example.spec.js - Example end-to-end test
+  - ./tests-examples/demo-todo-app.spec.js - Demo Todo App end-to-end tests
+  - ./playwright.config.js - Playwright Test configuration
+</code></pre>
+<p>أي موقع بعض الاختبارات النموذجية للمشروع التي أنشأها التثبيت.</p>
+<p>لنشغّل الاختبارات:</p>
+<pre><code class="language-bash">$ npm <span class="hljs-built_in">test</span>
+
+&gt; notes-e2e@1.0.0 <span class="hljs-built_in">test</span>
+&gt; playwright <span class="hljs-built_in">test</span>
+
+
+Running 6 tests using 5 workers
+  6 passed (3.9s)
+
+To open last HTML report run:
+
+  npx playwright show-report
+</code></pre>
+<p>تنجح الاختبارات. ويمكن فتح تقرير اختبار أكثر تفصيلاً إما بالأمر الذي اقترحه الناتج، أو بسكربت npm الذي عرّفناه للتو:</p>
+<pre><code>npm run test:report
+</code></pre>
+<p>يمكن أيضاً تشغيل الاختبارات عبر الواجهة الرسومية بالأمر:</p>
+<pre><code>npm run test -- --ui
+</code></pre>
+<p>تبدو الاختبارات النموذجية في الملف tests/example.spec.js هكذا:</p>
+<pre><code class="language-js"><span class="hljs-comment">// @ts-check</span>
+<span class="hljs-keyword">import</span> { test, expect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@playwright/test&#x27;</span>;
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;has title&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;https://playwright.dev/&#x27;</span>); <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-comment">// توقّع أن &quot;يحتوي&quot; العنوان على سلسلة فرعية.</span>
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page).<span class="hljs-title function_">toHaveTitle</span>(<span class="hljs-regexp">/Playwright/</span>);
+});
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;get started link&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;https://playwright.dev/&#x27;</span>);
+
+  <span class="hljs-comment">// انقر على رابط البدء.</span>
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;link&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Get started&#x27;</span> }).<span class="hljs-title function_">click</span>();
+
+  <span class="hljs-comment">// يتوقع أن تحتوي الصفحة على عنوان فرعي باسم Installation.</span>
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;heading&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Installation&#x27;</span> })).<span class="hljs-title function_">toBeVisible</span>();
+});
+</code></pre>
+<p>يقول السطر الأول من دوال الاختبار إن الاختبارات تختبر الصفحة الموجودة على https://playwright.dev/.</p>
+<h3 id="اختبار-شيفرتنا">اختبار شيفرتنا</h3>
+<p>لنحذف الآن الاختبارات النموذجية ونبدأ باختبار تطبيقنا.</p>
+<p>تفترض اختبارات Playwright أن النظام قيد الاختبار يعمل عند تنفيذ الاختبارات. وخلافاً مثلاً لاختبارات تكامل الواجهة الخلفية، <i>لا تشغّل</i> اختبارات Playwright النظام قيد الاختبار أثناء الاختبار.</p>
+<p>لننشئ سكربت npm للـ<i>واجهة الخلفية</i> يتيح تشغيلها في وضع الاختبار، أي بحيث تأخذ <i>NODE_ENV</i> القيمة <i>test</i>.</p>
+<pre><code class="language-js">{
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-string">&quot;scripts&quot;</span>: {
+    <span class="hljs-string">&quot;start&quot;</span>: <span class="hljs-string">&quot;cross-env NODE_ENV=production node index.js&quot;</span>,
+    <span class="hljs-string">&quot;dev&quot;</span>: <span class="hljs-string">&quot;cross-env NODE_ENV=development node --watch index.js&quot;</span>,
+    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;cross-env NODE_ENV=test node --test&quot;</span>,
+    <span class="hljs-string">&quot;lint&quot;</span>: <span class="hljs-string">&quot;eslint .&quot;</span>,
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-string">&quot;start:test&quot;</span>: <span class="hljs-string">&quot;cross-env NODE_ENV=test node --watch index.js&quot;</span> <span class="hljs-comment">// highlight-line</span>
+  },
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لنشغّل الواجهة الأمامية والخلفية، وننشئ أول ملف اختبار للتطبيق <code>tests/note_app.spec.js</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, expect } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;front page can be opened&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> locator = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Notes&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(locator).<span class="hljs-title function_">toBeVisible</span>()
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Note app, Department of Computer Science, University of Helsinki 2024&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+})
+</code></pre>
+<p>أولاً، يفتح الاختبار التطبيق بالدالة <a href="https://playwright.dev/docs/writing-tests#navigation">page.goto</a>. بعد ذلك يستخدم الدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-text">page.getByText</a> للحصول على <a href="https://playwright.dev/docs/locators">محدِّد موقع</a> (locator) يقابل العنصر الذي يوجد فيه النص <i>Notes</i>.</p>
+<p>تضمن الدالة <a href="https://playwright.dev/docs/api/class-locatorassertions#locator-assertions-to-be-visible">toBeVisible</a> أن العنصر المقابل للمحدِّد الموقع ظاهر في الصفحة.</p>
+<p>أُجري التحقق الثاني دون استخدام المتغير المساعد.</p>
+<p>يفشل الاختبار لأن سنة قديمة وردت في الاختبار. يفتح Playwright تقرير الاختبار في المتصفح، ويتضح أن Playwright نفّذ الاختبارات فعلاً بثلاثة متصفحات مختلفة: Chrome وFirefox وWebkit، أي محرك المتصفح الذي يستخدمه Safari:</p>
+<p><img src="/images/content/5/play2.webp" alt="تقرير الاختبار يظهر فشل الاختبار في ثلاثة متصفحات مختلفة"></p>
+<p>بالنقر على تقرير أحد المتصفحات، يمكننا رؤية رسالة خطأ أكثر تفصيلاً:</p>
+<p><img src="/images/content/5/play3a.webp" alt="رسالة خطأ الاختبار"></p>
+<p>في الصورة الكبيرة، من الجيد جداً بطبيعة الحال أن يجري الاختبار بجميع محركات المتصفحات الثلاثة الشائعة، لكن هذا بطيء، وعند تطوير الاختبارات من الأفضل على الأرجح تنفيذها أساساً بمتصفح واحد فقط. يمكنك تحديد محرك المتصفح المستخدم بوسيط سطر الأوامر:</p>
+<pre><code class="language-js">npm test -- --project chromium
+</code></pre>
+<p>لنصحّح الآن الاختبار بالسنة الصحيحة، ولنضف كتلة <em>describe</em> إلى الاختبارات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {  <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;front page can be opened&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> locator = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Notes&#x27;</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(locator).<span class="hljs-title function_">toBeVisible</span>()
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Note app, Department of Computer Science, University of Helsinki 2025&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+})
+</code></pre>
+<p>قبل أن نمضي قدماً، لنجعل الاختبارات تفشل مرة أخرى. نلاحظ أن تنفيذ الاختبارات سريع جداً عندما تنجح، لكنه أبطأ بكثير إذا لم تنجح. والسبب في ذلك أن سياسة Playwright هي الانتظار للعناصر المبحوث عنها حتى <a href="https://playwright.dev/docs/actionability">تُعرَض وتصبح جاهزة للتفاعل</a>. وإذا لم يُعثر على العنصر، يُرفَع <em>TimeoutError</em> ويفشل الاختبار. وينتظر Playwright العناصر افتراضياً 5 أو 30 ثانية <a href="https://playwright.dev/docs/test-timeouts#introduction">حسب الدوال المستخدمة في الاختبار</a>.</p>
+<p>عند تطوير الاختبارات، قد يكون من الحكمة تقليل زمن الانتظار إلى بضع ثوانٍ. ووفقاً <a href="https://playwright.dev/docs/test-timeouts">للتوثيق</a>، يمكن فعل ذلك بتغيير ملف <em>playwright.config.js</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">3000</span>, <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-attr">fullyParallel</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-attr">workers</span>: <span class="hljs-number">1</span>, <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>أجرينا أيضاً تغييرين آخرين على الملف، حددنا فيهما أن <a href="https://playwright.dev/docs/test-parallel">تُنفَّذ</a> جميع الاختبارات واحداً تلو الآخر. فمع الإعداد الافتراضي يحدث التنفيذ على التوازي، ولأن اختباراتنا تستخدم قاعدة بيانات، يسبب التنفيذ المتوازي مشكلات.</p>
+<h3 id="الكتابة-في-النموذج">الكتابة في النموذج</h3>
+<p>لنكتب اختباراً جديداً يحاول تسجيل الدخول إلى التطبيق. لنفترض أن مستخدماً مخزَّناً في قاعدة البيانات باسم المستخدم <i>mluukkai</i> وكلمة المرور <i>salainen</i>.</p>
+<p>لنبدأ بفتح نموذج تسجيل الدخول.</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  })
+})
+</code></pre>
+<p>يستخدم الاختبار أولاً الدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-role">page.getByRole</a> لاسترجاع الزر بناءً على نصه. وتعيد الدالة <a href="https://playwright.dev/docs/api/class-locator">المحدِّد الموقع</a> (Locator) المقابل لعنصر الزر. ويُنفَّذ الضغط على الزر باستخدام دالة المحدِّد الموقع <a href="https://playwright.dev/docs/api/class-locator#locator-click">click</a>.</p>
+<p>عند تطوير الاختبارات، يمكنك استخدام <a href="https://playwright.dev/docs/test-ui-mode">وضع واجهة المستخدم</a> في Playwright، أي نسخة واجهة المستخدم. لنشغّل الاختبارات في وضع واجهة المستخدم كما يلي:</p>
+<pre><code>npm test -- --ui
+</code></pre>
+<p>نرى الآن أن الاختبار يعثر على الزر</p>
+<p><img src="/images/content/5/play4.webp" alt="واجهة Playwright تعرض تطبيق الملاحظات أثناء اختباره"></p>
+<p>بعد النقر، سيظهر النموذج</p>
+<p><img src="/images/content/5/play5.webp" alt="واجهة Playwright تعرض نموذج تسجيل الدخول في تطبيق الملاحظات"></p>
+<p>عند فتح النموذج، ينبغي أن يبحث الاختبار عن حقول النص ويدخل اسم المستخدم وكلمة المرور فيها. لنقم بالمحاولة الأولى باستخدام الدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-role">page.getByRole</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)  <span class="hljs-comment">// highlight-line</span>
+  })
+})
+</code></pre>
+<p>ينتج عن ذلك خطأ:</p>
+<pre><code class="language-bash">Error: locator.fill: Error: strict mode violation: getByRole(<span class="hljs-string">&#x27;textbox&#x27;</span>) resolved to 2 elements:
+  1) &lt;input value=<span class="hljs-string">&quot;&quot;</span>/&gt; aka locator(<span class="hljs-string">&#x27;div&#x27;</span>).filter({ hasText: /^username$/ }).getByRole(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+  2) &lt;input value=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;password&quot;</span>/&gt; aka locator(<span class="hljs-string">&#x27;input[type=&quot;password&quot;]&#x27;</span>)
+</code></pre>
+<p>المشكلة الآن أن <em>getByRole</em> يجد حقلَي نص، ويفشل استدعاء الدالة <a href="https://playwright.dev/docs/api/class-locator#locator-fill">fill</a> لأنه يفترض وجود حقل نص واحد فقط. ومن طرق التفاف حول المشكلة استخدام الدالتين <a href="https://playwright.dev/docs/api/class-locator#locator-first">first</a> و<a href="https://playwright.dev/docs/api/class-locator#locator-last">last</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-comment">// highlight-start</span>
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">first</span>().<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">last</span>().<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    <span class="hljs-comment">// highlight-end</span>
+  })
+})
+</code></pre>
+<p>بعد الكتابة في حقلي النص، يضغط الاختبار على زر <em>login</em> ويتحقق من أن التطبيق يعرض على الشاشة معلومات المستخدم المسجَّل دخوله.</p>
+<p>لو كان هناك أكثر من حقلَي نص، لما كفت الدالتان <em>first</em> و_last_. ومن الاحتمالات استخدام الدالة <a href="https://playwright.dev/docs/api/class-locator#locator-all">all</a> التي تحوّل المحدِّدات الموقعة التي عُثر عليها إلى مصفوفة يمكن فهرستها:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-comment">// highlight-start</span>
+    <span class="hljs-keyword">const</span> textboxes = <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">all</span>()
+
+    <span class="hljs-keyword">await</span> textboxes[<span class="hljs-number">0</span>].<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> textboxes[<span class="hljs-number">1</span>].<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+    <span class="hljs-comment">// highlight-end</span>
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })  
+})
+</code></pre>
+<p>تعمل هذه النسخة ونسخة الاختبار السابقة. لكن كلتيهما إشكالية إلى حد أنه إذا تغيّر نموذج التسجيل، فقد تتعطل الاختبارات لأنها تعتمد على وجود الحقول في الصفحة بترتيب معيّن.</p>
+<p>إذا كان تحديد موقع عنصر صعباً في الاختبارات، يمكنك إسناده خاصية <i>test-id</i> مستقلة والعثور على العنصر في الاختبارات باستخدام الدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-test-id">getByTestId</a>.</p>
+<p>لنستفد الآن من العناصر الموجودة في نموذج تسجيل الدخول. فقد أُسندت إلى حقول إدخال نموذج تسجيل الدخول <i>تسميات</i> فريدة:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+&lt;form onSubmit={handleSubmit}&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span> // highlight-line
+      username // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{username}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleUsernameChange}</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span> // highlight-line
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span> // highlight-line
+      password // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{password}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handlePasswordChange}</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span> // highlight-line
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>login<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+&lt;/form&gt;
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<p>يمكن بل ينبغي تحديد موقع حقول الإدخال في الاختبارات باستخدام <i>التسميات</i> مع الدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-label">getByLabel</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)  <span class="hljs-comment">// highlight-line</span>
+  
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>() 
+  
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+})
+</code></pre>
+<p>عند تحديد مواقع العناصر، من المنطقي أن نسعى إلى الاستفادة من المحتوى الظاهر للمستخدم في الواجهة، لأن ذلك يحاكي على أفضل وجه كيفية عثور المستخدم فعلاً على حقل الإدخال المطلوب أثناء تنقله في التطبيق.</p>
+<p>لاحظ أن نجاح الاختبار في هذه المرحلة يتطلب وجود مستخدم في قاعدة بيانات <i>الاختبار</i> في الواجهة الخلفية باسم المستخدم <i>mluukkai</i> وكلمة المرور <i>salainen</i>. أنشئ مستخدماً إذا لزم الأمر!</p>
+<h3 id="تهيئة-الاختبار">تهيئة الاختبار</h3>
+<p>بما أن كلا الاختبارين يبدأ بالطريقة نفسها، أي بفتح الصفحة <i>http://localhost:5173</i>، يُستحسن عزل الجزء المشترك في كتلة <i>beforeEach</i> التي تُنفَّذ قبل كل اختبار:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+  })
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;front page can be opened&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">const</span> locator = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Notes&#x27;</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(locator).<span class="hljs-title function_">toBeVisible</span>()
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Note app, Department of Computer Science, University of Helsinki 2025&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+})
+</code></pre>
+<h3 id="اختبار-إنشاء-ملاحظة">اختبار إنشاء ملاحظة</h3>
+<p>بعد ذلك، لننشئ اختباراً يضيف ملاحظة جديدة إلى التطبيق:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+  })  
+})
+</code></pre>
+<p>عُرِّف الاختبار في كتلة <em>describe</em> خاصة به. ويتطلب إنشاء ملاحظة أن يكون المستخدم مسجَّلاً دخوله، وهذا ما تعالجه كتلة <em>beforeEach</em>.</p>
+<p>يعتمد الاختبار على أنه عند إنشاء ملاحظة جديدة يوجد حقل إدخال واحد فقط في الصفحة، فيبحث عنه كما يلي:</p>
+<pre><code class="language-js">page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>)
+</code></pre>
+<p>لو كان هناك حقول أكثر، لتعطّل الاختبار. ولهذا قد يكون من الأفضل إضافة <i>test-id</i> إلى حقل إدخال النموذج والبحث عنه في الاختبار بناءً على هذا المعرّف.</p>
+<p><strong>ملاحظة:</strong> لن ينجح الاختبار إلا في المرة الأولى. والسبب في ذلك أن توقعه</p>
+<pre><code class="language-js"><span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+</code></pre>
+<p>يسبب مشكلات عندما تُنشأ الملاحظة نفسها في التطبيق أكثر من مرة. وسنحل المشكلة في الفصل التالي.</p>
+<p>يبدو هيكل الاختبارات هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ....</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+  })
+})
+</code></pre>
+<p>بما أننا منعنا تشغيل الاختبارات على التوازي، يشغّل Playwright الاختبارات بالترتيب الذي تظهر به في شيفرة الاختبار. أي أنه يُنفَّذ أولاً الاختبار <i>user can log in</i> الذي يسجّل فيه المستخدم دخوله إلى التطبيق. بعد ذلك يُنفَّذ الاختبار <i>a new note can be created</i> الذي يقوم أيضاً بتسجيل الدخول في كتلة <i>beforeEach</i>. لماذا نفعل هذا، أليس المستخدم مسجَّلاً دخوله بالفعل بفضل الاختبار السابق؟ لا، لأن تنفيذ <i>كل</i> اختبار يبدأ من «الحالة الصفرية» للمتصفح، فتُصفَّر جميع التغييرات التي أجرتها الاختبارات السابقة على حالة المتصفح.</p>
+<h3 id="التحكم-في-حالة-قاعدة-البيانات">التحكم في حالة قاعدة البيانات</h3>
+<p>إذا احتاجت الاختبارات إلى القدرة على تعديل قاعدة بيانات الخادم، تصبح الحالة أكثر تعقيداً فوراً. فالمثالي أن تكون قاعدة بيانات الخادم هي نفسها في كل مرة نشغّل فيها الاختبارات، حتى تكون اختباراتنا قابلة للتكرار بموثوقية وسهولة.</p>
+<p>كما هو الحال مع اختبارات الوحدات والتكامل، من الأفضل في اختبارات E2E إفراغ قاعدة البيانات وربما تهيئتها قبل تشغيل الاختبارات. والتحدي في اختبارات E2E أنها لا تستطيع الوصول إلى قاعدة البيانات.</p>
+<p>الحل هو إنشاء نقاط نهاية API لاختبارات الواجهة الخلفية.
+يمكننا إفراغ قاعدة البيانات باستخدام نقاط النهاية هذه.
+لننشئ موجّهاً جديداً للاختبارات داخل مجلد <i>controllers</i>، في ملف <i>testing.js</i></p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> router = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>).<span class="hljs-title class_">Router</span>()
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">User</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/user&#x27;</span>)
+
+router.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/reset&#x27;</span>, <span class="hljs-title function_">async</span> (request, response) =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">User</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">204</span>).<span class="hljs-title function_">end</span>()
+})
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = router
+</code></pre>
+<p>ونضيفه إلى الواجهة الخلفية فقط <i>إذا كان التطبيق يعمل في وضع الاختبار</i>:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/login&#x27;</span>, loginRouter)
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/users&#x27;</span>, usersRouter)
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, notesRouter)
+
+<span class="hljs-comment">// highlight-start</span>
+<span class="hljs-keyword">if</span> (process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;test&#x27;</span>) {
+  <span class="hljs-keyword">const</span> testingRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./controllers/testing&#x27;</span>)
+  app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/testing&#x27;</span>, testingRouter)
+}
+<span class="hljs-comment">// highlight-end</span>
+
+app.<span class="hljs-title function_">use</span>(middleware.<span class="hljs-property">unknownEndpoint</span>)
+app.<span class="hljs-title function_">use</span>(middleware.<span class="hljs-property">errorHandler</span>)
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = app
+</code></pre>
+<p>بعد التغييرات، يؤدي طلب HTTP POST إلى نقطة النهاية <i>/api/testing/reset</i> إلى إفراغ قاعدة البيانات. تأكد من أن واجهتك الخلفية تعمل في وضع الاختبار بتشغيلها بهذا الأمر (المُعدّ سابقاً في ملف package.json):</p>
+<pre><code class="language-js">  npm run <span class="hljs-attr">start</span>:test
+</code></pre>
+<p>يمكن العثور على شيفرة الواجهة الخلفية المعدّلة في فرع <i>part5-1</i> على <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part5-1">GitHub</a>.</p>
+<p>بعد ذلك، سنغيّر كتلة <em>beforeEach</em> بحيث تفرغ قاعدة بيانات الخادم قبل تشغيل الاختبارات.</p>
+<p>حالياً لا يمكن إضافة مستخدمين جدد عبر واجهة المستخدم في الواجهة الأمامية، لذا نضيف مستخدماً جديداً إلى الواجهة الخلفية من كتلة beforeEach.</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page, request }) =&gt; {
+    <span class="hljs-keyword">await</span> request.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;http://localhost:3001/api/testing/reset&#x27;</span>)
+    <span class="hljs-keyword">await</span> request.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;http://localhost:3001/api/users&#x27;</span>, {
+      <span class="hljs-attr">data</span>: {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Matti Luukkainen&#x27;</span>,
+        <span class="hljs-attr">username</span>: <span class="hljs-string">&#x27;mluukkai&#x27;</span>,
+        <span class="hljs-attr">password</span>: <span class="hljs-string">&#x27;salainen&#x27;</span>
+      }
+    })
+
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+  })
+  
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;front page can be opened&#x27;</span>,  <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can login&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+  })
+})
+</code></pre>
+<p>أثناء التهيئة، يوجّه الاختبار طلبات HTTP إلى الواجهة الخلفية بالدالة <a href="https://playwright.dev/docs/api/class-apirequestcontext#api-request-context-post">post</a> الخاصة بالمعامل <em>request</em>.</p>
+<p>خلافاً لما سبق، يبدأ اختبار الواجهة الخلفية الآن دائماً من الحالة نفسها، أي وجود مستخدم واحد ولا ملاحظات في قاعدة البيانات.</p>
+<p>لننشئ اختباراً يتحقق من إمكانية تغيير أهمية الملاحظات.</p>
+<p>هناك بضعة مقاربات مختلفة لإجراء الاختبار.</p>
+<p>في ما يلي، نبحث أولاً عن ملاحظة وننقر على زرها الذي نصه <i>make not important</i>. بعد ذلك نتحقق من أن الملاحظة تحتوي على الزر <i>make important</i>.</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+
+    <span class="hljs-comment">// highlight-start</span>
+    <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and a note exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;another note by playwright&#x27;</span>)
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      })
+  
+      <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;importance can be changed&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+      })
+    <span class="hljs-comment">// highlight-end</span>
+    })
+  })
+})
+</code></pre>
+<p>يبحث الأمر الأول أولاً عن المكوّن الذي يوجد فيه النص <i>another note by playwright</i> ثم عن الزر <i>make not important</i> بداخله وينقر عليه.</p>
+<p>ويضمن الأمر الثاني أن نص الزر نفسه قد تغيّر إلى <i>make important</i>.</p>
+<p>توجد الشيفرة الحالية للاختبارات على <a href="https://github.com/fullstack-hy2020/notes-e2e/tree/part5-1">GitHub</a>، في فرع <i>part5-1</i>.</p>
+<h3 id="اختبار-فشل-تسجيل-الدخول">اختبار فشل تسجيل الدخول</h3>
+<p>لنُجرِ الآن اختباراً يضمن فشل محاولة تسجيل الدخول إذا كانت كلمة المرور خاطئة.</p>
+<p>تبدو النسخة الأولى من الاختبار هكذا:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;wrong&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;wrong credentials&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>يتحقق الاختبار بالدالة <a href="https://playwright.dev/docs/api/class-page#page-get-by-text">page.getByText</a> من أن التطبيق يطبع رسالة خطأ.</p>
+<p>يعرض التطبيق رسالة الخطأ في عنصر يحتوي على صنف CSS وهو <i>error</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Notification</span> = (<span class="hljs-params">{ message }</span>) =&gt; {
+  <span class="hljs-keyword">if</span> (message === <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;error&quot;</span>&gt;</span> // highlight-line
+      {message}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يمكننا تحسين الاختبار لضمان طباعة رسالة الخطأ في المكان الصحيح بالضبط، أي في العنصر الذي يحتوي على صنف CSS وهو <i>error</i>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">const</span> errorDiv = page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;.error&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toContainText</span>(<span class="hljs-string">&#x27;wrong credentials&#x27;</span>)
+})
+</code></pre>
+<p>إذن يستخدم الاختبار الدالة <a href="https://playwright.dev/docs/api/class-page#page-locator">page.locator</a> للعثور على المكوّن الذي يحتوي على صنف CSS وهو <i>error</i> ويخزّنه في متغير. ويمكن التحقق من صحة النص المرتبط بالمكوّن بالتوقع <a href="https://playwright.dev/docs/api/class-locatorassertions#locator-assertions-to-contain-text">toContainText</a>. لاحظ أن <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors">محدِّد صنف CSS</a> يبدأ بنقطة، لذا فإن محدِّد الصنف <i>error</i> هو <i> .error</i>.</p>
+<p>يمكن اختبار أنماط CSS في التطبيق بالمطابق <a href="https://playwright.dev/docs/api/class-locatorassertions#locator-assertions-to-have-css">toHaveCSS</a>. فيمكننا مثلاً التأكد من أن لون رسالة الخطأ أحمر، ومن وجود إطار حولها:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">const</span> errorDiv = page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;.error&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toContainText</span>(<span class="hljs-string">&#x27;wrong credentials&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toHaveCSS</span>(<span class="hljs-string">&#x27;border-style&#x27;</span>, <span class="hljs-string">&#x27;solid&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toHaveCSS</span>(<span class="hljs-string">&#x27;color&#x27;</span>, <span class="hljs-string">&#x27;rgb(255, 0, 0)&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>يجب تعريف الألوان لـ Playwright برموز <a href="https://rgbcolorcode.com/color/red">rgb</a>.</p>
+<p>لنُكمل الاختبار بحيث يضمن أيضاً أن التطبيق <strong>لا يعرض</strong> النص الذي يصف نجاح تسجيل الدخول <i>'Matti Luukkainen logged in'</i>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt;{
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;wrong&#x27;</span>)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+
+  <span class="hljs-keyword">const</span> errorDiv = page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;.error&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toContainText</span>(<span class="hljs-string">&#x27;wrong credentials&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toHaveCSS</span>(<span class="hljs-string">&#x27;border-style&#x27;</span>, <span class="hljs-string">&#x27;solid&#x27;</span>)
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(errorDiv).<span class="hljs-title function_">toHaveCSS</span>(<span class="hljs-string">&#x27;color&#x27;</span>, <span class="hljs-string">&#x27;rgb(255, 0, 0)&#x27;</span>)
+
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-property">not</span>.<span class="hljs-title function_">toBeVisible</span>() <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<h3 id="تشغيل-الاختبارات-واحدا-تلو-الآخر">تشغيل الاختبارات واحداً تلو الآخر</h3>
+<p>افتراضياً، يشغّل Playwright دائماً جميع الاختبارات، وبازدياد عدد الاختبارات يصبح ذلك مستهلكاً للوقت. عند تطوير اختبار جديد أو تصحيح اختبار معطوب، يمكن تعريف الاختبار بدلاً من الأمر <i>test</i> بالأمر <i>test.only</i>، وحينها سيشغّل Playwright ذلك الاختبار فقط:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// هذا هو الاختبار الوحيد الذي سيُنفَّذ!</span>
+  test.<span class="hljs-title function_">only</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {  <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-comment">// هذا الاختبار يُتخطى...</span>
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can login with correct credentials&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>عندما يصبح الاختبار جاهزاً، يمكن بل <strong>يجب</strong> حذف <i>only</i>.</p>
+<p>ومن الخيارات الأخرى لتشغيل اختبار واحد استخدام وسيط سطر الأوامر:</p>
+<pre><code>npm test -- -g &quot;login fails with wrong password&quot;
+</code></pre>
+<h3 id="دوال-مساعدة-للاختبارات">دوال مساعدة للاختبارات</h3>
+<p>تبدو اختبارات تطبيقنا حالياً هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can login with correct credentials&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt;{
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page, request }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;mluukkai&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;salainen&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-comment">// ...</span>
+    })
+  
+    <span class="hljs-comment">// ...</span>
+  })  
+})
+</code></pre>
+<p>أولاً تُختبر دالة تسجيل الدخول. بعد ذلك تحتوي كتلة <em>describe</em> أخرى على مجموعة اختبارات تفترض أن المستخدم مسجَّل دخوله، ويُعالَج تسجيل الدخول داخل كتلة التهيئة <em>beforeEach</em>.</p>
+<p>كما ذُكر سابقاً، يُنفَّذ كل اختبار بدءاً من الحالة الأولية (حيث تُفرَّغ قاعدة البيانات ويُنشأ فيها مستخدم واحد)، لذا حتى لو عُرِّف الاختبار بعد اختبار آخر في الشيفرة، فإنه لا يبدأ من الحالة نفسها التي تركتها الاختبارات المنفَّذة سابقاً في الشيفرة!</p>
+<p>من الجدير أيضاً السعي إلى عدم تكرار الشيفرة في الاختبارات. لنعزل الشيفرة التي تعالج تسجيل الدخول في دالة مساعدة توضع مثلاً في الملف <em>tests/helper.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">loginWith</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">page, username, password</span>)  =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(username)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(password)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+}
+
+<span class="hljs-keyword">export</span> { loginWith }
+</code></pre>
+<p>تصبح الاختبارات أبسط وأوضح:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+<span class="hljs-keyword">const</span> { loginWith } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./helper&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;user can log in&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">loginWith</span>(page, <span class="hljs-string">&#x27;mluukkai&#x27;</span>, <span class="hljs-string">&#x27;salainen&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;Matti Luukkainen logged in&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;login fails with wrong password&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">loginWith</span>(page, <span class="hljs-string">&#x27;mluukkai&#x27;</span>, <span class="hljs-string">&#x27;wrong&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+    <span class="hljs-keyword">const</span> errorDiv = page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;.error&#x27;</span>)
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">loginWith</span>(page, <span class="hljs-string">&#x27;mluukkai&#x27;</span>, <span class="hljs-string">&#x27;salainen&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+    })
+
+    <span class="hljs-comment">// ...</span>
+  })
+})
+</code></pre>
+<p>تقدم Playwright أيضاً <a href="https://playwright.dev/docs/auth">حلاً</a> يُنفَّذ فيه تسجيل الدخول مرة واحدة قبل الاختبارات، ويبدأ كل اختبار من حالة يكون فيها التطبيق مسجَّلاً دخوله بالفعل. ولكي نستفيد من هذه الطريقة، ينبغي أن تكون تهيئة بيانات اختبار التطبيق مختلفة قليلاً عما هي عليه الآن. ففي الحل الحالي تُصفَّر قاعدة البيانات قبل كل اختبار، ولهذا يستحيل تسجيل الدخول مرة واحدة فقط قبل الاختبارات. ولكي نستخدم تسجيل الدخول المسبق الذي توفره Playwright، ينبغي تهيئة المستخدم مرة واحدة فقط قبل الاختبارات. ونلتزم بحلنا الحالي من أجل البساطة.</p>
+<p>تنطبق الشيفرة المتكررة المقابلة فعلاً أيضاً على إنشاء ملاحظة جديدة. فهناك اختبار ينشئ ملاحظة باستخدام نموذج. وكذلك في كتلة التهيئة <em>beforeEach</em> للاختبار الذي يختبر تغيير أهمية الملاحظة، تُنشأ ملاحظة باستخدام النموذج:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)
+      <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+  
+    <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and a note exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-string">&#x27;another note by playwright&#x27;</span>)
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      })
+  
+      <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;it can be made important&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-comment">// ...</span>
+      })
+    })
+  })
+})
+</code></pre>
+<p>عُزل إنشاء الملاحظة أيضاً في دالة مساعدة خاصة به. ويتوسّع ملف <em>tests/helper.js</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">loginWith</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">page, username, password</span>)  =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;username&#x27;</span>).<span class="hljs-title function_">fill</span>(username)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByLabel</span>(<span class="hljs-string">&#x27;password&#x27;</span>).<span class="hljs-title function_">fill</span>(password)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;login&#x27;</span> }).<span class="hljs-title function_">click</span>()
+}
+
+<span class="hljs-comment">// highlight-start</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">createNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">page, content</span>) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(content)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+}
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-keyword">export</span> { loginWith, createNote } <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>تُبسَّط الاختبارات كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe, expect, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+<span class="hljs-keyword">const</span> { createNote, loginWith } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./helper&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">loginWith</span>(page, <span class="hljs-string">&#x27;mluukkai&#x27;</span>, <span class="hljs-string">&#x27;salainen&#x27;</span>)
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;a note created by playwright&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+
+    <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and a note exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;another note by playwright&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+      })
+  
+      <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;importance can be changed&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+      })
+    })
+  })
+})
+</code></pre>
+<p>هناك سمة مزعجة أخرى في اختباراتنا. فعنوان الواجهة الأمامية <i>http:localhost:5173</i> وعنوان الواجهة الخلفية <i>http:localhost:3001</i> مكتوبان مباشرة في الاختبارات. ومن هذين، عنوان الواجهة الخلفية غير مفيد فعلاً، لأن وكيلاً (proxy) قد عُرِّف في إعدادات Vite للواجهة الأمامية، وهو يمرر جميع الطلبات التي تجريها الواجهة الأمامية إلى العنوان <i>http:localhost:5173/api</i> إلى الواجهة الخلفية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">proxy</span>: {
+      <span class="hljs-string">&#x27;/api&#x27;</span>: {
+        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;http://localhost:3001&#x27;</span>,
+        <span class="hljs-attr">changeOrigin</span>: <span class="hljs-literal">true</span>,
+      },
+    }
+  },
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>لذا يمكننا استبدال جميع العناوين في الاختبارات من <em>http://localhost:3001/api/...</em> إلى <em>http://localhost:5173/api/...</em></p>
+<p>يمكننا الآن تعريف <em>baseUrl</em> للتطبيق في ملف إعدادات الاختبارات <i>playwright.config.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">use</span>: {
+    <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>,
+    <span class="hljs-comment">// ...</span>
+  },
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>جميع الأوامر في الاختبارات التي تستخدم عنوان url للتطبيق، مثل</p>
+<pre><code class="language-js"><span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+<span class="hljs-keyword">await</span> request.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;http://localhost:5173/api/testing/reset&#x27;</span>)
+</code></pre>
+<p>يمكن الآن تحويلها إلى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;/&#x27;</span>)
+<span class="hljs-keyword">await</span> request.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/testing/reset&#x27;</span>)
+</code></pre>
+<p>توجد الشيفرة الحالية للاختبارات على <a href="https://github.com/fullstack-hy2020/notes-e2e/tree/part5-2">GitHub</a>، في فرع <i>part5-2</i>.</p>
+<h3 id="إعادة-النظر-في-تغيير-أهمية-الملاحظة">إعادة النظر في تغيير أهمية الملاحظة</h3>
+<p>لنلقِ نظرة على الاختبار الذي أجريناه سابقاً، والذي يتحقق من إمكانية تغيير أهمية ملاحظة.</p>
+<p>لنغيّر كتلة تهيئة الاختبار بحيث تنشئ ملاحظتين بدلاً من واحدة:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and several notes exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> { <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-comment">// highlight-start</span>
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;first note&#x27;</span>)
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;second note&#x27;</span>)
+      <span class="hljs-comment">// highlight-end</span>
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">const</span> otherNoteElement = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;first note&#x27;</span>)
+
+      <span class="hljs-keyword">await</span> otherNoteElement
+        .<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(otherNoteElement.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+  })
+})
+</code></pre>
+<p>يبحث الاختبار أولاً عن العنصر المقابل للملاحظة الأولى المنشأة بالدالة <em>page.getByText</em> ويخزّنه في متغير. بعد ذلك يُبحث داخل العنصر عن زر نصه <em>make not important</em> ويُضغط عليه. وأخيراً يتحقق الاختبار من أن نص الزر قد تغيّر إلى <em>make important</em>.</p>
+<p>كان يمكن أيضاً كتابة الاختبار دون المتغير المساعد:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;first note&#x27;</span>)
+    .<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;first note&#x27;</span>).<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>))
+    .<span class="hljs-title function_">toBeVisible</span>()
+})
+</code></pre>
+<p>لنغيّر مكوّن <em>Note</em> بحيث يُعرَض نص الملاحظة داخل عنصر <em>span</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Note</span> = (<span class="hljs-params">{ note, toggleImportance }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> label = note.<span class="hljs-property">important</span>
+    ? <span class="hljs-string">&#x27;make not important&#x27;</span> : <span class="hljs-string">&#x27;make important&#x27;</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&#x27;note&#x27;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{note.content}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggleImportance}</span>&gt;</span>{label}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تتعطل الاختبارات! والسبب في المشكلة أن الأمر <em>page.getByText('first note')</em> يعيد الآن عنصر <em>span</em> يحتوي على النص فقط، والزر خارج عنه.</p>
+<p>ومن طرق إصلاح المشكلة ما يلي:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">const</span> otherNoteText = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;first note&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> otherNoteElement = otherNoteText.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;..&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">await</span> otherNoteElement.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(otherNoteElement.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+})
+</code></pre>
+<p>يبحث السطر الأول الآن عن عنصر <em>span</em> الذي يحتوي على النص المرتبط بالملاحظة الأولى المنشأة. وفي السطر الثاني تُستخدم الدالة <em>locator</em> ويُمرَّر <em>..</em> كوسيط، وهو يسترجع العنصر الأب للعنصر. ودالة المحدِّد الموقع مرنة جداً، ونستفيد من كونها تقبل <a href="https://playwright.dev/docs/locators#locate-by-css-or-xpath">كوسيط</a> ليس محددات CSS فقط بل محدد <a href="https://developer.mozilla.org/en-US/docs/Web/XPath">XPath</a> أيضاً. وكان يمكن التعبير عن الأمر نفسه بـ CSS، لكن XPath يوفر في هذه الحالة أبسط طريقة للعثور على العنصر الأب لعنصر.</p>
+<p>يمكن بطبيعة الحال كتابة الاختبار باستخدام متغير مساعد واحد فقط:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">const</span> secondNoteElement = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;second note&#x27;</span>).<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;..&#x27;</span>)
+  <span class="hljs-keyword">await</span> secondNoteElement.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(secondNoteElement.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+})
+</code></pre>
+<p>لنغيّر الاختبار بحيث تُنشأ ثلاث ملاحظات، وتُغيَّر الأهمية في الملاحظة الثانية المنشأة:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">loginWith</span>(page, <span class="hljs-string">&#x27;mluukkai&#x27;</span>, <span class="hljs-string">&#x27;salainen&#x27;</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new note can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;a note created by playwright&#x27;</span>, <span class="hljs-literal">true</span>)
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;a note created by playwright&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and several notes exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;first note&#x27;</span>)
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;second note&#x27;</span>)
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;third note&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-keyword">const</span> otherNoteText = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;second note&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+      <span class="hljs-keyword">const</span> otherNoteElement = otherNoteText.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;..&#x27;</span>)
+    
+      <span class="hljs-keyword">await</span> otherNoteElement.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(otherNoteElement.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+    })
+  })
+}) 
+</code></pre>
+<p>لسبب ما يبدأ الاختبار بالعمل بشكل غير موثوق، فينجح أحياناً ويفشل أحياناً. حان وقت أن نشمّر عن سواعدنا ونتعلم كيفية تصحيح أخطاء الاختبارات.</p>
+<h3 id="تطوير-الاختبارات-وتصحيح-الأخطاء">تطوير الاختبارات وتصحيح الأخطاء</h3>
+<p>إذا لم تنجح الاختبارات وشككت في أن العيب في الاختبارات لا في الشيفرة، ينبغي أن تشغّل الاختبارات في وضع <a href="https://playwright.dev/docs/debug#run-in-debug-mode-1">التصحيح</a> (debug).</p>
+<p>يشغّل الأمر التالي الاختبار المشكِل في وضع التصحيح:</p>
+<pre><code>npm test -- -g'one of those can be made nonimportant' --debug
+</code></pre>
+<p>يعرض مفتّش Playwright (inspector) تقدم الاختبارات خطوة بخطوة. وزر السهم/النقطة في الأعلى ينقل الاختبارات خطوة إلى الأمام. وتُعرض في المتصفح العناصر التي عثرت عليها المحدِّدات الموقعة والتفاعل مع المتصفح:</p>
+<p><img src="/images/content/5/play6a.webp" alt="مفتّش Playwright يبرز العنصر الذي عثر عليه المحدِّد الموقع المحدد في التطبيق"></p>
+<p>افتراضياً، يتنقل وضع التصحيح عبر الاختبار أمراً بأمر. وإذا كان الاختبار معقداً، فقد يكون التنقل عبره حتى نقطة الاهتمام عبئاً كبيراً. ويمكن تجنّب ذلك باستخدام الأمر <em>await page.pause()</em>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Note app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page, request }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-comment">// ...</span>
+    })
+
+    <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;and several notes exists&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;first note&#x27;</span>)
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;second note&#x27;</span>)
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">createNote</span>(page, <span class="hljs-string">&#x27;third note&#x27;</span>)
+      })
+  
+      <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;one of those can be made nonimportant&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+        <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">pause</span>() <span class="hljs-comment">// highlight-line</span>
+        <span class="hljs-keyword">const</span> otherNoteText = page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;second note&#x27;</span>)
+        <span class="hljs-keyword">const</span> otherNoteElement = otherNoteText.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;..&#x27;</span>)
+      
+        <span class="hljs-keyword">await</span> otherNoteElement.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> }).<span class="hljs-title function_">click</span>()
+        <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(otherNoteElement.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;make important&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>()
+      })
+    })
+  })
+})
+</code></pre>
+<p>الآن يمكنك في الاختبار الانتقال إلى <em>page.pause()</em> بخطوة واحدة، بالضغط على رمز السهم الأخضر في المفتّش.</p>
+<p>عندما نشغّل الاختبار الآن وننتقل إلى الأمر <em>page.pause()</em>، نكتشف حقيقة مثيرة للاهتمام:</p>
+<p><img src="/images/content/5/play6b.webp" alt="مفتّش Playwright يعرض حالة التطبيق عند page.pause"></p>
+<p>يبدو أن المتصفح <i>لا يعرض</i> جميع الملاحظات المنشأة في كتلة <em>beforeEach</em>. فما المشكلة؟</p>
+<p>السبب في المشكلة أن الاختبار عندما ينشئ ملاحظة، يبدأ بإنشاء التالية حتى قبل أن يستجيب الخادم، وتُعرَض الملاحظة المضافة على الشاشة. وهذا بدوره قد يؤدي إلى فقدان بعض الملاحظات (في الصورة، حدث ذلك للملاحظة الثانية المنشأة)، لأن المتصفح يُعاد عرضه عند استجابة الخادم بناءً على حالة الملاحظات في بداية عملية الإدراج تلك.</p>
+<p>يمكن حل المشكلة بـ«إبطاء» عمليات الإدراج باستخدام الأمر <a href="https://playwright.dev/docs/api/class-locator#locator-wait-for">waitFor</a> بعد الإدراج للانتظار حتى تُعرَض الملاحظة المُدرَجة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">createNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">page, content</span>) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;new note&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;textbox&#x27;</span>).<span class="hljs-title function_">fill</span>(content)
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;save&#x27;</span> }).<span class="hljs-title function_">click</span>()
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByText</span>(content).<span class="hljs-title function_">waitFor</span>() <span class="hljs-comment">// highlight-line</span>
+}
+</code></pre>
+<p>بدلاً من وضع التصحيح أو إلى جانبه، قد يكون تشغيل الاختبارات في وضع واجهة المستخدم مفيداً. وكما ذُكر سابقاً، تُشغَّل الاختبارات في وضع واجهة المستخدم كما يلي:</p>
+<pre><code>npm run test -- --ui
+</code></pre>
+<p>يشبه استخدام <a href="https://playwright.dev/docs/trace-viewer-intro">عارض التتبع</a> (Trace Viewer) في Playwright وضعَ واجهة المستخدم تقريباً. والفكرة أن يُحفظ «تتبع مرئي» للاختبارات، يمكن عرضه عند الحاجة بعد اكتمال الاختبارات. ويُحفظ التتبع بتشغيل الاختبارات كما يلي:</p>
+<pre><code>npm run test -- --trace on
+</code></pre>
+<p>وعند الحاجة، يمكن عرض التتبع بالأمر</p>
+<pre><code>npx playwright show-report
+</code></pre>
+<p>أو بسكربت npm الذي عرّفناه <em>npm run test:report</em></p>
+<p>يبدو التتبع عملياً مثل تشغيل الاختبارات في وضع واجهة المستخدم.</p>
+<p>يوفر وضع واجهة المستخدم وعارض التتبع أيضاً إمكانية البحث المدعوم عن المحدِّدات الموقعة. ويُفعل ذلك بالضغط على الدائرة المزدوجة على الجانب الأيسر من الشريط السفلي، ثم بالنقر على عنصر واجهة المستخدم المطلوب. فيعرض Playwright محدد موقع العنصر:</p>
+<p><img src="/images/content/5/play8.webp" alt="عارض التتبع في Playwright مع أسهم حمراء تشير إلى موضع البحث المدعوم عن المحدِّد الموقع وإلى العنصر المحدد به مع عرض محدد موقع مقترح للعنصر"></p>
+<p>يقترح Playwright ما يلي كمحدد موقع للملاحظة الثالثة</p>
+<pre><code class="language-js">page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;li&#x27;</span>).<span class="hljs-title function_">filter</span>({ <span class="hljs-attr">hasText</span>: <span class="hljs-string">&#x27;third note&#x27;</span> }).<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>)
+</code></pre>
+<p>تُستدعى الدالة <a href="https://playwright.dev/docs/api/class-page#page-locator">page.locator</a> بالوسيط <em>li</em>، أي نبحث عن جميع عناصر li في الصفحة، وعددها ثلاثة إجمالاً. بعد ذلك، باستخدام دالة <a href="https://playwright.dev/docs/api/class-locator#locator-filter">locator.filter</a>، نضيّق النطاق إلى عنصر li الذي يحتوي على النص <i>third note</i>، ويُؤخذ عنصر الزر بداخله باستخدام دالة <a href="https://playwright.dev/docs/api/class-locator#locator-get-by-role">locator.getByRole</a>.</p>
+<p>يختلف المحدِّد الموقع الذي يولّده Playwright بعض الشيء عن المحدِّد الموقع الذي استخدمته اختباراتنا، وهو</p>
+<pre><code class="language-js">page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;first note&#x27;</span>).<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;..&#x27;</span>).<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;make not important&#x27;</span> })
+</code></pre>
+<p>أي المحدِّدين الموقعين أفضل هو على الأرجح مسألة ذوق.</p>
+<p>تتضمن Playwright أيضاً <a href="https://playwright.dev/docs/codegen-intro">مولّد اختبارات</a> يتيح «تسجيل» اختبار عبر واجهة المستخدم. ويُشغَّل مولّد الاختبارات بالأمر:</p>
+<pre><code>npx playwright codegen http://localhost:5173/
+</code></pre>
+<p>عند تفعيل وضع <em>Record</em>، «يسجّل» مولّد الاختبارات تفاعل المستخدم في مفتّش Playwright، حيث يمكن نسخ المحدِّدات الموقعة والإجراءات إلى الاختبارات:</p>
+<p><img src="/images/content/5/play9.webp" alt="وضع التسجيل في Playwright مفعّلاً مع ناتجه في المفتّش بعد تفاعل المستخدم"></p>
+<p>بدلاً من سطر الأوامر، يمكن أيضاً استخدام Playwright عبر إضافة <a href="https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright">VS Code</a>. وتوفر الإضافة ميزات مريحة عديدة، مثل استخدام نقاط التوقف عند تصحيح أخطاء الاختبارات.</p>
+<p>لتجنّب المواقف الإشكالية وزيادة الفهم، يجدر بالتأكيد تصفح <a href="https://playwright.dev/docs/intro">توثيق</a> Playwright عالي الجودة. والأقسام الأهم مذكورة أدناه:</p>
+<ul>
+<li>قسم <a href="https://playwright.dev/docs/locators">المحدِّدات الموقعة</a> يقدم تلميحات جيدة للعثور على العناصر في الاختبار</li>
+<li>قسم <a href="https://playwright.dev/docs/input">الإجراءات</a> يشرح كيف يمكن محاكاة التفاعل مع المتصفح في الاختبارات</li>
+<li>قسم <a href="https://playwright.dev/docs/test-assertions">التوقعات</a> يعرض مختلف التوقعات التي توفرها Playwright للاختبار</li>
+</ul>
+<p>يمكن العثور على تفاصيل أعمق في وصف <a href="https://playwright.dev/docs/api/class-playwright">API</a>، ومن المفيد بشكل خاص صنف <a href="https://playwright.dev/docs/api/class-page">Page</a> المقابل لنافذة المتصفح للتطبيق قيد الاختبار، وصنف <a href="https://playwright.dev/docs/api/class-locator">Locator</a> المقابل للعناصر المبحوث عنها في الاختبارات.</p>
+<p>توجد النسخة النهائية للاختبارات كاملة على <a href="https://github.com/fullstack-hy2020/notes-e2e/tree/part5-3">GitHub</a>، في فرع <i>part5-3</i>.</p>
+<p>توجد النسخة النهائية لشيفرة الواجهة الأمامية بكاملها على <a href="https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-9">GitHub</a>، في فرع <i>part5-9</i>.</p>
+</div>
+<div class="tasks">
+<h3 id="تمارين-517-523">تمارين 5.17.-5.23.</h3>
+<p>في التمارين الأخيرة من هذا الجزء، لنُجرِ بعض اختبارات E2E لتطبيق المدونات. وينبغي أن تكفي المادة أعلاه لإنجاز معظم التمارين. غير أنه يجدر بك بالتأكيد قراءة <a href="https://playwright.dev/docs/intro">توثيق</a> Playwright و<a href="https://playwright.dev/docs/api/class-playwright">وصف API</a>، على الأقل الأقسام المذكورة في نهاية الفصل السابق.</p>
+<h4 id="517-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-1">5.17: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 1</h4>
+<p>أنشئ مشروع npm جديداً للاختبارات وهيئ Playwright فيه.</p>
+<p>اكتب اختباراً يضمن أن التطبيق يعرض نموذج تسجيل الدخول افتراضياً.</p>
+<p>ينبغي أن يكون جسم الاختبار كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, expect, beforeEach, describe } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Blog app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;http://localhost:5173&#x27;</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;Login form is shown&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+})
+
+</code></pre>
+<h4 id="518-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-2">5.18: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 2</h4>
+<p>اكتب اختبارات تسجيل الدخول. اختبر تسجيل الدخول الناجح والفاشل معاً. وللاختبارات، أنشئ مستخدماً في كتلة <em>beforeEach</em>.</p>
+<p>يتوسّع جسم الاختبارات كما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, expect, beforeEach, describe } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@playwright/test&#x27;</span>)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Blog app&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page, request }) =&gt; {
+    <span class="hljs-comment">// أفرغ قاعدة البيانات هنا</span>
+    <span class="hljs-comment">// أنشئ مستخدماً للواجهة الخلفية هنا</span>
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;Login form is shown&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Login&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;succeeds with correct credentials&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-comment">// ...</span>
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;fails with wrong credentials&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+      <span class="hljs-comment">// ...</span>
+    })
+  })
+})
+</code></pre>
+<p>يجب أن تفرّغ كتلة <em>beforeEach</em> قاعدة البيانات باستخدام مثلاً طريقة reset التي استخدمناها في <a href="/part5#controlling-the-state-of-the-database">المادة</a>.</p>
+<h4 id="519-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-3">5.19: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 3</h4>
+<p>أنشئ اختباراً يتحقق من أن مستخدماً مسجَّل دخوله يمكنه إنشاء مدونة. وقد يبدو جسم الاختبار كما يلي</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;When logged in&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a new blog can be created&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-comment">// ...</span>
+  })
+})
+</code></pre>
+<p>ينبغي أن يضمن الاختبار ظهور المدونة المنشأة في قائمة المدونات.</p>
+<h4 id="520-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-4">5.20: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 4</h4>
+<p>اكتب اختباراً يتأكد من إمكانية الإعجاب بالمدونة.</p>
+<h4 id="521-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-5">5.21: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 5</h4>
+<p>اكتب اختباراً يضمن أن المستخدم الذي أضاف المدونة يمكنه حذف المدونة. وإذا كنت تستخدم حوار <em>window.confirm</em> في عملية الحذف، فقد تحتاج إلى البحث في Google عن كيفية استخدام الحوار في اختبارات Playwright.</p>
+<h4 id="522-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-6">5.22: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 6</h4>
+<p>اكتب اختباراً يضمن أن المستخدم الذي أضاف المدونة وحده يرى زر حذف المدونة.</p>
+<h4 id="523-اختبار-قائمة-المدونات-من-الطرف-إلى-الطرف-الخطوة-7">5.23: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 7</h4>
+<p>اكتب اختباراً يضمن ترتيب المدونات حسب الإعجابات، فالمدونة الأكثر إعجابات أولاً.</p>
+<p><i>هذا التمرين أصعب بكثير من التمارين السابقة.</i></p>
+</div>
+`,i={part:5,letter:"d",file:s,title:n,slug:a,mainImage:t,headings:l,html:p};export{i as default,s as file,l as headings,p as html,c as letter,t as mainImage,e as part,a as slug,n as title};

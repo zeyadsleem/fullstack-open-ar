@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="استخدم قواعد البيانات العلائقية مع Sequelize والترحيلات والعلاقات."/><!----><title>استخدام قواعد البيانات العلائقية مع Sequelize - الجزء 13 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#إيجابيات-قواعد-البيانات-المستندية-وسلبياتها">إيجابيات قواعد البيانات المستندية وسلبياتها</a></li><li class="toc__depth-3"><a href="#قاعدة-بيانات-التطبيق">قاعدة بيانات التطبيق</a></li><li class="toc__depth-3"><a href="#تطبيق-nodejs-يستخدم-قاعدة-بيانات-علائقية">تطبيق Node.js يستخدم قاعدة بيانات علائقية</a></li><li class="toc__depth-3"><a href="#النموذج">النموذج</a></li><li class="toc__depth-3"><a href="#إنشاء-جداول-قاعدة-البيانات-تلقائيا">إنشاء جداول قاعدة البيانات تلقائياً</a></li><li class="toc__depth-3"><a href="#عمليات-أخرى">عمليات أخرى</a></li><li class="toc__depth-3"><a href="#طباعة-الكائنات-التي-يعيدها-sequelize-إلى-الطرفية">طباعة الكائنات التي يعيدها Sequelize إلى الطرفية</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#C5FF73"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part13">الجزء 13: قواعد البيانات العلائقية</a></p> <h1>استخدام قواعد البيانات العلائقية مع Sequelize</h1></div> <div class="course-content"><!----><p>تأكد من أنك قرأت <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-1" data-type="link" data-id="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-1">الفصل الأول: البدء</a>!</p>
+<h3 id="إيجابيات-قواعد-البيانات-المستندية-وسلبياتها">إيجابيات قواعد البيانات المستندية وسلبياتها</h3>
+<p>استخدمنا MongoDB في جميع أقسام الدورة السابقة. Mongo قاعدة بيانات مستندية، ومن أبرز خصائصها أنها بلا مخطط (schemaless)، أي أن قاعدة البيانات لا تملك سوى إدراك محدود جداً لنوع البيانات المخزّنة في مجموعاتها. لا يوجد مخطط قاعدة البيانات إلا في شيفرة البرنامج، وهي التي تفسّر البيانات بطريقة معيّنة، مثلاً بتحديد أن بعض الحقول مراجع إلى كائنات في مجموعة أخرى.</p>
+<p>في التطبيق المثال في <a href="../../part3/saving_data_to_mongo_db#mongo-db" data-type="link" data-id="https://fullstackopen.com/en/part3/saving_data_to_mongo_db#mongo-db">الجزء 3</a> والجزء 4، تخزّن قاعدة البيانات <em>ملاحظات</em> و<em>مستخدمين</em>.</p>
+<p>تبدو المجموعة التي تخزّن <em>الملاحظات</em> كما يلي:</p>
+<pre><code>&lt;code&gt;[
+  {
+    &quot;_id&quot;: &quot;600c0e410d10256466898a6c&quot;,
+    &quot;content&quot;: &quot;HTML is easy&quot;
+    &quot;date&quot;: 2026-01-23T11:53:37.292+00:00,
+    &quot;important&quot;: false
+    &quot;__v&quot;: 0
+  },
+  {
+    &quot;_id&quot;: &quot;600c0edde86c7264ace9bb78&quot;,
+    &quot;content&quot;: &quot;CSS is hard&quot;
+    &quot;date&quot;: 2026-01-23T11:56:13.912+00:00,
+    &quot;important&quot;: true
+    &quot;__v&quot;: 0
+  },
+]&lt;/code&gt;
+</code></pre>
+<p>يبدو المستخدمون المحفوظون في مجموعة <em>users</em> كما يلي:</p>
+<pre><code>&lt;code&gt;[&lt;br&gt;  {&lt;br&gt;    &quot;_id&quot;: &quot;600c0e410d10256466883a6a&quot;,&lt;br&gt;    &quot;username&quot;: &quot;mluukkai&quot;,&lt;br&gt;    &quot;name&quot;: &quot;Matti Luukkainen&quot;,&lt;br&gt;    &quot;passwordHash&quot; : &quot;$2b$10$Df1yYJRiQuu3Sr4tUrk.SerVz1JKtBHlBOARfY0PBn/Uo7qr8Ocou&quot;,&lt;br&gt;    &quot;__v&quot;: 9,&lt;br&gt;    notes: [&lt;br&gt;      &quot;600c0edde86c7264ace9bb78&quot;,&lt;br&gt;      &quot;600c0e410d10256466898a6c&quot;&lt;br&gt;    ]&lt;br&gt;  },&lt;br&gt;]&lt;/code&gt;
+</code></pre>
+<p>تعرف MongoDB أنواع حقول الكيانات المخزّنة، لكن ليست لديها معلومات عن المجموعة التي تشير إليها معرّفات سجلات المستخدم. كذلك لا يهم MongoDB ما الحقول التي تملكها الكائنات المخزّنة في المجموعات. تترك MongoDB الأمر بالكامل للمبرمج ليضمن تخزين المعلومات الصحيحة في قاعدة البيانات.</p>
+<p>لغياب المخطط إيجابيات وسلبيات. من الإيجابيات المرونة التي يوفّرها: بما أنه لا حاجة إلى تعريف مخطط على مستوى قاعدة البيانات، يمكن أن يكون تطوير التطبيقات أسرع وأسهل في حالات معيّنة، كما أن تعريف المخطط وتعديله لا يتطلبان جهداً يُذكر على أي حال. أما مشكلات غياب المخطط فتتعلق بقابلية الخطأ: فكل شيء متروك للمبرمج. لا تملك قاعدة البيانات نفسها أي وسيلة للتحقق مما إذا كانت البيانات فيها <em>متسقة</em>، أي ما إذا كانت جميع الحقول الإلزامية لها قيم، وما إذا كانت حقول نوع المرجع تشير إلى أنواع موجودة وصحيحة من الكائنات، إلخ.</p>
+<p>تعتمد قواعد البيانات العلائقية التي يتركّز عليها هذا الجزء اعتماداً كبيراً على وجود مخطط، وإيجابيات قواعد البيانات ذات المخطط وسلبياتها تكاد تكون عكس تلك الخاصة بقواعد البيانات بلا مخطط.</p>
+<p>سبب استخدام الأجزاء السابقة من الدورة لـMongoDB هو تحديداً غياب المخطط فيها، مما جعل استخدامها أسهل بعض الشيء لمن ليسوا على دراية كبيرة بقواعد البيانات العلائقية. بالنسبة لمعظم حالات الاستخدام في هذه الدورة، كنت سأختار بنفسي قاعدة بيانات علائقية.</p>
+<h3 id="قاعدة-بيانات-التطبيق">قاعدة بيانات التطبيق</h3>
+<p>في المادة النظرية لهذا القسم، سنبني نسخة تدعم Postgres من الواجهة الخلفية لتطبيق تخزين الملاحظات الذي بُني في القسمين 3 و4.</p>
+<p>نحتاج في تطبيقنا إلى قاعدة بيانات علائقية. هناك خيارات كثيرة، لكننا سنستخدم الحل مفتوح المصدر الأكثر شعبية حالياً <a href="https://www.postgresql.org/" target="_blank" rel="noreferrer noopener">PostgreSQL</a>. يمكنك تثبيت Postgres (كما تُسمى قاعدة البيانات غالباً) على جهازك إن أردت ذلك، لكنه ليس ضرورياً.</p>
+<p>ربما يكون الخيار الأسهل استخدام Postgres مستضاف في السحابة. هناك خيارات وفيرة، وعلى الأقل أحدها، <a href="https://aiven.io/">aiven.io</a>، يمكن استخدامه مجاناً للمشاريع الجانبية.</p>
+<p>خيار آخر هو تطبيق ما تعلمته في <a href="../../part12" target="_blank" rel="noreferrer noopener">الجزء 12</a> من الدورة واستخدام Postgres محلياً مع Docker. بعد تعليمات Postgres الخاصة بخدمات السحابة، نقدّم أيضاً تعليمات موجزة حول كيفية إعداد Postgres بسهولة مع Docker.</p>
+<h4 id="حل-مستضاف-aiven">حل مستضاف: Aiven</h4>
+<p>في وقت كتابة هذا النص (9 فبراير 2026) توفّر <a href="https://aiven.io/" data-type="link" data-id="https://aiven.io/">Aiven</a> طبقة مجانية تناسب أغراض هذه الدورة جيداً. اذهب إلى <a href="https://aiven.io/">aiven.io</a> وسجّل. بعد إنشاء قاعدة البيانات، تحقق مما هو رابط الاتصال:</p>
+<p><img src="../../images/mooc/d6c141cdea4c.webp" alt="صورة توضيحية"></p>
+<h4 id="docker">Docker</h4>
+<p>تفترض هذه التعليمات أنك أتقنت أساسيات Docker بالقدر الذي يعلّمه مثلاً <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-containers">الجزء 12</a>.</p>
+<p>شغّل <a href="https://hub.docker.com/_/postgres" target="_blank" rel="noreferrer noopener">صورة Docker</a> الخاصة بـPostgres بالأمر</p>
+<pre><code>&lt;code&gt;docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres&lt;/code&gt;
+</code></pre>
+<p>يمكن فتح اتصال طرفية psql بقاعدة البيانات باستخدام أمر <em>docker exec</em>. أولاً عليك معرفة معرّف الحاوية:</p>
+<pre><code>&lt;code&gt;$ docker ps&lt;br&gt;CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES&lt;br&gt;ff3f49eadf27   postgres   &quot;docker-entrypoint.s…&quot;   31 minutes ago   Up 31 minutes   0.0.0.0:5432-&gt;5432/tcp   great_raman&lt;br&gt;docker exec -it ff3f49eadf27 psql -U postgres postgres&lt;br&gt;psql (15.2 (Debian 15.2-1.pgdg110+1))&lt;br&gt;Type &quot;help&quot; for help.&lt;br&gt;&lt;br&gt;postgres=#&lt;/code&gt;
+</code></pre>
+<p>بالتعريف بهذه الطريقة، لا تبقى البيانات المخزّنة في قاعدة البيانات محفوظة إلا طالما وُجدت الحاوية. يمكن الحفاظ على البيانات بتعريف حجم (volume) للبيانات. يمكنك الاطلاع على <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-containers/chapter-3#066334ce-29a6-4ea8-a66b-035846920009">الجزء 12 </a>للتفاصيل. انظر المزيد <a href="https://github.com/docker-library/docs/blob/master/postgres/README.md#pgdata" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<h4 id="الوصول-إلى-قاعدة-البيانات">الوصول إلى قاعدة البيانات</h4>
+<p>لا سيّما عند استخدام قاعدة بيانات علائقية، من الضروري الوصول إلى قاعدة البيانات مباشرة أيضاً. هناك طرق كثيرة لفعل ذلك. أحد الاحتمالات استخدام أداة سطر الأوامر <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noreferrer noopener">psql</a> الخاصة بـPostgres. إذا لم يكن psql مثبتاً لديك أو لم تكن تستخدم تثبيت Docker، <a href="https://www.pgadmin.org/download/" data-type="link" data-id="https://www.pgadmin.org/download/">نزّل</a> وثبّت pgAdmin، وهو عميل Postgres رسومي.</p>
+<h4 id="فتح-اتصال-باستخدام-psql">فتح اتصال باستخدام psql</h4>
+<p>إذا كان psql مثبتاً على جهازك المضيف، يُفتح الاتصال بالأمر</p>
+<pre><code>&lt;code&gt;psql postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require&lt;/code&gt;
+</code></pre>
+<p>إذا كان Docker مثبتاً لديك، يمكنك فتح الاتصال بقاعدة بيانات Aiven كما يلي</p>
+<pre><code>&lt;code&gt;docker run -it --rm postgres psql &quot;postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require&quot;&lt;/code&gt;
+</code></pre>
+<p>تذكّر أنك تجد رابط اتصال قاعدة البيانات في لوحة تحكم Aiven.</p>
+<p>إذا كانت قاعدة البيانات لديك داخل Docker، انظر أعلاه كيفية الوصول إليها بالأمر <code>docker exec</code>.</p>
+<h4 id="فتح-اتصال-باستخدام-pgadmin">فتح اتصال باستخدام pgAdmin</h4>
+<p>ابدأ بإنشاء <em>خادم</em>:</p>
+<p><img src="../../images/mooc/387a5134d08c.webp" alt="صورة توضيحية"></p>
+<p>املأ النموذج بالمعلومات التي تجدها في لوحة تحكم Aiven. بعد إعداد الخادم وإنشاء الاتصال، تُفتح طرفية قاعدة البيانات كما يلي:</p>
+<p><img src="../../images/mooc/cd9bc10bdfd2.webp" alt="صورة توضيحية"></p>
+<p>إذا سار كل شيء على ما يرام، فأنت جاهز:</p>
+<p><img src="../../images/mooc/10c64e56f72a.webp" alt="صورة توضيحية"></p>
+<h4 id="عند-فتح-الاتصال">عند فتح الاتصال</h4>
+<p>عند فتح الطرفية، لنجرّب أمر psql الرئيسي <code>\d</code>، الذي يخبرك بمحتويات قاعدة البيانات:</p>
+<pre><code>&lt;code&gt;psql (17.4 (Debian 17.4-1.pgdg120+2), server 17.7)&lt;br&gt;SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: postgresql)&lt;br&gt;Type &quot;help&quot; for help.&lt;br&gt;&lt;br&gt;defaultdb=&gt; \d&lt;br&gt;Did not find any relations.&lt;br&gt;defaultdb=&gt;&lt;/code&gt;
+</code></pre>
+<p>كما قد تتوقع، لا يوجد شيء حالياً في قاعدة البيانات.</p>
+<p>لننشئ جدولاً للملاحظات:</p>
+<pre><code>&lt;code&gt;CREATE TABLE notes (&lt;br&gt;    id SERIAL PRIMARY KEY,&lt;br&gt;    content text NOT NULL,&lt;br&gt;    important boolean,&lt;br&gt;    date time&lt;br&gt;);&lt;/code&gt;
+</code></pre>
+<p>بضع نقاط: العمود <em>id</em> معرّف بأنه <em>مفتاح أساسي</em>، ما يعني أن القيمة في العمود يجب أن تكون فريدة لكل صف في الجدول، ويجب ألا تكون القيمة فارغة. نوع هذا العمود معرّف بأنه <a href="https://www.postgresql.org/docs/9.1/datatype-numeric.html#DATATYPE-SERIAL" target="_blank" rel="noreferrer noopener">SERIAL</a>، وهو ليس النوع الفعلي بل اختصار لعمود عدد صحيح يُسند إليه Postgres تلقائياً قيمة فريدة متزايدة عند إنشاء الصفوف. العمود المسمى <em>content</em> من النوع text معرّف بطريقة تجعل إسناد قيمة إليه إلزامياً.</p>
+<p>لننظر إلى الحالة من الطرفية. أولاً الأمر <code>\d</code>، الذي يخبرنا ما الجداول الموجودة في قاعدة البيانات:</p>
+<pre><code>defaultdb=&gt; \d
+            List of relations
+ Schema |     Name     |   Type   |  Owner
+--------+--------------+----------+----------
+ public | notes        | table    | username
+ public | notes_id_seq | sequence | username
+(2 rows)
+</code></pre>
+<p>إضافة إلى جدول <em>notes</em>، أنشأ Postgres جدولاً فرعياً يُسمى <em>notes_id_seq</em>، يتتبّع القيمة المُسندة إلى عمود <em>id</em> عند إنشاء الملاحظة التالية.</p>
+<p>بالأمر <code>\d notes</code>، يمكننا رؤية كيفية تعريف جدول <em>notes</em>:</p>
+<pre><code>defaultdb=&gt; \d notes;
+                                 Table &quot;public.notes&quot;
+ Column    |          Type          | Collation | Nullable |             Default
+-----------+------------------------+-----------+----------+-----------------------------------
+ id        | integer                |           | not null | nextval('notes_id_seq'::regclass)
+ content   | text                   |           | not null |
+ important | boolean                |           |          |
+ date      | time without time zone |           |          |
+Indexes:
+    &quot;notes_pkey&quot; PRIMARY KEY, btree (id)
+</code></pre>
+<p>نرى أن العمود <em>id</em> له <em>قيمة افتراضية</em> تُحصل عليها باستدعاء دالة Postgres الداخلية <code>nextval</code>.</p>
+<p>لنضف بعض المحتوى إلى الجدول:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">insert into</span> notes (content, important) <span class="hljs-keyword">values</span> (<span class="hljs-string">&#x27;Relational databases rule the world&#x27;</span>, <span class="hljs-literal">true</span>);
+<span class="hljs-keyword">insert into</span> notes (content, important) <span class="hljs-keyword">values</span> (<span class="hljs-string">&#x27;MongoDB is webscale&#x27;</span>, <span class="hljs-literal">false</span>);
+</code></pre>
+<p>ولنرَ كيف يبدو المحتوى المُنشأ:</p>
+<pre><code>defaultdb=&gt; select * from notes;
+ id |               content               | important | date
+----+-------------------------------------+-----------+------
+  1 | relational databases rule the world | t         |
+  2 | MongoDB is webscale                 | f         |
+(2 rows)
+</code></pre>
+<p>إذا حاولنا تخزين بيانات في قاعدة البيانات لا تتوافق مع المخطط، فلن ينجح ذلك. لا يمكن أن تكون قيمة عمود إلزامي مفقودة:</p>
+<pre><code>defaultdb=&gt; insert into notes (important) values (true);
+ERROR: null value in column &quot;content&quot; of relation &quot;notes&quot; violates not-null constraint
+DETAIL: Failing row contains (9, null, t, null).
+</code></pre>
+<p>لا يمكن أن تكون قيمة العمود من النوع الخاطئ:</p>
+<pre><code>defaultdb=&gt; insert into notes (content, important) values ('only valid data can be saved', 1);
+ERROR: column &quot;important&quot; is of type boolean but expression is of type integer
+LINE 1: ...tent, important) values ('only valid data can be saved', 1); ^
+</code></pre>
+<p>الأعمدة غير الموجودة في المخطط لا تُقبل أيضاً:</p>
+<pre><code>defaultdb=&gt; insert into notes (content, important, value) values ('only valid data can be saved', true, 10);
+ERROR: column &quot;value&quot; of relation &quot;notes&quot; does not exist
+LINE 1: insert into notes (content, important, value) values ('only ...
+</code></pre>
+<p>الآن حان وقت الانتقال إلى الوصول إلى قاعدة البيانات من التطبيق.</p>
+<h3 id="تطبيق-nodejs-يستخدم-قاعدة-بيانات-علائقية">تطبيق Node.js يستخدم قاعدة بيانات علائقية</h3>
+<p>لنبدأ التطبيق كالمعتاد بـ <em>npm init</em> ونثبّت <em>nodemon</em> كاعتمادية تطوير وكذلك الاعتماديات التشغيلية التالية:</p>
+<pre><code class="language-bash">npm install express dotenv pg sequelize
+</code></pre>
+<p>من بين هذه، الأخيرة <a href="https://sequelize.org/master/" target="_blank" rel="noreferrer noopener">sequelize</a> هي المكتبة التي نستخدم بها Postgres. Sequelize هي مكتبة <a href="https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping" target="_blank" rel="noreferrer noopener">ربط الكائنات بالعلاقات</a> (ORM) تتيح لك تخزين كائنات JavaScript في قاعدة بيانات علائقية دون استخدام لغة SQL نفسها، على غرار Mongoose الذي استخدمناه مع MongoDB.</p>
+<p>لنجرّب أننا نستطيع الاتصال بقاعدة البيانات. أنشئ الملف <em>index.js</em> وأضف المحتوى التالي:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>()
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Sequelize</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;sequelize&#x27;</span>)
+
+<span class="hljs-keyword">const</span> sequelize = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Sequelize</span>(process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>, {
+  <span class="hljs-attr">dialect</span>: <span class="hljs-string">&#x27;postgres&#x27;</span>,
+  <span class="hljs-attr">dialectOptions</span>: {
+    <span class="hljs-attr">ssl</span>: {
+      <span class="hljs-attr">require</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">rejectUnauthorized</span>: <span class="hljs-literal">false</span>
+    }
+  }
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">main</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> sequelize.<span class="hljs-title function_">authenticate</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Connection has been established successfully.&#x27;</span>)
+    sequelize.<span class="hljs-title function_">close</span>()
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Unable to connect to the database:&#x27;</span>, error)
+  }
+}
+
+<span class="hljs-title function_">main</span>()
+</code></pre>
+<p>يجب تعريف <em>سلسلة الاتصال</em> بقاعدة البيانات، التي تحتوي على عنوان قاعدة البيانات وبيانات الاعتماد، في الملف <em>.env</em></p>
+<p>إذا كنت تستخدم Aiven، ينبغي أن يكون محتوى الملف <em>.env</em> شيئاً مثل ما يلي:</p>
+<pre><code>$ cat .env
+&lt;code&gt;postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb&lt;/code&gt;
+</code></pre>
+<p>لاحظ أنه يجب عليك إزالة <code>?sslmode=require</code> من سلسلة الاتصال!</p>
+<p>إذا كنت تستخدم Docker، فسلسلة الاتصال هي:</p>
+<pre><code>DATABASE_URL=postgres://postgres:mysecretpassword@localhost:5432/postgres
+</code></pre>
+<p>بعد إعداد سلسلة الاتصال في الملف <em>.env</em> يمكننا اختبار الاتصال:</p>
+<pre><code>$ node index.js
+Executing (default): SELECT 1+1 AS result
+Connection has been established successfully.
+</code></pre>
+<p>إذا نجح الاتصال، يمكننا بعد ذلك تشغيل أول استعلام. لنعدّل البرنامج كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>()
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Sequelize</span>, <span class="hljs-title class_">QueryTypes</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;sequelize&#x27;</span>)
+<span class="hljs-keyword">const</span> sequelize = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Sequelize</span>(process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>, {
+  <span class="hljs-attr">dialectOptions</span>: {
+    <span class="hljs-attr">ssl</span>: {
+      <span class="hljs-attr">require</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">rejectUnauthorized</span>: <span class="hljs-literal">false</span>
+    }
+  },
+});
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">main</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> sequelize.<span class="hljs-title function_">authenticate</span>()
+    <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> sequelize.<span class="hljs-title function_">query</span>(<span class="hljs-string">&quot;SELECT * FROM notes&quot;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-title class_">QueryTypes</span>.<span class="hljs-property">SELECT</span> })
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(notes)
+    sequelize.<span class="hljs-title function_">close</span>()
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Unable to connect to the database:&#x27;</span>, error)
+  }
+}
+
+<span class="hljs-title function_">main</span>()
+</code></pre>
+<p>ينبغي أن يطبع تنفيذ التطبيق ما يلي:</p>
+<pre><code>Executing (default): SELECT * FROM notes
+[
+  {
+    id: 1,
+    content: 'Relational databases rule the world',
+    important: true,
+    date: null
+  },
+  {
+    id: 2,
+    content: 'MongoDB is webscale',
+    important: false,
+    date: null
+  }
+]
+</code></pre>
+<p>مع أن Sequelize مكتبة ORM، أي أنه لا حاجة تُذكر إلى كتابة SQL بنفسك عند استخدامها، إلا أننا استخدمنا للتو <a href="https://sequelize.org/master/manual/raw-queries.html" target="_blank" rel="noreferrer noopener">SQL مباشراً</a> مع دالة sequelize المسماة <a href="https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-method-query" target="_blank" rel="noreferrer noopener">query</a>.</p>
+<p>يبدو أن التطبيق يعمل، وتُطبع الملاحظات إلى الطرفية. لكن لننتقل الآن إلى استخدام Sequelize بدلاً من SQL، كما يُقصد به أن يُستخدم.</p>
+<h3 id="النموذج">النموذج</h3>
+<p>عند استخدام Sequelize، يُمثّل كل جدول في قاعدة البيانات <a href="https://sequelize.org/master/manual/model-basics.html" target="_blank" rel="noreferrer noopener">نموذجاً</a> (model)، وهو في الواقع صنف JavaScript خاص به. لنعرّف الآن النموذج <em>Note</em> المقابل للجدول <em>notes</em> في التطبيق بتغيير الشيفرة إلى الصيغة التالية:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>()
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Sequelize</span>, <span class="hljs-title class_">Model</span>, <span class="hljs-title class_">DataTypes</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;sequelize&#x27;</span>)
+<span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+
+<span class="hljs-keyword">const</span> sequelize = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Sequelize</span>(process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>, {
+  <span class="hljs-attr">dialectOptions</span>: {
+    <span class="hljs-attr">ssl</span>: {
+      <span class="hljs-attr">require</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">rejectUnauthorized</span>: <span class="hljs-literal">false</span>
+    }
+  },
+});
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Model</span> {}
+<span class="hljs-title class_">Note</span>.<span class="hljs-title function_">init</span>({
+  <span class="hljs-attr">id</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">DataTypes</span>.<span class="hljs-property">INTEGER</span>,
+    <span class="hljs-attr">primaryKey</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">autoIncrement</span>: <span class="hljs-literal">true</span>
+  },
+  <span class="hljs-attr">content</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">DataTypes</span>.<span class="hljs-property">TEXT</span>,
+    <span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>
+  },
+  <span class="hljs-attr">important</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">DataTypes</span>.<span class="hljs-property">BOOLEAN</span>
+  },
+  <span class="hljs-attr">date</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">DataTypes</span>.<span class="hljs-property">DATE</span>
+  }
+}, {
+  sequelize,
+  <span class="hljs-attr">underscored</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">timestamps</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">modelName</span>: <span class="hljs-string">&#x27;note&#x27;</span>
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">PORT</span> || <span class="hljs-number">3001</span>
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Server running on port <span class="hljs-subst">${PORT}</span>`</span>)
+})
+</code></pre>
+<p>بضع تعليقات على الشيفرة: لا شيء مفاجئ كثيراً في تعريف النموذج <em>Note</em>؛ فكل عمود له نوع معرّف، وكذلك خصائص أخرى عند الحاجة، مثل ما إذا كان المفتاح الأساسي للجدول. المعامل الثاني في تعريف النموذج يحتوي على خاصية <em>sequelize</em> وكذلك معلومات تهيئة أخرى. عرّفنا أيضاً أن الجدول لا يلزمه استخدام عمودي الطوابع الزمنية (<em>created_at</em> و<em>updated_at</em>).</p>
+<p>عرّفنا أيضاً <em>underscored: true</em>، ما يعني أن أسماء الجداول تُشتق من أسماء النماذج بصيغة الجمع <a href="https://en.wikipedia.org/wiki/Snake_case" target="_blank" rel="noreferrer noopener">snake case</a>. عملياً، هذا يعني أنه إذا كان اسم النموذج، كما في حالتنا، هو &quot;Note&quot;، فإن اسم الجدول المقابل هو صيغته الجمعية مكتوبة بحرف أول صغير، أي notes. أما إذا كان اسم النموذج &quot;مكوّناً من جزأين&quot;، مثل <em>StudyGroup</em>، فسيكون اسم الجدول <em>study_groups</em>. يستنتج Sequelize أسماء الجداول تلقائياً، لكنه يتيح أيضاً تعريفها صراحةً.</p>
+<p>تنطبق سياسة التسمية نفسها على الأعمدة أيضاً. لو كنا قد عرّفنا أن الملاحظة مرتبطة بـ <em>creationYear</em>، أي معلومات عن السنة التي أُنشئت فيها، لعرّفناه في النموذج كما يلي:</p>
+<pre><code>Note.init({
+  // ...
+  creationYear: {
+    type: DataTypes.INTEGER,
+  },
+})
+</code></pre>
+<p>سيكون اسم العمود المقابل في قاعدة البيانات <em>creation_year</em>. وفي الشيفرة، تكون الإشارة إلى العمود دائماً بالصيغة نفسها كما في النموذج، أي بصيغة &quot;camel case&quot;.</p>
+<p>عرّفنا أيضاً <em>modelName: 'note'</em>؛ اسم النموذج الافتراضي سيكون <em>Note</em> بحرف كبير. لكننا نريد حرفاً أولياً صغيراً، وهذا سيجعل بعض الأمور أسهل قليلاً فيما بعد.</p>
+<p>عملية قاعدة البيانات سهلة باستخدام <a href="https://sequelize.org/master/manual/model-querying-basics.html" target="_blank" rel="noreferrer noopener">واجهة الاستعلام</a> التي توفّرها النماذج. الدالة <a href="https://sequelize.org/api/v6/class/src/model.js~model#static-method-findAll" target="_blank" rel="noreferrer noopener">findAll</a> تعمل تماماً كما يُفترض بها أن تعمل بحسب اسمها:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findAll</span>()
+  res.<span class="hljs-title function_">json</span>(notes)
+})
+</code></pre>
+<p>تخبرك الطرفية أن استدعاء الدالة <em>Note.findAll()</em> يسبّب الاستعلام التالي:</p>
+<pre><code>Executing (default): SELECT &quot;id&quot;, &quot;content&quot;, &quot;important&quot;, &quot;date&quot; FROM &quot;notes&quot; AS &quot;note&quot;;
+</code></pre>
+<p>بعد ذلك، لننفّذ نقطة نهاية لإنشاء ملاحظات جديدة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>())
+
+<span class="hljs-comment">// ...</span>
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(req.<span class="hljs-property">body</span>)
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">create</span>({...req.<span class="hljs-property">body</span>, <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>()})
+  res.<span class="hljs-title function_">json</span>(note)
+})
+</code></pre>
+<p>يتم إنشاء ملاحظة جديدة باستدعاء دالة النموذج <em>Note</em> المسماة <a href="https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries" target="_blank" rel="noreferrer noopener">create</a> وتمرير كائن يحدد قيم الأعمدة كمعامل.</p>
+<p>بدلاً من دالة <em>create</em>، <a href="https://sequelize.org/master/manual/model-instances.html#creating-an-instance" target="_blank" rel="noreferrer noopener">من الممكن أيضاً</a> الحفظ في قاعدة بيانات باستخدام دالة <a href="https://sequelize.org/api/v6/class/src/model.js~model#static-method-build" target="_blank" rel="noreferrer noopener">build</a> أولاً لإنشاء كائن Model من البيانات المطلوبة، ثم استدعاء دالة <a href="https://sequelize.org/master/class/lib/model.js~Model.html#instance-method-save" target="_blank" rel="noreferrer noopener">save</a> عليه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> note = <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">build</span>(req.<span class="hljs-property">body</span>)
+<span class="hljs-keyword">await</span> note.<span class="hljs-title function_">save</span>()
+</code></pre>
+<p>استدعاء دالة <em>build</em> لا يحفظ الكائن في قاعدة البيانات بعد، لذا يظل ممكناً تعديل الكائن قبل حدث الحفظ الفعلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> note = <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">build</span>(req.<span class="hljs-property">body</span>)
+note.<span class="hljs-property">important</span> = <span class="hljs-literal">true</span>
+<span class="hljs-keyword">await</span> note.<span class="hljs-title function_">save</span>()
+</code></pre>
+<p>لحالة استخدام الشيفرة المثال، دالة <a href="https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries" target="_blank" rel="noreferrer noopener">create</a> أنسب، لذا لنلتزم بها.</p>
+<p>إذا كان الكائن المُنشأ غير صالح، تنتج رسالة خطأ. مثلاً عند محاولة إنشاء ملاحظة دون محتوى، تفشل العملية وتكشف الطرفية أن السبب هو <em>SequelizeValidationError: notNull Violation Note.content cannot be null</em>:</p>
+<pre><code>(node:39109) UnhandledPromiseRejectionWarning: SequelizeValidationError: notNull Violation: Note.content cannot be null
+    at InstanceValidator._validate (/Users/mluukkai/opetus/fs-psql/node_modules/sequelize/lib/instance-validator.js:78:13)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+</code></pre>
+<p>لنضف معالجة أخطاء بسيطة عند إضافة ملاحظة جديدة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">create</span>({...req.<span class="hljs-property">body</span>, <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>()})
+    <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>(note)
+  } <span class="hljs-keyword">catch</span>(error) {
+    <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">json</span>({ error })
+  }
+})
+</code></pre>
+<div class="tasks">
+<p><strong>1. المستودع وقاعدة البيانات</strong></p>
+</div>
+<div class="tasks">
+<p><strong>2. الاتصال عبر الطرفية</strong></p>
+</div>
+<div class="tasks">
+<p><strong>3. الاتصال من التطبيق</strong></p>
+</div>
+<h3 id="إنشاء-جداول-قاعدة-البيانات-تلقائيا">إنشاء جداول قاعدة البيانات تلقائياً</h3>
+<p>تطبيقنا الآن فيه عيب واحد: يفترض وجود قاعدة بيانات بمخطط صحيح تماماً، أي أن جدول <em>notes</em> أُنشئ بأمر <code>create table</code> المناسب.</p>
+<p>بما أن شيفرة البرنامج مخزّنة في GitHub، سيكون من المنطقي تخزين الأوامر التي تنشئ قاعدة البيانات أيضاً إلى جانب شيفرة البرنامج، حتى يكون مخطط قاعدة البيانات بالتأكيد مطابقاً لما تتوقعه شيفرة البرنامج. Sequelize قادر فعلاً على توليد المخطط تلقائياً من تعريفات النماذج باستخدام دالة النموذج <a href="https://sequelize.org/master/manual/model-basics.html#model-synchronization" target="_blank" rel="noreferrer noopener">sync</a>.</p>
+<p>لندمّر الآن جدول <em>notes</em> من الطرفية بإدخال الأمر التالي:</p>
+<pre><code>&lt;code&gt;drop table notes;&lt;/code&gt;
+</code></pre>
+<p>يكشف الأمر <code>\d</code> أن الجدول فُقد من قاعدة البيانات:</p>
+<pre><code>&lt;code&gt;postgres=# \d&lt;br&gt;Did not find any relations.&lt;/code&gt;
+</code></pre>
+<p>لم يعد التطبيق يعمل.</p>
+<p>لنضف الأمر التالي إلى التطبيق مباشرة بعد تعريف النموذج <em>Note</em>:</p>
+<pre><code>&lt;code&gt;Note.sync()&lt;/code&gt;
+</code></pre>
+<p>عند بدء التطبيق، يُطبع ما يلي على الطرفية:</p>
+<pre><code>Executing (default): CREATE TABLE IF NOT EXISTS &quot;notes&quot; (&quot;id&quot; SERIAL , &quot;content&quot; TEXT NOT NULL, &quot;important&quot; BOOLEAN, &quot;date&quot; TIMESTAMP WITH TIME ZONE, PRIMARY KEY (&quot;id&quot;));
+</code></pre>
+<p>أي أنه عند بدء التطبيق يُنفّذ الأمر <em>CREATE TABLE IF NOT EXISTS &quot;notes&quot;...</em> الذي ينشئ الجدول <em>notes</em> إن لم يكن موجوداً بالفعل.</p>
+<h3 id="عمليات-أخرى">عمليات أخرى</h3>
+<p>لنكمل التطبيق ببضع عمليات أخرى.</p>
+<p>البحث عن ملاحظة واحدة ممكن بدالة <a href="https://sequelize.org/docs/v6/core-concepts/model-querying-finders/#findbypk" target="_blank" rel="noreferrer noopener">findByPk</a>، لأنها تُجلب بناءً على معرّف المفتاح الأساسي:</p>
+<pre><code class="language-js">&lt;code&gt;app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {&lt;br&gt;  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByPk</span>(req.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)&lt;br&gt;  <span class="hljs-keyword">if</span> (note) {&lt;br&gt;    res.<span class="hljs-title function_">json</span>(note)&lt;br&gt;  } <span class="hljs-keyword">else</span> {&lt;br&gt;    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()&lt;br&gt;  }&lt;br&gt;})&lt;/code&gt;
+</code></pre>
+<p>جلب ملاحظة واحدة يسبّب أمر SQL التالي:</p>
+<pre><code>&lt;code&gt;Executing (default): SELECT &quot;id&quot;, &quot;content&quot;, &quot;important&quot;, &quot;date&quot; FROM &quot;notes&quot; AS &quot;note&quot; WHERE &quot;note&quot;. &quot;id&quot; = '1';&lt;/code&gt;
+</code></pre>
+<p>إذا لم تُوجد أي ملاحظة، تعيد العملية <em>null</em>، وفي هذه الحالة يُعطى رمز الحالة المناسب.</p>
+<p>تعديل الملاحظة يتم كما يلي. يُدعم فقط تعديل حقل <em>important</em>، لأن الواجهة الأمامية للتطبيق لا تحتاج شيئاً آخر:</p>
+<pre><code class="language-js">&lt;code&gt;app.<span class="hljs-title function_">put</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {&lt;br&gt;  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByPk</span>(req.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)&lt;br&gt;  <span class="hljs-keyword">if</span> (note) {&lt;br&gt;    note.<span class="hljs-property">important</span> = req.<span class="hljs-property">body</span>.<span class="hljs-property">important</span>&lt;br&gt;    <span class="hljs-keyword">await</span> note.<span class="hljs-title function_">save</span>()&lt;br&gt;    res.<span class="hljs-title function_">json</span>(note)&lt;br&gt;  } <span class="hljs-keyword">else</span> {&lt;br&gt;    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()&lt;br&gt;  }&lt;br&gt;})&lt;/code&gt;
+</code></pre>
+<p>يُجلب الكائن المقابل لصف قاعدة البيانات من قاعدة البيانات بدالة <em>findByPk</em>، ويُعدَّل الكائن وتُحفظ النتيجة باستدعاء دالة <em>save</em> على الكائن المقابل لصف قاعدة البيانات.</p>
+<p>الشيفرة الحالية للتطبيق موجودة بكاملها على <a href="https://github.com/fullstack-hy2020/fs-psql/tree/step1" target="_blank" rel="noreferrer noopener">GitHub</a>، الفرع <em>step1</em>.</p>
+<h3 id="طباعة-الكائنات-التي-يعيدها-sequelize-إلى-الطرفية">طباعة الكائنات التي يعيدها Sequelize إلى الطرفية</h3>
+<p>أهم أداة لدى مبرمج JavaScript (إلى جانب وكلاء الذكاء الاصطناعي) هي <em>console.log</em>، التي يجعل استخدامها المكثّف حتى أسوأ الأخطاء تحت السيطرة. لنضف طباعة إلى الطرفية في مسار الملاحظة الواحدة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByPk</span>(req.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+  <span class="hljs-keyword">if</span> (note) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(note)
+    res.<span class="hljs-title function_">json</span>(note)
+  } <span class="hljs-keyword">else</span> {
+    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+  }
+})
+</code></pre>
+<p>نرى أن النتيجة النهائية ليست تماماً ما توقعناه:</p>
+<pre><code>note {
+  dataValues: {
+    id: 1,
+    content: 'Notes are attached to a user',
+    important: true,
+    date: 2026-02-03T15:00:24.582Z,
+  },
+  _previousDataValues: {
+    id: 1,
+    content: 'Notes are attached to a user',
+    important: true,
+    date: 2026-02-03T15:00:24.582Z,
+  },
+  _changed: Set(0) {},
+  _options: {
+    isNewRecord: false,
+    _schema: null,
+    _schemaDelimiter: '',
+    raw: true,
+    attributes: [ 'id', 'content', 'important', 'date' ]
+  },
+  isNewRecord: false
+}
+</code></pre>
+<p>إضافة إلى معلومات الملاحظة، تُطبع على الطرفية أمور أخرى من كل نوع. يمكننا الحصول على النتيجة المطلوبة باستدعاء دالة الكائن النموذجي <a href="https://sequelize.org/api/v6/class/src/model.js~model#instance-method-toJSON" target="_blank" rel="noreferrer noopener">toJSON</a>:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&gt; {
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByPk</span>(req.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+  <span class="hljs-keyword">if</span> (note) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(note.<span class="hljs-title function_">toJSON</span>())
+    res.<span class="hljs-title function_">json</span>(note)
+  } <span class="hljs-keyword">else</span> {
+    res.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+  }
+})
+</code></pre>
+<p>الآن النتيجة هي بالضبط ما نريد:</p>
+<pre><code>{ id: 1,
+  content: 'MongoDB is webscale',
+  important: false,
+  date: 2026-02-09T13:52:58.693Z }
+</code></pre>
+<p>في حالة مجموعة من الكائنات، لا تعمل دالة toJSON مباشرةً، بل يجب استدعاؤها منفصلة لكل كائن في المجموعة:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findAll</span>()
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(notes.<span class="hljs-title function_">map</span>(n=&amp;gt;n.<span class="hljs-title function_">toJSON</span>()))
+  res.<span class="hljs-title function_">json</span>(notes)
+})
+</code></pre>
+<p>تبدو الطباعة كما يلي:</p>
+<pre><code>[ { id: 1,
+    content: 'MongoDB is webscale',
+    important: false,
+    date: 2026-02-09T13:52:58.693Z },
+  { id: 2,
+    content: 'Relational databases rule the world',
+    important: true,
+    date: 2026-02-09T13:53:10.710Z } ]
+</code></pre>
+<p>لكن ربما الحل الأفضل هو تحويل المجموعة إلى JSON للطباعة باستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify" target="_blank" rel="noreferrer noopener">JSON.stringify</a>:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-title function_">async</span> (req, res) =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findAll</span>()
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(notes))
+  res.<span class="hljs-title function_">json</span>(notes)
+})
+</code></pre>
+<p>هذه الطريقة أفضل خاصةً إذا كانت الكائنات في المجموعة تحتوي كائنات أخرى. وكثيراً ما يكون مفيداً أيضاً تنسيق الكائنات على الشاشة بصيغة أسهل قراءةً بعض الشيء. يمكن فعل ذلك بالأمر التالي:</p>
+<pre><code>console.log(JSON.stringify(notes, null, 2))
+</code></pre>
+<p>تبدو الطباعة كما يلي:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;MongoDB is webscale&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;important&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-02-09T13:52:58.693Z&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Relational databases rule the world&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;important&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-02-09T13:53:10.710Z&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<div class="tasks">
+<p><strong>4. وُلدت خدمة الويب</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part13/getting_started"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">البدء</span></a><!--]--> <!--[0--><a class="next" href="../../part13/join_tables_and_queries"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">جداول الربط والاستعلامات</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

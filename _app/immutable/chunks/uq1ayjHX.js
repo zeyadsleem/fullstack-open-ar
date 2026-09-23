@@ -1,0 +1,542 @@
+const e=1,c="c",s="part1c.md",n="حالة المكوّن ومعالجات الأحداث",a="component_state_event_handlers",l="/images/part-1.svg",p=[{depth:3,id:"دوال-مساعدة-في-المكون",text:"دوال مساعدة في المكوّن"},{depth:3,id:"التفكيك-destructuring",text:"التفكيك (destructuring)"},{depth:3,id:"إعادة-عرض-الصفحة",text:"إعادة عرض الصفحة"},{depth:3,id:"مكون-ذو-حالة",text:"مكوّن ذو حالة"},{depth:3,id:"معالجة-الأحداث",text:"معالجة الأحداث"},{depth:3,id:"معالج-الحدث-دالة",text:"معالج الحدث دالة"},{depth:3,id:"تمرير-الحالة-إلى-المكونات-الابنة",text:"تمرير الحالة إلى المكوّنات الابنة"},{depth:3,id:"التغييرات-في-الحالة-تسبب-إعادة-العرض",text:"التغييرات في الحالة تسبب إعادة العرض"},{depth:3,id:"إعادة-هيكلة-المكونات",text:"إعادة هيكلة المكوّنات"}],t=`<div class="content">
+<p>لنعد إلى العمل مع React.</p>
+<p>نبدأ بمثال جديد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        Hello {props.name}, you are {props.age} years old
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;Peter&#x27;</span>
+  <span class="hljs-keyword">const</span> age = <span class="hljs-number">10</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Maya&quot;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{age}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<h3 id="دوال-مساعدة-في-المكون">دوال مساعدة في المكوّن</h3>
+<p>لنوسّع مكوّن <i>Hello</i> لدينا بحيث يخمّن سنة ميلاد الشخص الذي نحيّيه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-keyword">const</span> yearNow = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>()
+    <span class="hljs-keyword">return</span> yearNow - props.<span class="hljs-property">age</span>
+  }
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        Hello {props.name}, you are {props.age} years old
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>So you were probably born in {bornYear()}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span> // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>منطق تخمين سنة الميلاد مُغلَّف داخل دالة خاصة به، تُستدعى عند عرض المكوّن.</p>
+<p>لا حاجة لتمرير عمر الشخص صراحةً كوسيط إلى هذه الدالة، لأن الدالة يمكنها الوصول مباشرةً إلى كل الـ props الممرَّرة إلى المكوّن.</p>
+<p>إذا تأملنا الشيفرة الحالية، نلاحظ أن الدالة المساعدة معرَّفة داخل دالة أخرى تحدّد سلوك المكوّن. في برمجة Java، قد يكون تعريف دالة داخل دالة أخرى معقّداً وغير شائع. أما في JavaScript، فتعريف الدوال داخل الدوال ممارسة شائعة وفعّالة.</p>
+<h3 id="التفكيك-destructuring">التفكيك (destructuring)</h3>
+<p>قبل أن نمضي قدماً، سنلقي نظرة على ميزة صغيرة لكن مفيدة من لغة JavaScript أُضيفت في مواصفة ES6، وتتيح لنا <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">تفكيك</a> القيم من الكائنات والمصفوفات عند الإسناد.</p>
+<p>في شيفرتنا السابقة، كان علينا الإشارة إلى البيانات الممرَّرة إلى مكوّننا بصيغة <em>props.name</em> و_props.age_. ومن بين هذين التعبيرين، اضطررنا لتكرار <em>props.age</em> مرتين في شيفرتنا.</p>
+<p>بما أن <i>props</i> كائن</p>
+<pre><code class="language-js">props = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+}
+</code></pre>
+<p>يمكننا تبسيط مكوّننا بإسناد قيم الخصائص مباشرةً إلى متغيرين هما <em>name</em> و_age_ يمكننا بعدها استخدامهما في شيفرتنا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> name = props.<span class="hljs-property">name</span>
+  <span class="hljs-keyword">const</span> age = props.<span class="hljs-property">age</span>
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>() - age <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello {name}, you are {age} years old<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span> // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>So you were probably born in {bornYear()}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>لاحظ أننا استخدمنا أيضاً الصيغة الأكثر إيجازاً لدوال السهم عند تعريف دالة <em>bornYear</em>. وكما ذُكر سابقاً، إذا كانت دالة السهم تتكوّن من تعبير واحد، فلا حاجة لكتابة جسم الدالة داخل أقواس معقوفة. في هذه الصيغة الأكثر إيجازاً، تُعيد الدالة ببساطة نتيجة التعبير الواحد.</p>
+<p>وللتذكير، فإن تعريفي الدالة الموضحين أدناه متكافئان:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>() - age
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>() - age
+}
+</code></pre>
+<p>يجعل التفكيك إسناد المتغيرات أسهل، إذ يمكننا استخدامه لاستخراج قيم خصائص الكائن وجمعها في متغيرات منفصلة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+    <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> { name, age } = props
+    <span class="hljs-comment">// highlight-end</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>() - age
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello {name}, you are {age} years old<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>So you were probably born in {bornYear()}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>عندما يحتوي الكائن الذي نفكّكه على القيم</p>
+<pre><code class="language-js">props = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+}
+</code></pre>
+<p>فإن التعبير <em>const { name, age } = props</em> يُسند القيمة 'Arto Hellas' إلى <em>name</em> و35 إلى <em>age</em>.</p>
+<p>يمكننا أن نخطو بالتفكيك خطوة إضافية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">{ name, age }</span>) =&gt; { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">bornYear</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getFullYear</span>() - age
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        Hello {name}, you are {age} years old
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>So you were probably born in {bornYear()}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الـ props الممرَّرة إلى المكوّن تُفكَّك الآن مباشرةً إلى المتغيرين <em>name</em> و_age_.</p>
+<p>وهذا يعني أنه بدلاً من إسناد كائن الـ props كاملاً إلى متغير يُسمى <i>props</i> ثم إسناد خصائصه إلى المتغيرين <em>name</em> و_age_</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { name, age } = props
+</code></pre>
+<p>نُسند قيم الخصائص مباشرةً إلى المتغيرات عبر تفكيك كائن الـ props الممرَّر إلى دالة المكوّن كوسيط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">{ name, age }</span>) =&gt; {
+</code></pre>
+<h3 id="إعادة-عرض-الصفحة">إعادة عرض الصفحة</h3>
+<p>حتى هذه اللحظة، كانت تطبيقاتنا ساكنة — يبقى مظهرها دون تغيير بعد العرض الأولي. لكن ماذا لو أردنا إنشاء عدّاد تزداد قيمته بمرور الوقت أو عند النقر على زر؟</p>
+<p>لنبدأ بما يلي. يصبح الملف <i>App.jsx</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> {counter} = props
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>ويصبح الملف <i>main.jsx</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>
+
+<span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> <span class="hljs-attr">counter</span>=<span class="hljs-string">{counter}</span> /&gt;</span></span>
+)
+</code></pre>
+<p>يُمنح مكوّن App قيمة العدّاد عبر الـ prop المسمى <em>counter</em>. ويعرض هذا المكوّن القيمة على الشاشة. ماذا يحدث عندما تتغير قيمة <em>counter</em>؟ حتى لو أضفنا ما يلي</p>
+<pre><code class="language-js">counter += <span class="hljs-number">1</span>
+</code></pre>
+<p>فلن يُعاد عرض المكوّن. يمكننا جعل المكوّن يُعاد عرضه باستدعاء الدالة <em>render</em> مرة ثانية، مثلاً بالطريقة التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>
+
+<span class="hljs-keyword">const</span> root = <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>))
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">refresh</span> = (<span class="hljs-params"></span>) =&gt; {
+  root.<span class="hljs-title function_">render</span>(
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> <span class="hljs-attr">counter</span>=<span class="hljs-string">{counter}</span> /&gt;</span></span>
+  )
+}
+
+<span class="hljs-title function_">refresh</span>()
+counter += <span class="hljs-number">1</span>
+<span class="hljs-title function_">refresh</span>()
+counter += <span class="hljs-number">1</span>
+<span class="hljs-title function_">refresh</span>()
+</code></pre>
+<p>لُفّ أمر إعادة العرض داخل الدالة <em>refresh</em> لتقليل كمية الشيفرة المنسوخة.</p>
+<p>الآن <i>يُعرض المكوّن ثلاث مرات</i>، أولاً بالقيمة 1 ثم 2 وأخيراً 3. لكن القيمتين 1 و2 تُعرضان على الشاشة لمدة قصيرة جداً بحيث لا يمكن ملاحظتهما.</p>
+<p>يمكننا تنفيذ وظيفة أكثر تشويقاً بقليل عبر إعادة العرض وزيادة العدّاد كل ثانية باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval">setInterval</a>:</p>
+<pre><code class="language-js"><span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">refresh</span>()
+  counter += <span class="hljs-number">1</span>
+}, <span class="hljs-number">1000</span>)
+</code></pre>
+<p>تكرار استدعاء الدالة <em>render</em> ليس الطريقة الموصى بها لإعادة عرض المكوّنات. سنقدّم لاحقاً طريقة أفضل لتحقيق هذا الأثر.</p>
+<h3 id="مكون-ذو-حالة">مكوّن ذو حالة</h3>
+<p>كانت جميع مكوّناتنا حتى الآن بسيطة بمعنى أنها لم تكن تحتوي على أي حالة يمكن أن تتغير خلال دورة حياة المكوّن.</p>
+<p>لنضف الآن حالة إلى مكوّن <i>App</i> في تطبيقنا بمساعدة <a href="https://react.dev/learn/state-a-components-memory">خطاف الحالة</a> في React.</p>
+<p>سنغيّر التطبيق كما يلي. يعود الملف <i>main.jsx</i> إلى:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>)
+</code></pre>
+<p>ويتغير الملف <i>App.jsx</i> إلى ما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span> <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-built_in">setTimeout</span>(
+    <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>),
+    <span class="hljs-number">1000</span>
+  )
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>في السطر الأول، يستورد الملف الدالة <em>useState</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+</code></pre>
+<p>يبدأ جسم الدالة الذي يعرّف المكوّن باستدعاء الدالة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+</code></pre>
+<p>يضيف استدعاء الدالة <i>حالة</i> إلى المكوّن ويعرضه مهيَّأً بالقيمة صفر. وتُعيد الدالة مصفوفة تحتوي على عنصرين. نُسند العنصرين إلى المتغيرين <em>counter</em> و_setCounter_ باستخدام صيغة إسناد التفكيك التي عرضناها سابقاً.</p>
+<p>يُسند إلى المتغير <em>counter</em> القيمة الأولية لـ<i>الحالة</i>، وهي صفر. ويُسند إلى المتغير <em>setCounter</em> دالة ستُستخدم لـ<i>تعديل الحالة</i>.</p>
+<p>يستدعي التطبيق الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout">setTimeout</a> ويمرّر إليها وسيطين: دالة لزيادة حالة العدّاد ومهلة زمنية مقدارها ثانية واحدة:</p>
+<pre><code class="language-js"><span class="hljs-built_in">setTimeout</span>(
+  <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>),
+  <span class="hljs-number">1000</span>
+)
+</code></pre>
+<p>تُستدعى الدالة الممرَّرة كوسيط أول إلى الدالة <em>setTimeout</em> بعد ثانية واحدة من استدعاء الدالة <em>setTimeout</em></p>
+<pre><code class="language-js">() =&gt; <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)
+</code></pre>
+<p>عند استدعاء الدالة المعدِّلة للحالة <em>setCounter</em>، <i>يُعيد React عرض المكوّن</i>، ما يعني إعادة تنفيذ جسم دالة المكوّن:</p>
+<pre><code class="language-js">() =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-built_in">setTimeout</span>(
+    <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>),
+    <span class="hljs-number">1000</span>
+  )
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>في المرة الثانية التي تُنفَّذ فيها دالة المكوّن، تستدعي الدالة <em>useState</em> وتُعيد القيمة الجديدة للحالة: 1. كما أن إعادة تنفيذ جسم الدالة تجري استدعاءً جديداً للدالة <em>setTimeout</em>، التي تنفّذ المهلة الزمنية مقدارها ثانية وتزيد حالة <em>counter</em> مرة أخرى. ولأن قيمة المتغير <em>counter</em> هي 1، فإن زيادتها بمقدار 1 تكافئ فعلياً تعبيراً يضبط قيمة <em>counter</em> على 2.</p>
+<pre><code class="language-js">() =&gt; <span class="hljs-title function_">setCounter</span>(<span class="hljs-number">2</span>)
+</code></pre>
+<p>وفي الوقت نفسه، تُعرض على الشاشة القيمة القديمة للمتغير <em>counter</em> — «1».</p>
+<p>في كل مرة تعدّل فيها <em>setCounter</em> الحالة، تتسبب في إعادة عرض المكوّن. وستزداد قيمة الحالة مرة أخرى بعد ثانية واحدة، وسيستمر هذا التكرار طالما بقي التطبيق قيد التشغيل.</p>
+<p>إذا لم يُعرض المكوّن عندما تظن أنه ينبغي أن يُعرض، أو إذا عُرض في «الوقت الخطأ»، يمكنك تصحيح أخطاء التطبيق بطبع قيم متغيرات المكوّن في وحدة التحكم. وإذا أضفنا الإضافات التالية إلى شيفرتنا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-built_in">setTimeout</span>(
+    <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>),
+    <span class="hljs-number">1000</span>
+  )
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;rendering...&#x27;</span>, counter) <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يصبح من السهل متابعة وتتبّع الاستدعاءات التي تجريها دالة العرض الخاصة بمكوّن <i>App</i>:</p>
+<p><img src="/images/content/1/4e.webp" alt="لقطة شاشة لسجل العرض في أدوات المطوّر"></p>
+<p>هل كانت وحدة تحكم المتصفح مفتوحة؟ إن لم تكن كذلك، فعِدنا بأن هذه آخر مرة نحتاج فيها إلى تذكيرك بذلك.</p>
+<h3 id="معالجة-الأحداث">معالجة الأحداث</h3>
+<p>سبق أن ذكرنا <i>معالجات الأحداث</i> التي تُسجَّل لتُستدعى عند وقوع أحداث معينة عدة مرات في <a href="/part0">الجزء 0</a>. ويمكن أن يؤدي تفاعل المستخدم مع العناصر المختلفة لصفحة ويب إلى إطلاق مجموعة من الأحداث المتنوعة.</p>
+<p>لنغيّر التطبيق بحيث تحدث زيادة العدّاد عند نقر المستخدم على زر، وهو أمر يُنفَّذ بعنصر <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button">button</a>.</p>
+<p>تدعم عناصر الزر ما يُسمى <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent">أحداث الفأرة</a>، وأكثرها شيوعاً هو الحدث <a href="https://developer.mozilla.org/en-US/docs/Web/Events/click">click</a>. ويمكن إطلاق حدث النقر على زر أيضاً بلوحة المفاتيح أو شاشة اللمس رغم الاسم <i>حدث الفأرة</i>.</p>
+<p>في React، تجري <a href="https://react.dev/learn/responding-to-events">تسجيل دالة معالج حدث</a> للحدث <i>click</i> هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;clicked&#x27;</span>)
+  }
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      // highlight-start
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>
+        plus
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      // highlight-end
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>نضبط قيمة خاصية <i>onClick</i> للزر على مرجع إلى الدالة <em>handleClick</em> المعرَّفة في الشيفرة.</p>
+<p>الآن كل نقرة على زر <i>plus</i> تؤدي إلى استدعاء الدالة <em>handleClick</em>، ما يعني أن كل حدث نقر سيطبع رسالة <i>clicked</i> في وحدة تحكم المتصفح.</p>
+<p>يمكن أيضاً تعريف دالة معالج الحدث مباشرةً في إسناد قيمة الخاصية onClick:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> console.log(&#x27;clicked&#x27;)}&gt; // highlight-line
+        plus
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>بتغيير معالج الحدث إلى الصيغة التالية</p>
+<pre><code class="language-js">&lt;button onClick={<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&gt;
+  plus
+&lt;/button&gt;
+</code></pre>
+<p>نحقّق السلوك المطلوب، أي تزداد قيمة <em>counter</em> بمقدار واحد <i>و</i>يُعاد عرض المكوّن.</p>
+<p>لنضف أيضاً زراً لإعادة تعيين العدّاد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCounter(counter + 1)}&gt;
+        plus
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      // highlight-start
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCounter(0)}&gt; 
+        zero
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      // highlight-end
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تطبيقنا جاهز الآن!</p>
+<h3 id="معالج-الحدث-دالة">معالج الحدث دالة</h3>
+<p>نعرّف معالجات الأحداث لأزرارنا حيث نصرّح بخصائص <i>onClick</i> الخاصة بها:</p>
+<pre><code class="language-js">&lt;button onClick={<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&gt; 
+  plus
+&lt;/button&gt;
+</code></pre>
+<p>ماذا لو حاولنا تعريف معالجات الأحداث بصيغة أبسط؟</p>
+<pre><code class="language-js">&lt;button onClick={<span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&gt; 
+  plus
+&lt;/button&gt;
+</code></pre>
+<p>سيؤدي هذا إلى تعطيل تطبيقنا بالكامل:</p>
+<p><img src="/images/content/1/5c.webp" alt="لقطة شاشة لخطأ إعادة العرض"></p>
+<p>ما الذي يحدث؟ يُفترض أن يكون معالج الحدث إما <i>دالة</i> أو <i>مرجعاً إلى دالة</i>، وعندما نكتب:</p>
+<pre><code class="language-js">&lt;button onClick={<span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&gt;
+</code></pre>
+<p>فإن معالج الحدث هو في الواقع <i>استدعاء دالة</i>. هذا مقبول في كثير من الحالات، لكنه ليس مقبولاً في هذه الحالة تحديداً. في البداية، قيمة المتغير <i>counter</i> هي 0. وعندما يعرض React المكوّن للمرة الأولى، ينفّذ استدعاء الدالة <em>setCounter(0+1)</em> ويغيّر قيمة حالة المكوّن إلى 1.
+سيؤدي هذا إلى إعادة عرض المكوّن، وسينفّذ React استدعاء الدالة setCounter مرة أخرى، وستتغير الحالة مؤديةً إلى إعادة عرض أخرى...</p>
+<p>لنعرّف معالجات الأحداث كما فعلنا سابقاً:</p>
+<pre><code class="language-js">&lt;button onClick={<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&gt; 
+  plus
+&lt;/button&gt;
+</code></pre>
+<p>الآن أصبحت خاصية الزر التي تحدّد ما يحدث عند النقر على الزر — <i>onClick</i> — تحمل القيمة <em>() =&gt; setCounter(counter + 1)</em>.
+ولا تُستدعى الدالة setCounter إلا عندما ينقر المستخدم على الزر.</p>
+<p>عادةً ليس من الجيد تعريف معالجات الأحداث داخل قوالب JSX.
+لكن الأمر مقبول هنا لأن معالجات الأحداث لدينا بسيطة جداً.</p>
+<p>لنفصل معالجات الأحداث في دوال منفصلة على أي حال:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">increaseByOne</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)
+  
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">setToZero</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(<span class="hljs-number">0</span>)
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increaseByOne}</span>&gt;</span> // highlight-line
+        plus
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{setToZero}</span>&gt;</span> // highlight-line
+        zero
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>هنا، عُرّفت معالجات الأحداث بشكل صحيح. قيمة خاصية <i>onClick</i> هي متغير يحتوي على مرجع إلى دالة:</p>
+<pre><code class="language-js">&lt;button onClick={increaseByOne}&gt; 
+  plus
+&lt;/button&gt;
+</code></pre>
+<h3 id="تمرير-الحالة-إلى-المكونات-الابنة">تمرير الحالة إلى المكوّنات الابنة</h3>
+<p>يُستحسن كتابة مكوّنات React صغيرة وقابلة لإعادة الاستخدام في أنحاء التطبيق وحتى في مشاريع أخرى. لنُعد هيكلة تطبيقنا بحيث يتكوّن من ثلاثة مكوّنات أصغر: مكوّن لعرض العدّاد ومكوّنان للأزرار.</p>
+<p>لننفّذ أولاً مكوّن <i>Display</i> المسؤول عن عرض قيمة العدّاد.</p>
+<p>من أفضل الممارسات في React <a href="https://react.dev/learn/sharing-state-between-components">رفع الحالة لأعلى</a> في التسلسل الهرمي للمكوّنات. تقول التوثيقات:</p>
+<blockquote>
+<p><i>غالباً ما تحتاج عدة مكوّنات إلى عكس البيانات المتغيرة نفسها. نوصي برفع الحالة المشتركة إلى أقرب سلف مشترك لها.</i></p>
+</blockquote>
+<p>فلنضع إذن حالة التطبيق في مكوّن <i>App</i> ونمرّرها إلى مكوّن <i>Display</i> عبر <i>props</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Display</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{props.counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>استخدام المكوّن مباشر، إذ نحتاج فقط لتمرير حالة <em>counter</em> إليه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">increaseByOne</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">setToZero</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Display</span> <span class="hljs-attr">counter</span>=<span class="hljs-string">{counter}/</span>&gt;</span> // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increaseByOne}</span>&gt;</span>
+        plus
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{setToZero}</span>&gt;</span> 
+        zero
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>كل شيء ما زال يعمل. عند النقر على الأزرار وإعادة عرض <i>App</i>، يُعاد أيضاً عرض جميع أبنائه بما في ذلك مكوّن <i>Display</i>.</p>
+<p>لننشئ الآن مكوّن <i>Button</i> لأزرار تطبيقنا. علينا تمرير معالج الحدث وكذلك نص الزر عبر props المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Button</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{props.onClick}</span>&gt;</span>
+      {props.text}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>أصبح مكوّن <i>App</i> لدينا الآن هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [ counter, setCounter ] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">increaseByOne</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)
+  <span class="hljs-comment">//highlight-start</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">decreaseByOne</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(counter - <span class="hljs-number">1</span>)
+  <span class="hljs-comment">//highlight-end</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">setToZero</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">setCounter</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Display</span> <span class="hljs-attr">counter</span>=<span class="hljs-string">{counter}/</span>&gt;</span>
+      // highlight-start
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span>
+        <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increaseByOne}</span>
+        <span class="hljs-attr">text</span>=<span class="hljs-string">&#x27;plus&#x27;</span>
+      /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span>
+        <span class="hljs-attr">onClick</span>=<span class="hljs-string">{setToZero}</span>
+        <span class="hljs-attr">text</span>=<span class="hljs-string">&#x27;zero&#x27;</span>
+      /&gt;</span>     
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span>
+        <span class="hljs-attr">onClick</span>=<span class="hljs-string">{decreaseByOne}</span>
+        <span class="hljs-attr">text</span>=<span class="hljs-string">&#x27;minus&#x27;</span>
+      /&gt;</span>           
+      // highlight-end
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>وبما أنه أصبح لدينا مكوّن <i>Button</i> سهل إعادة الاستخدام، نفّذنا أيضاً وظيفة جديدة في تطبيقنا بإضافة زر يمكن استخدامه لإنقاص العدّاد.</p>
+<p>يُمرَّر معالج الحدث إلى مكوّن <i>Button</i> عبر الـ prop المسمى <em>onClick</em>. عند إنشاء مكوّناتك الخاصة، يمكنك نظرياً اختيار اسم الـ prop بحرية. غير أن اختيارنا لاسم معالج الحدث لم يكن اعتباطياً بالكامل.</p>
+<p>يقترح <a href="https://react.dev/learn/tutorial-tic-tac-toe">الدرس التعليمي</a> الرسمي من React نفسه:
+«في React، من المعتاد استخدام أسماء من نمط <em>onSomething</em> للـ props التي تستقبل دوال تتعامل مع الأحداث، و_handleSomething_ لتعريفات الدوال الفعلية التي تعالج تلك الأحداث».</p>
+<h3 id="التغييرات-في-الحالة-تسبب-إعادة-العرض">التغييرات في الحالة تسبب إعادة العرض</h3>
+<p>لنستعرض مرة أخرى المبادئ الأساسية لعمل التطبيق.</p>
+<p>عند بدء التطبيق، تُنفَّذ الشيفرة الموجودة في <em>App</em>. تستخدم هذه الشيفرة الخطاف <a href="https://react.dev/reference/react/useState">useState</a> لإنشاء حالة التطبيق، مع ضبط قيمة أولية للمتغير <em>counter</em>.
+يحتوي هذا المكوّن على مكوّن <em>Display</em> — الذي يعرض قيمة العدّاد، 0 — وثلاثة مكوّنات <em>Button</em>. ولجميع الأزرار معالجات أحداث تُستخدم لتغيير حالة العدّاد.</p>
+<p>عند النقر على أحد الأزرار، يُنفَّذ معالج الحدث. يغيّر معالج الحدث حالة مكوّن <em>App</em> باستخدام الدالة <em>setCounter</em>.
+<strong>استدعاء دالة تغيّر الحالة يتسبب في إعادة عرض المكوّن.</strong></p>
+<p>لذا، إذا نقر المستخدم على زر <i>plus</i>، يغيّر معالج حدث الزر قيمة <em>counter</em> إلى 1، ويُعاد عرض مكوّن <em>App</em>.
+ويؤدي هذا إلى إعادة عرض مكوّناته الفرعية <em>Display</em> و_Button_ أيضاً.
+يستقبل <em>Display</em> القيمة الجديدة للعدّاد، 1، كـ props. وتستقبل مكوّنات <em>Button</em> معالجات أحداث يمكن استخدامها لتغيير حالة العدّاد.</p>
+<p>وللتأكد من فهم كيفية عمل البرنامج، لنضف إليه بعض عبارات <em>console.log</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [counter, setCounter] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;rendering with counter value&#x27;</span>, counter) <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">increaseByOne</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;increasing, value before&#x27;</span>, counter) <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)
+  }
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">decreaseByOne</span> = (<span class="hljs-params"></span>) =&gt; { 
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;decreasing, value before&#x27;</span>, counter) <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-title function_">setCounter</span>(counter - <span class="hljs-number">1</span>)
+  }
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">setToZero</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;resetting to zero, value before&#x27;</span>, counter) <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-title function_">setCounter</span>(<span class="hljs-number">0</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Display</span> <span class="hljs-attr">counter</span>=<span class="hljs-string">{counter}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increaseByOne}</span> <span class="hljs-attr">text</span>=<span class="hljs-string">&quot;plus&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{setToZero}</span> <span class="hljs-attr">text</span>=<span class="hljs-string">&quot;zero&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{decreaseByOne}</span> <span class="hljs-attr">text</span>=<span class="hljs-string">&quot;minus&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+} 
+</code></pre>
+<p>لنرَ الآن ما يُطبع في وحدة التحكم عند الضغط على الأزرار plus وzero وminus:</p>
+<p><img src="/images/content/1/31.webp" alt="متصفح يعرض وحدة التحكم مع إبراز قيم العرض"></p>
+<p>لا تحاول أبداً تخمين ما تفعله شيفرتك. من الأفضل استخدام <em>console.log</em> و<i>رؤية ما تفعله بعينيك</i>.</p>
+<h3 id="إعادة-هيكلة-المكونات">إعادة هيكلة المكوّنات</h3>
+<p>المكوّن الذي يعرض قيمة العدّاد هو كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Display</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{props.counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يستخدم المكوّن فقط الحقل <em>counter</em> من <i>props</i> الخاصة به.
+وهذا يعني أنه يمكننا تبسيط المكوّن باستخدام <a href="/part1/component_state_event_handlers#destructuring">التفكيك</a>، هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Display</span> = (<span class="hljs-params">{ counter }</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تحتوي الدالة التي تعرّف المكوّن على عبارة return فقط، لذا يمكننا تعريف الدالة باستخدام الصيغة الأكثر إيجازاً لدوال السهم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Display</span> = (<span class="hljs-params">{ counter }</span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{counter}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</code></pre>
+<p>يمكننا تبسيط مكوّن Button أيضاً.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Button</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{props.onClick}</span>&gt;</span>
+      {props.text}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يمكننا استخدام التفكيك للحصول على الحقول المطلوبة فقط من <i>props</i>، واستخدام الصيغة الأكثر إيجازاً لدوال السهم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Button</span> = (<span class="hljs-params">{ onClick, text }</span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onClick}</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+</code></pre>
+<p>تنجح هذه الطريقة لأن المكوّن يحتوي على عبارة return واحدة فقط، ما يجعل استخدام صيغة دالة السهم المختصرة ممكناً.</p>
+</div>
+`,o={part:1,letter:"c",file:s,title:n,slug:a,mainImage:l,headings:p,html:t};export{o as default,s as file,p as headings,t as html,c as letter,l as mainImage,e as part,a as slug,n as title};

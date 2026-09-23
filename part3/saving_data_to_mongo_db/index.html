@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="ابنِ واجهة REST برمجية باستخدام Node.js وExpress وخزّن البيانات في MongoDB."/><!----><title>حفظ البيانات في MongoDB - الجزء 3 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#تصحيح-أخطاء-تطبيقات-node">تصحيح أخطاء تطبيقات Node</a></li><li class="toc__depth-3"><a href="#mongodb">MongoDB</a></li><li class="toc__depth-3"><a href="#المخطط">المخطط</a></li><li class="toc__depth-3"><a href="#إنشاء-الكائنات-وحفظها">إنشاء الكائنات وحفظها</a></li><li class="toc__depth-3"><a href="#جلب-الكائنات-من-قاعدة-البيانات">جلب الكائنات من قاعدة البيانات</a></li><li class="toc__depth-3"><a href="#تمرين-312">تمرين 3.12.</a></li><li class="toc__depth-3"><a href="#ربط-الواجهة-الخلفية-بقاعدة-بيانات">ربط الواجهة الخلفية بقاعدة بيانات</a></li><li class="toc__depth-3"><a href="#نقل-إعدادات-قاعدة-البيانات-إلى-وحدة-خاصة-بها">نقل إعدادات قاعدة البيانات إلى وحدة خاصة بها</a></li><li class="toc__depth-3"><a href="#تعريف-متغيرات-البيئة-باستخدام-مكتبة-dotenv">تعريف متغيرات البيئة باستخدام مكتبة dotenv</a></li><li class="toc__depth-3"><a href="#استخدام-قاعدة-البيانات-في-معالجات-المسارات">استخدام قاعدة البيانات في معالجات المسارات</a></li><li class="toc__depth-3"><a href="#التحقق-من-تكامل-الواجهة-الأمامية-والخلفية">التحقق من تكامل الواجهة الأمامية والخلفية</a></li><li class="toc__depth-3"><a href="#قسم-مطور-full-stack-الحقيقي">قسم مطوّر full stack الحقيقي</a></li><li class="toc__depth-3"><a href="#التمارين-313-314">التمارين 3.13.-3.14.</a></li><li class="toc__depth-3"><a href="#معالجة-الأخطاء">معالجة الأخطاء</a></li><li class="toc__depth-3"><a href="#نقل-معالجة-الأخطاء-إلى-وسيط">نقل معالجة الأخطاء إلى وسيط</a></li><li class="toc__depth-3"><a href="#ترتيب-تحميل-الوسيطات">ترتيب تحميل الوسيطات</a></li><li class="toc__depth-3"><a href="#عمليات-أخرى">عمليات أخرى</a></li><li class="toc__depth-3"><a href="#التمارين-315-318">التمارين 3.15.-3.18.</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#EEAC5D"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part3">الجزء 3: البرمجة من جهة الخادم</a></p> <h1>حفظ البيانات في MongoDB</h1></div> <div class="course-content"><!----><div class="content">
+<p>قبل أن ننتقل إلى الموضوع الرئيسي وهو حفظ البيانات في قاعدة بيانات، سنلقي نظرة على بضع طرق مختلفة لتصحيح أخطاء تطبيقات Node.</p>
+<h3 id="تصحيح-أخطاء-تطبيقات-node">تصحيح أخطاء تطبيقات Node</h3>
+<p>تصحيح أخطاء تطبيقات Node أصعب قليلاً من تصحيح أخطاء JavaScript التي تعمل في متصفحك. الطباعة إلى الطرفية طريقة مجرَّبة وموثوقة، ويستحق فعلها دائماً. يعتقد بعض الناس أنه ينبغي استخدام طرق أكثر تطوراً بدلاً منها، لكنني لا أوافق. حتى نخبة مطوّري المصادر المفتوحة في العالم <a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html">يستخدمون</a> هذه <a href="https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/">الطريقة</a>.</p>
+<h4 id="visual-studio-code">Visual Studio Code</h4>
+<p>قد يكون مصحّح أخطاء Visual Studio Code مفيداً في بعض الحالات. يمكنك تشغيل التطبيق في وضع تصحيح الأخطاء هكذا (في هذه الصورة والصور القليلة التالية، تحتوي الملاحظات على حقل <em>date</em> أُزيل من الإصدار الحالي من التطبيق):</p>
+<p><img src="../../images/content/3/35x.webp" alt="لقطة شاشة توضح كيفية تشغيل مصحّح الأخطاء في vscode"></p>
+<p>لاحظ أنه لا ينبغي أن يكون التطبيق قيد التشغيل في طرفية أخرى، وإلا فسيكون المنفذ قيد الاستخدام بالفعل.</p>
+<p><strong>ملاحظة</strong> قد يحتوي إصدار أحدث من Visual Studio Code على <em>Run</em> بدلاً من <em>Debug</em>. علاوة على ذلك، قد تحتاج إلى ضبط ملف <em>launch.json</em> لبدء تصحيح الأخطاء. يمكن فعل ذلك باختيار <em>Add Configuration...</em> من القائمة المنسدلة، الموجودة بجوار زر التشغيل الأخضر وفوق قائمة <em>VARIABLES</em>، ثم اختيار <em>Run &quot;npm start&quot; in a debug terminal</em>. للحصول على تعليمات إعداد أكثر تفصيلاً، زُر <a href="https://code.visualstudio.com/docs/editor/debugging">توثيق تصحيح الأخطاء</a> في Visual Studio Code.</p>
+<p>أدناه ترى لقطة شاشة توقّف فيها تنفيذ الشيفرة في منتصف حفظ ملاحظة جديدة:</p>
+<p><img src="../../images/content/3/36x.webp" alt="لقطة شاشة vscode للتنفيذ عند نقطة توقف"></p>
+<p>توقّف التنفيذ عند <i>نقطة التوقف</i> في السطر 69. في وحدة التحكم، يمكنك رؤية قيمة المتغير <i>note</i>. وفي النافذة العلوية اليسرى، يمكنك رؤية أمور أخرى تتعلق بحالة التطبيق.</p>
+<p>يمكن استخدام الأسهم في الأعلى للتحكم في سير مصحّح الأخطاء.</p>
+<p>لسبب ما، لا أستخدم مصحّح أخطاء Visual Studio Code كثيراً.</p>
+<h4 id="أدوات-مطوري-chrome">أدوات مطوّري Chrome</h4>
+<p>يمكن تصحيح الأخطاء أيضاً باستخدام وحدة تحكم مطوّري Chrome عبر تشغيل تطبيقك بالأمر:</p>
+<pre><code class="language-bash">node --inspect index.js
+</code></pre>
+<p>يمكنك الوصول إلى مصحّح الأخطاء بالنقر على الأيقونة الخضراء - شعار node - التي تظهر في وحدة تحكم مطوّري Chrome:</p>
+<p><img src="../../images/content/3/37.webp" alt="أدوات المطوّر مع أيقونة شعار node الخضراء"></p>
+<p>يعمل عرض تصحيح الأخطاء بالطريقة نفسها التي كان عليها مع تطبيقات React. يمكن استخدام تبويب <i>Sources</i> لضبط نقاط التوقف حيث سيُوقَف تنفيذ الشيفرة.</p>
+<p><img src="../../images/content/3/38eb.webp" alt="تبويب sources في أدوات المطوّر مع نقطة توقف ومراقبة المتغيرات"></p>
+<p>ستظهر جميع رسائل <i>console.log</i> الخاصة بالتطبيق في تبويب <i>Console</i> في مصحّح الأخطاء. يمكنك أيضاً فحص قيم المتغيرات وتنفيذ شيفرة JavaScript الخاصة بك.</p>
+<p><img src="../../images/content/3/39ea.webp" alt="تبويب console في أدوات المطوّر يعرض كائن note مكتوباً"></p>
+<h4 id="شك-في-كل-شيء">شكّ في كل شيء</h4>
+<p>قد يبدو تصحيح أخطاء تطبيقات Full Stack صعباً في البداية. قريباً سيكون لتطبيقنا قاعدة بيانات إضافة إلى الواجهة الأمامية والواجهة الخلفية، وستكون هناك مجالات كثيرة محتملة للأخطاء في التطبيق.</p>
+<p>عندما «لا يعمل» التطبيق، علينا أولاً أن نكتشف أين تحدث المشكلة فعلاً. من الشائع جداً أن تكون المشكلة في مكان لم تتوقعه، وقد يستغرق العثور على مصدر المشكلة دقائق أو ساعات أو حتى أياماً.</p>
+<p>المفتاح هو أن تكون منهجياً. وبما أن المشكلة قد توجد في أي مكان، <i>عليك أن تشك في كل شيء</i>، وأن تستبعد جميع الاحتمالات واحداً واحداً. سيساعدك التسجيل في الطرفية وPostman ومصحّحات الأخطاء والخبرة.</p>
+<p>عندما تظهر الأخطاء، فإن <i>أسوأ الاستراتيجيات الممكنة جميعها</i> هي مواصلة كتابة الشيفرة. فذلك يضمن أن شيفرتك ستصاب قريباً بأخطاء أكثر، وأن تصحيحها سيكون أصعب. مبدأ <a href="https://leanscape.io/principles-of-lean-13-jidoka/">Jidoka</a> (توقف وأصلح) من أنظمة إنتاج تويوتا فعّال جداً في هذه الحالة أيضاً.</p>
+<h3 id="mongodb">MongoDB</h3>
+<p>لحفظ ملاحظاتنا المحفوظة إلى أجل غير مسمى، نحتاج إلى قاعدة بيانات. تستخدم معظم المقررات التي تُدرَّس في جامعة هلسنكي قواعد بيانات علائقية. في معظم أجزاء هذه الدورة، سنستخدم <a href="https://www.mongodb.com/">MongoDB</a> وهي <a href="https://en.wikipedia.org/wiki/Document-oriented_database">قاعدة بيانات وثائقية</a>.</p>
+<p>سبب استخدام Mongo كقاعدة بيانات هو تعقيدها الأقل مقارنة بقاعدة بيانات علائقية. يعرض <a href="../../part13">الجزء 13</a> من الدورة كيفية بناء واجهات خلفية بـ Node.js تستخدم قاعدة بيانات علائقية.</p>
+<p>تختلف قواعد البيانات الوثائقية عن قواعد البيانات العلائقية في طريقة تنظيمها للبيانات وكذلك في لغات الاستعلام التي تدعمها. تُصنَّف قواعد البيانات الوثائقية عادةً ضمن المصطلح الشامل <a href="https://en.wikipedia.org/wiki/NoSQL">NoSQL</a>.</p>
+<p>يمكنك قراءة المزيد عن قواعد البيانات الوثائقية وNoSQL في مادة مقرر مقدمة في قواعد البيانات <a href="https://tikape-s18.mooc.fi/part7/">الأسبوع 7</a>. للأسف، المادة متاحة حالياً بالفنلندية فقط.</p>
+<p>اقرأ الآن الفصلين عن <a href="https://www.mongodb.com/docs/manual/core/databases-and-collections/">المجموعات</a> و<a href="https://www.mongodb.com/docs/manual/core/document/">الوثائق</a> من دليل MongoDB للحصول على فكرة أساسية عن كيفية تخزين قاعدة بيانات وثائقية للبيانات.</p>
+<p>بطبيعة الحال، يمكنك تثبيت MongoDB وتشغيلها على حاسوبك. غير أن الإنترنت مليء أيضاً بخدمات قواعد بيانات Mongo التي يمكنك استخدامها. مزوّد MongoDB المفضّل لدينا في هذه الدورة سيكون <a href="https://www.mongodb.com/atlas/database">MongoDB Atlas</a>.</p>
+<p>بعد إنشاء حسابك وتسجيل الدخول إليه، لننشئ عنقوداً جديداً باستخدام الزر الظاهر في الصفحة الرئيسية. من العرض الذي يُفتح، اختر الخطة المجانية، وحدّد مزوّد السحابة ومركز البيانات، ثم أنشئ العنقود:</p>
+<p><img src="../../images/content/3/mongo2.webp" alt="mongodb اختيار shared وAWS والمنطقة"></p>
+<p>المزوّد المختار هو <i>AWS</i> والمنطقة هي <i>Stockholm (eu-north-1)</i>. لاحظ أنك إذا اخترت شيئاً آخر، فسيكون نص اتصال قاعدة بياناتك مختلفاً قليلاً عن هذا المثال. انتظر حتى يصبح العنقود جاهزاً، وهو ما سيستغرق بضع دقائق.</p>
+<p><strong>ملاحظة</strong> لا تتابع قبل أن يصبح العنقود جاهزاً.</p>
+<p>لنستخدم تبويب <i>security</i> لإنشاء بيانات اعتماد مستخدم لقاعدة البيانات. يرجى الانتباه إلى أن هذه ليست بيانات الاعتماد نفسها التي تستخدمها لتسجيل الدخول إلى MongoDB Atlas. ستُستخدم هذه ليتصل تطبيقك بقاعدة البيانات.</p>
+<p><img src="../../images/content/3/mongo3.webp" alt="البداية السريعة لأمان mongodb"></p>
+<p>بعد ذلك، علينا تحديد عناوين IP المسموح لها بالوصول إلى قاعدة البيانات. للتبسيط، سنسمح بالوصول من جميع عناوين IP:</p>
+<p><img src="../../images/content/3/mongo4.webp" alt="mongodb الوصول إلى الشبكة/إضافة قائمة عناوين IP"></p>
+<p>ملاحظة: إذا كانت القائمة المنبثقة مختلفة لديك، فوفقاً لتوثيق MongoDB، فإن إضافة 0.0.0.0 كعنوان IP تتيح الوصول من أي مكان أيضاً.</p>
+<p>أخيراً، أصبحنا مستعدين للاتصال بقاعدة بياناتنا. لفعل ذلك، نحتاج إلى نص اتصال قاعدة البيانات، ويمكن إيجاده باختيار <i>Connect</i> ثم <i>Drivers</i> من العرض، ضمن قسم <i>Connect to your application</i>:</p>
+<p><img src="../../images/content/3/mongo5.webp" alt="mongodb نشر قاعدة البيانات والاتصال"></p>
+<p>يعرض العرض <i>MongoDB URI</i>، وهو عنوان قاعدة البيانات الذي سنمرّره إلى مكتبة عميل MongoDB التي سنضيفها إلى تطبيقنا:</p>
+<p><img src="../../images/content/3/mongo6new.webp" alt="mongodb الاتصال بالتطبيق"></p>
+<p>يبدو العنوان هكذا:</p>
+<pre><code class="language-js">mongodb+<span class="hljs-attr">srv</span>:<span class="hljs-comment">//fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/?retryWrites=true&amp;w=majority&amp;appName=Cluster0</span>
+</code></pre>
+<p>أصبحنا الآن مستعدين لاستخدام قاعدة البيانات.</p>
+<p>كان يمكننا استخدام قاعدة البيانات مباشرة من شيفرة JavaScript لدينا عبر مكتبة <a href="https://mongodb.github.io/node-mongodb-native/">مشغّل MongoDB Node.js الرسمي</a>، لكن استخدامها مرهق نوعاً ما. سنستخدم بدلاً منها مكتبة <a href="http://mongoosejs.com/index.html">Mongoose</a> التي تقدّم API بمستوى أعلى.</p>
+<p>يمكن وصف Mongoose بأنها <i>مُخطِّط كائنات إلى وثائق</i> (object document mapper - ODM)، وحفظ كائنات JavaScript كوثائق Mongo مباشر مع هذه المكتبة.</p>
+<p>لنثبّت Mongoose في الواجهة الخلفية لمشروع الملاحظات:</p>
+<pre><code class="language-bash">npm install mongoose
+</code></pre>
+<p>لن نضف بعد أي شيفرة تتعامل مع Mongo إلى الواجهة الخلفية. بدلاً من ذلك، لننشئ تطبيقاً تدريبياً بإنشاء ملف جديد هو <i>mongo.js</i> في جذر تطبيق الملاحظات الخلفي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+
+<span class="hljs-keyword">if</span> (process.<span class="hljs-property">argv</span>.<span class="hljs-property">length</span> &lt; <span class="hljs-number">3</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;give password as argument&#x27;</span>)
+  process.<span class="hljs-title function_">exit</span>(<span class="hljs-number">1</span>)
+}
+
+<span class="hljs-keyword">const</span> password = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>]
+
+<span class="hljs-keyword">const</span> url = <span class="hljs-string">`mongodb+srv://fullstack:<span class="hljs-subst">${password}</span>@cluster0.a5qfl.mongodb.net/?retryWrites=true&amp;w=majority&amp;appName=Cluster0`</span>
+
+mongoose.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;strictQuery&#x27;</span>,<span class="hljs-literal">false</span>)
+
+mongoose.<span class="hljs-title function_">connect</span>(url, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+
+<span class="hljs-keyword">const</span> noteSchema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-title class_">Boolean</span>,
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Note&#x27;</span>, noteSchema)
+
+<span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;HTML is easy&#x27;</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+})
+
+note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;note saved!&#x27;</span>)
+  mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p><strong>ملاحظة:</strong> حسب المنطقة التي اخترتها عند بناء عنقودك، قد يختلف <i>MongoDB URI</i> عن المثال أعلاه. ينبغي أن تتحقق من URI الصحيح الذي وُلِّد من MongoDB Atlas وتستخدمه.</p>
+<p>يُنشأ الاتصال بقاعدة البيانات بالأمر:</p>
+<pre><code class="language-js">mongoose.<span class="hljs-title function_">connect</span>(url, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+</code></pre>
+<p>تأخذ الدالة عنوان URL لقاعدة البيانات كمعامل أول، وكائناً يعرّف الإعدادات المطلوبة كمعامل ثانٍ. يدعم MongoDB Atlas عناوين IPv4 فقط، لذا نحدّد بالكائن <em>{ family: 4 }</em> أن الاتصال ينبغي أن يستخدم IPv4 دائماً.</p>
+<p>يفترض التطبيق التدريبي أنه سيُمرَّر إليه كلمة المرور من بيانات الاعتماد التي أنشأناها في MongoDB Atlas، كمعامل من سطر الأوامر. يمكننا الوصول إلى معامل سطر الأوامر هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> password = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>]
+</code></pre>
+<p>عندما تُشغَّل الشيفرة بالأمر <i>node mongo.js yourPassword</i>، ستضيف Mongo وثيقة جديدة إلى قاعدة البيانات.</p>
+<p><strong>ملاحظة:</strong> يرجى الانتباه إلى أن كلمة المرور هي كلمة المرور المُنشأة لمستخدم قاعدة البيانات، وليست كلمة مرور MongoDB Atlas الخاصة بك. كذلك، إذا أنشأت كلمة مرور تحتوي أحرفاً خاصة، فستحتاج إلى <a href="https://docs.atlas.mongodb.com/troubleshoot-connection/#special-characters-in-connection-string-password">ترميز كلمة المرور تلك بصيغة URL</a>.</p>
+<p>يمكننا عرض الحالة الحالية لقاعدة البيانات من MongoDB Atlas عبر <i>Browse collections</i>، في تبويب Database.</p>
+<p><img src="../../images/content/3/mongo7.webp" alt="زر browse collections في قواعد بيانات mongodb"></p>
+<p>كما يوضح العرض، أُضيفت <i>الوثيقة</i> المطابقة للملاحظة إلى مجموعة <i>notes</i> في قاعدة البيانات <i>myFirstDatabase</i>.</p>
+<p><img src="../../images/content/3/mongo8new.webp" alt="تبويب collections في mongodb مع قاعدة myFirstDatabase ومجموعة notes"></p>
+<p>لنحذف قاعدة البيانات الافتراضية <i>test</i> ونغيّر اسم قاعدة البيانات المشار إليها في نص الاتصال إلى <i>noteApp</i> بدلاً منها، بتعديل URI:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> url = <span class="hljs-string">`mongodb+srv://fullstack:<span class="hljs-subst">${password}</span>@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&amp;w=majority&amp;appName=Cluster0`</span>
+</code></pre>
+<p>لنشغّل شيفرتنا مرة أخرى:</p>
+<p><img src="../../images/content/3/mongo9.webp" alt="تبويب collections في mongodb مع noteApp وnotes"></p>
+<p>تُخزَّن البيانات الآن في قاعدة البيانات الصحيحة. يقدّم العرض أيضاً وظيفة <i>create database</i>، التي يمكن استخدامها لإنشاء قواعد بيانات جديدة من الموقع. إنشاء قاعدة بيانات بهذه الطريقة ليس ضرورياً، لأن MongoDB Atlas ينشئ تلقائياً قاعدة بيانات جديدة عندما يحاول تطبيق الاتصال بقاعدة بيانات غير موجودة بعد.</p>
+<h3 id="المخطط">المخطط</h3>
+<p>بعد إنشاء الاتصال بقاعدة البيانات، نعرّف <a href="https://mongoosejs.com/docs/guide.html#schemas">المخطط</a> لملاحظة و<a href="https://mongoosejs.com/docs/models.html">الطراز</a> (model) المطابق:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> noteSchema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-title class_">Boolean</span>,
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Note&#x27;</span>, noteSchema)
+</code></pre>
+<p>أولاً، نعرّف <a href="https://mongoosejs.com/docs/guide.html#schemas">مخطط</a> الملاحظة الذي يُخزَّن في المتغير <em>noteSchema</em>. يخبر المخطط Mongoose كيف ينبغي تخزين كائنات الملاحظات في قاعدة البيانات.</p>
+<p>في تعريف طراز <em>Note</em>، المعامل الأول <i>&quot;Note&quot;</i> هو الاسم المفرد للطراز. سيكون اسم المجموعة هو الجمع بحروف صغيرة <i>notes</i>، لأن <a href="https://mongoosejs.com/docs/models.html#compiling">عُرف Mongoose</a> هو تسمية المجموعات تلقائياً بصيغة الجمع (مثل <i>notes</i>) عندما يشير إليها المخطط بصيغة المفرد (مثل <i>Note</i>).</p>
+<p>قواعد البيانات الوثائقية مثل Mongo <i>بلا مخطط</i>، أي أن قاعدة البيانات نفسها لا تهتم ببنية البيانات المخزّنة فيها. من الممكن تخزين وثائق بحقول مختلفة تماماً في المجموعة نفسها.</p>
+<p>الفكرة وراء Mongoose هي أن البيانات المخزّنة في قاعدة البيانات تُمنَح <i>مخططاً على مستوى التطبيق</i> يعرّف شكل الوثائق المخزّنة في أي مجموعة معينة.</p>
+<h3 id="إنشاء-الكائنات-وحفظها">إنشاء الكائنات وحفظها</h3>
+<p>بعد ذلك، ينشئ التطبيق كائن ملاحظة جديداً بمساعدة <a href="https://mongoosejs.com/docs/models.html">طراز</a> <i>Note</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;HTML is Easy&#x27;</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span>,
+})
+</code></pre>
+<p>الطرازات <i>دوال بانية</i> تنشئ كائنات JavaScript جديدة بناءً على المعاملات المقدَّمة. وبما أن الكائنات تُنشأ بالدالة البانية للطراز، فإنها تملك جميع خصائص الطراز، ومنها دوال حفظ الكائن في قاعدة البيانات.</p>
+<p>يتم حفظ الكائن في قاعدة البيانات بالدالة المسماة على نحو مناسب <em>save</em>، التي يمكن تزويدها بمعالج حدث عبر الدالة <em>then</em>:</p>
+<pre><code class="language-js">note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;note saved!&#x27;</span>)
+  mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>عندما يُحفظ الكائن في قاعدة البيانات، يُستدعى معالج الحدث المزوَّد إلى <em>then</em>. يغلق معالج الحدث اتصال قاعدة البيانات بالأمر <code>mongoose.connection.close()</code>. وإذا لم يُغلق الاتصال، يبقى الاتصال مفتوحاً حتى ينتهي البرنامج.</p>
+<p>توجد نتيجة عملية الحفظ في المعامل <em>result</em> الخاص بمعالج الحدث. النتيجة ليست مثيرة للاهتمام كثيراً عندما نخزّن كائناً واحداً في قاعدة البيانات. يمكنك طباعة الكائن في الطرفية إذا أردت إلقاء نظرة أدق عليه أثناء تنفيذ تطبيقك أو أثناء تصحيح الأخطاء.</p>
+<p>لنحفظ أيضاً بضع ملاحظات إضافية بتعديل البيانات في الشيفرة وتنفيذ البرنامج مرة أخرى.</p>
+<p><strong>ملاحظة:</strong> للأسف، توثيق Mongoose ليس متسقاً كثيراً، إذ تستخدم أجزاء منه دوال راجعة في أمثلتها وأجزاء أخرى أساليب مغايرة، لذا لا يُنصح بنسخ الشيفرة منه ولصقها مباشرة. كما لا يُنصح بخلط الوعود (promises) بالدوال الراجعة القديمة في الشيفرة نفسها.</p>
+<h3 id="جلب-الكائنات-من-قاعدة-البيانات">جلب الكائنات من قاعدة البيانات</h3>
+<p>لنعلّق شيفرة توليد الملاحظات الجديدة ونستبدلها بما يلي:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+  result.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(note)
+  })
+  mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>عند تنفيذ الشيفرة، يطبع البرنامج جميع الملاحظات المخزّنة في قاعدة البيانات:</p>
+<p><img src="../../images/content/3/70new.webp" alt="مخرجات node mongo.js تعرض الملاحظات بصيغة JSON"></p>
+<p>تُسترجَع الكائنات من قاعدة البيانات بالدالة <a href="https://mongoosejs.com/docs/api/model.html#model_Model-find">find</a> الخاصة بطراز <em>Note</em>. معامل الدالة كائن يعبّر عن شروط البحث. وبما أن المعامل كائن فارغ<code>{}</code>، نحصل على جميع الملاحظات المخزّنة في مجموعة <em>notes</em>.</p>
+<p>تتبع شروط البحث <a href="https://www.mongodb.com/docs/manual/tutorial/query-documents/">صيغة</a> استعلام البحث في Mongo.</p>
+<p>يمكننا قصر بحثنا على الملاحظات المهمة فقط هكذا:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({ <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span> }).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+</div>
+<div class="tasks">
+<h3 id="تمرين-312">تمرين 3.12.</h3>
+<h4 id="312-قاعدة-بيانات-من-سطر-الأوامر">3.12: قاعدة بيانات من سطر الأوامر</h4>
+<p>أنشئ قاعدة بيانات MongoDB سحابية لتطبيق دليل الهاتف باستخدام MongoDB Atlas.</p>
+<p>أنشئ ملف <i>mongo.js</i> في مجلد المشروع، يمكن استخدامه لإضافة مدخلات إلى دليل الهاتف، ولعرض جميع المدخلات الموجودة فيه.</p>
+<p><strong>ملاحظة:</strong> لا تضمّن كلمة المرور في الملف الذي تُجري commit عليه وترفعه إلى GitHub!</p>
+<p>ينبغي أن يعمل التطبيق كما يلي. تستخدم البرنامج بتمرير ثلاثة معاملات من سطر الأوامر (الأول هو كلمة المرور)، مثلاً:</p>
+<pre><code class="language-bash">node mongo.js yourpassword Anna 040-1234556
+</code></pre>
+<p>ونتيجة لذلك، سيطبع التطبيق:</p>
+<pre><code class="language-bash">added Anna number 040-1234556 to phonebook
+</code></pre>
+<p>سيُحفظ المدخل الجديد في دليل الهاتف في قاعدة البيانات. لاحظ أنه إذا كان الاسم يحتوي محارف مسافة بيضاء، فيجب وضعه بين علامتي اقتباس:</p>
+<pre><code class="language-bash">node mongo.js yourpassword <span class="hljs-string">&quot;Arto Vihavainen&quot;</span> 045-1232456
+</code></pre>
+<p>إذا كانت كلمة المرور هي المعامل الوحيد الممنوح للبرنامج، أي أنه يُستدعى هكذا:</p>
+<pre><code class="language-bash">node mongo.js yourpassword
+</code></pre>
+<p>فسيُفترض بالبرنامج أن يعرض جميع مدخلات دليل الهاتف:</p>
+<pre><code>phonebook:
+Anna 040-1234556
+Arto Vihavainen 045-1232456
+Ada Lovelace 040-1231236
+</code></pre>
+<p>يمكنك الحصول على معاملات سطر الأوامر من المتغير <a href="https://nodejs.org/docs/latest-v18.x/api/process.html#process_process_argv">process.argv</a>.</p>
+<p><strong>ملاحظة: لا تغلق الاتصال في المكان الخطأ</strong>. فمثلاً، الشيفرة التالية لن تعمل:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Person</span>
+  .<span class="hljs-title function_">find</span>({})
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">persons</span>=&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+  })
+
+mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+</code></pre>
+<p>في الشيفرة أعلاه، سيُنفَّذ الأمر <i>mongoose.connection.close()</i> فوراً بعد بدء عملية <i>Person.find</i>. وهذا يعني أن اتصال قاعدة البيانات سيُغلق فوراً، ولن يصل التنفيذ أبداً إلى النقطة التي تنتهي فيها عملية <i>Person.find</i> وتُستدعى فيها الدالة <i>callback</i>.</p>
+<p>المكان الصحيح لإغلاق اتصال قاعدة البيانات هو نهاية الدالة الراجعة:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Person</span>
+  .<span class="hljs-title function_">find</span>({})
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">persons</span>=&gt;</span> {
+    <span class="hljs-comment">// ...</span>
+    mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+  })
+</code></pre>
+<p><strong>ملاحظة:</strong> إذا عرّفت طرازاً باسم <i>Person</i>، فستسمّي mongoose المجموعة المرتبطة به تلقائياً <i>people</i>.</p>
+</div>
+<div class="content">
+<h3 id="ربط-الواجهة-الخلفية-بقاعدة-بيانات">ربط الواجهة الخلفية بقاعدة بيانات</h3>
+<p>أصبح لدينا الآن ما يكفي من المعرفة لنبدأ استخدام Mongo في الواجهة الخلفية لتطبيق الملاحظات.</p>
+<p>لنبدأ سريعاً بنسخ تعريفات Mongoose ولصقها في ملف <i>index.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+
+<span class="hljs-comment">// لا تحفظ كلمة المرور الخاصة بك في GITHUB!!</span>
+<span class="hljs-keyword">const</span> password = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>]
+<span class="hljs-keyword">const</span> url = <span class="hljs-string">`mongodb+srv://fullstack:<span class="hljs-subst">${password}</span>@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&amp;w=majority&amp;appName=Cluster0`</span>
+
+mongoose.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;strictQuery&#x27;</span>,<span class="hljs-literal">false</span>)
+mongoose.<span class="hljs-title function_">connect</span>(url, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+
+<span class="hljs-keyword">const</span> noteSchema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-title class_">Boolean</span>,
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Note&#x27;</span>, noteSchema)
+</code></pre>
+<p>لنغيّر معالج جلب جميع الملاحظات إلى الشكل التالي:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(notes)
+  })
+})
+</code></pre>
+<p>لنشغّل الواجهة الخلفية بالأمر <code>node --watch index.js yourpassword</code> حتى نتحقق في المتصفح من أن الواجهة الخلفية تعرض بشكل صحيح جميع الملاحظات المحفوظة في قاعدة البيانات:</p>
+<p><img src="../../images/content/3/44ea.webp" alt="api/notes في المتصفح يعرض الملاحظات بصيغة JSON"></p>
+<p>يعمل التطبيق على نحو شبه مثالي. تفترض الواجهة الأمامية أن لكل كائن معرّفاً فريداً في الحقل <i>id</i>. كذلك لا نريد إعادة حقل الإصدار <i>__v</i> الخاص بـ mongo إلى الواجهة الأمامية.</p>
+<p>إحدى طرق تنسيق الكائنات التي تعيدها Mongoose هي <a href="https://stackoverflow.com/questions/7034848/mongodb-output-id-instead-of-id">تعديل</a> الدالة <em>toJSON</em> الخاصة بالمخطط، وهي تُستخدم على جميع نسخ الطرازات المُنتَجة بذلك المخطط. يمكن إجراء التعديل كما يلي:</p>
+<pre><code class="language-js">noteSchema.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;toJSON&#x27;</span>, {
+  <span class="hljs-attr">transform</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-variable language_">document</span>, returnedObject</span>) =&gt;</span> {
+    returnedObject.<span class="hljs-property">id</span> = returnedObject.<span class="hljs-property">_id</span>.<span class="hljs-title function_">toString</span>()
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">_id</span>
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">__v</span>
+  }
+})
+</code></pre>
+<p>رغم أن خاصية <i>_id</i> في كائنات Mongoose تبدو كنص، فهي في الحقيقة كائن. الدالة <em>toJSON</em> التي عرّفناها تحوّلها إلى نص من باب الاحتياط فقط. ولو لم نجري هذا التغيير، لسبّب لنا ضرراً أكبر في المستقبل بمجرد أن نبدأ كتابة الاختبارات.</p>
+<p>لا حاجة إلى أي تغييرات في المعالج:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(notes)
+  })
+})
+</code></pre>
+<p>تستخدم الشيفرة تلقائياً الدالة <em>toJSON</em> المعرَّفة عند تنسيق الملاحظات في الاستجابة.</p>
+<h3 id="نقل-إعدادات-قاعدة-البيانات-إلى-وحدة-خاصة-بها">نقل إعدادات قاعدة البيانات إلى وحدة خاصة بها</h3>
+<p>قبل أن نعيد هيكلة بقية الواجهة الخلفية لتستخدم قاعدة البيانات، لنستخرج الشيفرة الخاصة بـ Mongoose إلى وحدة خاصة بها.</p>
+<p>لننشئ مجلداً جديداً للوحدة باسم <i>models</i>، ونضف ملفاً باسم <i>note.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+
+mongoose.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;strictQuery&#x27;</span>, <span class="hljs-literal">false</span>)
+
+<span class="hljs-keyword">const</span> url = process.<span class="hljs-property">env</span>.<span class="hljs-property">MONGODB_URI</span> <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;connecting to&#x27;</span>, url)
+mongoose.<span class="hljs-title function_">connect</span>(url, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+<span class="hljs-comment">// highlight-start</span>
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;connected to MongoDB&#x27;</span>)
+  })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;error connecting to MongoDB:&#x27;</span>, error.<span class="hljs-property">message</span>)
+  })
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-keyword">const</span> noteSchema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">content</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">important</span>: <span class="hljs-title class_">Boolean</span>,
+})
+
+noteSchema.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;toJSON&#x27;</span>, {
+  <span class="hljs-attr">transform</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-variable language_">document</span>, returnedObject</span>) =&gt;</span> {
+    returnedObject.<span class="hljs-property">id</span> = returnedObject.<span class="hljs-property">_id</span>.<span class="hljs-title function_">toString</span>()
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">_id</span>
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">__v</span>
+  }
+})
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Note&#x27;</span>, noteSchema) <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>هناك بعض التغييرات في الشيفرة مقارنةً بالسابق. أصبح عنوان URL لاتصال قاعدة البيانات يُمرَّر إلى التطبيق عبر متغير البيئة MONGODB_URI، إذ ليس من الجيد تضمينه مباشرة في الشيفرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> url = process.<span class="hljs-property">env</span>.<span class="hljs-property">MONGODB_URI</span>
+</code></pre>
+<p>هناك طرق كثيرة لتعريف قيمة متغير بيئة. على سبيل المثال، يمكننا تعريفه عند تشغيل التطبيق كما يلي:</p>
+<pre><code class="language-bash">MONGODB_URI=<span class="hljs-string">&quot;your_connection_string_here&quot;</span> npm run dev
+</code></pre>
+<p>سنتعلّم قريباً طريقة أكثر تطوراً لتعريف متغيرات البيئة.</p>
+<p>تغيّرت طريقة إنشاء الاتصال قليلاً:</p>
+<pre><code class="language-js">mongoose.<span class="hljs-title function_">connect</span>(url, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;connected to MongoDB&#x27;</span>)
+  })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;error connecting to MongoDB:&#x27;</span>, error.<span class="hljs-property">message</span>)
+  })
+</code></pre>
+<p>أصبحت الدالة المسؤولة عن إنشاء الاتصال تُمنَح دالتين للتعامل مع محاولة اتصال ناجحة وأخرى فاشلة. كلتا الدالتين تسجّلان فقط رسالة في الطرفية عن حالة النجاح:</p>
+<p><img src="../../images/content/3/45e.webp" alt="مخرجات node عند اسم مستخدم أو كلمة مرور خاطئين"></p>
+<p>يختلف تعريف <a href="https://nodejs.org/docs/latest-v18.x/api/modules.html">وحدات</a> Node قليلاً عن طريقة تعريف <a href="../../part2/rendering_a_collection_modules#refactoring-modules">وحدات ES6</a> في الجزء 2.</p>
+<p>تُعرَّف الواجهة العامة للوحدة بإسناد قيمة إلى المتغير <em>module.exports</em>. سنسند القيمة لتكون طراز <i>Note</i>. أما الأمور الأخرى المعرَّفة داخل الوحدة، مثل المتغيرين <em>mongoose</em> و_url_، فلن تكون متاحة أو مرئية لمستخدمي الوحدة.</p>
+<p>تحدث استيراد الوحدة بإضافة السطر التالي إلى <i>index.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./models/note&#x27;</span>)
+</code></pre>
+<p>بهذه الطريقة سيُسنَد المتغير <em>Note</em> إلى الكائن نفسه الذي تعرّفه الوحدة.</p>
+<h3 id="تعريف-متغيرات-البيئة-باستخدام-مكتبة-dotenv">تعريف متغيرات البيئة باستخدام مكتبة dotenv</h3>
+<p>طريقة أكثر تطوراً لتعريف متغيرات البيئة هي استخدام مكتبة <a href="https://github.com/motdotla/dotenv#readme">dotenv</a>. يمكنك تثبيت المكتبة بالأمر:</p>
+<pre><code class="language-bash">npm install dotenv
+</code></pre>
+<p>لاستخدام المكتبة، ننشئ ملف <i>.env</i> في جذر المشروع. تُعرَّف متغيرات البيئة داخل الملف، وقد يبدو هكذا:</p>
+<pre><code class="language-bash">MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=<span class="hljs-literal">true</span>&amp;w=majority&amp;appName=Cluster0
+PORT=3001
+</code></pre>
+<p>أضفنا أيضاً منفذ الخادم المضمَّن في الشيفرة إلى متغير البيئة <em>PORT</em>.</p>
+<p><strong>ينبغي استثناء ملف <i>.env</i> من git فوراً لأننا لا نريد نشر أي معلومات سرية علناً على الإنترنت!</strong></p>
+<p><img src="../../images/content/3/45ae.webp" alt="ملف .gitignore في vscode مع إضافة سطر .env"></p>
+<p>يمكن أخذ متغيرات البيئة المعرَّفة في ملف <i>.env</i> في الاستخدام بالتعليم <em>require('dotenv').config()</em>، ويمكنك الإشارة إليها في شيفرتك كما تشير إلى متغيرات البيئة العادية، بصيغة <em>process.env.MONGODB_URI</em>.</p>
+<p>لنحمّل متغيرات البيئة في بداية ملف index.js لتكون متاحة في التطبيق كله. لنغيّر ملف <i>index.js</i> بالطريقة التالية:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>() <span class="hljs-comment">// highlight-line</span>
+<span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./models/note&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+<span class="hljs-comment">// ..</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">PORT</span> <span class="hljs-comment">// highlight-line</span>
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Server running on port <span class="hljs-subst">${PORT}</span>`</span>)
+})
+</code></pre>
+<p>من المهم أن يُستورَد <i>dotenv</i> قبل استيراد طراز <i>note</i>. هذا يضمن أن متغيرات البيئة من ملف <i>.env</i> متاحة عالمياً قبل استيراد الشيفرة من الوحدات الأخرى.</p>
+<h4 id="ملاحظة-مهمة-حول-تعريف-متغيرات-البيئة-في-flyio-وrender">ملاحظة مهمة حول تعريف متغيرات البيئة في Fly.io وRender</h4>
+<p><strong>مستخدمو Fly.io:</strong> بما أن GitHub لا يُستخدم مع Fly.io، فإن ملف .env يصل أيضاً إلى خوادم Fly.io عند نشر التطبيق. وبسبب ذلك، ستكون متغيرات البيئة المعرَّفة في الملف متاحة هناك.</p>
+<p>غير أن <a href="https://community.fly.io/t/clarification-on-environment-variables/6309">خياراً أفضل</a> هو منع نسخ ملف .env إلى Fly.io بإنشاء ملف <em>.dockerignore</em> في جذر المشروع بالمحتوى التالي</p>
+<pre><code class="language-bash">.<span class="hljs-built_in">env</span>
+</code></pre>
+<p>وضبط قيمة متغير البيئة من سطر الأوامر بالأمر:</p>
+<pre><code class="language-bash">fly secrets <span class="hljs-built_in">set</span> MONGODB_URI=<span class="hljs-string">&quot;mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&amp;w=majority&amp;appName=Cluster0&quot;</span>
+</code></pre>
+<p><strong>مستخدمو Render:</strong> عند استخدام Render، يُعطى عنوان url لقاعدة البيانات بتعريف متغير البيئة المناسب في لوحة التحكم:</p>
+<p><img src="../../images/content/3/render-env.webp" alt="المتصفح يعرض متغيرات بيئة render"></p>
+<p>اضبط عنوان URL الذي يبدأ بـ <i>mongodb+srv://...</i> فقط في حقل <em>value</em>.</p>
+<h3 id="استخدام-قاعدة-البيانات-في-معالجات-المسارات">استخدام قاعدة البيانات في معالجات المسارات</h3>
+<p>بعد ذلك، لنغيّر بقية وظائف الواجهة الخلفية لتستخدم قاعدة البيانات.</p>
+<p>يتم إنشاء ملاحظة جديدة هكذا:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-keyword">if</span> (!body.<span class="hljs-property">content</span>) {
+    <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">json</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;content missing&#x27;</span> })
+  }
+
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+    <span class="hljs-attr">content</span>: body.<span class="hljs-property">content</span>,
+    <span class="hljs-attr">important</span>: body.<span class="hljs-property">important</span> || <span class="hljs-literal">false</span>,
+  })
+
+  note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">savedNote</span> =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(savedNote)
+  })
+})
+</code></pre>
+<p>تُنشأ كائنات الملاحظات بالدالة البانية <em>Note</em>. تُرسَل الاستجابة داخل الدالة الراجعة لعملية <em>save</em>. وهذا يضمن ألا تُرسَل الاستجابة إلا إذا نجحت العملية. سنناقش معالجة الأخطاء بعد قليل.</p>
+<p>المعامل <em>savedNote</em> في الدالة الراجعة هو الملاحظة الجديدة المنشأة والمحفوظة. البيانات المُعاد إرسالها في الاستجابة هي النسخة المنسَّقة التي تُنشأ تلقائياً بالدالة <em>toJSON</em>:</p>
+<pre><code class="language-js">response.<span class="hljs-title function_">json</span>(savedNote)
+</code></pre>
+<p>باستخدام دالة <a href="https://mongoosejs.com/docs/api/model.html#model_Model-findById">findById</a> في Mongoose، يصبح جلب ملاحظة فردية كما يلي:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(note)
+  })
+})
+</code></pre>
+<h3 id="التحقق-من-تكامل-الواجهة-الأمامية-والخلفية">التحقق من تكامل الواجهة الأمامية والخلفية</h3>
+<p>عندما تتوسّع الواجهة الخلفية، من الجيد اختبار الواجهة الخلفية أولاً بـ <strong>المتصفح أو Postman أو عميل REST في VS Code</strong>. بعد ذلك، لنجرّب إنشاء ملاحظة جديدة بعد أخذ قاعدة البيانات في الاستخدام:</p>
+<p><img src="../../images/content/3/46new.webp" alt="عميل REST في VS Code يرسل طلب post"></p>
+<p>فقط بعد التحقق من أن كل شيء يعمل في الواجهة الخلفية، من الجيد اختبار أن الواجهة الأمامية تعمل مع الواجهة الخلفية. فاختبار الأمور حصراً عبر الواجهة الأمامية غير فعّال إطلاقاً.</p>
+<p>من الجيد على الأرجح دمج الواجهة الأمامية والخلفية وظيفة واحدة في كل مرة. أولاً، يمكننا تنفيذ جلب جميع الملاحظات من قاعدة البيانات واختباره عبر نقطة نهاية الواجهة الخلفية في المتصفح. بعد ذلك، يمكننا التحقق من أن الواجهة الأمامية تعمل مع الواجهة الخلفية الجديدة. وبمجرد أن يبدو كل شيء يعمل، ننتقل إلى الميزة التالية.</p>
+<p>بمجرد إدخال قاعدة بيانات إلى المعادلة، من المفيد فحص الحالة المحفوظة في قاعدة البيانات، مثلاً من لوحة التحكم في MongoDB Atlas. وفي كثير من الأحيان تكون برامج Node المساعدة الصغيرة مثل برنامج <i>mongo.js</i> الذي كتبناه سابقاً مفيدة جداً أثناء التطوير.</p>
+<p>يمكنك إيجاد شيفرة تطبيقنا الحالي كاملةً في فرع <i>part3-4</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part3-4">مستودع GitHub هذا</a>.</p>
+<h3 id="قسم-مطور-full-stack-الحقيقي">قسم مطوّر full stack الحقيقي</h3>
+<p>حان وقت التمارين مرة أخرى. ازداد تعقيد تطبيقنا الآن خطوة أخرى، إذ أصبح لدينا قاعدة بيانات إضافة إلى الواجهة الأمامية والخلفية. وهناك بالفعل مصادر كثيرة جداً محتملة للأخطاء.</p>
+<p>لذا ينبغي أن نوسّع قسمنا مرة أخرى:</p>
+<p>تطوير full stack <i>صعب للغاية</i>، ولهذا سأستخدم كل الوسائل الممكنة لتسهيله</p>
+<ul>
+<li>سأبقي وحدة تحكم مطوّري المتصفح مفتوحة طوال الوقت</li>
+<li>سأستخدم تبويب network في أدوات مطوّري المتصفح للتأكد من أن الواجهة الأمامية والخلفية تتواصلان كما أتوقع</li>
+<li>سأراقب باستمرار حالة الخادم للتأكد من أن البيانات التي ترسلها الواجهة الأمامية إليه تُحفظ هناك كما أتوقع</li>
+<li><i>سأراقب قاعدة البيانات؛ هل تُحفظ البيانات في الحالة المتوقعة</i></li>
+<li>سأتقدم بخطوات صغيرة</li>
+<li>سأكتب الكثير من عبارات <em>console.log</em> للتأكد من فهمي لكيفية تصرف الشيفرة وللمساعدة في تحديد المشاكل</li>
+<li>إذا لم تعمل شيفرتي، لن أكتب المزيد من الشيفرة. بل أبدأ بحذف الشيفرة حتى تعمل أو أعود ببساطة إلى حالة كان فيها كل شيء يعمل</li>
+<li>عندما أطلب المساعدة في قناة Discord الخاصة بالدورة أو في أي مكان آخر، سأصوغ أسئلتي بشكل صحيح، انظر <a href="../../part0/general_info#how-to-get-help-in-discord">هنا</a> لكيفية طلب المساعدة</li>
+</ul>
+</div>
+<div class="tasks">
+<h3 id="التمارين-313-314">التمارين 3.13.-3.14.</h3>
+<p>التمارين التالية مباشرة إلى حد كبير، لكن إذا توقفت واجهتك الأمامية عن العمل مع الواجهة الخلفية، فقد يكون العثور على الأخطاء وإصلاحها ممتعاً للغاية.</p>
+<h4 id="313-قاعدة-بيانات-دليل-الهاتف-الخطوة-1">3.13: قاعدة بيانات دليل الهاتف، الخطوة 1</h4>
+<p>غيّر جلب جميع مدخلات دليل الهاتف بحيث تُجلَب البيانات <i>من قاعدة البيانات</i>.</p>
+<p>تحقق من أن الواجهة الأمامية تعمل بعد إجراء التغييرات.</p>
+<p>في التمارين التالية، اكتب جميع الشيفرة الخاصة بـ Mongoose في وحدة خاصة بها، تماماً كما فعلنا في فصل <a href="../../part3/saving_data_to_mongo_db#moving-db-configuration-to-its-own-module">إعدادات قاعدة البيانات في وحدة خاصة بها</a>.</p>
+<h4 id="314-قاعدة-بيانات-دليل-الهاتف-الخطوة-2">3.14: قاعدة بيانات دليل الهاتف، الخطوة 2</h4>
+<p>غيّر الواجهة الخلفية بحيث تُحفظ الأرقام الجديدة <i>في قاعدة البيانات</i>. تحقق من أن واجهتك الأمامية لا تزال تعمل بعد التغييرات.</p>
+<p>في هذه المرحلة، يمكنك تجاهل ما إذا كان هناك بالفعل شخص في قاعدة البيانات بالاسم نفسه للشخص الذي تضيفه.</p>
+</div>
+<div class="content">
+<h3 id="معالجة-الأخطاء">معالجة الأخطاء</h3>
+<p>إذا حاولنا زيارة عنوان URL لملاحظة بمعرّف غير موجود، مثل <a href="http://localhost:3001/api/notes/5c41c90e84d891c15dfa3431">http://localhost:3001/api/notes/5c41c90e84d891c15dfa3431</a> حيث <i>5c41c90e84d891c15dfa3431</i> ليس معرّفاً مخزّناً في قاعدة البيانات، فستكون الاستجابة <em>null</em>.</p>
+<p>لنغيّر هذا السلوك بحيث إذا لم توجد ملاحظة بالمعرّف المحدد، سيستجيب الخادم للطلب برمز حالة HTTP 404 not found. بالإضافة إلى ذلك، لننفّذ كتلة <em>catch</em> بسيطة للتعامل مع الحالات التي يُرفَض فيها الوعد الذي تعيده دالة <em>findById</em>:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-comment">// highlight-start</span>
+      <span class="hljs-keyword">if</span> (note) {
+        response.<span class="hljs-title function_">json</span>(note)
+      } <span class="hljs-keyword">else</span> {
+        response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+      <span class="hljs-comment">// highlight-end</span>
+    })
+    <span class="hljs-comment">// highlight-start</span>
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error)
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">500</span>).<span class="hljs-title function_">end</span>()
+    })
+    <span class="hljs-comment">// highlight-end</span>
+})
+</code></pre>
+<p>إذا لم يوجد كائن مطابق في قاعدة البيانات، ستكون قيمة <em>note</em> هي <em>null</em> وستُنفَّذ كتلة <em>else</em>. وينتج عن ذلك استجابة برمز الحالة <i>404 not found</i>. أما إذا رُفض الوعد الذي تعيده دالة <em>findById</em>، فستحمل الاستجابة رمز الحالة <i>500 internal server error</i>. وتعرض الطرفية معلومات أكثر تفصيلاً عن الخطأ.</p>
+<p>إضافة إلى حالة الملاحظة غير الموجودة، هناك حالة خطأ أخرى تحتاج إلى معالجة. في هذه الحالة، نحاول جلب ملاحظة بنوع <em>id</em> خاطئ، أي <em>id</em> لا يطابق صيغة معرّف Mongo.</p>
+<p>إذا أرسلنا الطلب التالي، فسنحصل على رسالة الخطأ المعروضة أدناه:</p>
+<pre><code>Method: GET
+Path:   /api/notes/someInvalidId
+Body:   {}
+---
+{ CastError: Cast to ObjectId failed for value &quot;someInvalidId&quot; at path &quot;_id&quot;
+    at CastError (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/error/cast.js:27:11)
+    at ObjectId.cast (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/schema/objectid.js:158:13)
+    ...
+</code></pre>
+<p>عند إعطاء معرّف مشوّه كمعامل، ستطلق دالة <em>findById</em> خطأً يؤدي إلى رفض الوعد المُعاد. وسيؤدي ذلك إلى استدعاء الدالة الراجعة المعرَّفة في كتلة <em>catch</em>.</p>
+<p>لنجرِ بعض التعديلات الصغيرة على الاستجابة في كتلة <em>catch</em>:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (note) {
+        response.<span class="hljs-title function_">json</span>(note)
+      } <span class="hljs-keyword">else</span> {
+        response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>() 
+      }
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error)
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;malformatted id&#x27;</span> }) <span class="hljs-comment">// highlight-line</span>
+    })
+})
+</code></pre>
+<p>إذا كانت صيغة المعرّف غير صحيحة، فسننتهي في معالج الأخطاء المعرَّف في كتلة <em>catch</em>. ورمز الحالة المناسب لهذه الحالة هو <a href="https://www.rfc-editor.org/rfc/rfc9110.html#name-400-bad-request">400 Bad Request</a> لأن الحالة تطابق الوصف تماماً:</p>
+<blockquote>
+<p><i>يشير رمز الحالة 400 (Bad Request) إلى أن الخادم لا يستطيع أو لا يريد معالجة الطلب بسبب أمر يُعتبر خطأ من العميل (مثل صيغة طلب مشوّهة، أو تأطير رسالة طلب غير صالح، أو توجيه طلب خادع).</i></p>
+</blockquote>
+<p>أضفنا أيضاً بعض البيانات إلى الاستجابة لإلقاء الضوء على سبب الخطأ.</p>
+<p>عند التعامل مع الوعود (Promises)، من الجيد دائماً تقريباً إضافة معالجة للأخطاء والاستثناءات. وإلا ستجد نفسك تتعامل مع أخطاء غريبة.</p>
+<p>ليس فكرة سيئة أبداً طباعة الكائن الذي سبّب الاستثناء في الطرفية داخل معالج الأخطاء:</p>
+<pre><code class="language-js">.<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error)  <span class="hljs-comment">// highlight-line</span>
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;malformatted id&#x27;</span> })
+})
+</code></pre>
+<p>قد يكون سبب استدعاء معالج الأخطاء أمراً مختلفاً تماماً عما توقعته. وإذا سجّلت الخطأ في الطرفية، فقد تنقذ نفسك من جلسات تصحيح أخطاء طويلة ومحبطة. علاوة على ذلك، تدعم معظم الخدمات الحديثة التي تنشر تطبيقك عليها شكلاً من أشكال نظام التسجيل يمكنك استخدامه للتحقق من هذه السجلات. وكما ذُكر، فإن Fly.io واحدة منها.</p>
+<p>في كل مرة تعمل فيها على مشروع له واجهة خلفية، <i>من الضروري أن تراقب مخرجات الطرفية للواجهة الخلفية</i>. وإذا كنت تعمل على شاشة صغيرة، فيكفي أن ترى شريحة صغيرة من المخرجات في الخلفية. فستلفت أي رسائل خطأ انتباهك حتى عندما تكون الطرفية بعيدة في الخلفية:</p>
+<p><img src="../../images/content/3/15b.webp" alt="لقطة شاشة مثال تعرض شريحة صغيرة من المخرجات"></p>
+<h3 id="نقل-معالجة-الأخطاء-إلى-وسيط">نقل معالجة الأخطاء إلى وسيط</h3>
+<p>كتبنا شيفرة معالج الأخطاء بين بقية شيفرتنا. قد يكون هذا حلاً معقولاً في بعض الأحيان، لكن هناك حالات يكون فيها من الأفضل تنفيذ كل معالجة الأخطاء في مكان واحد. ويمكن أن يكون هذا مفيداً بشكل خاص إذا أردنا لاحقاً إبلاغ نظام خارجي لتتبّع الأخطاء مثل <a href="https://sentry.io/welcome/">Sentry</a> ببيانات متعلقة بالأخطاء.</p>
+<p>لنغيّر معالج المسار <i>/api/notes/:id</i> بحيث يمرّر الخطأ إلى الأمام بالدالة <em>next</em>. تُمرَّر الدالة next إلى المعالج كمعامل ثالث:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (note) {
+        response.<span class="hljs-title function_">json</span>(note)
+      } <span class="hljs-keyword">else</span> {
+        response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error)) <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>يُمنَح الخطأ المُمرَّر إلى الأمام للدالة <em>next</em> كمعامل. وإذا استُدعيت <em>next</em> دون معامل، فسينتقل التنفيذ ببساطة إلى المسار أو الوسيط التالي. أما إذا استُدعيت الدالة <em>next</em> بمعامل، فسيستمر التنفيذ إلى <i>وسيط معالج الأخطاء</i>.</p>
+<p><a href="https://expressjs.com/en/guide/error-handling.html">معالجات الأخطاء</a> في Express وسيطات تُعرَّف بدالة تقبل <i>أربعة معاملات</i>. ويبدو معالج الأخطاء لدينا هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">errorHandler</span> = (<span class="hljs-params">error, request, response, next</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error.<span class="hljs-property">message</span>)
+
+  <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;CastError&#x27;</span>) {
+    <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;malformatted id&#x27;</span> })
+  } 
+
+  <span class="hljs-title function_">next</span>(error)
+}
+
+<span class="hljs-comment">// يجب أن يكون هذا آخر وسيط يُحمَّل، كما ينبغي تسجيل جميع المسارات قبله!</span>
+app.<span class="hljs-title function_">use</span>(errorHandler)
+</code></pre>
+<p>يتحقق معالج الأخطاء مما إذا كان الخطأ استثناء <i>CastError</i>، وفي هذه الحالة نعرف أن الخطأ سبّبه معرّف كائن غير صالح في Mongo. في هذه الحالة، سيرسل معالج الأخطاء استجابة إلى المتصفح بكائن الاستجابة المُمرَّر كمعامل. وفي جميع حالات الأخطاء الأخرى، يمرّر الوسيط الخطأ إلى معالج الأخطاء الافتراضي في Express.</p>
+<p>لاحظ أن وسيط معالجة الأخطاء يجب أن يكون آخر وسيط يُحمَّل، كما ينبغي تسجيل جميع المسارات قبل معالج الأخطاء!</p>
+<h3 id="ترتيب-تحميل-الوسيطات">ترتيب تحميل الوسيطات</h3>
+<p>ترتيب تنفيذ الوسيطات هو نفسه ترتيب تحميلها في Express بالدالة <em>app.use</em>. لهذا السبب، من المهم توخّي الحذر عند تعريف الوسيطات.</p>
+<p>الترتيب الصحيح هو التالي:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">static</span>(<span class="hljs-string">&#x27;dist&#x27;</span>))
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>())
+app.<span class="hljs-title function_">use</span>(requestLogger)
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+  <span class="hljs-comment">// ...</span>
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">unknownEndpoint</span> = (<span class="hljs-params">request, response</span>) =&gt; {
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;unknown endpoint&#x27;</span> })
+}
+
+<span class="hljs-comment">// معالج الطلبات ذات نقطة النهاية غير المعروفة</span>
+app.<span class="hljs-title function_">use</span>(unknownEndpoint)
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">errorHandler</span> = (<span class="hljs-params">error, request, response, next</span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-comment">// معالج الطلبات التي تؤدي إلى أخطاء</span>
+app.<span class="hljs-title function_">use</span>(errorHandler)
+</code></pre>
+<p>ينبغي أن يكون وسيط محلل json من أوائل الوسيطات المحمَّلة في Express. لو كان الترتيب كالتالي:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">use</span>(requestLogger) <span class="hljs-comment">// قيمة request.body غير معرّفة!</span>
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-comment">// قيمة request.body غير معرّفة!</span>
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+  <span class="hljs-comment">// ...</span>
+})
+
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>())
+</code></pre>
+<p>فلن تكون بيانات JSON المُرسَلة مع طلبات HTTP متاحة لوسيط المسجّل أو لمعالج مسار POST، لأن <em>request.body</em> ستكون <em>undefined</em> في تلك المرحلة.</p>
+<p>من المهم أيضاً ألا يُحمَّل الوسيط الخاص بالتعامل مع المسارات غير المدعومة إلا بعد تعريف جميع نقاط النهاية، وقبل معالج الأخطاء مباشرة. فمثلاً، سيؤدي ترتيب التحميل التالي إلى مشكلة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">unknownEndpoint</span> = (<span class="hljs-params">request, response</span>) =&gt; {
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;unknown endpoint&#x27;</span> })
+}
+
+<span class="hljs-comment">// معالج الطلبات ذات نقطة النهاية غير المعروفة</span>
+app.<span class="hljs-title function_">use</span>(unknownEndpoint)
+
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+})
+</code></pre>
+<p>الآن أصبحت معالجة نقاط النهاية غير المعروفة مرتَّبة <i>قبل معالج طلبات HTTP</i>. وبما أن معالج نقطة النهاية غير المعروفة يستجيب لجميع الطلبات بـ <i>404 unknown endpoint</i>، فلن يُستدعى أي مسار أو وسيط بعد إرسال الاستجابة من وسيط نقطة النهاية غير المعروفة. والاستثناء الوحيد لذلك هو معالج الأخطاء الذي يجب أن يأتي في النهاية تماماً، بعد معالج نقاط النهاية غير المعروفة.</p>
+<h3 id="عمليات-أخرى">عمليات أخرى</h3>
+<p>لنضف بعض الوظائف الناقصة إلى تطبيقنا، ومنها حذف ملاحظة فردية وتحديثها.</p>
+<p>أسهل طريقة لحذف ملاحظة من قاعدة البيانات هي الدالة <a href="https://mongoosejs.com/docs/api/model.html#Model.findByIdAndDelete()">findByIdAndDelete</a>:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByIdAndDelete</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">204</span>).<span class="hljs-title function_">end</span>()
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+</code></pre>
+<p>في كلتا حالتي حذف مورد بنجاح، تستجيب الواجهة الخلفية برمز الحالة <i>204 no content</i>. والحالتان المختلفتان هما حذف ملاحظة موجودة، وحذف ملاحظة غير موجودة في قاعدة البيانات. ويمكن استخدام المعامل الراجع <em>result</em> للتحقق مما إذا كان المورد قد حُذف فعلاً، ويمكننا استخدام تلك المعلومة لإعادة رموز حالة مختلفة للحالتين إذا رأينا ذلك ضرورياً. ويُمرَّر أي استثناء يحدث إلى معالج الأخطاء.</p>
+<p>لننفّذ وظيفة تحديث ملاحظة واحدة، بما يسمح بتغيير أهمية الملاحظة. يتم تحديث الملاحظة كما يلي:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">put</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { content, important } = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!note) {
+        <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+
+      note.<span class="hljs-property">content</span> = content
+      note.<span class="hljs-property">important</span> = important
+
+      <span class="hljs-keyword">return</span> note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">updatedNote</span>) =&gt;</span> {
+        response.<span class="hljs-title function_">json</span>(updatedNote)
+      })
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+</code></pre>
+<p>تُجلَب الملاحظة المراد تحديثها أولاً من قاعدة البيانات باستخدام الدالة <em>findById</em>. وإذا لم يوجد كائن في قاعدة البيانات بالمعرّف المحدد، فستكون قيمة المتغير <em>note</em> هي <em>null</em>، ويستجيب الاستعلام برمز الحالة <i>404 Not Found</i>.</p>
+<p>وإذا وُجد كائن بالمعرّف المحدد، يُحدَّث حقلا <em>content</em> و_important_ بالبيانات المقدَّمة في الطلب، وتُحفظ الملاحظة المعدَّلة في قاعدة البيانات باستخدام الدالة <em>save()</em>. ويستجيب طلب HTTP بإرسال الملاحظة المحدَّثة في الاستجابة.</p>
+<p>من النقاط الجديرة بالملاحظة أن الشيفرة تحتوي الآن على وعود متداخلة، أي أن داخل الدالة <em>.then</em> الخارجية تُعرَّف <a href="https://javascript.info/promise-chaining">سلسلة وعود</a> أخرى:</p>
+<pre><code class="language-js">    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!note) {
+        <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+
+      note.<span class="hljs-property">content</span> = content
+      note.<span class="hljs-property">important</span> = important
+
+      <span class="hljs-comment">// highlight-start</span>
+      <span class="hljs-keyword">return</span> note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">updatedNote</span>) =&gt;</span> {
+        response.<span class="hljs-title function_">json</span>(updatedNote)
+      })
+      <span class="hljs-comment">// highlight-end</span>
+</code></pre>
+<p>عادةً لا يُنصح بهذا لأنه قد يجعل الشيفرة صعبة القراءة. غير أن الحل يعمل في هذه الحالة لأنه يضمن ألا تُنفَّذ كتلة <em>.then</em> التي تلي الدالة <em>save()</em> إلا إذا وُجدت ملاحظة بالمعرّف المحدد في قاعدة البيانات واستُدعيت الدالة <em>save()</em>. وفي الجزء الرابع من الدورة، سنستكشف صيغة async/await التي تقدّم طريقة أسهل وأوضح للتعامل مع مثل هذه الحالات.</p>
+<p>تقدّم Mongoose أيضاً الدالة <a href="https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()">findByIdAndUpdate</a>، التي يمكن استخدامها لإيجاد وثيقة بـ <i>id</i> الخاص بها وتحديثها باستدعاء دالة واحد. غير أن هذا الأسلوب لا يلبي احتياجاتنا تماماً، لأننا نعرّف لاحقاً في هذا الجزء متطلبات معينة للبيانات المخزّنة في قاعدة البيانات، و<i>findByIdAndUpdate</i> لا يدعم تحققات Mongoose من الصحة دعماً كاملاً. كما يشير <a href="https://mongoosejs.com/docs/documents.html#updating-using-queries">توثيق</a> Mongoose إلى أن الدالة <i>save()</i> هي الخيار الصحيح عموماً لتحديث وثيقة، لأنها توفّر تحققاً كاملاً.</p>
+<p>بعد اختبار الواجهة الخلفية مباشرة بـ Postman أو عميل REST في VS Code، يمكننا التحقق من أنها تبدو تعمل. ويبدو أن الواجهة الأمامية تعمل أيضاً مع الواجهة الخلفية التي تستخدم قاعدة البيانات.</p>
+<p>يمكنك إيجاد شيفرة تطبيقنا الحالي كاملةً في فرع <i>part3-5</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part3-5">مستودع GitHub هذا</a>.</p>
+</div>
+<div class="tasks">
+<h3 id="التمارين-315-318">التمارين 3.15.-3.18.</h3>
+<h4 id="315-قاعدة-بيانات-دليل-الهاتف-الخطوة-3">3.15: قاعدة بيانات دليل الهاتف، الخطوة 3</h4>
+<p>غيّر الواجهة الخلفية بحيث ينعكس حذف مدخلات دليل الهاتف في قاعدة البيانات.</p>
+<p>تحقق من أن الواجهة الأمامية لا تزال تعمل بعد إجراء التغييرات.</p>
+<h4 id="316-قاعدة-بيانات-دليل-الهاتف-الخطوة-4">3.16: قاعدة بيانات دليل الهاتف، الخطوة 4</h4>
+<p>انقل معالجة الأخطاء في التطبيق إلى وسيط معالج أخطاء جديد.</p>
+<h4 id="317-قاعدة-بيانات-دليل-الهاتف-الخطوة-5">3.17*: قاعدة بيانات دليل الهاتف، الخطوة 5</h4>
+<p>إذا حاول المستخدم إنشاء مدخل جديد في دليل الهاتف لشخص اسمه موجود بالفعل في دليل الهاتف، فستحاول الواجهة الأمامية تحديث رقم هاتف المدخل الموجود بإرسال طلب HTTP PUT إلى العنوان الفريد للمدخل.</p>
+<p>عدّل الواجهة الخلفية لدعم هذا الطلب.</p>
+<p>تحقق من أن الواجهة الأمامية تعمل بعد إجراء تغييراتك.</p>
+<h4 id="318-قاعدة-بيانات-دليل-الهاتف-الخطوة-6">3.18*: قاعدة بيانات دليل الهاتف، الخطوة 6</h4>
+<p>حدّث أيضاً معالجة مساري HTTP GET <i>api/persons/:id</i> و<i>info</i> لتستخدم قاعدة البيانات، وتحقق من أنها تعمل مباشرة مع المتصفح أو Postman أو عميل REST في VS Code.</p>
+<p>ينبغي أن يبدو فحص مدخل فردي في دليل الهاتف من المتصفح هكذا:</p>
+<p><img src="../../images/content/3/49.webp" alt="لقطة شاشة للمتصفح تعرض شخصاً واحداً عبر api/persons/their_id"></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part3/deploying_app_to_internet"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">نشر التطبيق على الإنترنت</span></a><!--]--> <!--[0--><a class="next" href="../../part3/validation_and_es_lint"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">التحقق من الصحة وESLint</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

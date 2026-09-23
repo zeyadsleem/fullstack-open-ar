@@ -1,0 +1,758 @@
+const t=8,r="c",s="c.md",a="React وGraphQL",n="react_and_graphql",p="/images/part-8.svg",l=[{depth:2,id:"عميل-apollo",text:"عميل Apollo"},{depth:2,id:"إجراء-الاستعلامات",text:"إجراء الاستعلامات"},{depth:2,id:"الاستعلامات-المسماة-والمتغيرات",text:"الاستعلامات المسماة والمتغيرات"},{depth:3,id:"الذاكرة-المؤقتة",text:"الذاكرة المؤقتة"},{depth:2,id:"إجراء-الـ-mutations",text:"إجراء الـ mutations"},{depth:2,id:"تحديث-الذاكرة-المؤقتة",text:"تحديث الذاكرة المؤقتة"},{depth:2,id:"معالجة-أخطاء-الـ-mutation",text:"معالجة أخطاء الـ mutation"},{depth:2,id:"تحديث-رقم-هاتف",text:"تحديث رقم هاتف"},{depth:2,id:"apollo-client-وحالة-التطبيق",text:"Apollo Client وحالة التطبيق"}],e=`<p>سننفّذ بعد ذلك تطبيق React يستخدم خادم GraphQL الذي أنشأناه.</p>
+<p>تجد الشيفرة الحالية للخادم على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-backend/tree/part8-3" target="_blank" rel="noreferrer noopener">GitHub</a>، في الفرع <em>part8-3</em>.</p>
+<p>من حيث المبدأ، يمكننا استخدام GraphQL عبر طلبات HTTP من نوع POST. يُظهر ما يلي مثالاً على ذلك باستخدام Postman:</p>
+<p><img src="/images/mooc/8cb04b83e47f.webp" alt="Postman يعرض localhost:4000 graphql مع استعلام allPersons"></p>
+<p>يتم التواصل عبر إرسال طلبات HTTP من نوع POST إلى <a href="http://localhost:4000/graphql" target="_blank" rel="noreferrer noopener">http://localhost:4000/graphql</a>. والاستعلام نفسه نص يُرسل كقيمة للمفتاح <em>query</em>.</p>
+<p>يمكننا تولّي أمر التواصل بين تطبيق React وGraphQL باستخدام Axios. لكن في معظم الأحيان، ليس من الحكمة كثيراً فعل ذلك. من الأفضل استخدام مكتبة أعلى مستوى قادرة على تجريد التفاصيل غير الضرورية من التواصل.</p>
+<p>حالياً، هناك خياران جيدان: <a href="https://facebook.github.io/relay/" target="_blank" rel="noreferrer noopener">Relay</a> من Facebook و <a href="https://www.apollographql.com/docs/react/" target="_blank" rel="noreferrer noopener">Apollo Client</a>، وهو الجانب الخاص بالعميل من المكتبة نفسها التي استخدمناها في القسم السابق. Apollo هو بالتأكيد الأكثر شعبية بين الاثنين، وسنستخدمه في هذا القسم أيضاً.</p>
+<h2 id="عميل-apollo">عميل Apollo</h2>
+<p>لننشئ تطبيق React جديداً ونثبّت الاعتماديات اللازمة لـ <a href="https://www.apollographql.com/docs/react/get-started/" target="_blank" rel="noreferrer noopener">عميل Apollo</a>.</p>
+<pre><code class="language-bash">npm install @apollo/client graphql
+</code></pre>
+<p>استبدل المحتوى الافتراضي للملف <em>main.jsx</em> بهيكل البرنامج التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">StrictMode</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> { createRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.jsx&#x27;</span>
+
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloClient</span>, gql, <span class="hljs-title class_">HttpLink</span>, <span class="hljs-title class_">InMemoryCache</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloClient</span>({
+  <span class="hljs-attr">link</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({
+    <span class="hljs-attr">uri</span>: <span class="hljs-string">&#x27;http://localhost:4000&#x27;</span>,
+  }),
+  <span class="hljs-attr">cache</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryCache</span>(),
+})
+
+<span class="hljs-keyword">const</span> query = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> <span class="hljs-punctuation">{</span>
+    allPersons <span class="hljs-punctuation">{</span>
+      name
+      phone
+      address <span class="hljs-punctuation">{</span>
+        street
+        city
+      <span class="hljs-punctuation">}</span>
+      id
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+
+client.<span class="hljs-title function_">query</span>({ query }).<span class="hljs-title function_">then</span>((response) =&amp;gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">data</span>)
+})
+
+<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">StrictMode</span>&amp;gt;
+    &amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;
+  &amp;lt;/<span class="hljs-title class_">StrictMode</span>&amp;gt;,
+)
+</code></pre>
+<p>تُنشئ بداية الشيفرة كائن <a href="https://www.apollographql.com/docs/react/get-started#step-3-initialize-apolloclient" target="_blank" rel="noreferrer noopener">عميل</a> جديداً، يُستخدم بعدها لإرسال استعلام إلى الخادم:</p>
+<pre><code>client.query({ query }).then((response) =&amp;gt; {
+  console.log(response.data)
+})
+</code></pre>
+<p>تُطبع استجابة الخادم في وحدة التحكم:</p>
+<p><img src="/images/mooc/e1d6c9ca3a7c.webp" alt="أدوات المطورين تعرض مصفوفة allPersons مع 3 أشخاص"></p>
+<p>يُضاف وسم <code>gql</code> قبل القالب النصي الذي يشكّل الاستعلام، وهو مستورد من حزمة @apollo/client:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloClient</span>, gql, <span class="hljs-title class_">HttpLink</span>, <span class="hljs-title class_">InMemoryCache</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> query = gql\`<span class="language-graphql"> // HIGHLIGHT LINE
+  <span class="hljs-keyword">query</span> <span class="hljs-punctuation">{</span>
+    allPersons <span class="hljs-punctuation">{</span>
+      name
+      phone
+      address <span class="hljs-punctuation">{</span>
+        street
+        city
+      <span class="hljs-punctuation">}</span>
+      id
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+</code></pre>
+<p>بفضل الوسم، تتعرّف إضافة GraphQL في VS Code والأدوات الأخرى على التعريف باعتباره GraphQL، ما يتيح ميزات مثل إبراز الصيغة في المحرر. أما في جهة الخادم، فقد حققنا الشيء نفسه بإضافة تعليق يحدد النوع قبل القالب النصي، لأن مكتبة @apollo/server المستخدمة في الخادم لا تتضمن وسم <code>gql</code> مقابلاً.</p>
+<p>يمكن للتطبيق أن يتواصل مع خادم GraphQL باستخدام كائن <code>client</code>. ويمكن جعل العميل متاحاً لجميع مكوّنات التطبيق بتغليف مكوّن <em>App</em> بـ <a href="https://www.apollographql.com/docs/react/get-started#step-4-connect-your-client-to-react" target="_blank" rel="noreferrer noopener">ApolloProvider</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">StrictMode</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> { createRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.jsx&#x27;</span>
+
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloClient</span>, gql, <span class="hljs-title class_">HttpLink</span>, <span class="hljs-title class_">InMemoryCache</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ApolloProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ApolloClient</span>({
+  <span class="hljs-attr">link</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpLink</span>({
+    <span class="hljs-attr">uri</span>: <span class="hljs-string">&#x27;http://localhost:4000&#x27;</span>,
+  }),
+  <span class="hljs-attr">cache</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryCache</span>(),
+})
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">StrictMode</span>&amp;gt;
+    &amp;lt;<span class="hljs-title class_">ApolloProvider</span> client={client}&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      &amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;
+    &amp;lt;<span class="hljs-regexp">/ApolloProvider&amp;gt; /</span>/ <span class="hljs-variable constant_">HIGHLIGHT</span> <span class="hljs-variable constant_">LINE</span>
+  &amp;lt;/<span class="hljs-title class_">StrictMode</span>&amp;gt;,
+)
+</code></pre>
+<h2 id="إجراء-الاستعلامات">إجراء الاستعلامات</h2>
+<p>أصبحنا مستعدين لتنفيذ العرض الرئيسي للتطبيق، الذي يعرض قائمة باسم الشخص ورقم هاتفه.</p>
+<p>يقدم Apollo Client بضعة بدائل لإجراء <a href="https://www.apollographql.com/docs/react/data/queries/" target="_blank" rel="noreferrer noopener">الاستعلامات</a>. حالياً، يُعد استخدام دالة الخطاف <a href="https://www.apollographql.com/docs/react/api/react/hooks/#usequery" target="_blank" rel="noreferrer noopener">useQuery</a> هو الممارسة السائدة.</p>
+<p>يُجري الاستعلام مكوّن <em>App</em> ، وشيفرته كالتالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { gql } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { useQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ALL_PERSONS</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> <span class="hljs-punctuation">{</span>
+    allPersons <span class="hljs-punctuation">{</span>
+      name
+      phone
+      id
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>) {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      {result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>.<span class="hljs-title function_">map</span>(p =&amp;gt; p.<span class="hljs-property">name</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;, &#x27;</span>)}
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>عند استدعائه، يُجري <code>useQuery</code> الاستعلام الذي يستقبله كمعامل. وهو يعيد كائناً فيه عدة <a href="https://www.apollographql.com/docs/react/api/react/hooks/#result" target="_blank" rel="noreferrer noopener">حقول</a>. يكون الحقل <em>loading</em> قيمته true إذا لم يتلقَّ الاستعلام استجابة بعد. عندئذٍ تُعرض الشيفرة التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>) {
+  <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+}
+</code></pre>
+<p>عند استلام استجابة، يمكن العثور على نتيجة استعلام <em>allPersons</em> في الحقل data، ويمكننا عرض قائمة الأسماء على الشاشة.</p>
+<pre><code>&amp;lt;div&amp;gt;
+  {result.data.allPersons.map(p =&amp;gt; p.name).join(', ')}
+&amp;lt;/div&amp;gt;
+</code></pre>
+<p>افصل عرض الأشخاص في مكوّن خاص به في الملف <em>src/components/Persons.jsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Persons</span> = ({ persons }) =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;<span class="hljs-title class_">Persons</span>&amp;lt;/h2&amp;gt;
+      {persons.<span class="hljs-title function_">map</span>(p =&amp;gt;
+        &amp;lt;div key={p.<span class="hljs-property">id</span>}&amp;gt;
+          {p.<span class="hljs-property">name</span>} {p.<span class="hljs-property">phone</span>}
+        &amp;lt;/div&amp;gt;
+      )}
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Persons</span>
+</code></pre>
+<p>لا يزال مكوّن <code>App</code> يجري الاستعلام، ويمرر النتيجة إلى المكوّن الجديد ليُعرض:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { gql } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { useQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Persons</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Persons&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>) {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+  <span class="hljs-keyword">return</span> &amp;lt;<span class="hljs-title class_">Persons</span> persons={result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>} /&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+}
+</code></pre>
+<h2 id="الاستعلامات-المسماة-والمتغيرات">الاستعلامات المسماة والمتغيرات</h2>
+<p>لننفّذ وظيفة لعرض تفاصيل عنوان شخص. استعلام <em>findPerson</em> مناسب تماماً لهذا.</p>
+<p>الاستعلامات التي أجريناها في الفصل السابق كانت تحمل المعامل مضمَّناً مباشرة في الاستعلام:</p>
+<pre><code>query {
+  findPerson(name: &quot;Arto Hellas&quot;) {
+    phone
+    city
+    street
+    id
+  }
+}
+</code></pre>
+<p>عندما نُجري استعلامات برمجياً، يجب أن نكون قادرين على إعطائها معاملات ديناميكياً.</p>
+<p>تناسب <a href="https://graphql.org/learn/queries/#variables" target="_blank" rel="noreferrer noopener">متغيرات</a> GraphQL هذا الغرض تماماً. ولكي نتمكن من استخدام المتغيرات، يجب أيضاً أن نسمّي استعلاماتنا.</p>
+<p>صيغة جيدة للاستعلام هي هذه:</p>
+<pre><code>query findPersonByName($nameToSearch: String!) {
+  findPerson(name: $nameToSearch) {
+    name
+    phone
+    address {
+      street
+      city
+    }
+  }
+}
+</code></pre>
+<p>اسم الاستعلام هو <em>findPersonByName</em>، ويُعطى نصاً <em>$nameToSearch</em> كمعامل.</p>
+<p>من الممكن أيضاً إجراء استعلامات ذات معاملات باستخدام Apollo Explorer. تُعطى المعاملات في <em>Variables</em>:</p>
+<p><img src="/images/mooc/cb57470830d9.webp" alt="apollostudio findPersonByName مع إبراز nameToSearch وArto Hellas"></p>
+<p>خطاف <code>useQuery</code> مناسب تماماً للحالات التي يُجرى فيها الاستعلام عند عرض المكوّن. لكننا نريد الآن إجراء الاستعلام فقط عندما يريد المستخدم رؤية تفاصيل شخص معيّن، لذا لا يُجرى الاستعلام إلا <a href="https://www.apollographql.com/docs/react/data/queries/#executing-queries-manually" target="_blank" rel="noreferrer noopener">عند الحاجة</a>.</p>
+<p>أحد الاحتمالات لهذا النوع من الحالات هو دالة الخطاف <a href="https://www.apollographql.com/docs/react/api/react/useLazyQuery" target="_blank" rel="noreferrer noopener">useLazyQuery</a> التي تجعل من الممكن تعريف استعلام يُنفَّذ <em>عندما</em> يريد المستخدم رؤية المعلومات التفصيلية لشخص.</p>
+<p>لكن في حالتنا يمكننا الاكتفاء بـ <code>useQuery</code> واستخدام الخيار <a href="https://www.apollographql.com/docs/react/data/queries#skipoptional" target="_blank" rel="noreferrer noopener">skip</a>، الذي يجعل من الممكن إجراء الاستعلام فقط إذا تحقق شرط محدد.</p>
+<p>بعد التغييرات، يصبح الملف <em>Persons.jsx</em> كالتالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> { gql } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { useQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">FIND_PERSON</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> findPersonByName<span class="hljs-punctuation">(</span><span class="hljs-variable">$nameToSearch</span>: String<span class="hljs-punctuation">!</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">{</span>
+    findPerson<span class="hljs-punctuation">(</span><span class="hljs-symbol">name</span><span class="hljs-punctuation">:</span> <span class="hljs-variable">$nameToSearch</span>) <span class="hljs-punctuation">{</span>
+      name
+      phone
+      id
+      address <span class="hljs-punctuation">{</span>
+        street
+        city
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Person</span> = ({ person, onClose }) =&amp;gt; {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;{person.<span class="hljs-property">name</span>}&amp;lt;/h2&amp;gt;
+      &amp;lt;div&amp;gt;
+        {person.<span class="hljs-property">address</span>.<span class="hljs-property">street</span>} {person.<span class="hljs-property">address</span>.<span class="hljs-property">city</span>}
+      &amp;lt;/div&amp;gt;
+      &amp;lt;div&amp;gt;{person.<span class="hljs-property">phone</span>}&amp;lt;/div&amp;gt;
+      &amp;lt;button onClick={onClose}&amp;gt;close&amp;lt;/button&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Persons</span> = ({ persons }) =&amp;gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> [nameToSearch, setNameToSearch] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>)
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">FIND_PERSON</span>, {
+    <span class="hljs-attr">variables</span>: { nameToSearch },
+    <span class="hljs-attr">skip</span>: !nameToSearch,
+  })
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">if</span> (nameToSearch &amp;amp;&amp;amp; result.<span class="hljs-property">data</span>) {
+    <span class="hljs-keyword">return</span> (
+      &amp;lt;<span class="hljs-title class_">Person</span>
+        person={result.<span class="hljs-property">data</span>.<span class="hljs-property">findPerson</span>}
+        onClose={() =&amp;gt; <span class="hljs-title function_">setNameToSearch</span>(<span class="hljs-literal">null</span>)}
+      /&amp;gt;
+    )
+  }
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;<span class="hljs-title class_">Persons</span>&amp;lt;/h2&amp;gt;
+      {persons.<span class="hljs-title function_">map</span>((p) =&amp;gt; (
+        &amp;lt;div key={p.<span class="hljs-property">id</span>}&amp;gt;
+          {p.<span class="hljs-property">name</span>} {p.<span class="hljs-property">phone</span>}
+          &amp;lt;button onClick={() =&amp;gt; <span class="hljs-title function_">setNameToSearch</span>(p.<span class="hljs-property">name</span>)}&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+            show address <span class="hljs-comment">// HIGHLIGHT LINE</span>
+          &amp;lt;<span class="hljs-regexp">/button&amp;gt; /</span>/ <span class="hljs-variable constant_">HIGHLIGHT</span> <span class="hljs-variable constant_">LINE</span>
+        &amp;lt;/div&amp;gt;
+      ))}
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Persons</span>
+</code></pre>
+<p>تغيّرت الشيفرة كثيراً، وليست كل التغييرات ظاهرة تماماً.</p>
+<p>عند الضغط على زر <em>show address</em> لشخص ما، يُضبط اسم الشخص في الحالة <em>nameToSearch</em>:</p>
+<pre><code>&amp;lt;button onClick={() =&amp;gt; setNameToSearch(p.name)}&amp;gt;
+  show address
+&amp;lt;/button&amp;gt;
+</code></pre>
+<p>يتسبب هذا في إعادة عرض المكوّن لنفسه. وعند العرض يُنفَّذ استعلام <em>FIND_PERSON</em> الذي يجلب المعلومات التفصيلية لمستخدم إذا كانت للمتغير <em>nameToSearch</em> قيمة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">FIND_PERSON</span>, {
+  <span class="hljs-attr">variables</span>: { nameToSearch },
+  <span class="hljs-attr">skip</span>: !nameToSearch, <span class="hljs-comment">// HIGHLIGHT LINE</span>
+})
+</code></pre>
+<p>عندما لا يهتم المستخدم برؤية المعلومات التفصيلية لأي شخص، يكون متغير الحالة <em>nameToSearch</em> قيمته null ولا يُنفَّذ الاستعلام.</p>
+<p>إذا كانت للحالة <em>nameToSearch</em> قيمة وكانت نتيجة الاستعلام جاهزة، يعرض مكوّن <em>Person</em> المعلومات التفصيلية لشخص:</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (nameToSearch &amp;amp;&amp;amp; result.<span class="hljs-property">data</span>) {
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;<span class="hljs-title class_">Person</span>
+      person={result.<span class="hljs-property">data</span>.<span class="hljs-property">findPerson</span>}
+      onClose={() =&amp;gt; <span class="hljs-title function_">setNameToSearch</span>(<span class="hljs-literal">null</span>)}
+    /&amp;gt;
+  )
+}
+</code></pre>
+<p>يبدو عرض الشخص الواحد كالتالي:</p>
+<p><img src="/images/mooc/e0c37be995e1.webp" alt="المتصفح يعرض شخصاً واحداً"></p>
+<p>عندما يريد المستخدم العودة إلى قائمة الأشخاص، تُضبط حالة <code>nameToSearch</code> على <code>null</code>.</p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-1" target="_blank" rel="noreferrer noopener">GitHub</a> في الفرع <em>part8-1</em>.</p>
+<h3 id="الذاكرة-المؤقتة">الذاكرة المؤقتة</h3>
+<p>عندما نُجري استعلامات متعددة، مثلاً بتفاصيل عنوان Arto Hellas، نلاحظ شيئاً مثيراً للاهتمام: لا يُجرى الاستعلام إلى الواجهة الخلفية إلا في المرة الأولى. بعد ذلك، ورغم إجراء الشيفرة للاستعلام نفسه مرة أخرى، لا يُرسل الاستعلام إلى الواجهة الخلفية.</p>
+<p><img src="/images/mooc/0fc3b52f0877.webp" alt="المتصفح يعرض استجابة أدوات المطورين مع تبويب الشبكة وgraphql"></p>
+<p>يحفظ عميل Apollo استجابات الاستعلامات في <a href="https://www.apollographql.com/docs/react/caching/overview/" target="_blank" rel="noreferrer noopener">الذاكرة المؤقتة</a>. ولتحسين الأداء، إذا كانت استجابة الاستعلام موجودة أصلاً في الذاكرة المؤقتة، فلا يُرسل الاستعلام إلى الخادم إطلاقاً.</p>
+<p><img src="/images/mooc/bf7ef641cb8f.webp" alt="أدوات مطوري Apollo تعرض root_query allPersons"></p>
+<p>تُظهر الذاكرة المؤقتة المعلومات التفصيلية عن Arto Hellas بعد استعلام <em>findPerson</em>:</p>
+<p><img src="/images/mooc/dec90af18c4d.webp" alt="أدوات مطوري Apollo تعرض أول شخص مع معلوماته"></p>
+<h2 id="إجراء-الـ-mutations">إجراء الـ mutations</h2>
+<p>لننفّذ وظيفة لإضافة أشخاص جدد.</p>
+<p>في الفصل السابق، ضمّنّا المعاملات مباشرة في الـ mutations. الآن، نحتاج إلى نسخة من mutation الـ addPerson تستخدم <a href="https://graphql.org/learn/queries/#variables" target="_blank" rel="noreferrer noopener">المتغيرات</a>:</p>
+<pre><code class="language-bash">const CREATE_PERSON = gql\`
+  mutation createPerson(
+    <span class="hljs-variable">$name</span>: String!
+    <span class="hljs-variable">$street</span>: String!
+    <span class="hljs-variable">$city</span>: String!
+    <span class="hljs-variable">$phone</span>: String
+  ) {
+    addPerson(name: <span class="hljs-variable">$name</span>, street: <span class="hljs-variable">$street</span>, city: <span class="hljs-variable">$city</span>, phone: <span class="hljs-variable">$phone</span>) {
+      name
+      phone
+      <span class="hljs-built_in">id</span>
+      address {
+        street
+        city
+      }
+    }
+  }
+\`
+</code></pre>
+<p>توفر دالة الخطاف <a href="https://www.apollographql.com/docs/react/api/react/hooks/#usemutation" target="_blank" rel="noreferrer noopener">useMutation</a> وظيفة إجراء الـ mutations.</p>
+<p>أنشئ مكوّناً جديداً <em>PersonForm</em> لإضافة شخص جديد إلى التطبيق. محتوى الملف <em>src/components/PersonForm.jsx</em> كالتالي:</p>
+<pre><code class="language-bash">import { useState } from <span class="hljs-string">&#x27;react&#x27;</span>
+import { gql } from <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+import { useMutation } from <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+
+const CREATE_PERSON = gql\`
+  mutation createPerson(
+    <span class="hljs-variable">$name</span>: String!
+    <span class="hljs-variable">$street</span>: String!
+    <span class="hljs-variable">$city</span>: String!
+    <span class="hljs-variable">$phone</span>: String
+  ) {
+    addPerson(name: <span class="hljs-variable">$name</span>, street: <span class="hljs-variable">$street</span>, city: <span class="hljs-variable">$city</span>, phone: <span class="hljs-variable">$phone</span>) {
+      name
+      phone
+      <span class="hljs-built_in">id</span>
+      address {
+        street
+        city
+      }
+    }
+  }
+\`
+
+const PersonForm = () =&amp;gt; {
+  const [name, setName] = useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [phone, setPhone] = useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [street, setStreet] = useState(<span class="hljs-string">&#x27;&#x27;</span>)
+  const [city, setCity] = useState(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  const [createPerson] = useMutation(CREATE_PERSON) // HIGHLIGHT LINE
+
+  const submit = (event) =&amp;gt; {
+    event.preventDefault()
+
+    // BEGIN HIGHLIGHT
+    createPerson({ variables: { name, phone, street, city } })
+    // END HIGHLIGHT
+
+    setName(<span class="hljs-string">&#x27;&#x27;</span>)
+    setPhone(<span class="hljs-string">&#x27;&#x27;</span>)
+    setStreet(<span class="hljs-string">&#x27;&#x27;</span>)
+    setCity(<span class="hljs-string">&#x27;&#x27;</span>)
+  }
+
+  <span class="hljs-built_in">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;create new&amp;lt;/h2&amp;gt;
+      &amp;lt;form onSubmit={submit}&amp;gt;
+        &amp;lt;div&amp;gt;
+          name &amp;lt;input value={name}
+            onChange={({ target }) =&amp;gt; setName(target.value)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+          phone &amp;lt;input value={phone}
+            onChange={({ target }) =&amp;gt; setPhone(target.value)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+          street &amp;lt;input value={street}
+            onChange={({ target }) =&amp;gt; setStreet(target.value)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+          city &amp;lt;input value={city}
+            onChange={({ target }) =&amp;gt; setCity(target.value)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;button <span class="hljs-built_in">type</span>=<span class="hljs-string">&#x27;submit&#x27;</span>&amp;gt;add!&amp;lt;/button&amp;gt;
+      &amp;lt;/form&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-built_in">export</span> default PersonForm
+</code></pre>
+<p>شيفرة النموذج مباشرة وقد أُبرزت الأسطر المهمة. يمكننا تعريف دوال الـ mutation باستخدام خطاف <code>useMutation</code>. يعيد الخطاف <em>مصفوفة</em>، يحتوي عنصرها الأول على الدالة التي تُحدث الـ mutation.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> [createPerson] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">CREATE_PERSON</span>)
+</code></pre>
+<p>تتلقى متغيرات الاستعلام القيم عند إجراء الاستعلام:</p>
+<pre><code>createPerson({ variables: { name, phone, street, city } })
+</code></pre>
+<p>فعّل مكوّن <em>PersonForm</em> في الملف <em>App.jsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { gql } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+<span class="hljs-keyword">import</span> { useQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">PersonForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/PersonForm&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Persons</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Persons&#x27;</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>) {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Persons</span> persons={result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>} /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">PersonForm</span> /&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>يُضاف الأشخاص الجدد بشكل جيد، لكن الشاشة لا تُحدَّث. السبب أن Apollo Client لا يستطيع تحديث الذاكرة المؤقتة للتطبيق تلقائياً، لذا لا تزال تحتوي على الحالة السابقة للـ mutation. يمكننا تحديث الشاشة بإعادة تحميل الصفحة، إذ تُفرَّغ الذاكرة المؤقتة عند إعادة تحميل الصفحة. لكن لا بد أن تكون هناك طريقة أفضل لفعل ذلك.</p>
+<h2 id="تحديث-الذاكرة-المؤقتة">تحديث الذاكرة المؤقتة</h2>
+<p>توجد بضعة حلول مختلفة لهذا. إحدى الطرق هي جعل استعلام جميع الأشخاص <a href="https://www.apollographql.com/docs/react/data/queries/#polling" target="_blank" rel="noreferrer noopener">يستطلع (poll)</a> الخادم، أو إجراء الاستعلام بشكل متكرر.</p>
+<p>التغيير صغير. لنضبط الاستعلام ليستطلع كل ثانيتين:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>, {
+    <span class="hljs-attr">pollInterval</span>: <span class="hljs-number">2000</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  })
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>)  {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Persons</span> persons = {result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>}/&amp;gt;
+      &amp;lt;<span class="hljs-title class_">PersonForm</span> /&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>الحل بسيط، وفي كل مرة يضيف فيها مستخدم شخصاً جديداً، يظهر فوراً على شاشات جميع المستخدمين.</p>
+<p>الجانب السلبي في الاستطلاع هو بطبيعة الحال حركة الشبكة غير الضرورية التي يسببها. إضافة إلى ذلك، قد تبدأ الصفحة بالوميض، لأن المكوّن يُعاد عرضه مع كل تحديث للاستعلام وتكون <code>result.loading</code> قيمتها true للحظة وجيزة—فيتوهّج نص <em>loading...</em> على الشاشة لجزء من الثانية.</p>
+<p>طريقة سهلة أخرى للحفاظ على تزامن الذاكرة المؤقتة هي استخدام معامل <a href="https://www.apollographql.com/docs/react/data/refetching/" target="_blank" rel="noreferrer noopener">refetchQueries</a> في خطاف <code>useMutation</code> لتعريف أنه كلما أُنشئ شخص جديد، يُعاد إجراء الاستعلام الذي يجلب جميع الأشخاص.</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ALL_PERSONS</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">query</span> <span class="hljs-punctuation">{</span>
+    allPersons <span class="hljs-punctuation">{</span>
+      name
+      phone
+      id
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">PersonForm</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [phone, setPhone] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [street, setStreet] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [city, setCity] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> [createPerson] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">CREATE_PERSON</span>, {
+    <span class="hljs-attr">refetchQueries</span>: [{ <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">ALL_PERSONS</span> }],
+  })
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>مزايا هذا الحل وعيوبه شبه معاكسة للحل السابق. لا توجد حركة ويب إضافية لأن الاستعلامات لا تُجرى احتياطاً. لكن إذا حدّث أحد المستخدمين الآن حالة الخادم، فلا تظهر التغييرات للمستخدمين الآخرين فوراً.</p>
+<p>إذا أردت إجراء استعلامات متعددة، يمكنك تمرير عدة كائنات داخل refetchQueries. سيتيح لك ذلك تحديث أجزاء مختلفة من تطبيقك في الوقت نفسه. إليك مثالاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> [createPerson] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">CREATE_PERSON</span>, {
+  <span class="hljs-attr">refetchQueries</span>: [
+    { <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">ALL_PERSONS</span> },
+    { <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">OTHER_QUERY</span> },
+    { <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">ANOTHER_QUERY</span> },
+  ], <span class="hljs-comment">// مرّر ما تحتاج من استعلامات</span>
+})
+</code></pre>
+<p>توجد طرق أخرى لتحديث الذاكرة المؤقتة. المزيد عنها لاحقاً في هذا الجزء.</p>
+<p>حالياً، تُعرَّف الاستعلامات والمكوّنات في المكان نفسه في شيفرتنا. لنفصل تعريفات الاستعلامات في ملفها الخاص <em>src/queries.js</em>:</p>
+<pre><code class="language-bash">import { gql } from <span class="hljs-string">&#x27;@apollo/client&#x27;</span>
+
+<span class="hljs-built_in">export</span> const ALL_PERSONS = gql\`
+  query {
+    allPersons {
+      name
+      phone
+      <span class="hljs-built_in">id</span>
+    }
+  }
+\`
+
+<span class="hljs-built_in">export</span> const FIND_PERSON = gql\`
+  query findPersonByName(<span class="hljs-variable">$nameToSearch</span>: String!) {
+    findPerson(name: <span class="hljs-variable">$nameToSearch</span>) {
+      name
+      phone
+      <span class="hljs-built_in">id</span>
+      address {
+        street
+        city
+      }
+    }
+  }
+\`
+
+<span class="hljs-built_in">export</span> const CREATE_PERSON = gql\`
+  mutation createPerson(
+    <span class="hljs-variable">$name</span>: String!
+    <span class="hljs-variable">$street</span>: String!
+    <span class="hljs-variable">$city</span>: String!
+    <span class="hljs-variable">$phone</span>: String
+  ) {
+    addPerson(name: <span class="hljs-variable">$name</span>, street: <span class="hljs-variable">$street</span>, city: <span class="hljs-variable">$city</span>, phone: <span class="hljs-variable">$phone</span>) {
+      name
+      phone
+      <span class="hljs-built_in">id</span>
+      address {
+        street
+        city
+      }
+    }
+  }
+\`
+</code></pre>
+<p>ثم يستورد كل مكوّن الاستعلامات التي يحتاجها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">ALL_PERSONS</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./queries&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-2" target="_blank" rel="noreferrer noopener">GitHub</a> في الفرع <em>part8-2</em>.</p>
+<h2 id="معالجة-أخطاء-الـ-mutation">معالجة أخطاء الـ mutation</h2>
+<p>إذا حاولنا إنشاء شخص غير صالح، مثلاً باستخدام اسم موجود أصلاً في التطبيق، فلا يحدث شيء. لا يُضاف الشخص إلى التطبيق، لكننا لا نتلقى أيضاً أي رسالة خطأ.</p>
+<p>في وقت سابق، عرّفنا فحصاً في الخادم يمنع إضافة شخص آخر بالاسم نفسه ويرمي خطأً في مثل هذه الحالة. لكن الخطأ لم يُعالج بعد في الواجهة الأمامية. باستخدام <a href="https://www.apollographql.com/docs/react/api/react/hooks/#params-2" target="_blank" rel="noreferrer noopener">الخيار</a> <code>onError</code> في خطاف <code>useMutation</code>، يمكن تسجيل دالة معالج أخطاء للـ mutations.</p>
+<p>لنسجّل معالج أخطاء للـ mutation. يتلقى مكوّن <em>PersonForm</em> دالة <code>setError</code> كـ prop، تُستخدم لضبط رسالة تشير إلى الخطأ:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">PersonForm</span> = ({ setError }) =&amp;gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">const</span> [ createPerson ] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">CREATE_PERSON</span>, {
+    <span class="hljs-attr">refetchQueries</span>: [  {<span class="hljs-attr">query</span>: <span class="hljs-variable constant_">ALL_PERSONS</span> } ],
+    <span class="hljs-attr">onError</span>: (error) =&amp;gt; <span class="hljs-title function_">setError</span>(error.<span class="hljs-property">message</span>), <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  })
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>أنشئ مكوّناً منفصلاً للإشعار في الملف <em>src/components/Notify.jsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Notify</span> = ({ errorMessage }) =&amp;gt; {
+  <span class="hljs-keyword">if</span> (!errorMessage) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+  }
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div style={{ <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;red&#x27;</span> }}&amp;gt;
+      {errorMessage}
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Notify</span>
+</code></pre>
+<p>يتلقى المكوّن رسالة خطأ محتملة كـ prop. وإذا ضُبطت رسالة خطأ، تُعرض على الشاشة.</p>
+<p>اعرض مكوّن <em>Notify</em> الذي يعرض رسالة الخطأ في الملف <em>App.jsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Notify</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Notify&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [errorMessage, setErrorMessage] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useQuery</span>(<span class="hljs-variable constant_">ALL_PERSONS</span>)
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">loading</span>)  {
+    <span class="hljs-keyword">return</span> &amp;lt;div&amp;gt;loading...&amp;lt;/div&amp;gt;
+  }
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> notify = (message) =&amp;gt; {
+    <span class="hljs-title function_">setErrorMessage</span>(message)
+    <span class="hljs-built_in">setTimeout</span>(() =&amp;gt; {
+      <span class="hljs-title function_">setErrorMessage</span>(<span class="hljs-literal">null</span>)
+    }, <span class="hljs-number">10000</span>)
+  }
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Notify</span> errorMessage={errorMessage} /&amp;gt;  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+      &amp;lt;<span class="hljs-title class_">Persons</span> persons = {result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>} /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">PersonForm</span> setError={notify} /&amp;gt;  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    &amp;lt;/div&amp;gt;
+  )
+}
+</code></pre>
+<p>الآن يُبلَّغ المستخدم بحدوث خطأ عبر إشعار بسيط.</p>
+<p><img src="/images/mooc/56e165c88d0f.webp" alt="المتصفح يعرض باللون الأحمر الرسالة name must be unique"></p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-3" target="_blank" rel="noreferrer noopener">GitHub</a> في الفرع <em>part8-3</em>.</p>
+<h2 id="تحديث-رقم-هاتف">تحديث رقم هاتف</h2>
+<p>لنضف إلى تطبيقنا إمكانية تغيير أرقام هواتف الأشخاص. الحل شبه مطابق للحل الذي استخدمناه لإضافة أشخاص جدد.</p>
+<p>تتطلب الـ mutation مرة أخرى استخدام المتغيرات. أضف الاستعلام التالي إلى الملف <em>queries.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">EDIT_NUMBER</span> = gql\`<span class="language-graphql">
+  <span class="hljs-keyword">mutation</span> editNumber<span class="hljs-punctuation">(</span><span class="hljs-variable">$name</span>: String<span class="hljs-punctuation">!</span>, <span class="hljs-variable">$phone</span>: String<span class="hljs-punctuation">!</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">{</span>
+    editNumber<span class="hljs-punctuation">(</span><span class="hljs-symbol">name</span><span class="hljs-punctuation">:</span> <span class="hljs-variable">$name</span>, <span class="hljs-symbol">phone</span><span class="hljs-punctuation">:</span> <span class="hljs-variable">$phone</span>) <span class="hljs-punctuation">{</span>
+      name
+      phone
+      address <span class="hljs-punctuation">{</span>
+        street
+        city
+      <span class="hljs-punctuation">}</span>
+      id
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+\`</span>
+</code></pre>
+<p>أنشئ مكوّناً جديداً <em>PhoneForm</em> في الملف <em>src/components/PhoneForm.jsx</em> لتحديث رقم هاتف. يضيف المكوّن نموذجاً إلى التطبيق حيث يمكنك إدخال رقم هاتف جديد لشخص محدد. الأجزاء المثيرة للاهتمام في الشيفرة مُبرَزة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> { useMutation } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@apollo/client/react&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">EDIT_NUMBER</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../queries&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">PhoneForm</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [phone, setPhone] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> [ changeNumber ] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">EDIT_NUMBER</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> submit = (event) =&amp;gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-title function_">changeNumber</span>({ <span class="hljs-attr">variables</span>: { name, phone } })
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+
+    <span class="hljs-title function_">setName</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+    <span class="hljs-title function_">setPhone</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;change number&amp;lt;/h2&amp;gt;
+
+      &amp;lt;form onSubmit={submit}&amp;gt;
+        &amp;lt;div&amp;gt;
+          name &amp;lt;input
+            value={name}
+            onChange={({ target }) =&amp;gt; <span class="hljs-title function_">setName</span>(target.<span class="hljs-property">value</span>)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+          phone &amp;lt;input
+            value={phone}
+            onChange={({ target }) =&amp;gt; <span class="hljs-title function_">setPhone</span>(target.<span class="hljs-property">value</span>)}
+          /&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;button type=<span class="hljs-string">&#x27;submit&#x27;</span>&amp;gt;change number&amp;lt;/button&amp;gt;
+      &amp;lt;/form&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">PhoneForm</span>
+</code></pre>
+<p>مكوّن <em>PhoneForm</em> مباشر: يطلب اسم الشخص ورقم هاتف جديداً عبر نموذج. وعند إرسال النموذج، يستدعي دالة <code>changeNumber</code> التي تتولى التحديث، والمُنشأة بخطاف <code>useMutation</code>.</p>
+<p>فعّل المكوّن الجديد في الملف <em>App.jsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">PhoneForm</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/PhoneForm&#x27;</span> <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Notify</span> errorMessage={errorMessage} /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">Persons</span> persons={result.<span class="hljs-property">data</span>.<span class="hljs-property">allPersons</span>} /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">PersonForm</span> setError={notify} /&amp;gt;
+      &amp;lt;<span class="hljs-title class_">PhoneForm</span> setError={notify} /&amp;gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    &amp;lt;/div&amp;gt;
+  )
+}
+</code></pre>
+<p>يبدو قاتماً، لكنه يعمل:</p>
+<p><img src="/images/mooc/842b2800e5a8.webp" alt="المتصفح يعرض الصفحة الرئيسية مع معلومات في حقلَي الإدخال name وphone"></p>
+<p>من المثير للدهشة أنه عند تغيير رقم شخص، يظهر الرقم الجديد تلقائياً في قائمة الأشخاص التي يعرضها مكوّن <em>Persons</em>. يحدث هذا لأن لكل شخص حقلاً معرِّفاً من النوع <em>ID</em>، لذا تُحدَّث تفاصيل الشخص المحفوظة في الذاكرة المؤقتة تلقائياً عند تغييرها بالـ mutation.</p>
+<p>لا يزال في تطبيقنا عيب صغير واحد. إذا حاولنا تغيير رقم هاتف لاسم غير موجود، لا يبدو أن شيئاً يحدث. يحدث هذا لأنه إذا تعذّر العثور على شخص بالاسم المعطى، تكون استجابة الـ mutation هي <em>null</em>:</p>
+<p><img src="/images/mooc/c12257e022e7.webp" alt="أدوات المطورين تعرض الشبكة مع localhost والاستجابة التي فيها editNumber بقيمة null"></p>
+<p>بما أن GraphQL لا يعتبر هذا حالة خطأ، فلن يكون تسجيل معالج أخطاء <code>onError</code> مفيداً في هذه الحالة. لكن يمكننا إضافة دالة استدعاء راجعة <code>onCompleted</code> إلى خطاف <code>useMutation</code>، حيث يمكننا توليد رسالة خطأ محتملة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">PhoneForm</span> = ({ setError }) =&amp;gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [phone, setPhone] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> [changeNumber] = <span class="hljs-title function_">useMutation</span>(<span class="hljs-variable constant_">EDIT_NUMBER</span>, {
+    <span class="hljs-attr">onCompleted</span>: (data) =&amp;gt; {
+      <span class="hljs-keyword">if</span> (!data.<span class="hljs-property">editNumber</span>) {
+        <span class="hljs-title function_">setError</span>(<span class="hljs-string">&#x27;person not found&#x27;</span>)
+      }
+    }
+  })
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>تُنفَّذ دالة الاستدعاء الراجعة <code>onCompleted</code> دائماً عند اكتمال الـ mutation بنجاح. وإذا لم يُعثر على الشخص—أي إذا كانت نتيجة الاستعلام <code>data.editNumber</code> قيمتها <code>null</code>—يستخدم المكوّن دالة الاستدعاء الراجعة <code>setError</code> التي تلقاها عبر props لضبط رسالة خطأ مناسبة.</p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-4" target="_blank" rel="noreferrer noopener">GitHub</a> في الفرع <em>part8-4</em>.</p>
+<h2 id="apollo-client-وحالة-التطبيق">Apollo Client وحالة التطبيق</h2>
+<p>في مثالنا، أصبحت إدارة حالة التطبيق في معظمها من مسؤولية Apollo Client. هذا حل نموذجي تماماً لتطبيقات GraphQL. يستخدم مثالنا حالة مكوّنات React فقط لإدارة حالة نموذج ولعرض إشعارات الأخطاء. ونتيجة لذلك، قد لا توجد أسباب مبررة لاستخدام Redux لإدارة حالة التطبيق عند استخدام GraphQL.</p>
+<p>عند الحاجة، يتيح Apollo حفظ الحالة المحلية للتطبيق في <a href="https://www.apollographql.com/docs/react/local-state/local-state-management/" target="_blank" rel="noreferrer noopener">ذاكرة Apollo المؤقتة</a>.</p>
+<div class="tasks">
+<p><strong>8. عرض المؤلفين</strong></p>
+</div>
+<div class="tasks">
+<p><strong>9. عرض الكتب</strong></p>
+</div>
+<div class="tasks">
+<p><strong>10. إضافة كتاب</strong></p>
+</div>
+<div class="tasks">
+<p><strong>11. سنة ميلاد المؤلفين</strong></p>
+</div>
+<div class="tasks">
+<p><strong>12. سنة ميلاد المؤلفين المتقدمة</strong></p>
+</div>
+`,o={part:8,letter:"c",file:s,title:a,slug:n,mainImage:p,headings:l,html:e};export{o as default,s as file,l as headings,e as html,r as letter,p as mainImage,t as part,n as slug,a as title};

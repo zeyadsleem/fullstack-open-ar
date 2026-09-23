@@ -1,0 +1,409 @@
+const e=2,c="b",s="part2b.md",a="النماذج",n="forms",p="/images/part-2.svg",l=[{depth:3,id:"حفظ-الملاحظات-في-حالة-المكون",text:"حفظ الملاحظات في حالة المكوّن"},{depth:3,id:"المكون-المتحكم-به",text:"المكوّن المتحكَّم به"},{depth:3,id:"تصفية-العناصر-المعروضة",text:"تصفية العناصر المعروضة"},{depth:3,id:"تمارين-26-210",text:"تمارين 2.6.-2.10."}],t=`<div class="content">
+<p>لنواصل توسيع تطبيقنا بالسماح للمستخدمين بإضافة ملاحظات جديدة. يمكنك العثور على شيفرة تطبيقنا الحالي <a href="https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part2-1">هنا</a>.</p>
+<h3 id="حفظ-الملاحظات-في-حالة-المكون">حفظ الملاحظات في حالة المكوّن</h3>
+<p>لكي تتحدّث صفحتنا عند إضافة ملاحظات جديدة، من الأفضل تخزين الملاحظات في حالة المكوّن <i>App</i>. لنستورد الدالة <a href="https://react.dev/reference/react/useState">useState</a> ونستخدمها لتعريف قطعة حالة تُهيَّأ بمصفوفة الملاحظات الأولية الممرَّرة في props.</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span> <span class="hljs-comment">// highlight-line</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>) <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notes.map(note =&gt; 
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span> 
+</code></pre>
+<p>يستخدم المكوّن الدالة <em>useState</em> لتهيئة قطعة الحالة المخزَّنة في <em>notes</em> بمصفوفة الملاحظات الممرَّرة في props:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; { 
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>) 
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>يمكننا أيضاً استخدام React Developer Tools لنرى أن هذا يحدث فعلاً:</p>
+<p><img src="/images/content/2/30.webp" alt="المتصفح يعرض نافذة React developer tools"></p>
+<p>إذا أردنا البدء بقائمة ملاحظات فارغة، فسنضبط القيمة الأولية كمصفوفة فارغة، ولأن props لن تُستخدم، يمكننا حذف الوسيط <em>props</em> من تعريف الدالة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; { 
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>([]) 
+
+  <span class="hljs-comment">// ...</span>
+}  
+</code></pre>
+<p>لنبقَ على القيمة الأولية الممرَّرة في props في الوقت الحالي.</p>
+<p>بعد ذلك، لنضف إلى المكوّن <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms">نموذج</a> HTML يُستخدم لإضافة ملاحظات جديدة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>)
+
+<span class="hljs-comment">// highlight-start </span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = (<span class="hljs-params">event</span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;button clicked&#x27;</span>, event.<span class="hljs-property">target</span>)
+  }
+  <span class="hljs-comment">// highlight-end   </span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notes.map(note =&gt; 
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      // highlight-start 
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>   
+      // highlight-end   
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>أضفنا الدالة <em>addNote</em> كمعالج أحداث إلى عنصر النموذج، وستُستدعى عند إرسال النموذج بالنقر على زر الإرسال.</p>
+<p>نستخدم الطريقة التي ناقشناها في <a href="/part1/component_state_event_handlers#event-handling">الجزء 1</a> لتعريف معالج الأحداث:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = (<span class="hljs-params">event</span>) =&gt; {
+  event.<span class="hljs-title function_">preventDefault</span>()
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;button clicked&#x27;</span>, event.<span class="hljs-property">target</span>)
+}
+</code></pre>
+<p>الوسيط <em>event</em> هو <a href="https://react.dev/learn/responding-to-events">الحدث</a> الذي يُطلق استدعاء دالة معالج الأحداث:</p>
+<p>يستدعي معالج الأحداث فوراً الدالة <em>event.preventDefault()</em>، التي تمنع الإجراء الافتراضي لإرسال النموذج. وكان الإجراء الافتراضي سيؤدي، <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event">من بين أمور أخرى</a>، إلى إعادة تحميل الصفحة.</p>
+<p>يُسجَّل هدف الحدث المخزَّن في <em>event.target</em> في وحدة التحكم:</p>
+<p><img src="/images/content/2/6e.webp" alt="زر نُقر مع كائن النموذج في وحدة التحكم"></p>
+<p>الهدف في هذه الحالة هو النموذج الذي عرّفناه في مكوّننا.</p>
+<p>كيف نصل إلى البيانات الموجودة في عنصر <i>input</i> الخاص بالنموذج؟</p>
+<h3 id="المكون-المتحكم-به">المكوّن المتحكَّم به</h3>
+<p>هناك طرق عديدة لتحقيق ذلك؛ أول طريقة سنلقي عليها نظرة هي استخدام ما يسمى <a href="https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable">المكوّنات المتحكَّم بها</a> (controlled components).</p>
+<p>لنضف قطعة حالة جديدة تسمى <em>newNote</em> لتخزين إدخال المستخدم <strong>و</strong>لنضبطها كخاصية <i>value</i> لعنصر <i>input</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>)
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(
+    <span class="hljs-string">&#x27;a new note...&#x27;</span>
+  ) 
+  <span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = (<span class="hljs-params">event</span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;button clicked&#x27;</span>, event.<span class="hljs-property">target</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notes.map(note =&gt; 
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span> /&gt;</span> //highlight-line
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>   
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يظهر النص البديل المخزَّن كقيمة أولية للحالة <em>newNote</em> في عنصر <i>input</i>، لكن نص الإدخال لا يمكن تحريره. وتعرض وحدة التحكم تحذيراً يعطينا فكرة عما قد يكون الخطأ:</p>
+<p><img src="/images/content/2/7e.webp" alt="خطأ في وحدة التحكم عن تمرير قيمة إلى خاصية دون onchange"></p>
+<p>بما أننا أسندنا قطعة من حالة المكوّن <i>App</i> كخاصية <i>value</i> لعنصر الإدخال، فإن المكوّن <i>App</i> الآن <a href="https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable">يتحكم</a> في سلوك عنصر الإدخال.</p>
+<p>لتمكين تحرير عنصر الإدخال، علينا تسجيل <i>معالج أحداث</i> يزامن التغييرات التي تطرأ على الإدخال مع حالة المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>)
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(
+    <span class="hljs-string">&#x27;a new note...&#x27;</span>
+  ) 
+
+  <span class="hljs-comment">// ...</span>
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleNoteChange</span> = (<span class="hljs-params">event</span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)
+    <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)
+  }
+<span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notes.map(note =&gt; 
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{addNote}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+          <span class="hljs-attr">value</span>=<span class="hljs-string">{newNote}</span>
+          <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleNoteChange}</span> // <span class="hljs-attr">highlight-line</span>
+        /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>   
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>سجّلنا الآن معالج أحداث على الخاصية <i>onChange</i> لعنصر <i>input</i> في النموذج:</p>
+<pre><code class="language-js">&lt;input
+  value={newNote}
+  onChange={handleNoteChange}
+/&gt;
+</code></pre>
+<p>يُستدعى معالج الأحداث في كل مرة <i>يحدث فيها تغيير في عنصر الإدخال</i>. وتستقبل دالة معالج الأحداث كائن الحدث كوسيط <em>event</em> لها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">handleNoteChange</span> = (<span class="hljs-params">event</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)
+  <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)
+}
+</code></pre>
+<p>تشير خاصية <em>target</em> في كائن الحدث الآن إلى عنصر <i>input</i> المتحكَّم به، ويعبّر <em>event.target.value</em> عن قيمة الإدخال في ذلك العنصر.</p>
+<p>لاحظ أننا لم نحتج إلى استدعاء الدالة <em>event.preventDefault()</em> كما فعلنا في معالج الأحداث <i>onSubmit</i>. ذلك لأن أي إجراء افتراضي لا يحدث عند تغيير الإدخال، بخلاف إرسال النموذج.</p>
+<p>يمكنك المتابعة في وحدة التحكم لترى كيف يُستدعى معالج الأحداث:</p>
+<p><img src="/images/content/2/8e.webp" alt="استدعاءات متعددة في وحدة التحكم مع كتابة نص"></p>
+<p>هل تذكّرت تثبيت <a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React devtools</a>، أليس كذلك؟ جيد. يمكنك مشاهدة كيفية تغيّر الحالة مباشرةً من تبويب React Devtools:</p>
+<p><img src="/images/content/2/9ea.webp" alt="تغييرات الحالة في React devtools تُظهر الكتابة أيضاً"></p>
+<p>الآن تعكس حالة <em>newNote</em> في المكوّن <i>App</i> القيمة الحالية للإدخال، ما يعني أننا نستطيع إكمال الدالة <em>addNote</em> لإنشاء ملاحظات جديدة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = (<span class="hljs-params">event</span>) =&gt; {
+  event.<span class="hljs-title function_">preventDefault</span>()
+  <span class="hljs-keyword">const</span> noteObject = {
+    <span class="hljs-attr">content</span>: newNote,
+    <span class="hljs-attr">important</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() &lt; <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">id</span>: <span class="hljs-title class_">String</span>(notes.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>),
+  }
+
+  <span class="hljs-title function_">setNotes</span>(notes.<span class="hljs-title function_">concat</span>(noteObject))
+  <span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+}
+</code></pre>
+<p>أولاً، ننشئ كائناً جديداً للملاحظة يسمى <em>noteObject</em> يستقبل محتواه من الحالة <em>newNote</em> في المكوّن. ويُولَّد المعرّف الفريد <i>id</i> بناءً على العدد الإجمالي للملاحظات. هذه الطريقة تصلح لتطبيقنا لأن الملاحظات لا تُحذف أبداً. وبمساعدة الدالة <em>Math.random()</em>، يكون لملاحظتنا احتمال 50% أن تُعلَّم كمهمة.</p>
+<p>تُضاف الملاحظة الجديدة إلى قائمة الملاحظات باستخدام دالة المصفوفة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat">concat</a>، التي قدّمناها في <a href="/part1/java_script#arrays">الجزء 1</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">setNotes</span>(notes.<span class="hljs-title function_">concat</span>(noteObject))
+</code></pre>
+<p>لا تعدّل الدالة مصفوفة <em>notes</em> الأصلية، بل تنشئ <i>نسخة جديدة من المصفوفة مع إضافة العنصر الجديد إلى نهايتها</i>. هذا مهم لأننا يجب أن <a href="https://react.dev/learn/updating-objects-in-state#why-is-mutating-state-not-recommended-in-react">لا نعدّل الحالة مباشرة أبداً</a> في React!</p>
+<p>يعيد معالج الأحداث أيضاً ضبط قيمة عنصر الإدخال المتحكَّم به باستدعاء الدالة <em>setNewNote</em> الخاصة بالحالة <em>newNote</em>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+</code></pre>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في الفرع <i>part2-2</i> من <a href="https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part2-2">مستودع GitHub هذا</a>.</p>
+<h3 id="تصفية-العناصر-المعروضة">تصفية العناصر المعروضة</h3>
+<p>لنضف بعض الوظائف الجديدة إلى تطبيقنا تتيح لنا عرض الملاحظات المهمة فقط.</p>
+<p>لنضف قطعة حالة إلى المكوّن <i>App</i> تتبّع الملاحظات التي ينبغي عرضها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>) 
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [showAll, setShowAll] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>) <span class="hljs-comment">// highlight-line</span>
+  
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لنغيّر المكوّن بحيث يخزّن قائمة بكل الملاحظات المعروضة في المتغير <em>notesToShow</em>. وتعتمد عناصر القائمة على حالة المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>)
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>) 
+  <span class="hljs-keyword">const</span> [showAll, setShowAll] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>)
+
+  <span class="hljs-comment">// ...</span>
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> notesToShow = showAll
+    ? notes
+    : notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-property">important</span> === <span class="hljs-literal">true</span>)
+<span class="hljs-comment">// highlight-end</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notesToShow.map(note =&gt; // highlight-line
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      // ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تعريف المتغير <em>notesToShow</em> مختصر جداً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesToShow = showAll
+  ? notes
+  : notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-property">important</span> === <span class="hljs-literal">true</span>)
+</code></pre>
+<p>يستخدم التعريف <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator">المعامل الشرطي</a> الموجود أيضاً في كثير من لغات البرمجة الأخرى.</p>
+<p>يعمل المعامل كما يلي. إذا كان لدينا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> result = condition ? val1 : val2
+</code></pre>
+<p>فستُضبط قيمة المتغير <em>result</em> على قيمة <em>val1</em> إذا كانت <em>condition</em> صحيحة. وإذا كانت <em>condition</em> خاطئة، فستُضبط قيمة المتغير <em>result</em> على قيمة <em>val2</em>.</p>
+<p>إذا كانت قيمة <em>showAll</em> خاطئة، فسيُسند إلى المتغير <em>notesToShow</em> نص بقائمة تحتوي فقط على الملاحظات التي تكون خاصية <em>important</em> فيها مضبوطة على true. وتُنجز التصفية بمساعدة دالة المصفوفة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">filter</a>:</p>
+<pre><code class="language-js">notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-property">important</span> === <span class="hljs-literal">true</span>)
+</code></pre>
+<p>معامل المقارنة زائد عن الحاجة، لأن قيمة <em>note.important</em> هي إما <i>true</i> أو <i>false</i>، ما يعني أنه يمكننا ببساطة كتابة:</p>
+<pre><code class="language-js">notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-property">important</span>)
+</code></pre>
+<p>أظهرنا معامل المقارنة أولاً للتأكيد على تفصيل مهم: في JavaScript لا يعمل <em>val1 == val2</em> دائماً كما هو متوقع. لذلك من الأكثر أماناً عند إجراء المقارنات استخدام <em>val1 === val2</em> حصراً. يمكنك القراءة أكثر عن الموضوع <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">هنا</a>.</p>
+<p>يمكنك تجربة وظيفة التصفية بتغيير القيمة الأولية للحالة <em>showAll</em>.</p>
+<p>بعد ذلك، لنضف وظيفة تتيح للمستخدمين تبديل الحالة <em>showAll</em> للتطبيق من واجهة المستخدم.</p>
+<p>التغييرات ذات الصلة معروضة أدناه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span> 
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>(props.<span class="hljs-property">notes</span>) 
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  <span class="hljs-keyword">const</span> [showAll, setShowAll] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>)
+
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Notes<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+// highlight-start      
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setShowAll(!showAll)}&gt;
+          show {showAll ? &#x27;important&#x27; : &#x27;all&#x27;}
+        <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+// highlight-end            
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        {notesToShow.map(note =&gt;
+          <span class="hljs-tag">&lt;<span class="hljs-name">Note</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{note.id}</span> <span class="hljs-attr">note</span>=<span class="hljs-string">{note}</span> /&gt;</span>
+        )}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+      // ...    
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تتحكم الملاحظات المعروضة (الكل مقابل المهمة) بزر. ومعالج الأحداث الخاص بالزر بسيط لدرجة أنه عُرّف مباشرة في خاصية عنصر الزر. يبدّل معالج الأحداث قيمة <em>showAll</em> من true إلى false والعكس:</p>
+<pre><code class="language-js">() =&gt; <span class="hljs-title function_">setShowAll</span>(!showAll)
+</code></pre>
+<p>يعتمد نص الزر على قيمة الحالة <em>showAll</em>:</p>
+<pre><code class="language-js">show {showAll ? <span class="hljs-string">&#x27;important&#x27;</span> : <span class="hljs-string">&#x27;all&#x27;</span>}
+</code></pre>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في الفرع <i>part2-3</i> من <a href="https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part2-3">مستودع GitHub هذا</a>.</p>
+</div>
+<div class="tasks">
+<h3 id="تمارين-26-210">تمارين 2.6.-2.10.</h3>
+<p>في التمرين الأول، سنبدأ العمل على تطبيق سيُطوَّر أكثر في التمارين اللاحقة. في مجموعات التمارين المترابطة، يكفي إعادة النسخة النهائية من تطبيقك. ويمكنك أيضاً عمل commit منفصل بعد إنهاء كل جزء من مجموعة التمارين، لكن ذلك غير مطلوب.</p>
+<h4 id="26-دفتر-الهاتف-الخطوة-1">2.6: دفتر الهاتف الخطوة 1</h4>
+<p>لننشئ دفتر هاتف بسيطاً. <i><strong>في هذا الجزء، سنضيف أسماءً فقط إلى دفتر الهاتف.</strong></i></p>
+<p>لنبدأ بتنفيذ إضافة شخص إلى دفتر الهاتف.</p>
+<p>يمكنك استخدام الشيفرة أدناه كنقطة انطلاق للمكوّن <i>App</i> في تطبيقك:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [persons, setPersons] = <span class="hljs-title function_">useState</span>([
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span> }
+  ]) 
+  <span class="hljs-keyword">const</span> [newName, setNewName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Phonebook<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+          name: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>add<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Numbers<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+      ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>الحالة <em>newName</em> مخصصة للتحكم بعنصر الإدخال في النموذج.</p>
+<p>أحياناً يكون من المفيد عرض الحالة والمتغيرات الأخرى كنص لأغراض تصحيح الأخطاء. يمكنك مؤقتاً إضافة العنصر التالي إلى المكوّن المعروض:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>debug: {newName}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>من المهم أيضاً الاستفادة جيداً مما تعلمناه في فصل <a href="/part1/a_more_complex_state_debugging_react_apps">تصحيح أخطاء تطبيقات React</a> من الجزء الأول. إن إضافة <a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React developer tools</a> <i>مفيدة للغاية</i> لتتبع التغييرات التي تطرأ على حالة التطبيق.</p>
+<p>بعد إنهاء هذا التمرين، ينبغي أن يبدو تطبيقك شيئاً مثل هذا:</p>
+<p><img src="/images/content/2/10e.webp" alt="لقطة شاشة للتمرين 2.6 مكتملاً"></p>
+<p>لاحظ استخدام إضافة React developer tools في الصورة أعلاه!</p>
+<p><strong>ملاحظة:</strong></p>
+<ul>
+<li>يمكنك استخدام اسم الشخص كقيمة لخاصية <i>key</i></li>
+<li>تذكّر منع الإجراء الافتراضي لإرسال نماذج HTML!</li>
+</ul>
+<h4 id="27-دفتر-الهاتف-الخطوة-2">2.7: دفتر الهاتف الخطوة 2</h4>
+<p>امنع المستخدم من إضافة أسماء موجودة مسبقاً في دفتر الهاتف. تمتلك مصفوفات JavaScript دوال <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">methods</a> عديدة مناسبة لإنجاز هذه المهمة. ضع في اعتبارك <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">كيفية عمل مساواة الكائنات</a> في JavaScript.</p>
+<p>أصدر تحذيراً بالأمر <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/alert">alert</a> عند محاولة كهذه:</p>
+<p><img src="/images/content/2/11e.webp" alt="تنبيه في المتصفح: المستخدم موجود مسبقاً في دفتر الهاتف"></p>
+<p><strong>تلميح:</strong> عندما تشكّل نصوصاً تحتوي قيماً من متغيرات، يُوصى باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">نص قالب</a> (template string):</p>
+<pre><code class="language-js"><span class="hljs-string">\`<span class="hljs-subst">\${newName}</span> is already added to phonebook\`</span>
+</code></pre>
+<p>إذا كان المتغير <em>newName</em> يحمل القيمة <i>Arto Hellas</i>، فسيعيد تعبير نص القالب النص</p>
+<pre><code class="language-js"><span class="hljs-string">\`Arto Hellas is already added to phonebook\`</span>
+</code></pre>
+<p>ويمكن فعل الشيء نفسه على طريقة Java أكثر باستخدام معامل الجمع:</p>
+<pre><code class="language-js">newName + <span class="hljs-string">&#x27; is already added to phonebook&#x27;</span>
+</code></pre>
+<p>استخدام نصوص القوالب هو الخيار الأكثر أصالةً وعلامة على مبرمج JavaScript حقيقي.</p>
+<h4 id="28-دفتر-الهاتف-الخطوة-3">2.8: دفتر الهاتف الخطوة 3</h4>
+<p>وسّع تطبيقك بالسماح للمستخدمين بإضافة أرقام هواتف إلى دفتر الهاتف. ستحتاج إلى إضافة عنصر <i>input</i> ثانٍ إلى النموذج (مع معالج أحداث خاص به):</p>
+<pre><code class="language-js">&lt;form&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>name: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>number: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>add<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+&lt;/form&gt;
+</code></pre>
+<p>عند هذه النقطة، قد يبدو التطبيق شيئاً مثل هذا. تعرض الصورة أيضاً حالة التطبيق بمساعدة <a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React developer tools</a>:</p>
+<p><img src="/images/content/2/12e.webp" alt="لقطة شاشة نموذجية للتمرين 2.8"></p>
+<h4 id="29-دفتر-الهاتف-الخطوة-4">2.9*: دفتر الهاتف الخطوة 4</h4>
+<p>نفّذ حقل بحث يمكن استخدامه لتصفية قائمة الأشخاص بالاسم:</p>
+<p><img src="/images/content/2/13e.webp" alt="حقل بحث التمرين 2.9"></p>
+<p>يمكنك تنفيذ حقل البحث كعنصر <i>input</i> يوضع خارج نموذج HTML. منطق التصفية الظاهر في الصورة <i>غير حساس لحالة الأحرف</i>، أي أن مصطلح البحث <i>arto</i> يعيد أيضاً نتائج تحتوي على Arto بحرف A كبير.</p>
+<p><strong>ملاحظة:</strong> عند العمل على وظيفة جديدة، غالباً ما يكون من المفيد «تثبيت» بعض البيانات الوهمية مباشرة في تطبيقك، مثل</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [persons, setPersons] = <span class="hljs-title function_">useState</span>([
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>, <span class="hljs-attr">number</span>: <span class="hljs-string">&#x27;040-123456&#x27;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> },
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Ada Lovelace&#x27;</span>, <span class="hljs-attr">number</span>: <span class="hljs-string">&#x27;39-44-5323523&#x27;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">2</span> },
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Dan Abramov&#x27;</span>, <span class="hljs-attr">number</span>: <span class="hljs-string">&#x27;12-43-234345&#x27;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> },
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Mary Poppendieck&#x27;</span>, <span class="hljs-attr">number</span>: <span class="hljs-string">&#x27;39-23-6423122&#x27;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">4</span> }
+  ])
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>يوفر عليك هذا عناء إدخال البيانات يدوياً في تطبيقك لتجربة وظيفتك الجديدة.</p>
+<h4 id="210-دفتر-الهاتف-الخطوة-5">2.10: دفتر الهاتف الخطوة 5</h4>
+<p>إذا نفّذت تطبيقك في مكوّن واحد، فأعد هيكلته باستخراج أجزاء مناسبة إلى مكوّنات جديدة. أبقِ حالة التطبيق وكل معالجات الأحداث في المكوّن الجذري <i>App</i>.</p>
+<p>يكفي استخراج <i><strong>ثلاثة</strong></i> مكوّنات من التطبيق. ومن المرشحين الجيدين كمكوّنات منفصلة، مثلاً، مرشّح البحث، ونموذج إضافة أشخاص جدد إلى دفتر الهاتف، ومكوّن يعرض كل الأشخاص من دفتر الهاتف، ومكوّن يعرض تفاصيل شخص واحد.</p>
+<p>قد يبدو المكوّن الجذري للتطبيق مشابهاً لهذا بعد إعادة الهيكلة. المكوّن الجذري المعاد هيكلته أدناه يعرض العناوين فقط ويترك للمكوّنات المستخرجة الاهتمام بالباقي.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Phonebook<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">Filter</span> <span class="hljs-attr">...</span> /&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Add a new<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">PersonForm</span> 
+        <span class="hljs-attr">...</span>
+      /&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Numbers<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">Persons</span> <span class="hljs-attr">...</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p><strong>ملاحظة</strong>: قد تواجه مشكلات في هذا التمرين إذا عرّفت مكوّناتك «في المكان الخاطئ». والآن وقت مناسب لمراجعة فصل <a href="/part1/a_more_complex_state_debugging_react_apps#do-not-define-components-within-components">لا تعرّف مكوّناً داخل مكوّن آخر</a> من الجزء السابق.</p>
+</div>
+`,o={part:2,letter:"b",file:s,title:a,slug:n,mainImage:p,headings:l,html:t};export{o as default,s as file,l as headings,t as html,c as letter,p as mainImage,e as part,n as slug,a as title};

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على Docker وبناء بيئات التشغيل وأساسيات تنسيق الحاويات."/><!----><title>مقدمة إلى الحاويات - الجزء 12 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#عن-هذا-الجزء">عن هذا الجزء</a></li><li class="toc__depth-3"><a href="#أدوات-المهنة">أدوات المهنة</a></li><li class="toc__depth-3"><a href="#تثبيت-كل-ما-يتطلبه-هذا-الجزء">تثبيت كل ما يتطلبه هذا الجزء</a></li><li class="toc__depth-3"><a href="#الحاويات-والصور">الحاويات والصور</a></li><li class="toc__depth-3"><a href="#صورة-ubuntu">صورة Ubuntu</a></li><li class="toc__depth-3"><a href="#أوامر-docker-أخرى">أوامر Docker أخرى</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#F9B9D3"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part12">الجزء 12: الحاويات</a></p> <h1>مقدمة إلى الحاويات</h1></div> <div class="course-content"><!----><p>تمتدّ تطوير البرمجيات على دورة الحياة بأكملها — من تصوّر الحل وتصميمه، إلى تنفيذه وإطلاقه للمستخدمين وصيانته مع مرور الوقت. سيقدّم هذا الجزء الحاويات، وهي أداة حديثة تُستخدم في المراحل الأخيرة من دورة حياة البرمجيات.</p>
+<p>تُغلّف الحاويات تطبيقك في حزمة واحدة. وستضم هذه الحزمة التطبيق وجميع اعتمادياته. ونتيجة لذلك، يمكن تشغيل كل حاوية بمعزل عن الحاويات الأخرى.</p>
+<p>تعزل الحاويات التطبيقات عن النظام المضيف، وتحدّ افتراضياً من وصولها إلى الملفات وموارد النظام. ويمكن للمطوّرين منح الوصول صراحةً (على سبيل المثال، تركيب أدلة محددة أو كشف أجهزة)، وتحديد حدود للموارد مثل المعالج والذاكرة والشبكة والتخزين. ويحسّن هذا العزل المتحكَّم فيه الأمان وقابلية إعادة الإنتاج وقابلية النقل بين البيئات.</p>
+<p>وبشكل أكثر تحديداً، الحاويات شكل من أشكال المحاكاة الافتراضية على مستوى نظام التشغيل. وأقرب مقارنة لها هي الآلة الافتراضية (VM): تتيح لك الآلات الافتراضية تشغيل أنظمة تشغيل متعددة على مضيف فيزيائي واحد، ولكل منها حزمة نظام تشغيل كاملة خاصة به. في المقابل، تتشارك الحاويات نظام تشغيل المضيف وتشغّل تطبيقك في بيئة معزولة في مساحة المستخدم. ولأن الحاويات لا تُقلع نظام تشغيل منفصلاً، فإن عبئها الإضافي أقل بكثير من الآلات الافتراضية، وتُستخدم عادةً لتشغيل عملية واحدة أو خدمة واحدة بكفاءة.</p>
+<p>ولأن الحاويات خفيفة نسبياً، على الأقل مقارنة بالآلات الافتراضية، يمكن توسيعها بسرعة. ولأنها تعزل البرمجيات التي تعمل بداخلها، فإنها تتيح تشغيل هذه البرمجيات بشكل متطابق في أي مكان تقريباً. ولهذا فهي الخيار المفضّل في أي بيئة سحابية أو تطبيق يتجاوز عدد مستخدميه حفنة قليلة.</p>
+<p>تدعم الخدمات السحابية مثل AWS وGoogle Cloud وMicrosoft Azure الحاويات بأشكال متعددة ومختلفة. ومنها AWS Fargate وGoogle Cloud Run، وكلاهما يشغّل الحاويات بطريقة serverless — حيث لا تحتاج حاوية التطبيق حتى إلى أن تكون قيد التشغيل إن لم تُستخدم. يمكنك أيضاً تثبيت وقت تشغيل الحاويات (container runtime) على معظم الأجهزة وتشغيل الحاويات عليها بنفسك — بما في ذلك جهازك الخاص.</p>
+<p>تستخدم الحاويات على نطاق واسع في البيئات السحابية وفي التطوير المحلي. ما فوائد استخدام الحاويات؟ إليك سيناريوهان شائعان:</p>
+<p><em>السيناريو الأول: أنت تطوّر تطبيقاً جديداً يحتاج إلى العمل على الجهاز نفسه الذي يعمل عليه تطبيق قديم. وكلاهما يتطلب تثبيت إصدارات مختلفة من Node.</em></p>
+<p>يمكنك على الأرجح استخدام nvm أو الآلات الافتراضية أو سحر أسود لتشغيلهما في الوقت نفسه. ومع ذلك، فإن الحاويات حل ممتاز إذ يمكنك تشغيل كلا التطبيقين في حاويتيهما الخاصتين. فهما معزولان عن بعضهما ولا يتعارضان.</p>
+<p><em>السيناريو الثاني: يعمل تطبيقك على جهازك. وتحتاج إلى نقل التطبيق إلى خادم.</em></p>
+<p>ليس نادراً أن لا يعمل التطبيق على الخادم رغم أنه يعمل بشكل جيد على جهازك. وقد يعود السبب إلى اعتمادية مفقودة أو اختلافات أخرى في البيئتين. هنا تكون الحاويات حلاً ممتازاً لأنك تستطيع تشغيل التطبيق في بيئة تنفيذ واحدة على جهازك وعلى الخادم معاً. وهو ليس حلاً مثالياً: فقد تشكّل اختلافات العتاد مشكلة، لكن يمكنك الحدّ من الفروق بين البيئات.</p>
+<p>قد تسمع أحياناً عن مشكلة <em>«تعمل في حاويتي»</em>. تصف هذه العبارة حالة يعمل فيها التطبيق بشكل جيد في حاوية تعمل على جهازك لكنه يتعطل عند تشغيل الحاوية على خادم. والعبارة تلاعب بمشكلة <em>«تعمل على جهازي»</em> السيئة السمعة، التي كثيراً ما يُوعَد بأن الحاويات ستحلها. والأرجح أيضاً أن الحالة ناتجة عن خطأ في الاستخدام.</p>
+<h3 id="عن-هذا-الجزء">عن هذا الجزء</h3>
+<p>في هذا الجزء، لن ينصبّ تركيزنا على شيفرة JavaScript. بل سنُعنى بدلاً من ذلك بتهيئة البيئة التي تُنفَّذ فيها البرمجيات. ونتيجة لذلك، قد لا تتضمن التمارين أي برمجة، فالتطبيقات متاحة لك عبر GitHub وستشمل مهامك تهيئتها. وتُسلَّم التمارين في <em>مستودع GitHub واحد</em> يضم كل الشيفرة المصدرية والتهيئات التي تجريها خلال هذا الجزء.</p>
+<p>ستحتاج إلى معرفة أساسية بـ Node وExpress وReact. ولا يُشترط إكمال قبل هذا الجزء سوى الأجزاء الأساسية من 1 إلى 5.</p>
+<blockquote>
+<p>تحذير</p>
+<p>بما أننا نخرج هنا مباشرةً من منطقة راحتنا كمطوّري JavaScript، فقد يتطلب منك هذا الجزء القيام بجولة جانبية للتعرّف على shell / سطر الأوامر / موجه الأوامر / الطرفية قبل البدء.</p>
+<p>إذا لم تستخدم يوماً سوى واجهة مستخدم رسومية ولم تلمس مثلاً Linux أو الطرفية على Mac، أو إذا واجهت صعوبة في التمارين الأولى، فنوصي بإكمال الجزء الأول من «Computing tools for CS studies» أولاً: <a href="https://tkt-lapio.github.io/en/" target="_blank" rel="noreferrer noopener">https://tkt-lapio.github.io/en/</a>. تخطَّ قسم «SSH connection» والتمرين 11. وبخلاف ذلك، فهو يتضمن كل ما ستحتاجه للبدء هنا!</p>
+</blockquote>
+<div class="tasks">
+<p><strong>1. استخدام حاسوب (دون واجهة مستخدم رسومية)</strong></p>
+</div>
+<h3 id="أدوات-المهنة">أدوات المهنة</h3>
+<p>تختلف الأدوات الأساسية التي ستحتاجها باختلاف أنظمة التشغيل:</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10" target="_blank" rel="noreferrer noopener">طرفية WSL 2</a> على Windows</li>
+<li>الطرفية على Mac</li>
+<li>سطر الأوامر على Linux</li>
+</ul>
+<h3 id="تثبيت-كل-ما-يتطلبه-هذا-الجزء">تثبيت كل ما يتطلبه هذا الجزء</h3>
+<p>سنبدأ بتثبيت البرمجيات المطلوبة. وستكون خطوة التثبيت إحدى العقبات المحتملة. ولأننا نتعامل مع محاكاة افتراضية على مستوى نظام التشغيل، فستتطلب الأدوات وصولاً بصلاحيات المستخدم الخارق (superuser) على الحاسوب. وسيكون لديها وصول إلى نواة نظام التشغيل لديك.</p>
+<p>تم بناء المادة حول <a href="https://www.docker.com/" target="_blank" rel="noreferrer noopener">Docker</a>، وهي مجموعة منتجات سنستخدمها لتغليف الحاويات وإدارتها. وللأسف، إذا لم تستطع تثبيت Docker فمن المحتمل ألا تستطيع إكمال هذا الجزء.</p>
+<p>ولأن تعليمات التثبيت تعتمد على نظام التشغيل لديك، سيكون عليك العثور على تعليمات التثبيت الصحيحة من الرابط أدناه. لاحظ أنها قد تتضمن خيارات مختلفة متعددة لنظام تشغيلك.</p>
+<ul>
+<li><a href="https://docs.docker.com/get-docker/" target="_blank" rel="noreferrer noopener">احصل على Docker</a></li>
+</ul>
+<p>والآن بعد أن انتهى هذا الصداع كما نأمل، لنتأكد من تطابق إصداراتنا. قد تكون أرقام إصدارك أعلى قليلاً من الأرقام هنا:</p>
+<pre><code>$ docker -v
+Docker version 28.0.1, build 068a01e
+</code></pre>
+<h3 id="الحاويات-والصور">الحاويات والصور</h3>
+<p>هناك مفهومان أساسيان في هذا الجزء: <em>الحاوية</em> و <em>الصورة</em>. ومن السهل الخلط بينهما.</p>
+<p><em>الحاوية</em> هي نسخة قيد التشغيل من <em>الصورة</em>.</p>
+<p>العبارتان التاليتان صحيحتان:</p>
+<ul>
+<li>تتضمن الصور كل الشيفرة والاعتماديات والتعليمات الخاصة بكيفية تشغيل التطبيق</li>
+<li>تغلّف الحاويات البرمجيات في وحدات موحّدة</li>
+</ul>
+<p>ولا عجب أن يسهل الخلط بينهما.</p>
+<p>وللمساعدة في تجاوز هذا الالتباس، يستخدم الجميع تقريباً كلمة حاوية للدلالة على كليهما. لكنك لا تستطيع فعلياً بناء حاوية أو تنزيلها أبداً لأن الحاويات لا توجد إلا أثناء التشغيل. أما الصور فهي ملفات <strong>غير قابلة للتغيير</strong>. ونتيجة لهذا الثبات، لا يمكنك تعديل صورة بعد إنشائها. ومع ذلك، يمكنك استخدام صور موجودة لإنشاء <em>صورة جديدة</em> بإضافة طبقات جديدة فوق الطبقات الموجودة.</p>
+<p>استعارة من عالم الطبخ:</p>
+<ul>
+<li>الصورة وجبة مسبقة الطهي ومجمّدة.</li>
+<li>الحاوية هي الوجبة اللذيذة.</li>
+</ul>
+<p><a href="https://www.docker.com/" target="_blank" rel="noreferrer noopener">Docker</a> هي تقنية تغليف الحاويات الأكثر شيوعاً، وقد كانت السبّاقة إلى المعايير التي تستخدمها معظم تقنيات تغليف الحاويات اليوم. وعملياً، Docker مجموعة منتجات تساعدنا على إدارة الصور والحاويات. وستتيح لنا هذه المجموعة الاستفادة من كل مزايا الحاويات. فمثلاً، يأخذ <em>محرك Docker</em> صورةً — وهي لقطة غير قابلة للتغيير للقراءة فقط من نظام ملفات (مجموعة ملفات وبيانات وصفية) — ويشغّلها كحاوية.</p>
+<p>ولإدارة حاويات Docker، هناك أيضاً أداة تُسمى <a href="https://docs.docker.com/compose/" target="_blank" rel="noreferrer noopener">Docker Compose</a> تتيح لك <strong>تنسيق</strong> (التحكم في) حاويات متعددة في الوقت نفسه. وسنستخدم Docker Compose في هذا الجزء لتهيئة بيئة تطوير محلية معقدة. وفي النسخة النهائية من بيئة التطوير التي سنهيئها، لن يعود تثبيت Node على جهازنا مطلوباً حتى.</p>
+<p>هناك مفاهيم عدة علينا المرور عليها. لكننا سنتجاوزها الآن ونتعلم Docker أولاً!</p>
+<p>لنبدأ بالأمر <em>docker container run</em> الذي يُستخدم لتشغيل الصور داخل حاوية. وبنية الأمر هي التالية: <em>container run IMAGE-NAME</em> حيث نخبر Docker بإنشاء حاوية من صورة. ومن الميزات الرائعة خصوصاً في هذا الأمر أنه يستطيع تشغيل حاوية حتى لو لم تكن الصورة المطلوب تشغيلها منزَّلة بعد على جهازنا.</p>
+<p>لنشغّل الأمر</p>
+<pre><code>$ docker container run hello-world
+</code></pre>
+<p>ستكون هناك مخرجات كثيرة، لكن لنقسّمها إلى عدة أقسام يمكننا فكّها معاً. لقد رقّمتُ الأسطر بنفسي ليسهل متابعة الشرح. ولن تحتوي مخرجاتك على هذه الأرقام.</p>
+<pre><code>1. Unable to find image 'hello-world:latest' locally
+2. latest: Pulling from library/hello-world
+3. b8dfde127a29: Pull complete
+4. Digest: sha256:5122f6204b6a3596e048758cabba3c46b1c937a46b5be6225b835d091b90e46c
+5. Status: Downloaded newer image for hello-world:latest
+</code></pre>
+<p>ولأن الصورة <em>hello-world</em> لم تكن موجودة على جهازنا، نزّلها الأمر أولاً من سجل مجاني يُسمى <a href="https://hub.docker.com/" target="_blank" rel="noreferrer noopener">Docker Hub</a>. يمكنك الاطلاع على صفحة الصورة في Docker Hub عبر متصفحك هنا: <a href="https://hub.docker.com/_/hello-world" target="_blank" rel="noreferrer noopener">https://hub.docker.com/_/hello-world</a></p>
+<p>يوضح الجزء الأول من الرسالة أنه لم تكن لدينا بعد الصورة &quot;hello-world:latest&quot;. وهذا يكشف بعض التفاصيل عن الصور نفسها؛ فأسماء الصور تتكون من أجزاء متعددة، أشبه ما تكون برابط URL. ويكون اسم الصورة بالصيغة التالية:</p>
+<ul>
+<li><em>registry/organisation/image:tag</em></li>
+</ul>
+<p>وفي هذه الحالة أخذت الحقول الثلاثة الناقصة القيم الافتراضية:</p>
+<ul>
+<li><em>index.docker.io/library/hello-world:latest</em></li>
+</ul>
+<p>ويوضح السطر الثاني اسم المنظمة، &quot;library&quot;، التي ستُجلب منها الصورة. وفي رابط Docker Hub، يُختصر &quot;library&quot; إلى _.</p>
+<p>يعرض السطران الثالث والخامس الحالة فقط. لكن السطر الرابع قد يكون مثيراً للاهتمام: فلكل صورة بصمة (digest) فريدة مبنية على <em>الطبقات</em> التي تُبنى منها الصورة. وعملياً، تُنشئ كل خطوة أو أمر استُخدم في بناء الصورة طبقة فريدة. وتستخدم Docker البصمة للتأكد من أن الصورة هي نفسها. ويحدث ذلك عندما تحاول سحب الصورة نفسها مرة أخرى.</p>
+<p>إذن كانت نتيجة استخدام الأمر سحباً ثم إخراج معلومات عن <strong>الصورة</strong>. وبعد ذلك، أخبرتنا الحالة بأن نسخة جديدة من <em>hello-world:latest</em> قد نُزّلت فعلاً. يمكنك تجربة سحب الصورة بالأمر <em>docker image pull hello-world</em> ومشاهدة ما يحدث.</p>
+<p>كانت المخرجات التالية من الحاوية نفسها. وهي تشرح أيضاً ما حدث عندما شغّلنا <em>docker container run hello-world</em>.</p>
+<pre><code>Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker container run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+</code></pre>
+<p>تحتوي المخرجات على بعض الأمور الجديدة التي علينا تعلمها. <em>Docker daemon</em> خدمة تعمل في الخلفية وتتأكد من أن الحاويات تعمل، ونستخدم <em>عميل Docker (Docker client)</em> للتفاعل مع البرنامج الخفي (daemon). لقد تفاعلنا الآن مع الصورة الأولى وأنشأنا حاوية من الصورة. وأثناء تنفيذ تلك الحاوية، تلقينا المخرجات.</p>
+<div class="tasks">
+<p><strong>2. تشغيل حاويتك الثانية</strong></p>
+</div>
+<h3 id="صورة-ubuntu">صورة Ubuntu</h3>
+<p>يحتوي الأمر الذي استخدمته للتو لتشغيل حاوية Ubuntu، <code>docker container run -it ubuntu bash</code>، على بعض الإضافات مقارنةً بأمر hello-world السابق. لنطّلع على <code>--help</code> لفهم أفضل. وسأقتطع بعض المخرجات لنركّز على الأجزاء ذات الصلة.</p>
+<pre><code>$ docker container run --help
+
+Usage:  docker container run [OPTIONS] IMAGE [COMMAND] [ARG...]
+Run a command in a new container
+
+Options:
+  ...
+  -i, --interactive                    Keep STDIN open even if not attached
+  -t, --tty                            Allocate a pseudo-TTY
+  ...
+</code></pre>
+<p>الخياران، أو العَلَمان، <code>-it</code> يضمنان أننا نستطيع التفاعل مع الحاوية. وبعد الخيارات، حدّدنا أن الصورة المطلوب تشغيلها هي ubuntu. ثم لدينا الأمر <em>bash</em> الذي سيُنفَّذ داخل الحاوية عند تشغيلها.</p>
+<p>يمكنك تجربة أوامر أخرى قد تستطيع صورة Ubuntu تنفيذها. وكمثال، جرّب <code>docker container run --rm ubuntu ls -la</code>. سيسرد الأمر ls -la جميع الملفات في الدليل الافتراضي (الذي يصادف أنه الجذر /)، وسيزيل العَلَم <code><em>--</em>rm</code> الحاوية بعد التنفيذ. وبشكل طبيعي، لا تُحذف الحاويات تلقائياً.</p>
+<p>لنكمل مع حاوية Ubuntu الأولى التي تحتوي على ملف <strong>index.js</strong>. لقد توقفت الحاوية عن العمل منذ خروجنا منها. يمكننا سرد جميع الحاويات بالأمر <code>container ls -a,</code> حيث سيسرد <em>-a</em> (أو --all) الحاويات التي خرجت بالفعل.</p>
+<pre><code>$ docker container ls -a
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                            NAMES
+b8548b9faec3   ubuntu    &quot;bash&quot;    3 minutes ago    Exited (0) 6 seconds ago          hopeful_clarke
+</code></pre>
+<blockquote>
+<p><em>ملاحظة المحرر: للأمر docker container ls صيغة أقصر هي docker ps</em>، وأنا أفضل الأقصر.</p>
+</blockquote>
+<p>لدينا خياران عند مخاطبة حاوية. فالمعرّف في العمود الأول يمكن استخدامه للتفاعل مع الحاوية في معظم الأحيان. إضافةً إلى ذلك، تقبل معظم الأوامر اسم الحاوية كطريقة أكثر ودّاً للتعامل معها. وقد وُلّد اسم الحاوية تلقائياً فكان <strong>&quot;hopeful_clarke&quot;</strong> في حالتي.</p>
+<p>لقد خرجت الحاوية بالفعل، ومع ذلك يمكننا تشغيلها مجدداً بأمر start الذي يقبل معرّف الحاوية أو اسمها كمعامل: <code>start CONTAINER-ID-OR-CONTAINER-NAME</code>.</p>
+<pre><code>$ docker start hopeful_clarke
+hopeful_clarke
+</code></pre>
+<p>سيشغّل أمر start الحاوية نفسها التي كانت لدينا سابقاً. وللأسف، نسينا تشغيلها بالعَلَم <code>--interactive</code> (الذي يمكن كتابته أيضاً <code>-i</code>) لذا لا يمكننا التفاعل معها.</p>
+<p>الحاوية في الواقع قيد التشغيل كما يوضح الأمر <code>container ls -a</code>، لكننا لا نستطيع التواصل معها فحسب:</p>
+<pre><code>$ docker container ls -a
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                            NAMES
+b8548b9faec3   ubuntu    &quot;bash&quot;    7 minutes ago    Up (0) 15 seconds ago            hopeful_clarke
+</code></pre>
+<p>لاحظ أنه يمكننا أيضاً تنفيذ الأمر دون العَلَم <code>-a</code> لرؤية الحاويات التي تعمل فقط:</p>
+<pre><code>$ docker container ls
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS             NAMES
+8f5abc55242a   ubuntu    &quot;bash&quot;    8 minutes ago    Up 1 minutes       hopeful_clarke
+</code></pre>
+<p>لنقتلها بأمر <code>kill CONTAINER-ID-OR-CONTAINER-NAME</code> ونحاول مرة أخرى.</p>
+<pre><code>$ docker kill hopeful_clarke
+hopeful_clarke
+</code></pre>
+<p>يرسل <code>docker kill</code> إشارة SIGKILL إلى العملية، مجبراً إياها على الخروج، وذلك يوقف الحاوية. ويمكننا التحقق من حالتها بالأمر <code>container ls -a</code>:</p>
+<pre><code>$ docker container ls -a
+CONTAINER ID   IMAGE     COMMAND   CREATED             STATUS                     NAMES
+b8548b9faec3   ubuntu     &quot;bash&quot;   26 minutes ago      Exited 2 seconds ago       hopeful_clarke
+</code></pre>
+<p>لنبدأ الحاوية الآن مرة أخرى، لكن هذه المرة في الوضع التفاعلي:</p>
+<pre><code>$ docker start -i hopeful_clarke
+root@b8548b9faec3:/#
+</code></pre>
+<p>لنحرّر الملف <em>index.js</em> ونضف إليه بعض شيفرة JavaScript لتنفيذها. ينقصنا فقط أدوات تحرير الملف. <a href="https://www.nano-editor.org/" target="_blank" rel="noreferrer noopener">Nano</a> سيكون محرر نصوص جيداً في الوقت الحالي. وقد وُجدت تعليمات التثبيت من أول نتيجة في Google. وسنستغني عن استخدام sudo لأننا بالفعل root.</p>
+<pre><code>root@b8548b9faec3:/# apt-get update
+root@b8548b9faec3:/# apt-get -y install nano
+root@b8548b9faec3:/# nano /usr/src/app/index.js
+</code></pre>
+<p>الآن أصبح Nano مثبتاً ويمكننا البدء في تحرير الملفات!</p>
+<div class="tasks">
+<p><strong>3. Ubuntu 101</strong></p>
+</div>
+<div class="tasks">
+<p><strong>4. Ubuntu 102</strong></p>
+</div>
+<h3 id="أوامر-docker-أخرى">أوامر Docker أخرى</h3>
+<p>الآن بعد أن أصبح Node مثبتاً في الحاوية، يمكننا تنفيذ JavaScript داخل الحاوية! لننشئ صورة جديدة من الحاوية. الأمر</p>
+<pre><code>commit CONTAINER-ID-OR-CONTAINER-NAME NEW-IMAGE-NAME
+</code></pre>
+<p>سينشئ صورة جديدة تتضمن التغييرات التي أجريناها. ويمكنك استخدام <code>container diff</code> للتحقق من التغييرات بين الصورة الأصلية والحاوية قبل فعل ذلك.</p>
+<pre><code>$ docker commit hopeful_clarke hello-node-world
+</code></pre>
+<p>يمكنك سرد صورك بالأمر <code>image ls</code>:</p>
+<pre><code>$ docker image ls
+REPOSITORY                                      TAG         IMAGE ID       CREATED         SIZE
+hello-node-world                                latest      eef776183732   9 minutes ago   252MB
+ubuntu                                          latest      1318b700e415   2 weeks ago     72.8MB
+hello-world                                     latest      d1165f221234   5 months ago    13.3kB
+</code></pre>
+<p>يمكنك الآن تشغيل الصورة الجديدة كما يلي:</p>
+<pre><code class="language-bash">docker run -it hello-node-world bash
+root@4d1b322e1aff:/# node /usr/src/app/index.js
+</code></pre>
+<p>هناك طرق متعددة لفعل الشيء نفسه. لنجرّب حلاً أفضل. سنبدأ من صفحة بيضاء باستخدام <code>container rm</code> لإزالة الحاوية القديمة.</p>
+<pre><code>$ docker container ls -a
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                  NAMES
+b8548b9faec3   ubuntu    &quot;bash&quot;    31 minutes ago   Exited (0) 9 seconds ago               hopeful_clarke
+
+$ docker container rm hopeful_clarke
+hopeful_clarke
+</code></pre>
+<p>أنشئ ملفاً باسم <em>index.js</em> في دليلك الحالي واكتب داخله <em>console.log('Hello, World')</em>. لا حاجة إلى الحاويات بعد.</p>
+<p>بعد ذلك، لنتخطَّ تثبيت Node كلياً. فهناك الكثير من صور Docker المفيدة في Docker Hub الجاهزة لاستخدامنا. لنستخدم الصورة <a href="https://hub.docker.com/_/node" target="_blank" rel="noreferrer noopener">https://hub.docker.com/_/node</a> التي تحتوي على Node مثبتاً بالفعل. كل ما علينا فعله هو اختيار إصدار.</p>
+<p>بالمناسبة، يقبل <code>container run</code> العَلَم <code>--name</code> الذي يمكننا استخدامه لإعطاء اسم للحاوية.</p>
+<pre><code>$ docker container run -it --name hello-node node:24 bash
+</code></pre>
+<p>لننشئ دليلاً للشيفرة داخل الحاوية:</p>
+<pre><code>root@77d1023af893:/# mkdir /usr/src/app
+</code></pre>
+<p>وبينما نحن داخل الحاوية في هذه الطرفية، افتح طرفية أخرى واستخدم الأمر <code>container cp</code> لنسخ الملف من جهازك إلى الحاوية:</p>
+<pre><code>$ docker container cp ./index.js hello-node:/usr/src/app/index.js
+</code></pre>
+<p>والآن يمكننا تشغيل <code>node /usr/src/app/index.js</code> داخل الحاوية. يمكننا عمل commit لهذا كصورة جديدة أخرى، لكن هناك حل أفضل من ذلك. سيكون القسم التالي كله عن بناء صورك كالمحترفين.</p>
+<p>ستجد المزيد عن أوامر Docker في التوثيق <a href="https://docs.docker.com/">https://docs.docker.com/</a> ولاحظ أيضاً <em>Docker Cheat Sheet</em> الرائع في https://docker.how/ الذي يحتوي على الكثير من المعلومات في صيغة مضغوطة أنيقة.</p>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part12/getting_started"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">البدء</span></a><!--]--> <!--[0--><a class="next" href="../../part12/building_and_configuring_environments"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">بناء البيئات وتهيئتها</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

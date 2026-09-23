@@ -1,0 +1,416 @@
+const s=12,a="d",e="d.md",n="أساسيات تنسيق الحاويات",o="basics_of_container_orchestration",t="/images/part-12.svg",r=[{depth:3,id:"react-داخل-حاوية",text:"React داخل حاوية"},{depth:3,id:"استخدام-مراحل-متعددة",text:"استخدام مراحل متعددة"},{depth:3,id:"التطوير-في-الحاويات",text:"التطوير في الحاويات"},{depth:3,id:"التواصل-بين-الحاويات-في-شبكة-docker",text:"التواصل بين الحاويات في شبكة Docker"},{depth:3,id:"حول-الوصول-إلى-خادم-تطوير-vite",text:"حول الوصول إلى خادم تطوير Vite"},{depth:3,id:"التواصل-بين-الحاويات-في-بيئة-أكثر-طموحا",text:"التواصل بين الحاويات في بيئة أكثر طموحاً"},{depth:3,id:"أدوات-للإنتاج",text:"أدوات للإنتاج"}],p=`<p>لدينا الآن فهم أساسي لـDocker ويمكننا استخدامه لإعداد قاعدة بيانات لتطبيقنا بسهولة مثلاً. لننقل الآن تركيزنا إلى الواجهة الأمامية.</p>
+<h3 id="react-داخل-حاوية">React داخل حاوية</h3>
+<p>لننشئ تطبيق React ونضعه في حاوية بعد ذلك. نبدأ بالخطوات المعتادة:</p>
+<pre><code>$ npm create vite@latest hello-front -- --template react
+$ cd hello-front
+$ npm install
+</code></pre>
+<p>الخطوة التالية هي تحويل شيفرة JavaScript وCSS إلى ملفات ثابتة جاهزة للإنتاج. يمتلك Vite بالفعل الأمر <em>build</em> كسكربت npm فلنستخدمه:</p>
+<pre><code>$ npm run build
+  ...
+
+  Creating an optimized production build...
+  ...
+  The build folder is ready to be deployed.
+  ...
+</code></pre>
+<p>رائع! الخطوة الأخيرة هي إيجاد طريقة لاستخدام خادم لتقديم الملفات الثابتة. وكما تعلم، يمكننا استخدام <a href="https://expressjs.com/en/starter/static-files.html" target="_blank" rel="noreferrer noopener">express.static</a> مع خادم Express لتقديم الملفات الثابتة. سأترك ذلك كتمرين لك لتنفذه في المنزل. بدلاً من ذلك، سنمضي قدماً ونبدأ بكتابة ملف Dockerfile الخاص بنا:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci
+
+RUN npm run build
+</code></pre>
+<p>يبدو ذلك صحيحاً إلى حد ما. لنبنِه ونرَ إن كنا على المسار الصحيح. هدفنا أن ينجح البناء دون أخطاء. ثم سنستخدم bash للتحقق داخل الحاوية من وجود الملفات.</p>
+<pre><code>$ docker build . -t hello-front
+ =&gt; [4/5] RUN npm ci
+ =&gt; [5/5] RUN npm run
+ ...
+ =&gt; =&gt; naming to docker.io/library/hello-front
+
+$ docker run -it hello-front bash
+
+root@98fa9483ee85:/usr/src/app# ls
+Dockerfile  dist	      index.html    package-lock.json  public  vite.config.js
+README.md   eslint.config.js  node_modules  package.json       src
+
+root@98fa9483ee85:/usr/src/app# ls dist
+  assets	index.html  vite.svg
+</code></pre>
+<p>يُعدّ <a href="https://www.npmjs.com/package/serve" target="_blank" rel="noreferrer noopener">serve</a> خياراً صالحاً لتقديم الملفات الثابتة بما أن لدينا Node بالفعل في الحاوية. لنجرب تثبيت serve وتقديم الملفات الثابتة بينما نحن داخل الحاوية.</p>
+<pre><code>root@98fa9483ee85:/usr/src/app# npm install -g serve
+
+  added 89 packages in 2s
+
+root@98fa9483ee85:/usr/src/app# serve -n dist
+
+   ┌────────────────────────────────────────┐
+   │                                        │
+   │   Serving!                             │
+   │                                        │
+   │   - Local:    http://localhost:3000    │
+   │   - Network:  http://172.17.0.2:3000   │
+   │                                        │
+   └────────────────────────────────────────┘
+</code></pre>
+<p>رائع! لنضغط ctrl+c للخروج ثم نضيف ذلك إلى ملف Dockerfile.</p>
+<p>يتحول تثبيت serve إلى تعليمة RUN في ملف Dockerfile. وبهذه الطريقة تُثبَّت الاعتمادية أثناء عملية البناء. وسيصبح الأمر الخاص بتقديم المجلد <em>dist</em> هو الأمر الذي يبدأ الحاوية:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci
+
+RUN npm run build
+
+// BEGIN HIGHLIGHT
+RUN npm install -g serve
+CMD [&quot;serve&quot;, &quot;-n&quot;, &quot;dist&quot;]
+// END HIGHLIGHT
+</code></pre>
+<p>عندما نبني الصورة الآن باستخدام <code>docker build . -t hello-front</code> ونشغّلها باستخدام <code>docker run -p 5001:3000 hello-front</code>، سيصبح التطبيق متاحاً على <a href="http://localhost:5001/" target="_blank" rel="noreferrer noopener">http://localhost:5001</a>.</p>
+<h3 id="استخدام-مراحل-متعددة">استخدام مراحل متعددة</h3>
+<p>مع أن serve خيار <em>صالح</em>، يمكننا فعل ما هو أفضل. الهدف الجيد هو إنشاء صور Docker بحيث لا تحتوي على أي شيء غير ذي صلة. فمع عدد أدنى من الاعتماديات، تقل احتمالية تعطّل الصور أو إصابتها بثغرات مع مرور الوقت.</p>
+<p>صُمّمت <a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" rel="noreferrer noopener">عمليات البناء متعددة المراحل</a> لتقسيم عملية البناء إلى عدة مراحل منفصلة، حيث يمكن تحديد أجزاء ملفات الصورة التي تنتقل بين المراحل. وهذا يفتح إمكانيات للحد من حجم الصورة لأن جميع النواتج الجانبية للبناء ليست ضرورية للصورة الناتجة. والصور الأصغر أسرع في الرفع والتنزيل وتساعد في تقليل عدد الثغرات التي قد يعاني منها برنامجك.</p>
+<p>مع عمليات البناء متعددة المراحل، يمكن استخدام حل مجرَّب وموثوق مثل <a href="https://en.wikipedia.org/wiki/Nginx" target="_blank" rel="noreferrer noopener">Nginx</a> لتقديم الملفات الثابتة دون كثير من المتاعب. وتخبرنا <a href="https://hub.docker.com/_/nginx" target="_blank" rel="noreferrer noopener">صفحة Nginx على Docker Hub</a> بالمعلومات المطلوبة لفتح المنافذ و«استضافة بعض المحتوى الثابت البسيط».</p>
+<p>لنستخدم ملف Dockerfile السابق ولكن نغيّر تعليمة FROM لتضمين اسم المرحلة:</p>
+<pre><code># تعليمة FROM الأولى أصبحت الآن مرحلة تُسمى build-stage
+FROM node:24 AS build-stage // HIGHLIGHT LINE
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci
+
+RUN npm run build
+
+# هذه مرحلة جديدة، كل ما قبلها اختفى، باستثناء الملفات التي نريد نسخها بـCOPY
+FROM nginx:1.29-alpine // HIGHLIGHT LINE
+
+# انسخ المجلد dist من مرحلة build-stage إلى /usr/share/nginx/html
+# وُجد الموقع الهدف هنا في صفحة Docker hub
+COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html // HIGHLIGHT LINE
+</code></pre>
+<p>لقد أعلنّا أيضاً <em>مرحلة أخرى</em>، حيث تُنسخ فقط الملفات ذات الصلة من المرحلة الأولى (المجلد <em>dist</em> الذي يحتوي على المحتوى الثابت).</p>
+<p>بعد أن نبنيه مرة أخرى، تصبح الصورة جاهزة لتقديم المحتوى الثابت. المنفذ الافتراضي لـNginx هو 80، لذا سيعمل شيء مثل <code>-p 8000:80</code>، ولهذا يجب تغيير وسائط <code>docker run</code> قليلاً.</p>
+<p>تتضمن عمليات البناء متعددة المراحل أيضاً بعض التحسينات الداخلية التي قد تؤثر على عمليات البناء لديك. على سبيل المثال، تتخطى عمليات البناء متعددة المراحل المراحل غير المستخدمة. وإذا أردنا استخدام مرحلة لتحل محل جزء من خط أنابيب البناء، مثل الاختبار أو الإشعارات، فيجب تمرير <strong>بعض</strong> البيانات إلى المراحل التالية. وفي بعض الحالات يكون هذا مبرراً: انسخ الشيفرة من مرحلة الاختبار إلى مرحلة البناء. وهذا يضمن أنك تبني الشيفرة المُختبَرة.</p>
+<div class="tasks">
+<p><strong>13. الواجهة الأمامية لتطبيق المهام</strong></p>
+</div>
+<div class="tasks">
+<p><strong>14. الاختبار أثناء عملية البناء</strong></p>
+</div>
+<h3 id="التطوير-في-الحاويات">التطوير في الحاويات</h3>
+<p>لننقل تطوير تطبيق المهام بالكامل إلى حاوية. وهناك بضعة أسباب قد تدفعك إلى ذلك:</p>
+<ul>
+<li>الحفاظ على تشابه البيئة بين التطوير والإنتاج لتجنب الأخطاء التي تظهر فقط في بيئة الإنتاج</li>
+<li>تجنب الفروقات بين المطورين وبيئاتهم الشخصية التي تؤدي إلى صعوبات في تطوير التطبيق</li>
+<li>مساعدة أعضاء الفريق الجدد على الانضمام بمجرد تثبيت بيئة تشغيل الحاويات - دون طلب أي شيء آخر.</li>
+</ul>
+<p>كل هذه أسباب رائعة. والمقابل هو أننا قد نواجه بعض السلوك غير المعتاد عندما لا نشغّل التطبيقات بالطريقة التي اعتدناها. وسنحتاج إلى فعل أمرين على الأقل لنقل التطبيق إلى حاوية:</p>
+<ul>
+<li>تشغيل التطبيق في وضع التطوير</li>
+<li>الوصول إلى الملفات باستخدام VS Code</li>
+</ul>
+<p>لنبدأ بالواجهة الأمامية. بما أن ملف Dockerfile سيكون مختلفاً بشكل كبير عن ملف Dockerfile الإنتاجي، سننشئ ملفاً جديداً باسم <em>dev.Dockerfile</em>.</p>
+<p><strong>ملاحظة</strong> سنستخدم الاسم <em>dev.Dockerfile</em> لتهيئات التطوير والاسم <em>Dockerfile</em> في غير ذلك.</p>
+<p>تشغيل Vite في وضع التطوير ينبغي أن يكون سهلاً. لنبدأ بما يلي:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+# غيّر npm ci إلى npm install لأننا سنكون في وضع التطوير
+RUN npm install
+
+# الأمر npm run dev هو الأمر الذي يبدأ التطبيق في وضع التطوير
+CMD [&quot;npm&quot;, &quot;run&quot;, &quot;dev&quot;, &quot;--&quot;, &quot;--host&quot;]
+</code></pre>
+<blockquote>
+<p>لاحظ الوسيطين الإضافيين <em>-- --host</em> في تعليمة <em>CMD</em>. فهما مطلوبان لكشف خادم التطوير ليكون مرئياً خارج شبكة Docker. افتراضياً، يُكشف خادم التطوير على localhost فقط، ورغم أننا ما زلنا نصل إلى الواجهة الأمامية باستخدام عنوان localhost، فهي في الواقع مرتبطة بشبكة Docker.</p>
+</blockquote>
+<p>أثناء البناء يمكن استخدام العلامة <code>-f</code> لتحديد الملف الذي سيُستخدم، وإلا فسيعود افتراضياً إلى Dockerfile، لذا سيبني الأمر التالي الصورة:</p>
+<pre><code class="language-bash">docker build -f ./dev.Dockerfile -t hello-front-dev .
+</code></pre>
+<p>سيُقدَّم Vite على المنفذ 5173، لذا يمكنك اختبار عمله بتشغيل حاوية مع نشر ذلك المنفذ.</p>
+<p>المهمة الثانية، الوصول إلى الملفات باستخدام VSCode، لم تُعالَج بعد. وهناك طريقتان على الأقل لفعل ذلك:</p>
+<ul>
+<li><a href="https://code.visualstudio.com/docs/remote/containers" target="_blank" rel="noreferrer noopener">إضافة Visual Studio Code Remote - Containers</a></li>
+<li>وحدات التخزين (volumes)، وهي الشيء نفسه الذي استخدمناه للحفاظ على بيانات قاعدة البيانات</li>
+</ul>
+<p>لنتناول الخيار الأخير لأنه سيعمل مع محررات أخرى أيضاً. لنجرِ تجربة باستخدام العلامة <code>-v</code>. وإذا نجح ذلك، سننقل التهيئة إلى ملف docker-compose.</p>
+<p>لاستخدام <code>-v</code>، سنحتاج إلى إخباره بالمجلد الحالي. وينبغي أن يُخرج الأمر <code>pwd</code> مسار المجلد الحالي لنا. لنجرب ذلك باستخدام <code>echo $(pwd)</code> في سطر الأوامر. يمكننا استخدام ذلك كطرف أيسر لـ<code>-v</code> لربط المجلد الحالي بداخل الحاوية، أو يمكننا استخدام مسار المجلد الكامل.</p>
+<pre><code>$ docker run -p 5173:5173 -v &quot;$(pwd):/usr/src/app/&quot; hello-front-dev
+&amp;gt; todo-vite@0.0.0 dev
+&amp;gt; vite --host
+
+  VITE v5.1.6  ready in 130 ms
+</code></pre>
+<p>الآن يمكننا تحرير الملف <em>src/App.jsx</em>، وينبغي أن تُحمَّل التغييرات فورياً إلى المتصفح!</p>
+<p>إذا كان لديك جهاز MacBook من سلسلة M، فسيفشل الأمر أعلاه. وفي رسالة الخطأ نلاحظ ما يلي:</p>
+<pre><code>Error: Cannot find module @rollup/rollup-linux-arm64-gnu
+</code></pre>
+<p>المشكلة في المكتبة <a href="https://www.npmjs.com/package/rollup" target="_blank" rel="noreferrer noopener">rollup</a> التي لديها إصدار خاص بكل نظام تشغيل وبنية معالج. وبسبب ربط وحدة التخزين، تستخدم الحاوية الآن مجلد <em>node_modules</em> من مجلد الجهاز المضيف حيث يكون <em>@rollup/rollup-darwin-arm64</em> (الإصدار المناسب لـMac M1/M2) مثبتاً، لذا لا يُعثر على الإصدار الصحيح للمكتبة للحاوية <em>@rollup/rollup-linux-arm64-gnu</em>.</p>
+<p>هناك عدة طرق لإصلاح المشكلة. لنستخدم ربما أبسطها. ابدأ الحاوية مع bash كأمر، ثم شغّل <em>npm install</em> داخل الحاوية:</p>
+<pre><code>$ docker run -it -v &quot;$(pwd):/usr/src/app/&quot; hello-front-dev bash
+root@b83e9040b91d:/usr/src/app# npm install
+</code></pre>
+<p>الآن أصبح إصدارا مكتبة rollup مثبتين والحاوية تعمل!</p>
+<p>بعد ذلك، لننقل التهيئة إلى الملف <em>docker-compose.dev.yml</em>. وينبغي أن يكون هذا الملف في جذر المشروع أيضاً:</p>
+<pre><code>services:
+  app:
+    image: hello-front-dev
+    build:
+      context: . # سيأخذ السياق هذا المجلد باعتباره &quot;سياق البناء&quot;
+      dockerfile: dev.Dockerfile # هذا سيخبر ببساطة عن ملف dockerfile الذي يجب قراءته
+    volumes:
+      - ./:/usr/src/app # يمكن أن يكون المسار نسبياً، لذا يكفي ./ للقول &quot;الموقع نفسه الذي فيه docker-compose.yml&quot;
+    ports:
+      - 5173:5173
+    container_name: hello-front-dev # هذا سيسمي الحاوية hello-front-dev
+</code></pre>
+<p>مع هذه التهيئة، يمكن لـ<code>docker compose -f docker-compose.dev.yml up</code> تشغيل التطبيق في وضع التطوير. بل لا تحتاج حتى إلى تثبيت Node لتطويره!</p>
+<p><strong>ملاحظة</strong> سنستخدم الاسم <em>docker-compose.dev.yml</em> لملفات compose الخاصة ببيئة التطوير، والاسم الافتراضي <em>docker-compose.yml</em> في غير ذلك.</p>
+<p>يُعدّ تثبيت اعتماديات جديدة صداعاً في تهيئة تطوير كهذه. ومن الخيارات الأفضل تثبيت الاعتمادية الجديدة <strong>داخل</strong> الحاوية. فبدلاً من تنفيذ <code>npm install axios</code> مثلاً، عليك تنفيذه في الحاوية قيد التشغيل مثل <code>docker exec hello-front-dev npm install axios</code>، أو إضافته إلى package.json وتشغيل <code>docker build</code> مرة أخرى.</p>
+<div class="tasks">
+<p><strong>15. إعداد بيئة تطوير للواجهة الأمامية</strong></p>
+</div>
+<h3 id="التواصل-بين-الحاويات-في-شبكة-docker">التواصل بين الحاويات في شبكة Docker</h3>
+<p>تُنشئ أداة Docker Compose شبكة بين الحاويات وتتضمن DNS لربط حاويتين بسهولة. لنضف خدمة جديدة إلى Docker Compose وسنرى كيف تعمل الشبكة وDNS.</p>
+<p><a href="https://www.busybox.net/" target="_blank" rel="noreferrer noopener">Busybox</a> برنامج تنفيذي صغير يحتوي على أدوات متعددة قد تحتاجها. ويُلقَّب بـ«سكين الجيش السويسري لنظم Linux المدمجة»، ويمكننا بالتأكيد الاستفادة منه.</p>
+<p>يمكن أن يساعدنا BusyBox في تصحيح أخطاء تهيئاتنا، لذا إذا تُهت في تمارين هذا القسم اللاحقة، استخدمه لمعرفة ما يعمل وما لا يعمل. لنستخدمه لاستكشاف ما ذُكر للتو: أن الحاويات توجد داخل شبكة ويمكنها الاتصال ببعضها بسهولة. ويمكن إضافة Busybox إلى المزيج بتغيير <em>docker-compose.dev.yml</em> إلى:</p>
+<pre><code>services:
+  app:
+    image: hello-front-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 5173:5173
+    container_name: hello-front-dev
+
+  debug-helper:    // HIGHLIGHT LINE
+    image: busybox // HIGHLIGHT LINE
+</code></pre>
+<p>لن يكون داخل حاوية Busybox أي عملية قيد التشغيل، لذا لا يمكننا تنفيذ <code>exec</code> فيها. ولهذا سيبدو مخرج <code>docker compose up</code> أيضاً هكذا:</p>
+<pre><code>$ docker compose -f docker-compose.dev.yml up                                                                                    0.0s
+Attaching to front-dev, debug-helper-1
+debug-helper-1 exited with code 0
+front-dev       |
+front-dev       | &gt; todo-vite@0.0.0 dev
+front-dev       | &gt; vite --host
+front-dev       |
+front-dev       |
+front-dev       |   VITE v7.3.1  ready in 153 ms
+</code></pre>
+<p>هذا متوقع لأنه مجرد صندوق أدوات. لنستخدمه لإرسال طلب إلى hello-front-dev ونرى كيف يعمل DNS. وبينما تكون hello-front-dev قيد التشغيل، يمكننا تنفيذ الطلب باستخدام <a href="https://en.wikipedia.org/wiki/Wget" target="_blank" rel="noreferrer noopener">wget</a> لأنها أداة مضمّنة في Busybox لإرسال طلب من debug-helper إلى hello-front-dev.</p>
+<p>مع Docker Compose يمكننا استخدام <code>docker compose run SERVICE COMMAND</code> لتشغيل خدمة بأمر محدد. ويحتاج الأمر wget إلى العلامة <code>-O -</code> لإخراج الاستجابة إلى المخرج القياسي (stdout):</p>
+<pre><code>$ docker compose -f docker-compose.dev.yml run debug-helper wget --header=&quot;Host: localhost&quot; -O - http://app:5173
+
+Connecting to app:5173 (192.168.240.3:5173)
+writing to stdout
+&amp;lt;!doctype html&gt;
+&amp;lt;html lang=&quot;en&quot;&gt;
+  &amp;lt;head&gt;
+    &amp;lt;script type=&quot;module&quot;&gt;
+      ...
+</code></pre>
+<p>الرابط <a href="http://app:5173">http://app:5173</a> هو الجزء المثير للاهتمام هنا. لقد قلنا ببساطة إننا نريد الاتصال بالمنفذ 5173 للخدمة <em>app</em>. و<em>app</em> هو اسم الخدمة المحدد في ملف <em>docker-compose.dev.yml</em>:</p>
+<pre><code>services:
+  app:
+    image: hello-front-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 5173:5173 // HIGHLIGHT LINE
+    container_name: hello-front-dev
+</code></pre>
+<p>المنفذ المستخدم هو المنفذ الذي يكون التطبيق متاحاً منه في تلك الحاوية، وهو محدد أيضاً في <em>docker-compose.dev.yml</em>. ولا يحتاج المنفذ إلى أن يُنشر لكي تتمكن الخدمات الأخرى في الشبكة نفسها من الاتصال به. فـ«المنافذ» (ports) في ملف docker-compose مخصصة للوصول الخارجي فقط.</p>
+<p>لنغيّر تهيئة المنفذ في <em>docker-compose.dev.yml</em> لنؤكد على ذلك:</p>
+<pre><code>services:
+  app:
+    image: hello-front-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3210:5173  // HIGHLIGHT LINE
+    container_name: hello-front-dev
+
+  debug-helper:
+    image: busybox
+</code></pre>
+<p>مع <em>docker compose up</em> يكون التطبيق متاحاً على <a href="http://localhost:3210/" target="_blank" rel="noreferrer noopener">http://localhost:3210</a> من <em>الجهاز المضيف</em>، لكن الأمر</p>
+<pre><code class="language-bash">docker compose -f docker-compose.dev.yml run debug-helper wget --header=<span class="hljs-string">&quot;Host: localhost&quot;</span> -O - http://app:5173
+</code></pre>
+<p>لا يزال يعمل لأن المنفذ لا يزال 5173 داخل شبكة Docker.</p>
+<p>توضح الصورة أدناه ما يحدث. يطلب الأمر <code>docker compose run</code> من debug-helper إرسال الطلب داخل الشبكة، بينما يرسل المتصفح في الجهاز المضيف الطلب من خارج الشبكة.</p>
+<p><img src="/images/mooc/8913aee7153c.webp" alt="صورة توضيحية"></p>
+<p>الآن بعد أن عرفت مدى سهولة العثور على الخدمات الأخرى في <em>docker-compose.yml</em> ولم يتبقَّ لدينا ما نصححه، يمكننا إزالة debug-helper وإعادة المنافذ إلى 5173:5173 في ملف compose لدينا.</p>
+<h3 id="حول-الوصول-إلى-خادم-تطوير-vite">حول الوصول إلى خادم تطوير Vite</h3>
+<p>قد تتساءل لماذا يحتوي الأمر أعلاه على <code>header=&quot;Host: localhost&quot;</code>. والسبب أنه <a href="https://vite.dev/config/server-options.html#server-allowedhosts" data-type="link" data-id="https://vite.dev/config/server-options.html#server-allowedhosts">افتراضياً</a> لا يُسمح لخادم تطوير Vite بالاستجابة إلا إذا كان المضيف هو <em>localhost</em>. والآن اسم المضيف داخل شبكة Docker هو <em>app</em>، وإذا لم نضبط ترويسة Host، فسنحصل على<em> HTTP/1.1 403 Forbidden</em> كاستجابة. ويمكننا السماح بأسماء مضيفين إضافية بتحرير الملف <em>vite.config.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>&lt;br&gt;<span class="hljs-keyword">import</span> react <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react&#x27;</span>&lt;br&gt;&lt;br&gt;<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({&lt;br&gt;  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],&lt;br&gt;  <span class="hljs-attr">server</span>: {&lt;br&gt;    <span class="hljs-attr">allowedHosts</span>: [<span class="hljs-string">&#x27;app&#x27;</span>, <span class="hljs-string">&#x27;localhost&#x27;</span>],&lt;br&gt;  }&lt;br&gt;})
+</code></pre>
+<p>الآن لم نعد نحتاج إلى ترويسة Host ويعمل ما يلي:</p>
+<pre><code class="language-bash">docker compose -f docker-compose.dev.yml run debug-helper wget -O - http://app:5173
+</code></pre>
+<div class="tasks">
+<p><strong>16. تشغيل todo-backend في حاوية تطوير</strong></p>
+</div>
+<h3 id="التواصل-بين-الحاويات-في-بيئة-أكثر-طموحا">التواصل بين الحاويات في بيئة أكثر طموحاً</h3>
+<p>بعد ذلك، سنضيف <a href="https://en.wikipedia.org/wiki/Reverse_proxy" target="_blank" rel="noreferrer noopener">وكيلاً عكسياً (reverse proxy)</a> إلى ملف docker-compose.dev.yml لدينا. ووفقاً لويكيبيديا</p>
+<blockquote>
+<p><em>الوكيل العكسي هو نوع من خوادم الوساطة (proxy) يسترجع الموارد نيابةً عن العميل من خادم واحد أو أكثر. ثم تُعاد هذه الموارد إلى العميل وكأنها صادرة عن خادم الوكيل العكسي نفسه.</em></p>
+</blockquote>
+<p>وفي حالتنا، سيكون الوكيل العكسي نقطة الدخول الوحيدة إلى تطبيقنا، والهدف النهائي هو وضع كل من واجهة React الأمامية وواجهة Express الخلفية خلف الوكيل العكسي.</p>
+<p>هناك خيارات مختلفة متعددة لتنفيذ وكيل عكسي، مثل Traefik وCaddy وNginx وApache (مرتبة حسب الإصدار الأول من الأحدث إلى الأقدم).</p>
+<p>اختيارنا هو <a href="https://hub.docker.com/_/nginx" target="_blank" rel="noreferrer noopener">Nginx</a>.</p>
+<p>لنضع الآن <em>hello-frontend</em> خلف الوكيل العكسي.</p>
+<p>لننشئ الآن ملف <em>nginx.dev.conf</em> في جذر المشروع ونتخذ القالب التالي نقطة انطلاق. وسنحتاج إلى إجراء تعديلات طفيفة لتشغيل تطبيقنا:</p>
+<pre><code># تعليمة events مطلوبة، لكن القيم الافتراضية كافية
+events { }
+
+# خادم http يستمع على المنفذ 80
+http {
+  server {
+    listen 80;
+
+    # تُعالَج الطلبات التي تبدأ بالجذر (/)
+    location / {
+      # الأسطر الثلاثة التالية مطلوبة لكي تعمل إعادة التحميل الفوري
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+
+      # تُوجَّه الطلبات إلى http://localhost:5173
+      proxy_pass http://localhost:5173;
+    }
+  }
+}
+</code></pre>
+<p><strong>ملاحظة</strong> نستخدم اصطلاح التسمية المألوف أيضاً مع Nginx، <em>nginx.dev.conf</em> لتهيئات التطوير، والاسم الافتراضي <em>nginx.conf</em> في غير ذلك.</p>
+<p>بعد ذلك، أنشئ خدمة Nginx في ملف <em>docker-compose.dev.yml</em>. أضف وحدة تخزين كما هو موضح في صفحة Docker Hub بحيث يكون الجانب الأيمن <em>:/etc/nginx/nginx.conf:ro</em>، والجزء الأخير <em>ro</em> يعلن أن وحدة التخزين ستكون <em>للقراءة فقط</em>:</p>
+<pre><code>services:
+  app:
+    # ...
+  nginx:
+    image: nginx:1.29
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app # انتظر بدء حاوية الواجهة الأمامية
+</code></pre>
+<p>وبعد إضافة ذلك، يمكننا تشغيل <code>docker compose -f docker-compose.dev.yml up</code> ونرى ما يحدث.</p>
+<pre><code>$ docker container ls
+CONTAINER ID   IMAGE            COMMAND  PORTS                   NAMES
+a02ae58f3e8d   nginx:1.29.1     ...      0.0.0.0:8080-&gt;80/tcp    reverse-proxy
+5ee0284566b4   hello-front-dev  ...      0.0.0.0:5173-&gt;5173/tcp  hello-front-dev
+</code></pre>
+<p>سيؤدي الاتصال بـ <a href="http://localhost:8080/" target="_blank" rel="noreferrer noopener">http://localhost:8080</a> إلى صفحة مألوفة المظهر بحالة 502.</p>
+<p>وهذا لأن توجيه الطلبات إلى <a href="http://localhost:5173/" target="_blank" rel="noreferrer noopener">http://localhost:5173</a> لا يؤدي إلى أي مكان، إذ لا يوجد تطبيق يعمل على المنفذ 5173 في حاوية Nginx. فبحكم التعريف، يشير localhost إلى الحاسوب الحالي المستخدم للوصول إليه. وبما أن localhost فريد لكل حاوية، فإنه يشير دائماً إلى الحاوية نفسها.</p>
+<p>لنختبر ذلك بالدخول إلى حاوية Nginx واستخدام curl لإرسال طلب إلى التطبيق نفسه. وفي استخدامنا، curl شبيه بـwget لكنه لا يحتاج إلى أي علامات.</p>
+<pre><code>$ docker exec -it reverse-proxy bash
+
+root@374f9e62bfa8:\\# curl http://localhost:80
+  &amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;&amp;lt;title&amp;gt;502 Bad Gateway&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
+  ...
+</code></pre>
+<p>ولمساعدتنا، أنشأ Docker Compose شبكة عند تشغيلنا <code>docker compose up</code>. كما أضاف جميع الحاويات المذكورة في <em>docker-compose.dev.yml</em> إلى الشبكة. ويضمن DNS تمكننا من العثور على الحاويات الأخرى في الشبكة. ويُمنح كل حاوية اسمين: اسم الخدمة واسم الحاوية، ويمكن استخدام كليهما للتواصل مع الحاوية.</p>
+<p>وبما أننا داخل الحاوية، يمكننا أيضاً اختبار DNS! لننفذ curl على اسم الخدمة (app) على المنفذ 5173</p>
+<pre><code>root@374f9e62bfa8:\\# curl http://app:5173
+&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&quot;en&quot;&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;meta charset=&quot;UTF-8&quot; /&amp;gt;
+    &amp;lt;link rel=&quot;icon&quot; type=&quot;image/svg+xml&quot; href=&quot;/vite.svg&quot; /&amp;gt;
+    &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&amp;gt;
+    &amp;lt;title&amp;gt;Vite + React&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;root&quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;script type=&quot;module&quot; src=&quot;/src/main.jsx&quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>
+<p>هذا كل شيء! لنستبدل عنوان proxy_pass في nginx.dev.conf بذلك العنوان.</p>
+<p>أمر آخر: أضفنا خيار <a href="https://docs.docker.com/compose/compose-file/05-services/#depends_on" target="_blank" rel="noreferrer noopener">depends_on</a> إلى التهيئة يضمن عدم بدء حاوية <em>nginx</em> قبل بدء حاوية الواجهة الأمامية <em>app</em>:</p>
+<pre><code>services:
+  app:
+    # ...
+  nginx:
+    image: nginx:1.29
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:      // HIGHLIGHT LINE
+      - app // HIGHLIGHT LINE
+</code></pre>
+<p>إذا لم نفرض ترتيب البدء باستخدام <em>depends_on</em> فهناك خطر أن يفشل Nginx عند بدء التشغيل لأنه يحاول تحليل جميع أسماء DNS المشار إليها في ملف التهيئة:</p>
+<pre><code>events { }
+
+http {
+  server {
+    listen 80;
+
+    location / {
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+
+      proxy_pass http://app:5173;    // HIGHLIGHT LINE
+    }
+  }
+}
+</code></pre>
+<p>لاحظ أن <em>depends_on</em> لا يضمن أن الخدمة في الحاوية المعتمد عليها جاهزة للعمل، بل يضمن فقط أن الحاوية قد بدأت (وأُضيف المُدخل المقابل إلى DNS). وإذا احتاجت خدمة إلى انتظار خدمة أخرى لتصبح جاهزة قبل البدء، فينبغي استخدام <a href="https://docs.docker.com/compose/startup-order/" target="_blank" rel="noreferrer noopener">حلول أخرى</a>.</p>
+<div class="tasks">
+<p><strong>17. إعداد خادم وكيل عكسي Nginx أمام todo-frontend</strong></p>
+</div>
+<div class="tasks">
+<p><strong>18. تهيئة خادم Nginx ليكون أمام todo-backend</strong></p>
+</div>
+<div class="tasks">
+<p><strong>19. ربط الخدمات، todo-frontend مع todo-backend</strong></p>
+</div>
+<h3 id="أدوات-للإنتاج">أدوات للإنتاج</h3>
+<p>الحاويات أدوات ممتعة للاستخدام في التطوير، لكن أفضل حالة استخدام لها هي بيئة الإنتاج. وهناك أدوات أقوى بكثير من Docker Compose لتشغيل الحاويات في الإنتاج.</p>
+<p>تتيح لنا أدوات تنسيق الحاويات الثقيلة مثل <a href="https://kubernetes.io/" target="_blank" rel="noreferrer noopener">Kubernetes</a> إدارة الحاويات على مستوى جديد تماماً. فهي تخفي الأجهزة الفعلية وتسمح لنا نحن المطورين بالقلق بشكل أقل بشأن البنية التحتية.</p>
+<p>إذا كنت مهتماً بتعلم المزيد بعمق عن الحاويات فتعال إلى مقرر <a href="https://devopswithdocker.com/" target="_blank" rel="noreferrer noopener">DevOps with Docker</a> ويمكنك معرفة المزيد عن Kubernetes في مقرر <a href="https://devopswithkubernetes.com/" target="_blank" rel="noreferrer noopener">DevOps with Kubernetes</a> المتقدم ذي 5 نقاط دراسية. وينبغي أن تكون لديك الآن المهارات لإكمال كليهما!</p>
+<h3></h3>
+<div class="tasks">
+<p><strong>20. بيئة إنتاج في حاويات</strong></p>
+</div>
+<div class="tasks">
+<p><strong>21. اختبار الدخان (smoke test)</strong></p>
+</div>
+<div class="tasks">
+<p><strong>22. بيئة تطويري في حاويات</strong></p>
+</div>
+<div class="tasks">
+<p><strong>23. بيئة إنتاجي في حاويات</strong></p>
+</div>
+<div class="tasks">
+<p><strong>24. مستودع GitHub الخاص بك</strong></p>
+</div>
+`,c={part:12,letter:"d",file:e,title:n,slug:o,mainImage:t,headings:r,html:p};export{c as default,e as file,r as headings,p as html,a as letter,t as mainImage,s as part,o as slug,n as title};

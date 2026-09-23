@@ -1,0 +1,522 @@
+const e=1,c="a",s="part1a.md",a="مقدمة إلى React",n="introduction_to_react",p="/images/part-1.svg",l=[{depth:3,id:"مكون",text:"مكوّن"},{depth:3,id:"jsx",text:"JSX"},{depth:3,id:"مكونات-متعددة",text:"مكوّنات متعددة"},{depth:3,id:"props-تمرير-البيانات-إلى-المكونات",text:"props: تمرير البيانات إلى المكوّنات"},{depth:3,id:"رسالة-خطأ-محتملة",text:"رسالة خطأ محتملة"},{depth:3,id:"بعض-الملاحظات",text:"بعض الملاحظات"},{depth:3,id:"لا-تعرض-الكائنات",text:"لا تعرض الكائنات"},{depth:3,id:"تمارين-11-12",text:"تمارين 1.1.-1.2."}],t=`<div class="content">
+<p>سنبدأ الآن التعرّف على ما هو على الأرجح أهم موضوع في هذه الدورة، ألا وهو مكتبة <a href="https://react.dev/">React</a>. لنبدأ بإنشاء تطبيق React بسيط والتعرّف على المفاهيم الأساسية لـ React.</p>
+<p>أسهل طريقة للبدء بفارق كبير هي استخدام أداة تُسمى <a href="https://vitejs.dev/">Vite</a>.</p>
+<p>لننشئ تطبيقًا جديدًا باستخدام أداة <i>create-vite</i>:</p>
+<pre><code class="language-bash">npm create vite@latest
+</code></pre>
+<p>لنجب عن الأسئلة التي تعرضها الأداة كما يلي:</p>
+<p><img src="/images/content/1/1-create-vite.webp" alt="عرض اختيارات أداة create-vite، حيث يُسمّى المشروع part1، وإطار العمل React، والصيغة JavaScript، وتُجاب جميع الأسئلة الأخرى بـ No"></p>
+<p>لقد أنشأنا الآن تطبيقًا اسمه <i>part1</i>. كان بإمكان الأداة أيضًا تثبيت الاعتماديات المطلوبة وبدء التطبيق تلقائيًا لو أجبنا بـ &quot;Yes&quot; عن السؤال &quot;Install with npm and start now?&quot;. لكننا سننفّذ هذه الخطوات يدويًا حتى نرى كيف تُنجَز.</p>
+<p>بعد ذلك، لننتقل إلى مجلد التطبيق ونثبّت المكتبات المطلوبة:</p>
+<pre><code class="language-bash"><span class="hljs-built_in">cd</span> part1
+npm install
+</code></pre>
+<p>يُبدأ التطبيق كما يلي:</p>
+<pre><code class="language-bash">npm run dev
+</code></pre>
+<p>تقول وحدة التحكم إن التطبيق بدأ على منفذ localhost رقم 5173، أي العنوان <a href="http://localhost:5173/">http://localhost:5173/</a>:</p>
+<p><img src="/images/content/1/1-vite1.webp" alt="لقطة شاشة لوحدة التحكم تشغّل vite على localhost 5173"></p>
+<p>يبدأ Vite التطبيق <a href="https://vitejs.dev/config/server-options.html#server-port">افتراضيًا</a> على المنفذ 5173. وإذا لم يكن هذا المنفذ متاحًا، يستخدم Vite رقم المنفذ الحر التالي.</p>
+<p>افتح المتصفح ومحرر نصوص لتتمكن من عرض الشيفرة وصفحة الويب في الوقت نفسه على الشاشة:</p>
+<p><img src="/images/content/1/1-vite4.webp" alt="لقطة شاشة لصفحة vite الأولية وبنية الملفات في vs code"></p>
+<p>تقع شيفرة التطبيق في مجلد <i>src</i>. لنبسّط الشيفرة الافتراضية بحيث يصبح محتوى الملف main.jsx كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>)
+</code></pre>
+<p>ويصبح الملف <i>App.jsx</i> كما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>يمكن حذف الملفين <i>App.css</i> و<i>index.css</i> والمجلد <i>assets</i> لأننا لا نحتاج إليها في تطبيقنا الآن.</p>
+<h3 id="مكون">مكوّن</h3>
+<p>يعرّف الملف <i>App.jsx</i> الآن <a href="https://react.dev/learn/your-first-component">مكوّن React</a> باسم <i>App</i>. والأمر الموجود في السطر الأخير من الملف <i>main.jsx</i></p>
+<pre><code class="language-js"><span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>)
+</code></pre>
+<p>يعرض محتواه داخل عنصر <i>div</i> المعرّف في الملف <i>index.html</i> والذي يحمل قيمة <i>id</i> تساوي 'root'.</p>
+<p>افتراضيًا، لا يحتوي الملف <i>index.html</i> على أي ترميز HTML مرئي لنا في المتصفح:</p>
+<pre><code class="language-html"><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;icon&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;image/svg+xml&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/vite.svg&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>part1<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;root&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/src/main.jsx&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>يمكنك أن تجرّب إضافة بعض HTML إلى الملف هناك. لكن عند استخدام React، يُعرَّف عادةً كل المحتوى الذي يجب عرضه كمكوّنات React.</p>
+<p>لنلقِ نظرة أقرب على الشيفرة التي تعرّف المكوّن:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+)
+</code></pre>
+<p>كما خمّنت على الأرجح، سيُعرض المكوّن كوسم <i>div</i> يحيط بوسم <i>p</i> يحتوي على النص <i>Hello world</i>.</p>
+<p>تقنيًا، يُعرَّف المكوّن كدالة JavaScript. ما يلي دالة (لا تستقبل أي معاملات):</p>
+<pre><code class="language-js">() =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+)
+</code></pre>
+<p>ثم تُسنَد الدالة إلى متغير ثابت <i>App</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = ...
+</code></pre>
+<p>توجد عدة طرق لتعريف الدوال في JavaScript. سنستخدم هنا <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">دوال السهم</a>، وهي موصوفة في نسخة من JavaScript تُعرف باسم <a href="https://262.ecma-international.org/6.0/index.html?_gl=1*xxe99l*_ga*MjA1MjAzOTEwMC4xNzc0MjU2OTkx*_ga_TDCK4DWEPP*czE3NzQyNTY5OTEkbzEkZzEkdDE3NzQyNTczNzUkajYwJGwwJGgw">ECMAScript 6</a>، وتُسمى أيضًا ES6.</p>
+<p>ولأن الدالة تتكوّن من تعبير واحد فقط، استخدمنا صيغة مختصرة تمثّل قطعة الشيفرة هذه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>بعبارة أخرى، تُعيد الدالة قيمة التعبير.</p>
+<p>يمكن أن تحتوي الدالة التي تعرّف المكوّن على أي نوع من شيفرة JavaScript. عدّل مكوّنك ليصبح كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Hello from component&#x27;</span>)
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>ولاحظ ما يحدث في وحدة تحكم المتصفح</p>
+<p><img src="/images/content/1/30.webp" alt="وحدة تحكم المتصفح تعرض console log مع سهم يشير إلى &quot;Hello from component&quot;"></p>
+<p>القاعدة الأولى في تطوير الويب من جهة الواجهة الأمامية:</p>
+<blockquote>
+<p><i>أبقِ وحدة التحكم مفتوحة طوال الوقت</i></p>
+</blockquote>
+<p>لنكرّر هذا معًا: <i>أَعِدُ بإبقاء وحدة التحكم مفتوحة طوال الوقت</i> خلال هذه الدورة، وطوال بقية حياتي عندما أعمل في تطوير الويب.</p>
+<p>من الممكن أيضًا عرض محتوى ديناميكي داخل المكوّن.</p>
+<p>عدّل المكوّن كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> now = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>()
+  <span class="hljs-keyword">const</span> a = <span class="hljs-number">10</span>
+  <span class="hljs-keyword">const</span> b = <span class="hljs-number">20</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(now, a+b)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world, it is {now.toString()}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        {a} plus {b} is {a + b}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>تُقيَّم أي شيفرة JavaScript داخل الأقواس المعقوفة، وتُدمج نتيجة هذا التقييم في المكان المحدد في HTML الذي ينتجه المكوّن.</p>
+<p>لاحظ أنه يجب ألا تحذف السطر الموجود في أسفل المكوّن</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>لا يظهر export في معظم أمثلة مادة الدورة. وبدون export، ينهار المكوّن والتطبيق بأكمله.</p>
+<p>هل تذكرت وعدك بإبقاء وحدة التحكم مفتوحة؟ ما الذي طُبع هناك؟</p>
+<h3 id="jsx">JSX</h3>
+<p>يبدو أن مكوّنات React تُعيد ترميز HTML. لكن الأمر ليس كذلك. فغالبًا ما يُكتب تخطيط مكوّنات React باستخدام <a href="https://react.dev/learn/writing-markup-with-jsx">JSX</a>. فرغم أن JSX يشبه HTML، فإننا نتعامل مع طريقة لكتابة JavaScript. ففي الخفاء، تُترجم JSX التي تُعيدها مكوّنات React إلى JavaScript.</p>
+<p>بعد الترجمة، يبدو تطبيقنا هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> now = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>()
+  <span class="hljs-keyword">const</span> a = <span class="hljs-number">10</span>
+  <span class="hljs-keyword">const</span> b = <span class="hljs-number">20</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
+    <span class="hljs-string">&#x27;div&#x27;</span>,
+    <span class="hljs-literal">null</span>,
+    <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
+      <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&#x27;Hello world, it is &#x27;</span>, now.<span class="hljs-title function_">toString</span>()
+    ),
+    <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
+      <span class="hljs-string">&#x27;p&#x27;</span>, <span class="hljs-literal">null</span>, a, <span class="hljs-string">&#x27; plus &#x27;</span>, b, <span class="hljs-string">&#x27; is &#x27;</span>, a + b
+    )
+  )
+}
+</code></pre>
+<p>تتولى <a href="https://babeljs.io/repl/">Babel</a> عملية الترجمة. والمشاريع المنشأة باستخدام <em>Vite</em> مهيأة للترجمة تلقائيًا. سنتعلم المزيد عن هذا الموضوع في <a href="/part7">الجزء 7</a> من هذه الدورة.</p>
+<p>من الممكن أيضًا كتابة React كـ &quot;JavaScript خالص&quot; دون استخدام JSX. لكن لن يفعل ذلك أي شخص يتمتع بعقل سليم.</p>
+<p>عمليًا، يشبه JSX لغة HTML كثيرًا، مع فارق أنه يتيح لك تضمين محتوى ديناميكي بسهولة عبر كتابة شيفرة JavaScript المناسبة داخل الأقواس المعقوفة. وفكرة JSX شبيهة جدًا بالعديد من لغات القوالب، مثل Thymeleaf المستخدمة مع Java Spring، والتي تُستخدم على الخوادم.</p>
+<p>JSX &quot;شبيه بـ <a href="https://developer.mozilla.org/en-US/docs/Web/XML/XML_introduction">XML</a>&quot;، وهذا يعني أن كل وسم يحتاج إلى إغلاق. على سبيل المثال، السطر الجديد عنصر فارغ، ويمكن كتابته في HTML كما يلي:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+</code></pre>
+<p>لكن عند كتابة JSX، يجب إغلاق الوسم:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
+</code></pre>
+<h3 id="مكونات-متعددة">مكوّنات متعددة</h3>
+<p>لنعدّل الملف <i>App.jsx</i> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-comment">// highlight-start</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello world<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> /&gt;</span> // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>عرّفنا مكوّنًا جديدًا <i>Hello</i> واستخدمناه داخل المكوّن <i>App</i>. وبطبيعة الحال، يمكن استخدام المكوّن عدة مرات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> /&gt;</span>
+      // highlight-start
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> /&gt;</span>
+      // highlight-end
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p><strong>ملاحظة</strong>: يُحذف <em>export</em> في الأسفل في هذه <i>الأمثلة</i>، الآن وفي المستقبل. لكنه ما زال ضروريًا لتعمل الشيفرة</p>
+<p>كتابة المكوّنات باستخدام React سهلة، وبدمج المكوّنات يمكن الحفاظ على قابلية صيانة تطبيق أكثر تعقيدًا إلى حد كبير. بل إن من الفلسفات الجوهرية في React تركيب التطبيقات من العديد من المكوّنات المتخصصة القابلة لإعادة الاستخدام.</p>
+<p>وهناك عُرف قوي آخر هو فكرة <i>المكوّن الجذري</i> المسمى <i>App</i> في قمة شجرة مكوّنات التطبيق. ومع ذلك، كما سنتعلم في <a href="/part6">الجزء 6</a>، هناك حالات لا يكون فيها المكوّن <i>App</i> هو الجذر تمامًا، بل يكون ملفوفًا داخل مكوّن مساعد مناسب.</p>
+<h3 id="props-تمرير-البيانات-إلى-المكونات">props: تمرير البيانات إلى المكوّنات</h3>
+<p>من الممكن تمرير البيانات إلى المكوّنات باستخدام ما يُسمى <a href="https://react.dev/learn/passing-props-to-a-component">props</a>.</p>
+<p>لنعدّل المكوّن <i>Hello</i> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello {props.name}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span> // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الآن أصبح للدالة التي تعرّف المكوّن معامل props. ويتلقى هذا المعامل كوسيط كائنًا يحتوي على حقول تقابل كل &quot;props&quot; يحددها مستخدم المكوّن.</p>
+<p>وتُعرَّف الـ props كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;George&#x27;</span> /&gt;</span> // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Daisy&#x27;</span> /&gt;</span> // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يمكن أن يكون هناك عدد اعتباطي من الـ props، ويمكن أن تكون قيمها نصوصًا &quot;مكتوبة مباشرة&quot; أو نتائج تعبيرات JavaScript. وإذا حُصل على قيمة prop باستخدام JavaScript فيجب لفّها بأقواس معقوفة.</p>
+<p>لنعدّل الشيفرة بحيث يستخدم المكوّن <i>Hello</i> خاصيتي props:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Hello</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(props) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        Hello {props.name}, you are {props.age} years old // highlight-line
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;Peter&#x27;</span> <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> age = <span class="hljs-number">10</span>       <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Maya&#x27;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span> // highlight-line
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{age}</span> /&gt;</span>     // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الـ props التي يرسلها المكوّن <i>App</i> هي قيم المتغيرات، ونتيجة تقييم تعبير الجمع، ونص عادي.</p>
+<p>كما يسجّل المكوّن <i>Hello</i> قيمة الكائن props في وحدة التحكم.</p>
+<p>آمل حقًا أن تكون وحدة التحكم لديك مفتوحة. وإن لم تكن كذلك، فتذكّر ما وعدت به:</p>
+<blockquote>
+<p><i>أَعِدُ بإبقاء وحدة التحكم مفتوحة طوال الوقت خلال هذه الدورة، وطوال بقية حياتي عندما أعمل في تطوير الويب</i></p>
+</blockquote>
+<p>تطوير البرمجيات صعب. ويصبح أصعب إذا لم يستخدم المرء كل الأدوات المتاحة الممكنة مثل وحدة تحكم الويب والطباعة التصحيحية باستخدام <em>console.log</em>. فالمحترفون يستخدمون كليهما <i>طوال الوقت</i>، ولا يوجد سبب واحد يمنع المبتدئ من تبنّي استخدام هذه الأساليب المساعدة الرائعة التي ستجعل حياته أسهل بكثير.</p>
+<h3 id="رسالة-خطأ-محتملة">رسالة خطأ محتملة</h3>
+<p>إذا كان مشروعك يستخدم إصدار React 18 أو أقدم، فقد تتلقى رسالة الخطأ التالية في هذه المرحلة:</p>
+<p><img src="/images/content/1/1-vite5.webp" alt="لقطة شاشة لـ vs code تعرض خطأ eslint: &quot;name is missing in props validation&quot;"></p>
+<p>إنه ليس خطأ فعليًا، بل تحذير تسببه أداة <a href="https://eslint.org/">ESLint</a>. يمكنك إسكات تحذير <a href="https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/prop-types.md">react/prop-types</a> بإضافة السطر التالي إلى الملف <i>eslint.config.js</i></p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> [
+  { <span class="hljs-attr">ignores</span>: [<span class="hljs-string">&#x27;dist&#x27;</span>] },
+  {
+    <span class="hljs-attr">files</span>: [<span class="hljs-string">&#x27;**/*.{js,jsx}&#x27;</span>],
+    <span class="hljs-attr">languageOptions</span>: {
+      <span class="hljs-attr">ecmaVersion</span>: <span class="hljs-number">2020</span>,
+      <span class="hljs-attr">globals</span>: globals.<span class="hljs-property">browser</span>,
+      <span class="hljs-attr">parserOptions</span>: {
+        <span class="hljs-attr">ecmaVersion</span>: <span class="hljs-string">&#x27;latest&#x27;</span>,
+        <span class="hljs-attr">ecmaFeatures</span>: { <span class="hljs-attr">jsx</span>: <span class="hljs-literal">true</span> },
+        <span class="hljs-attr">sourceType</span>: <span class="hljs-string">&#x27;module&#x27;</span>,
+      },
+    },
+    <span class="hljs-attr">settings</span>: { <span class="hljs-attr">react</span>: { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;18.3&#x27;</span> } },
+    <span class="hljs-attr">plugins</span>: {
+      react,
+      <span class="hljs-string">&#x27;react-hooks&#x27;</span>: reactHooks,
+      <span class="hljs-string">&#x27;react-refresh&#x27;</span>: reactRefresh,
+    },
+    <span class="hljs-attr">rules</span>: {
+      ...js.<span class="hljs-property">configs</span>.<span class="hljs-property">recommended</span>.<span class="hljs-property">rules</span>,
+      ...react.<span class="hljs-property">configs</span>.<span class="hljs-property">recommended</span>.<span class="hljs-property">rules</span>,
+      ...react.<span class="hljs-property">configs</span>[<span class="hljs-string">&#x27;jsx-runtime&#x27;</span>].<span class="hljs-property">rules</span>,
+      ...reactHooks.<span class="hljs-property">configs</span>.<span class="hljs-property">recommended</span>.<span class="hljs-property">rules</span>,
+      <span class="hljs-string">&#x27;react/jsx-no-target-blank&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+      <span class="hljs-string">&#x27;react-refresh/only-export-components&#x27;</span>: [
+        <span class="hljs-string">&#x27;warn&#x27;</span>,
+        { <span class="hljs-attr">allowConstantExport</span>: <span class="hljs-literal">true</span> },
+      ],
+      <span class="hljs-string">&#x27;react/prop-types&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-comment">// highlight-line</span>
+    },
+  },
+]
+</code></pre>
+<p>سنتعرّف على ESLint بمزيد من التفصيل <a href="/part3/validation_and_es_lint#lint">في الجزء 3</a>.</p>
+<h3 id="بعض-الملاحظات">بعض الملاحظات</h3>
+<p>ضُبط React لتوليد رسائل خطأ واضحة تمامًا. ورغم ذلك، ينبغي لك، في البداية على الأقل، أن تتقدم بـ <strong>خطوات صغيرة جدًا</strong> وأن تتأكد من أن كل تغيير يعمل كما هو مطلوب.</p>
+<p><strong>يجب أن تكون وحدة التحكم مفتوحة دائمًا</strong>. إذا أبلغ المتصفح عن أخطاء، فليس من المستحسن مواصلة كتابة المزيد من الشيفرة أملًا في حدوث معجزة. بل ينبغي أن تحاول فهم سبب الخطأ، وأن تعود مثلًا إلى الحالة السابقة التي كانت تعمل:</p>
+<p><img src="/images/content/1/1-vite6.webp" alt="لقطة شاشة لخطأ prop غير معرّف"></p>
+<p>كما ذكرنا سابقًا، عند البرمجة باستخدام React، من الممكن بل ويستحق الأمر كتابة أوامر <em>console.log()</em> (التي تطبع في وحدة التحكم) داخل شيفرتك.</p>
+<p>وتذكّر أيضًا أن <strong>الحرف الأول من أسماء مكوّنات React يجب أن يكون كبيرًا</strong>. إذا حاولت تعريف مكوّن كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">footer</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      greeting app created by <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&#x27;https://github.com/mluukkai&#x27;</span>&gt;</span>mluukkai<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>واستخدمته هكذا</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Maya&#x27;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">footer</span> /&gt;</span> // highlight-line
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>فلن تعرض الصفحة المحتوى المعرّف داخل مكوّن footer، وبدلًا من ذلك ينشئ React فقط عنصر <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/footer">footer</a> فارغًا، أي عنصر HTML المدمج بدلًا من عنصر React المخصص الذي يحمل الاسم نفسه. وإذا غيّرت الحرف الأول من اسم المكوّن إلى حرف كبير، فإن React ينشئ عنصر <i>div</i> معرّفًا في مكوّن Footer، ويُعرض على الصفحة.</p>
+<p>لاحظ أن محتوى مكوّن React يحتاج (عادةً) إلى أن يحتوي على <strong>عنصر جذر واحد</strong>. فإذا حاولنا، على سبيل المثال، تعريف المكوّن <i>App</i> دون عنصر <i>div</i> الخارجي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Maya&#x27;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span></span>
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Footer</span> /&gt;</span></span>
+  )
+}
+</code></pre>
+<p>فالنتيجة هي رسالة خطأ.</p>
+<p><img src="/images/content/1/1-vite7.webp" alt="لقطة شاشة لخطأ عناصر جذر متعددة"></p>
+<p>استخدام عنصر جذر ليس الخيار الوحيد الذي يعمل. فـ<i>مصفوفة</i> من المكوّنات حل صالح أيضًا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> [
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>,
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Maya&#x27;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span></span>,
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Footer</span> /&gt;</span></span>
+  ]
+}
+</code></pre>
+<p>لكن عند تعريف المكوّن الجذري للتطبيق، فإن هذا ليس أمرًا حكيمًا بشكل خاص، ويجعل الشيفرة تبدو قبيحة بعض الشيء.</p>
+<p>ولأن عنصر الجذر مطلوب، فإن لدينا عناصر div &quot;إضافية&quot; في شجرة DOM. ويمكن تجنّب ذلك باستخدام <a href="https://react.dev/reference/react/Fragment">fragments</a>، أي بلفّ العناصر التي سيعيدها المكوّن بعنصر فارغ:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;Peter&#x27;</span>
+  <span class="hljs-keyword">const</span> age = <span class="hljs-number">10</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Greetings<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;Maya&#x27;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{26</span> + <span class="hljs-attr">10</span>} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> <span class="hljs-attr">age</span>=<span class="hljs-string">{age}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Footer</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الآن تُترجم الشيفرة بنجاح، ولم يعد DOM الذي ينشئه React يحتوي على عنصر div الإضافي.</p>
+<h3 id="لا-تعرض-الكائنات">لا تعرض الكائنات</h3>
+<p>تأمّل تطبيقًا يطبع أسماء أصدقائنا وأعمارهم على الشاشة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> friends = [
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Peter&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">4</span> },
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Maya&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">10</span> },
+  ]
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{friends[0]}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{friends[1]}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>لكن لا يظهر شيء على الشاشة. قضيت 15 دقيقة أحاول إيجاد مشكلة في الشيفرة، لكنني لم أستطع معرفة أين يمكن أن تكون المشكلة.</p>
+<p>وأخيرًا أتذكر الوعد الذي قطعناه</p>
+<blockquote>
+<p><i>أَعِدُ بإبقاء وحدة التحكم مفتوحة طوال الوقت خلال هذه الدورة، وطوال بقية حياتي عندما أعمل في تطوير الويب</i></p>
+</blockquote>
+<p>تصرخ وحدة التحكم بالأحمر:</p>
+<p><img src="/images/content/1/34new.webp" alt="devtools تعرض خطأ مع إبراز حول &quot;Objects are not valid as a React child&quot;"></p>
+<p>جوهر المشكلة هو <i>Objects are not valid as a React child</i>، أي أن التطبيق يحاول عرض <i>كائنات</i> ويفشل مرة أخرى.</p>
+<p>تحاول الشيفرة عرض معلومات أحد الأصدقاء كما يلي</p>
+<pre><code class="language-js">&lt;p&gt;{friends[<span class="hljs-number">0</span>]}&lt;/p&gt;
+</code></pre>
+<p>وهذا يسبب مشكلة لأن العنصر المطلوب عرضه داخل الأقواس المعقوفة هو كائن.</p>
+<pre><code class="language-js">{ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Peter&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">4</span> }
+</code></pre>
+<p>في React، يجب أن تكون العناصر الفردية المعروضة داخل الأقواس المعقوفة قيمًا أولية، مثل الأعداد أو النصوص.</p>
+<p>الإصلاح كما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> friends = [
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Peter&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">4</span> },
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Maya&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">10</span> },
+  ]
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{friends[0].name} {friends[0].age}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{friends[1].name} {friends[1].age}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>فالآن يُعرض اسم الصديق منفصلًا داخل الأقواس المعقوفة</p>
+<pre><code class="language-js">{friends[<span class="hljs-number">0</span>].<span class="hljs-property">name</span>}
+</code></pre>
+<p>والعمر</p>
+<pre><code class="language-js">{friends[<span class="hljs-number">0</span>].<span class="hljs-property">age</span>}
+</code></pre>
+<p>بعد تصحيح الخطأ، يجب أن تمسح رسائل الخطأ من وحدة التحكم بالضغط على 🚫 ثم تعيد تحميل محتوى الصفحة وتتأكد من عدم عرض أي رسائل خطأ.</p>
+<p>ملاحظة إضافية صغيرة على ما سبق. يسمح React أيضًا بعرض المصفوفات <i>إذا</i> كانت المصفوفة تحتوي على قيم صالحة للعرض (مثل الأعداد أو النصوص). لذا سيعمل البرنامج التالي، وإن كانت النتيجة قد لا تكون ما نريد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> friends = [ <span class="hljs-string">&#x27;Peter&#x27;</span>, <span class="hljs-string">&#x27;Maya&#x27;</span>]
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{friends}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>في هذا الجزء، لا يستحق الأمر حتى محاولة استخدام العرض المباشر للجداول، وسنعود إليه في الجزء التالي.</p>
+</div>
+<div class="tasks">
+  <h3 id="تمارين-11-12">تمارين 1.1.-1.2.</h3>
+<p>تُسلَّم التمارين عبر GitHub، وبتعليم التمارين كمنجزة في تبويب «تسليماتي» (my submissions) في <a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">تطبيق التسليم</a>.</p>
+<p>تُسلَّم التمارين <strong>جزءًا واحدًا في كل مرة</strong>. وعندما تسلّم تمارين جزء من الدورة، لم يعد بإمكانك تسليم تمارين غير منجزة للجزء نفسه.</p>
+<p>لاحظ أنه توجد في هذا الجزء <a href="/part1/a_more_complex_state_debugging_react_apps#exercises-1-6-1-14">تمارين إضافية</a> إلى جانب تلك الموجودة أدناه. <i>لا تسلّم عملك</i> حتى تكمل كل التمارين التي تريد تسليمها للجزء.</p>
+<p>يمكنك تسليم جميع تمارين هذه الدورة في المستودع نفسه، أو استخدام عدة مستودعات. وإذا سلّمت تمارين أجزاء مختلفة في المستودع نفسه، فيرجى استخدام نظام تسمية معقول للمجلدات.</p>
+<p>من بنى الملفات العملية جدًا لمستودع التسليم ما يلي:</p>
+<pre><code class="language-text">part0
+part1
+  courseinfo
+  unicafe
+  anecdotes
+part2
+  phonebook
+  countries
+</code></pre>
+<p>انظر إلى <a href="https://github.com/fullstack-hy2020/example-submission-repository">مستودع التسليم النموذجي</a> هذا!</p>
+<p>لكل جزء من الدورة يوجد مجلد، يتفرّع بدوره إلى مجلدات تحتوي على سلسلة من التمارين، مثل &quot;unicafe&quot; للجزء 1.</p>
+<p>تبني معظم تمارين الدورة تطبيقًا أكبر، مثل courseinfo وunicafe وanecdotes في هذا الجزء، شيئًا فشيئًا. ويكفي تسليم التطبيق المكتمل. ويمكنك إجراء commit بعد كل تمرين، لكن ذلك ليس إلزاميًا. فمثلًا يُبنى تطبيق معلومات الدورة في التمارين 1.1.-1.5. وما تحتاج إلى تسليمه هو النتيجة النهائية بعد 1.5 فقط!</p>
+<p>لكل تطبيق ويب مخصص لسلسلة من التمارين، يُوصى بتسليم جميع الملفات المتعلقة بذلك التطبيق، باستثناء المجلد <i>node_modules</i>.</p>
+  <h4 id="11-معلومات-الدورة-الخطوة-1">1.1: معلومات الدورة، الخطوة 1</h4>
+<p><i>التطبيق الذي سنبدأ العمل عليه في هذا التمرين سيُطوَّر أكثر في بعض التمارين التالية. وفي هذه المجموعة وغيرها من مجموعات التمارين القادمة في هذه الدورة، يكفي تسليم الحالة النهائية للتطبيق فقط. وإذا رغبت، يمكنك أيضًا إنشاء commit لكل تمرين في السلسلة، لكن هذا اختياري تمامًا.</i></p>
+<p>استخدم Vite لتهيئة تطبيق جديد. عدّل <i>main.jsx</i> ليطابق ما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>)
+</code></pre>
+<p>و<i>App.jsx</i> ليطابق ما يلي</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> course = <span class="hljs-string">&#x27;Half Stack application development&#x27;</span>
+  <span class="hljs-keyword">const</span> part1 = <span class="hljs-string">&#x27;Fundamentals of React&#x27;</span>
+  <span class="hljs-keyword">const</span> exercises1 = <span class="hljs-number">10</span>
+  <span class="hljs-keyword">const</span> part2 = <span class="hljs-string">&#x27;Using props to pass data&#x27;</span>
+  <span class="hljs-keyword">const</span> exercises2 = <span class="hljs-number">7</span>
+  <span class="hljs-keyword">const</span> part3 = <span class="hljs-string">&#x27;State of a component&#x27;</span>
+  <span class="hljs-keyword">const</span> exercises3 = <span class="hljs-number">14</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>{course}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        {part1} {exercises1}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        {part2} {exercises2}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        {part3} {exercises3}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Number of exercises {exercises1 + exercises2 + exercises3}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>واحذف الملفين الإضافيين <i>App.css</i> و<i>index.css</i>، واحذف أيضًا المجلد <i>assets</i>.</p>
+<p>لسوء الحظ، التطبيق كله في المكوّن نفسه. أعد هيكلة الشيفرة بحيث تتكوّن من ثلاثة مكوّنات جديدة: <i>Header</i> و<i>Content</i> و<i>Total</i>. تظل كل البيانات في المكوّن <i>App</i>، الذي يمرّر البيانات اللازمة إلى كل مكوّن باستخدام <i>props</i>. يتولى <i>Header</i> عرض اسم الدورة، ويعرض <i>Content</i> الأجزاء وعدد تمارينها، ويعرض <i>Total</i> العدد الإجمالي للتمارين.</p>
+<p>عرّف المكوّنات الجديدة في الملف <i>App.jsx</i>.</p>
+<p>سيكون جسم المكوّن <i>App</i> على النحو التالي تقريبًا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// تعريفات الثوابت</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> <span class="hljs-attr">course</span>=<span class="hljs-string">{course}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Content</span> <span class="hljs-attr">...</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Total</span> <span class="hljs-attr">...</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p><strong>تحذير</strong> لا تحاول برمجة كل المكوّنات في الوقت نفسه، لأن ذلك سيكسر التطبيق بأكمله على الأرجح. تقدّم بخطوات صغيرة، فاصنع أولًا مثلًا المكوّن <i>Header</i>، وفقط عندما يعمل بالتأكيد، يمكنك الانتقال إلى المكوّن التالي.</p>
+<p>قد يبدو التقدّم الحذر بخطوات صغيرة بطيئًا، لكنه في الواقع <i>أسرع طريقة للتقدّم بفارق كبير</i>. وقد صرّح مطوّر البرمجيات الشهير Robert &quot;Uncle Bob&quot; Martin</p>
+<blockquote>
+<p><i>&quot;الطريقة الوحيدة للإسراع هي أن تسير جيدًا&quot;</i></p>
+</blockquote>
+<p>أي أنه وفقًا لـ Martin، فإن التقدّم الحذر بخطوات صغيرة هو حتى الطريقة الوحيدة لتكون سريعًا.</p>
+<h4 id="12-معلومات-الدورة-الخطوة-2">1.2: معلومات الدورة، الخطوة 2</h4>
+<p>أعد هيكلة المكوّن <i>Content</i> بحيث لا يعرض بنفسه أي أسماء للأجزاء أو أعداد تمارينها. وبدلًا من ذلك، يعرض فقط ثلاثة مكوّنات <i>Part</i>، يعرض كل منها اسم جزء وعدد تمارينه.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Content</span> = ... {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Part</span> <span class="hljs-attr">...</span>/&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Part</span> <span class="hljs-attr">...</span>/&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Part</span> <span class="hljs-attr">...</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>يمرّر تطبيقنا المعلومات بطريقة بدائية جدًا في الوقت الحالي، لأنه يعتمد على متغيرات فردية. وسنصلح ذلك في <a href="/part2">الجزء 2</a>، لكن قبل ذلك، لننتقل إلى part1b لتعلّم JavaScript.</p>
+</div>
+`,h={part:1,letter:"a",file:s,title:a,slug:n,mainImage:p,headings:l,html:t};export{h as default,s as file,l as headings,t as html,c as letter,p as mainImage,e as part,n as slug,a as title};

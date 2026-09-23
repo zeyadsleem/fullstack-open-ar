@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="ابدأ ببناء واجهات المستخدم باستخدام مكتبة React وتعلّم خصائص JavaScript المهمة لها."/><!----><title>JavaScript - الجزء 1 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#المتغيرات">المتغيرات</a></li><li class="toc__depth-3"><a href="#المصفوفات">المصفوفات</a></li><li class="toc__depth-3"><a href="#الكائنات">الكائنات</a></li><li class="toc__depth-3"><a href="#الدوال">الدوال</a></li><li class="toc__depth-3"><a href="#تمارين-13-15">تمارين 1.3.-1.5.</a></li><li class="toc__depth-3"><a href="#دوال-الكائنات-و-quotthisquot">دوال الكائنات و &amp;quot;this&amp;quot;</a></li><li class="toc__depth-3"><a href="#الأصناف">الأصناف</a></li><li class="toc__depth-3"><a href="#مواد-javascript">مواد JavaScript</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#AEFFDA"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part1">الجزء 1: مقدمة إلى React</a></p> <h1>JavaScript</h1></div> <div class="course-content"><!----><div class="content">
+<p>خلال الدورة، لدينا هدف وحاجة إلى تعلّم قدر كافٍ من JavaScript إلى جانب تطوير الويب.</p>
+<p>تطوّرت JavaScript بسرعة في السنوات القليلة الماضية، ونستخدم في هذه الدورة ميزات من الإصدارات الأحدث. الاسم الرسمي لمعيار JavaScript هو <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a>. في هذه اللحظة، أحدث إصدار هو الصادر في يونيو 2025 باسم <a href="https://www.ecma-international.org/ecma-262/">ECMAScript®2025</a>، المعروف أيضًا باسم ES16.</p>
+<p>لا تدعم المتصفحات بعد جميع أحدث ميزات JavaScript. ولهذه الحقيقة، كثير من الشيفرة التي تعمل في المتصفحات قد <i>حُوِّلت</i> من إصدار أحدث من JavaScript إلى إصدار أقدم وأكثر توافقًا.</p>
+<p>اليوم، الطريقة الأكثر شيوعًا لإجراء هذا التحويل هي استخدام <a href="https://babeljs.io/">Babel</a>. يُضبط التحويل تلقائيًا في تطبيقات React المُنشأة باستخدام Vite. سنلقي نظرة أقرب على إعدادات التحويل في <a href="../../part7">الجزء 7</a> من هذه الدورة.</p>
+<p><a href="https://nodejs.org/en/">Node.js</a> هي بيئة تشغيل لـ JavaScript مبنية على محرّك <a href="https://developers.google.com/v8/">Chrome V8</a> من Google وتعمل عمليًا في أي مكان - من الخوادم إلى الهواتف المحمولة. لنتدرّب على كتابة بعض JavaScript باستخدام Node. الإصدارات الأحدث من Node تفهم بالفعل أحدث إصدارات JavaScript، لذا لا تحتاج الشيفرة إلى تحويل.</p>
+<p>تُكتب الشيفرة في ملفات تنتهي بـ <i>.js</i> وتُشغَّل بإصدار الأمر <em>node name_of_file.js</em></p>
+<p>من الممكن أيضًا كتابة شيفرة JavaScript في وحدة تحكم Node.js، التي تُفتح بكتابة <em>node</em> في سطر الأوامر، وكذلك في وحدة تحكم أدوات المطوّر في المتصفح. <a href="https://compat-table.github.io/compat-table/es2016plus/">تتعامل أحدث إصدارات Chrome مع ميزات JavaScript الجديدة بشكل جيد</a> دون تحويل الشيفرة. بدلًا من ذلك، يمكنك استخدام أداة مثل <a href="https://jsbin.com/?js,console">JS Bin</a>.</p>
+<p>تشبه JavaScript Java إلى حد ما، في الاسم والصياغة معًا. لكن عندما يتعلق الأمر بالآلية الجوهرية للغة، فهما لا يمكن أن تكونا أكثر اختلافًا. وإذا كنت قادمًا من خلفية في Java، فقد يبدو سلوك JavaScript غريبًا بعض الشيء، خاصة إذا لم تبذل جهدًا للبحث في ميزاتها.</p>
+<p>في بعض الأوساط، كان من الشائع أيضًا محاولة &quot;محاكاة&quot; ميزات Java وأنماط التصميم الخاصة بها في JavaScript. لا نوصي بذلك لأن اللغتين ومنظومتيهما البيئيتين مختلفتان اختلافًا جذريًا في نهاية المطاف.</p>
+<h3 id="المتغيرات">المتغيرات</h3>
+<p>في JavaScript هناك بضع طرق لتعريف المتغيرات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> x = <span class="hljs-number">1</span>
+<span class="hljs-keyword">let</span> y = <span class="hljs-number">5</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(x, y)   <span class="hljs-comment">// تُطبع 1 5</span>
+y += <span class="hljs-number">10</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(x, y)   <span class="hljs-comment">// تُطبع 1 15</span>
+y = <span class="hljs-string">&#x27;sometext&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(x, y)   <span class="hljs-comment">// تُطبع 1 sometext</span>
+x = <span class="hljs-number">4</span>               <span class="hljs-comment">// يسبّب خطأً</span>
+</code></pre>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a> لا تعرّف متغيرًا بل <i>ثابتًا</i> لا يمكن تغيير قيمته بعد ذلك. في المقابل، <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">let</a> تعرّف متغيرًا عاديًا.</p>
+<p>في المثال أعلاه، نرى أيضًا أن نوع بيانات المتغير يمكن أن يتغير أثناء التنفيذ. في البداية، تخزّن <em>y</em> عددًا صحيحًا؛ وفي النهاية، تخزّن نصًا.</p>
+<p>من الممكن أيضًا تعريف المتغيرات في JavaScript باستخدام الكلمة المفتاحية <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var">var</a>. لفترة طويلة، كانت var الطريقة الوحيدة لتعريف المتغيرات. وقد أُضيفت الكلمتان المفتاحيتان const و let في عام 2015 مع إصدار ES6. في حالات معينة، تعمل var بطريقة مختلفة مقارنة بتعريفات المتغيرات في معظم اللغات - راجع <a href="https://medium.com/craft-academy/javascript-variables-should-you-use-let-var-or-const-394f7645c88f">متغيرات JavaScript - هل ينبغي أن تستخدم let أم var أم const؟ على Medium</a> أو <a href="http://www.jstips.co/en/javascript/keyword-var-vs-let/">الكلمة المفتاحية: var مقابل let على JS Tips</a> لمزيد من المعلومات. خلال هذه الدورة، لا يُنصح باستخدام var وعليك الالتزام باستخدام const و let!
+يمكنك العثور على المزيد حول هذا الموضوع على YouTube - مثل <a href="https://youtu.be/sjyJBL5fkp8">var و let و const - ميزات ES6 في JavaScript</a></p>
+<h3 id="المصفوفات">المصفوفات</h3>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">المصفوفة</a> وبعض الأمثلة على استخدامها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> t = [<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">3</span>]
+
+t.<span class="hljs-title function_">push</span>(<span class="hljs-number">5</span>)
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(t.<span class="hljs-property">length</span>) <span class="hljs-comment">// تُطبع 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(t[<span class="hljs-number">1</span>])     <span class="hljs-comment">// تُطبع -1</span>
+
+t.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)  <span class="hljs-comment">// تُطبع الأعداد 1، -1، 3، 5، كل واحد في سطر منفصل</span>
+})                    
+</code></pre>
+<p>الملاحظ في هذا المثال أنه على الرغم من أن المتغير المُعرَّف بـ const لا يمكن إعادة إسناده إلى قيمة أخرى، فإن محتويات الكائن الذي يشير إليه يمكن تعديلها. والسبب أن تعريف const يضمن ثبات المرجع نفسه، لا البيانات التي يشير إليها. تخيّل الأمر كتغيير الأثاث داخل منزل، بينما يبقى عنوان المنزل كما هو.</p>
+<p>إحدى طرق المرور على عناصر المصفوفة هي استخدام <em>forEach</em> كما في المثال. تستقبل <em>forEach</em> <i>دالة</i> معرّفة بصياغة السهم كوسيط.</p>
+<pre><code class="language-js">value =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)
+}
+</code></pre>
+<p>تستدعي forEach الدالة <i>لكل عنصر من عناصر المصفوفة</i>، وتمرّر دائمًا العنصر المفرد كوسيط. ويمكن للدالة بوصفها وسيطًا لـ forEach أن تستقبل أيضًا <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">وسائط أخرى</a>.</p>
+<p>في المثال السابق، أُضيف عنصر جديد إلى المصفوفة باستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push">push</a>. عند استخدام React، كثيرًا ما تُستخدم تقنيات من البرمجة الوظيفية. ومن خصائص نمط البرمجة الوظيفية استخدام بنى بيانات <a href="https://en.wikipedia.org/wiki/Immutable_object">غير قابلة للتغيير</a>. في شيفرة React، يُفضَّل استخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat">concat</a>، التي تنشئ مصفوفة جديدة مع العنصر المُضاف. وهذا يضمن بقاء المصفوفة الأصلية دون تغيير.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> t = [<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">3</span>]
+
+<span class="hljs-keyword">const</span> t2 = t.<span class="hljs-title function_">concat</span>(<span class="hljs-number">5</span>)  <span class="hljs-comment">// ينشئ مصفوفة جديدة</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(t)  <span class="hljs-comment">// تُطبع [1, -1, 3]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(t2) <span class="hljs-comment">// تُطبع [1, -1, 3, 5]</span>
+</code></pre>
+<p>استدعاء الدالة <em>t.concat(5)</em> لا يضيف عنصرًا جديدًا إلى المصفوفة القديمة، بل يعيد مصفوفة جديدة تحتوي، إلى جانب عناصر المصفوفة القديمة، على العنصر الجديد أيضًا.</p>
+<p>هناك الكثير من الدوال المفيدة المعرّفة للمصفوفات. لنلقِ نظرة على مثال قصير لاستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">map</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> t = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+
+<span class="hljs-keyword">const</span> m1 = t.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> value * <span class="hljs-number">2</span>)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(m1)   <span class="hljs-comment">// تُطبع [2, 4, 6]</span>
+</code></pre>
+<p>بناءً على المصفوفة القديمة، تنشئ map <i>مصفوفة جديدة</i> تُستخدم الدالة المعطاة كوسيط لإنشاء عناصرها. في حالة هذا المثال، تُضرب القيمة الأصلية في اثنين.</p>
+<p>يمكن لـ map أيضًا تحويل المصفوفة إلى شيء مختلف تمامًا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> m2 = t.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-string">&#x27;&lt;li&gt;&#x27;</span> + value + <span class="hljs-string">&#x27;&lt;/li&gt;&#x27;</span>)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(m2)  
+<span class="hljs-comment">// تُطبع [ &#x27;&lt;li&gt;1&lt;/li&gt;&#x27;, &#x27;&lt;li&gt;2&lt;/li&gt;&#x27;, &#x27;&lt;li&gt;3&lt;/li&gt;&#x27; ]</span>
+</code></pre>
+<p>هنا تُحوَّل مصفوفة مليئة بقيم صحيحة إلى مصفوفة تحتوي نصوص HTML باستخدام الدالة map. في <a href="../../part2">الجزء 2</a> من هذه الدورة، سنرى أن map تُستخدم كثيرًا في React.</p>
+<p>يمكن إسناد العناصر المفردة في المصفوفة إلى متغيرات بسهولة بمساعدة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">إسناد التفكيك</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> t = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+
+<span class="hljs-keyword">const</span> [first, second, ...rest] = t
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(first, second)  <span class="hljs-comment">// تُطبع 1 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(rest)          <span class="hljs-comment">// تُطبع [3, 4, 5]</span>
+</code></pre>
+<p>في الأعلى، يُسند إلى المتغير <em>first</em> أول عدد صحيح في المصفوفة، ويُسند إلى المتغير <em>second</em> ثاني عدد صحيح في المصفوفة. أما المتغير <em>rest</em> في &quot;يجمع&quot; الأعداد الصحيحة المتبقية في مصفوفة خاصة به.</p>
+<h3 id="الكائنات">الكائنات</h3>
+<p>هناك بضع طرق مختلفة لتعريف الكائنات في JavaScript. ومن الطرق الشائعة جدًا استخدام <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#object_literals">الكائنات الحرفية</a> (object literals)، وذلك بسرد خصائصها داخل أقواس معقوصة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> object1 = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+  <span class="hljs-attr">education</span>: <span class="hljs-string">&#x27;PhD&#x27;</span>,
+}
+
+<span class="hljs-keyword">const</span> object2 = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Full Stack web application development&#x27;</span>,
+  <span class="hljs-attr">level</span>: <span class="hljs-string">&#x27;intermediate studies&#x27;</span>,
+  <span class="hljs-attr">size</span>: <span class="hljs-number">5</span>,
+}
+
+<span class="hljs-keyword">const</span> object3 = {
+  <span class="hljs-attr">name</span>: {
+    <span class="hljs-attr">first</span>: <span class="hljs-string">&#x27;Dan&#x27;</span>,
+    <span class="hljs-attr">last</span>: <span class="hljs-string">&#x27;Abramov&#x27;</span>,
+  },
+  <span class="hljs-attr">grades</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">3</span>],
+  <span class="hljs-attr">department</span>: <span class="hljs-string">&#x27;Stanford University&#x27;</span>,
+}
+</code></pre>
+<p>يمكن أن تكون قيم الخصائص من أي نوع، مثل الأعداد الصحيحة والنصوص والمصفوفات والكائنات...</p>
+<p>يُشار إلى خصائص الكائن باستخدام صيغة &quot;النقطة&quot;، أو باستخدام الأقواس:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object1.<span class="hljs-property">name</span>)         <span class="hljs-comment">// تُطبع Arto Hellas</span>
+<span class="hljs-keyword">const</span> fieldName = <span class="hljs-string">&#x27;age&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(object1[fieldName])    <span class="hljs-comment">// تُطبع 35</span>
+</code></pre>
+<p>يمكنك أيضًا إضافة خصائص إلى كائن أثناء العمل باستخدام صيغة النقطة أو الأقواس:</p>
+<pre><code class="language-js">object1.<span class="hljs-property">address</span> = <span class="hljs-string">&#x27;Helsinki&#x27;</span>
+object1[<span class="hljs-string">&#x27;secret number&#x27;</span>] = <span class="hljs-number">12341</span>
+</code></pre>
+<p>الإضافة الأخيرة يجب أن تتم باستخدام الأقواس، لأنه عند استخدام صيغة النقطة، فإن <i>secret number</i> ليس اسم خاصية صالحًا بسبب المسافة.</p>
+<p>بطبيعة الحال، يمكن أن تحتوي الكائنات في JavaScript على دوال أيضًا. ومع ذلك، خلال هذه الدورة، لا نحتاج إلى تعريف أي كائنات لها دوال خاصة بها. ولهذا تُناقش فقط بإيجاز خلال الدورة.</p>
+<p>يمكن أيضًا تعريف الكائنات باستخدام ما يُسمى دوال المُنشئ، وهو ما ينتج آلية تشبه آليات لغات برمجة أخرى كثيرة، مثل أصناف Java. ورغم هذا التشابه، لا تحتوي JavaScript على أصناف بالمعنى نفسه الموجود في لغات البرمجة كائنية التوجه. غير أنه أُضيفت <i>صياغة الأصناف</i> بدءًا من الإصدار ES6، وهي تساعد في بعض الحالات على تنظيم الأصناف كائنية التوجه.</p>
+<h3 id="الدوال">الدوال</h3>
+<p>أصبحنا بالفعل على دراية بتعريف دوال السهم. والعملية الكاملة، دون اختصار، لتعريف دالة سهم هي كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">sum</span> = (<span class="hljs-params">p1, p2</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p1)
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p2)
+  <span class="hljs-keyword">return</span> p1 + p2
+}
+</code></pre>
+<p>وتُستدعى الدالة كما هو متوقع:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> result = <span class="hljs-title function_">sum</span>(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result)
+</code></pre>
+<p>إذا كان هناك وسيط واحد فقط، يمكننا حذف الأقواس من التعريف:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">square</span> = p =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p)
+  <span class="hljs-keyword">return</span> p * p
+}
+</code></pre>
+<p>إذا كانت الدالة تحتوي على تعبير واحد فقط فلا حاجة إلى الأقواس المعقوصة. في هذه الحالة، تعيد الدالة فقط نتيجة تعبيرها الوحيد. الآن، إذا أزلنا الطباعة في وحدة التحكم، يمكننا تقصير تعريف الدالة أكثر:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">square</span> = p =&gt; p * p
+</code></pre>
+<p>هذه الصيغة عملية بشكل خاص عند التعامل مع المصفوفات - مثل استخدام الدالة map:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> t = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+<span class="hljs-keyword">const</span> tSquared = t.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p * p)
+<span class="hljs-comment">// tSquared أصبحت الآن [1, 4, 9]</span>
+</code></pre>
+<p>أُضيفت ميزة دوال السهم إلى JavaScript في عام 2015، مع الإصدار <a href="https://rse.github.io/es6-features/">ES6</a>. قبل ذلك، كانت الطريقة الوحيدة لتعريف الدوال هي استخدام الكلمة المفتاحية <em>function</em>.</p>
+<p>هناك طريقتان للإشارة إلى الدالة؛ إحداهما إعطاء اسم في <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">إعلان دالة</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">product</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a * b
+}
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-title function_">product</span>(<span class="hljs-number">2</span>, <span class="hljs-number">6</span>)
+<span class="hljs-comment">// result أصبحت الآن 12</span>
+</code></pre>
+<p>الطريقة الأخرى لتعريف الدالة هي استخدام <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function">تعبير دالة</a>. في هذه الحالة، لا حاجة لإعطاء الدالة اسمًا، ويمكن أن يوجد التعريف بين بقية الشيفرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> average = <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> (a + b) / <span class="hljs-number">2</span>
+}
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-title function_">average</span>(<span class="hljs-number">2</span>, <span class="hljs-number">5</span>)
+<span class="hljs-comment">// result أصبحت الآن 3.5</span>
+</code></pre>
+<p>خلال هذه الدورة، سنعرّف جميع الدوال باستخدام صياغة السهم.</p>
+</div>
+<div class="tasks">
+  <h3 id="تمارين-13-15">تمارين 1.3.-1.5.</h3>
+<p><i>نواصل بناء التطبيق الذي بدأنا العمل عليه في التمارين السابقة. يمكنك كتابة الشيفرة في المشروع نفسه لأننا مهتمون فقط بالحالة النهائية للتطبيق المُسلَّم.</i></p>
+<p><strong>نصيحة احترافية:</strong> قد تصادف مشكلات تتعلق ببنية الـ <i>props</i> التي تستقبلها المكوّنات. ومن الطرق الجيدة لتوضيح الأمور طباعة الـ props في وحدة التحكم، كما يلي مثلًا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Header</span> = (<span class="hljs-params">props</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(props) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>{props.course}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>
+}
+</code></pre>
+<p>وإذا واجهت رسالة خطأ، و<i>سوف</i> تواجهها</p>
+<blockquote>
+<p><i>Objects are not valid as a React child</i></p>
+</blockquote>
+<p>فتذكّر ما قيل <a href="../../part1/introduction_to_react#do-not-render-objects">هنا</a>.</p>
+  <h4 id="13-معلومات-الدورة-الخطوة-3">1.3: معلومات الدورة، الخطوة 3</h4>
+<p>لنمضِ قدمًا إلى استخدام الكائنات في تطبيقنا. عدّل تعريفات المتغيرات في مكوّن <i>App</i> كما يلي، وأعد هيكلة التطبيق أيضًا بحيث يظل يعمل:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> course = <span class="hljs-string">&#x27;Half Stack application development&#x27;</span>
+  <span class="hljs-keyword">const</span> part1 = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Fundamentals of React&#x27;</span>,
+    <span class="hljs-attr">exercises</span>: <span class="hljs-number">10</span>
+  }
+  <span class="hljs-keyword">const</span> part2 = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Using props to pass data&#x27;</span>,
+    <span class="hljs-attr">exercises</span>: <span class="hljs-number">7</span>
+  }
+  <span class="hljs-keyword">const</span> part3 = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;State of a component&#x27;</span>,
+    <span class="hljs-attr">exercises</span>: <span class="hljs-number">14</span>
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+  <h4 id="14-معلومات-الدورة-الخطوة-4">1.4: معلومات الدورة، الخطوة 4</h4>
+<p>ضع الكائنات في مصفوفة. عدّل تعريفات المتغيرات في <i>App</i> إلى الصيغة التالية وعدّل بقية أجزاء التطبيق وفقًا لذلك:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> course = <span class="hljs-string">&#x27;Half Stack application development&#x27;</span>
+  <span class="hljs-keyword">const</span> parts = [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Fundamentals of React&#x27;</span>,
+      <span class="hljs-attr">exercises</span>: <span class="hljs-number">10</span>
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Using props to pass data&#x27;</span>,
+      <span class="hljs-attr">exercises</span>: <span class="hljs-number">7</span>
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;State of a component&#x27;</span>,
+      <span class="hljs-attr">exercises</span>: <span class="hljs-number">14</span>
+    }
+  ]
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p><strong>ملاحظة</strong> في هذه المرحلة <i>يمكنك افتراض وجود ثلاثة عناصر دائمًا</i>، لذا لا حاجة للمرور على المصفوفات باستخدام الحلقات. سنعود إلى موضوع عرض المكوّنات بناءً على عناصر المصفوفات باستكشاف أكثر شمولًا في <a href="../../part2">الجزء التالي من الدورة</a>.</p>
+<p>ومع ذلك، لا تمرّر كائنات مختلفة كـ props منفصلة من مكوّن <i>App</i> إلى المكوّنين <i>Content</i> و<i>Total</i>. بل مرّرها مباشرة كمصفوفة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// تعريفات const</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> <span class="hljs-attr">course</span>=<span class="hljs-string">{course}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Content</span> <span class="hljs-attr">parts</span>=<span class="hljs-string">{parts}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Total</span> <span class="hljs-attr">parts</span>=<span class="hljs-string">{parts}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+  <h4 id="15-معلومات-الدورة-الخطوة-5">1.5: معلومات الدورة، الخطوة 5</h4>
+<p>لنمضِ بالتغييرات خطوة أخرى. حوّل الدورة وأجزاءها إلى كائن JavaScript واحد. وأصلح كل ما يتعطل.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> course = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Half Stack application development&#x27;</span>,
+    <span class="hljs-attr">parts</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Fundamentals of React&#x27;</span>,
+        <span class="hljs-attr">exercises</span>: <span class="hljs-number">10</span>
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Using props to pass data&#x27;</span>,
+        <span class="hljs-attr">exercises</span>: <span class="hljs-number">7</span>
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;State of a component&#x27;</span>,
+        <span class="hljs-attr">exercises</span>: <span class="hljs-number">14</span>
+      }
+    ]
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  )
+}
+</code></pre>
+</div>
+<div class="content">
+<h3 id="دوال-الكائنات-و-quotthisquot">دوال الكائنات و &quot;this&quot;</h3>
+<p>لأن هذه الدورة تستخدم إصدارًا من React يحتوي على خطافات React، لا نحتاج إلى تعريف كائنات لها دوال. <strong>محتويات هذا الفصل ليست ذات صلة بالدورة</strong> لكنها بالتأكيد مفيدة معرفتها من نواحٍ كثيرة. وعلى وجه الخصوص، عند استخدام إصدارات أقدم من React يجب فهم موضوعات هذا الفصل.</p>
+<p>تختلف دوال السهم والدوال المعرّفة بالكلمة المفتاحية <em>function</em> اختلافًا جوهريًا في سلوكها فيما يتعلق بالكلمة المفتاحية <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a>، التي تشير إلى الكائن نفسه.</p>
+<p>يمكننا إسناد دوال إلى كائن بتعريف خصائص هي دوال:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> arto = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+  <span class="hljs-attr">education</span>: <span class="hljs-string">&#x27;PhD&#x27;</span>,
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-attr">greet</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;hello, my name is &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>)
+  },
+  <span class="hljs-comment">// highlight-end</span>
+}
+
+arto.<span class="hljs-title function_">greet</span>()  <span class="hljs-comment">// تُطبع &quot;hello, my name is Arto Hellas&quot;</span>
+</code></pre>
+<p>يمكن إسناد الدوال إلى الكائنات حتى بعد إنشاء الكائن:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> arto = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+  <span class="hljs-attr">education</span>: <span class="hljs-string">&#x27;PhD&#x27;</span>,
+  <span class="hljs-attr">greet</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;hello, my name is &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>)
+  },
+}
+
+<span class="hljs-comment">// highlight-start</span>
+arto.<span class="hljs-property">growOlder</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span> += <span class="hljs-number">1</span>
+}
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arto.<span class="hljs-property">age</span>)   <span class="hljs-comment">// تُطبع 35</span>
+arto.<span class="hljs-title function_">growOlder</span>()
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arto.<span class="hljs-property">age</span>)   <span class="hljs-comment">// تُطبع 36</span>
+</code></pre>
+<p>لنعدّل الكائن قليلًا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> arto = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>,
+  <span class="hljs-attr">education</span>: <span class="hljs-string">&#x27;PhD&#x27;</span>,
+  <span class="hljs-attr">greet</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;hello, my name is &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>)
+  },
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-attr">doAddition</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a + b)
+  },
+  <span class="hljs-comment">// highlight-end</span>
+}
+
+arto.<span class="hljs-title function_">doAddition</span>(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>)        <span class="hljs-comment">// تُطبع 5</span>
+
+<span class="hljs-keyword">const</span> referenceToAddition = arto.<span class="hljs-property">doAddition</span>
+<span class="hljs-title function_">referenceToAddition</span>(<span class="hljs-number">10</span>, <span class="hljs-number">15</span>)   <span class="hljs-comment">// تُطبع 25</span>
+</code></pre>
+<p>الآن أصبح للكائن الدالة <em>doAddition</em> التي تحسب مجموع الأعداد المعطاة له كوسائط. وتُستدعى الدالة بالطريقة المعتادة، باستخدام الكائن <em>arto.doAddition(1, 4)</em> أو بتخزين <i>مرجع للدالة</i> في متغير واستدعاء الدالة عبر المتغير: <em>referenceToAddition(10, 15)</em>.</p>
+<p>إذا حاولنا فعل الشيء نفسه مع الدالة <em>greet</em> فإننا نصطدم بمشكلة:</p>
+<pre><code class="language-js">arto.<span class="hljs-title function_">greet</span>()       <span class="hljs-comment">// تُطبع &quot;hello, my name is Arto Hellas&quot;</span>
+
+<span class="hljs-keyword">const</span> referenceToGreet = arto.<span class="hljs-property">greet</span>
+<span class="hljs-title function_">referenceToGreet</span>() <span class="hljs-comment">// تُطبع &quot;hello, my name is undefined&quot;</span>
+</code></pre>
+<p>عند استدعاء الدالة عبر مرجع، تفقد الدالة معرفتها بما كان عليه <em>this</em> الأصلي. وخلافًا للغات أخرى، تُعرَّف قيمة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a> في JavaScript بناءً على <i>كيفية استدعاء الدالة</i>. وعند استدعاء الدالة عبر مرجع، تصبح قيمة <em>this</em> ما يُسمى <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object">الكائن العام</a>، وغالبًا ما تكون النتيجة النهائية غير ما قصده مطوّر البرمجيات أصلًا.</p>
+<p>فقدان تتبّع <em>this</em> عند كتابة شيفرة JavaScript يطرح بضع مشكلات محتملة. كثيرًا ما تنشأ حالات يحتاج فيها React أو Node (أو بشكل أدق محرّك JavaScript في متصفح الويب) إلى استدعاء دالة ما في كائن عرّفه المطوّر. ومع ذلك، في هذه الدورة نتجنب هذه المشكلات باستخدام JavaScript &quot;بلا this&quot;.</p>
+<p>من الحالات المؤدية إلى &quot;اختفاء&quot; <em>this</em> أننا نضبط مؤقتًا لاستدعاء الدالة <em>greet</em> على الكائن <em>arto</em>، باستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout">setTimeout</a>.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> arto = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Arto Hellas&#x27;</span>,
+  <span class="hljs-attr">greet</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;hello, my name is &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>)
+  },
+}
+
+<span class="hljs-built_in">setTimeout</span>(arto.<span class="hljs-property">greet</span>, <span class="hljs-number">1000</span>)  <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>كما ذُكر، تُعرَّف قيمة <em>this</em> في JavaScript بناءً على كيفية استدعاء الدالة. وعندما تستدعي <em>setTimeout</em> الدالة، فإن محرّك JavaScript هو من يستدعي الدالة فعليًا، وعند تلك اللحظة تشير <em>this</em> إلى الكائن العام.</p>
+<p>هناك آليات عدة يمكن بها الحفاظ على <em>this</em> الأصلي. إحداها استخدام دالة تُسمى <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a>:</p>
+<pre><code class="language-js"><span class="hljs-built_in">setTimeout</span>(arto.<span class="hljs-property">greet</span>.<span class="hljs-title function_">bind</span>(arto), <span class="hljs-number">1000</span>)
+</code></pre>
+<p>استدعاء <em>arto.greet.bind(arto)</em> ينشئ دالة جديدة ترتبط فيها <em>this</em> بالإشارة إلى Arto، بغض النظر عن مكان وكيفية استدعاء الدالة.</p>
+<p>باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">دوال السهم</a> يمكن حل بعض المشكلات المتعلقة بـ <em>this</em>. غير أنه لا ينبغي استخدامها دوالًا للكائنات لأن <em>this</em> عندئذ لا تعمل إطلاقًا. سنعود لاحقًا إلى سلوك <em>this</em> فيما يتعلق بدوال السهم.</p>
+<p>إذا أردت فهمًا أفضل لكيفية عمل <em>this</em> في JavaScript، فالإنترنت مليء بالمواد حول الموضوع، مثل سلسلة المقاطع المصوّرة <a href="https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth">فهم الكلمة المفتاحية this في JavaScript بعمق</a> من <a href="https://egghead.io">egghead.io</a> التي نوصي بها بشدة!</p>
+<h3 id="الأصناف">الأصناف</h3>
+<p>كما ذُكر سابقًا، لا توجد آلية أصناف في JavaScript مثل الموجودة في لغات البرمجة كائنية التوجه. غير أن هناك ميزات تجعل &quot;محاكاة&quot; <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">الأصناف</a> كائنية التوجه ممكنة.</p>
+<p>لنلقِ نظرة سريعة على <i>صياغة الأصناف</i> التي أُدخلت إلى JavaScript مع ES6، والتي تبسّط كثيرًا تعريف الأصناف (أو الأشياء الشبيهة بالأصناف) في JavaScript.</p>
+<p>في المثال التالي نعرّف &quot;صنفًا&quot; يُسمى Person وكائنين من نوع Person:</p>
+<pre><code class="language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">name, age</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span> = age
+  }
+  <span class="hljs-title function_">greet</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;hello, my name is &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>)
+  }
+}
+
+<span class="hljs-keyword">const</span> adam = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>(<span class="hljs-string">&#x27;Adam Ondra&#x27;</span>, <span class="hljs-number">33</span>)
+adam.<span class="hljs-title function_">greet</span>()
+
+<span class="hljs-keyword">const</span> janja = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>(<span class="hljs-string">&#x27;Janja Garnbret&#x27;</span>, <span class="hljs-number">27</span>)
+janja.<span class="hljs-title function_">greet</span>()
+</code></pre>
+<p>فيما يتعلق بالصياغة، تشبه أصناف JavaScript والنسخ المُنشأة منها كثيرًا طريقة عمل الأصناف والكائنات في Java. وسلوكها أيضًا شبيه جدًا بكائنات Java. لكنها في جوهرها تبقى كائنات JavaScript عادية مبنية على <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance">الوراثة النموذجية</a>. ويظل نوع أي نسخة من هذه الأصناف هو <em>Object</em>، لأن JavaScript تعرّف جوهريًا مجموعة محدودة فقط من الأنواع: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures">Boolean و Null و Undefined و Number و String و Symbol و BigInt و Object</a>.</p>
+<p>كان إدخال صياغة الأصناف إضافة مثيرة للجدل. اطّلع على <a href="https://github.com/petsel/not-awesome-es6-classes">غير رائع: أصناف ES6</a> أو <a href="https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65">هل &quot;Class&quot; في ES6 هي &quot;الجزء السيئ&quot; الجديد؟ على Medium</a> لمزيد من التفاصيل.</p>
+<p>تُستخدم صياغة أصناف ES6 كثيرًا في React &quot;القديم&quot; وكذلك في Node.js، لذا فإن فهمها مفيد حتى في هذه الدورة. ومع ذلك، بما أننا نستخدم ميزة <a href="https://react.dev/reference/react/hooks">الخطافات</a> الجديدة في React طوال هذه الدورة، فليس لدينا استخدام ملموس لصياغة الأصناف في JavaScript.</p>
+<h3 id="مواد-javascript">مواد JavaScript</h3>
+<p>توجد على الإنترنت أدلة جيدة وأدلة سيئة لـ JavaScript. ومعظم الروابط في هذه الصفحة المتعلقة بميزات JavaScript تشير إلى <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">دليل JavaScript من Mozilla</a>.</p>
+<p>نوصي بشدة بقراءة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_overview">نظرة عامة على لغة JavaScript</a> على موقع Mozilla فورًا.</p>
+<p>إذا أردت التعرّف على JavaScript بعمق، فهناك سلسلة كتب مجانية رائعة على الإنترنت تُسمى <a href="https://github.com/getify/You-Dont-Know-JS">You-Dont-Know-JS</a>.</p>
+<p>ومن الموارد الرائعة الأخرى لتعلّم JavaScript موقع <a href="https://javascript.info">javascript.info</a>.</p>
+<p>الكتاب المجاني والجذاب جدًا <a href="https://eloquentjavascript.net">Eloquent JavaScript</a> ينقلك من الأساسيات إلى أمور مثيرة بسرعة. وهو مزيج من مشاريع نظرية وتمارين، ويغطي نظرية البرمجة العامة وكذلك لغة JavaScript.</p>
+<p><a href="https://www.youtube.com/playlist?list=PLlasXeu85E9cQ32gLCvAvr9vNaUccPVNP">Namaste 🙏 JavaScript</a> هو درس تعليمي مجاني آخر رائع ومُوصى به بشدة لتعلّم JavaScript من أجل فهم كيفية عمل JS تحت الغطاء. Namaste JavaScript دورة JavaScript معمّقة خالصة نُشرت مجانًا على YouTube. وستغطي المفاهيم الجوهرية لـ JavaScript بالتفصيل وكل ما يتعلق بكيفية عمل JS خلف الكواليس داخل محرّك JavaScript.</p>
+<p>لدى <a href="https://egghead.io">egghead.io</a> الكثير من المقاطع المصوّرة عالية الجودة عن JavaScript وReact وموضوعات أخرى مثيرة للاهتمام. وللأسف، بعض المواد خلف جدار دفع.</p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part1/introduction_to_react"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">مقدمة إلى React</span></a><!--]--> <!--[0--><a class="next" href="../../part1/component_state_event_handlers"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">حالة المكوّن ومعالجات الأحداث</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

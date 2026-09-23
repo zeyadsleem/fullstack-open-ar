@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على معمارية Flux وZustand وReact Query وContext API لإدارة حالة التطبيقات."/><!----><title>الحالة المعقدة والجلب والاختبار - الجزء 6 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#حالة-أكثر-تعقيدا">حالة أكثر تعقيداً</a></li><li class="toc__depth-3"><a href="#البيانات-إلى-الخادم">البيانات إلى الخادم</a></li><li class="toc__depth-3"><a href="#fetch-api">Fetch API</a></li><li class="toc__depth-3"><a href="#جلب-البيانات-من-الخادم">جلب البيانات من الخادم</a></li><li class="toc__depth-3"><a href="#إرسال-البيانات-إلى-الخادم">إرسال البيانات إلى الخادم</a></li><li class="toc__depth-3"><a href="#الـ-actions-غير-المتزامنة">الـ actions غير المتزامنة</a></li><li class="toc__depth-3"><a href="#الوسيطات">الوسيطات</a></li><li class="toc__depth-3"><a href="#اختبار-stores-في-zustand">اختبار stores في Zustand</a></li><li class="toc__depth-3"><a href="#اختبار-store-الملاحظات">اختبار store الملاحظات</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#B795F3"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part6">الجزء 6: إدارة الحالة</a></p> <h1>الحالة المعقدة والجلب والاختبار</h1></div> <div class="course-content"><!----><p>لنواصل توسيع نسخة Zustand من تطبيق الملاحظات.</p>
+<p>لتسهيل التطوير، سنغيّر الحالة الأولية بحيث تحتوي مسبقاً على بضع ملاحظات:</p>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> initialNotes = [
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+      <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Zustand is less complex than Redux&#x27;</span>,
+      <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+    }, {
+      <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>,
+      <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;React app benefits from custom hooks&#x27;</span>,
+      <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span>,
+    }, {
+      <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Remember to sleep well&#x27;</span>,
+      <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+    }
+  ]
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: initialNotes,
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<h3 id="حالة-أكثر-تعقيدا">حالة أكثر تعقيداً</h3>
+<p>لننفّذ ترشيح الملاحظات المعروضة في التطبيق، بما يتيح تقييد الملاحظات الظاهرة. يُنفَّذ الترشيح باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio" target="_blank" rel="noopener">أزرار الراديو (radio buttons)</a>:</p>
+<p><img src="../../images/mooc/1522797f18a8.webp" alt="صورة توضيحية"></p>
+<p>يبرز السؤال حول أفضل طريقة للتعامل مع إدارة حالة المرشّح. يوجد أساساً خياران: إنشاء store منفصل في Zustand للمرشّح، أو إضافته إلى الـ store الحالي. وكلا الحلّين مبرَّر. توصي <a href="https://tkdodo.eu/blog/working-with-zustand#keep-the-scope-of-your-store-small" target="_blank" rel="noopener">أفضل الممارسات</a> الموجودة على الإنترنت بإبقاء <em>الأشياء غير المترابطة في stores منفصلة</em> تماماً. ومع ذلك، فإن قائمة الملاحظات والترشيح مرتبطان ارتباطاً وثيقاً بما يكفي لوضع كليهما في الـ store نفسه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: initialNotes,
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;all&#x27;</span>,
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">add</span>: <span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> <span class="hljs-title function_">set</span>(
+      <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(note) })
+    ),
+    <span class="hljs-attr">toggleImportance</span>: <span class="hljs-function"><span class="hljs-params">id</span> =&gt;</span> <span class="hljs-title function_">set</span>(
+      <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+        <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span>
+          note.<span class="hljs-property">id</span> === id ? { ...note, <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> } : note
+        )
+      })
+    ),
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">setFilter</span>: <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">filter</span>: value }))
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+  }
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNotes</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">notes</span>)
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useFilter</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">filter</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNoteActions</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">actions</span>)
+</code></pre>
+<p>المكوّن الذي يضبط قيمة المرشّح:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNoteActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">VisibilityFilter</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> { setFilter } = <span class="hljs-title function_">useNoteActions</span>()
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;input
+        type=<span class="hljs-string">&quot;radio&quot;</span>
+        name=<span class="hljs-string">&quot;filter&quot;</span>
+        onChange={() =&amp;gt; <span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;all&#x27;</span>)}
+        defaultChecked
+      /&amp;gt;
+      all
+      &amp;lt;input
+        type=<span class="hljs-string">&quot;radio&quot;</span>
+        name=<span class="hljs-string">&quot;filter&quot;</span>
+        onChange={() =&amp;gt; <span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;important&#x27;</span>)}
+      /&amp;gt;
+      important
+      &amp;lt;input
+        type=<span class="hljs-string">&quot;radio&quot;</span>
+        name=<span class="hljs-string">&quot;filter&quot;</span>
+        onChange={() =&amp;gt; <span class="hljs-title function_">setFilter</span>(<span class="hljs-string">&#x27;nonimportant&#x27;</span>)}
+      /&amp;gt;
+      not important
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">VisibilityFilter</span>
+</code></pre>
+<p>يعرض مكوّن <em>App</em> المرشّح:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; (
+  &amp;lt;div&gt;
+    &amp;lt;<span class="hljs-title class_">NoteForm</span> /&gt;
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    &amp;lt;<span class="hljs-title class_">VisibilityFilter</span> /&gt;
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+    &amp;lt;<span class="hljs-title class_">NoteList</span> /&gt;
+  &amp;lt;/div&gt;
+)
+</code></pre>
+<p>يمكن التعامل مع ترشيح الملاحظات المعروضة في مكوّن <em>NoteList</em> على النحو التالي مثلاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNotes, useFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteList</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>()
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> filter = <span class="hljs-title function_">useFilter</span>()
+
+  <span class="hljs-keyword">const</span> notesToShow = notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+    <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;important&#x27;</span>) <span class="hljs-keyword">return</span> note.<span class="hljs-property">important</span>
+    <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;nonimportant&#x27;</span>) <span class="hljs-keyword">return</span> !note.<span class="hljs-property">important</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+  })
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;ul&gt;
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      {notesToShow.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> (
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+        &amp;lt;<span class="hljs-title class_">Note</span> key={note.<span class="hljs-property">id</span>} note={note} /&gt;
+      ))}
+    &amp;lt;/ul&gt;
+  )
+}
+</code></pre>
+<p>الحل الأكثر أناقة هو تضمين منطق الترشيح مباشرةً في دالة <em>useNotes</em> الخاصة بالـ store:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-comment">// ...</span>
+}))
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNotes</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">notes</span>)
+  <span class="hljs-keyword">const</span> filter = <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">filter</span>)
+
+  <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;important&#x27;</span>) <span class="hljs-keyword">return</span> notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">important</span>)
+  <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;nonimportant&#x27;</span>) <span class="hljs-keyword">return</span> notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> !n.<span class="hljs-property">important</span>)
+
+  <span class="hljs-keyword">return</span> notes
+}
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>وهكذا تُعيد دالة <em>useNotes</em> دائماً قائمة ملاحظات مرشَّحة بالطريقة المطلوبة. بل إن مستخدِم الدالة، وهو مكوّن <em>NoteList</em>، لا يحتاج حتى إلى معرفة أن المرشّح موجود:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNotes } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Note</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Note&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">NoteList</span> = () =&amp;gt; {
+  <span class="hljs-comment">// يحصل المكوّن دائماً على مجموعة الملاحظات المرشَّحة بشكل صحيح</span>
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>()
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;ul&amp;gt;
+      {notes.<span class="hljs-title function_">map</span>(note =&amp;gt; (
+        &amp;lt;<span class="hljs-title class_">Note</span> key={note.<span class="hljs-property">id</span>} note={note} /&amp;gt;
+      ))}
+    &amp;lt;/ul&amp;gt;
+  )
+}
+</code></pre>
+<p>الحل أنيق!</p>
+<blockquote>
+<p>حل بديل ممكن</p>
+<p>يتمثل البديل في تنفيذ الترشيح مباشرةً داخل دالة المحدِّد (selector)، بحيث تُقرأ كل من الملاحظات والمرشّح في استدعاء واحد لـ <em>useNoteStore</em>:</p>
+<p>export const useNotes = () =&gt; useNoteStore(({ notes, filter }) =&gt; {
+if (filter === 'important') return notes.filter(n =&gt; n.important)
+if (filter === 'nonimportant') return notes.filter(n =&gt; !n.important)</p>
+<p>return notes
+})</p>
+<p>لكن هذا الأسلوب لا يعمل، لأنه يؤدي إلى حلقة إعادة عرض لا نهائية عند تغيير المرشّح.</p>
+<p>والسبب كما يلي: يقارن Zustand القيمة المُعادة من المحدِّد باستخدام المعامل <em>===</em>. ولأن <em>notes.filter(...)</em> تُنشئ مصفوفة جديدة في كل عرض، يفسّرها React دائماً على أنها حالة جديدة ويُطلق عرضاً آخر، يُنشئ بدوره مصفوفة جديدة، وهكذا دواليك.</p>
+<p>الحل هو إضافة <a href="https://zustand.docs.pmnd.rs/reference/hooks/use-shallow" target="_blank" rel="noopener">useShallow</a>، التي تستبدل مقارنة <em>===</em> بمقارنة سطحية: فهي تقارن عناصر المصفوفة واحداً واحداً. وإذا لم يتغير المحتوى، تُعيد مرجع المصفوفة القديمة بدلاً من مصفوفة جديدة، فيرى React أن الحالة مستقرة ولا يعيد العرض.</p>
+<p>import { useShallow } from 'zustand/react/shallow'</p>
+<p>//...</p>
+<p>export const useNotes = () =&gt; useNoteStore(useShallow(({ notes, filter }) =&gt; {
+if (filter === 'important') return notes.filter(n =&gt; n.important)
+if (filter === 'nonimportant') return notes.filter(n =&gt; !n.important)</p>
+<p>return notes
+}))</p>
+<p>الحل يعمل، لكنه أصعب قليلاً في الفهم. نستخدم في مادة المقرر النسخة المعروضة سابقاً باستدعاءين منفصلين لـ <em>useNoteStore</em>.</p>
+</blockquote>
+<p>الشيفرة الحالية للتطبيق متاحة كاملة على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-3" target="_blank" rel="noopener">GitHub</a>، في الفرع <em>part6-3</em>.</p>
+<div class="tasks">
+<p><strong>7. anecdotes، الخطوة 5</strong></p>
+</div>
+<h3 id="البيانات-إلى-الخادم">البيانات إلى الخادم</h3>
+<p>لنوسّع التطبيق بحيث تُخزَّن الملاحظات في الواجهة الخلفية. سنستخدم <a href="../../part2/getting_data_from_server" target="_blank" rel="noopener">JSON Server</a> المألوف من الجزء الثاني.</p>
+<p>احفظ الحالة الأولية لقاعدة البيانات في ملف <em>db.json</em> في جذر المشروع:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;notes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Zustand is less complex than Redux&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;important&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;React app benefits from custom hooks&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;important&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Remember to sleep well&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;important&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>ثبّت JSON Server:</p>
+<pre><code class="language-bash">npm install json-server --save-dev
+</code></pre>
+<p>وأضف السطر التالي إلى قسم <em>scripts</em> في <em>package.json</em>:</p>
+<pre><code>&quot;scripts&quot;: {
+  &quot;server&quot;: &quot;json-server -p 3001 db.json&quot;,
+  // ...
+}
+</code></pre>
+<p>شغّل JSON Server بالأمر <em>npm run server</em>.</p>
+<h3 id="fetch-api">Fetch API</h3>
+<p>في تطوير البرمجيات، غالباً ما يتعين عليك التفكير فيما إذا كانت ميزة معينة تُنفَّذ باستخدام مكتبة خارجية أم بالاستفادة من الحلول الأصلية التي توفرها البيئة. ولكل من الأسلوبين مزاياه وتحدياته.</p>
+<p>استخدمنا في أجزاء سابقة من هذا المقرر مكتبة <a href="https://axios-http.com/docs/intro" target="_blank" rel="noopener">Axios</a> لإجراء طلبات HTTP. لنألف الآن طريقة بديلة لإجراء طلبات HTTP باستخدام <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank" rel="noopener">Fetch API</a> الأصلية.</p>
+<p>من المعتاد أن تكون مكتبة خارجية مثل <em>Axios</em> مبنية باستخدام مكتبات خارجية أخرى. فمثلاً، إذا ثبّتت Axios في مشروع بالأمر <em>npm install axios</em>، يكون ناتج الطرفية:</p>
+<pre><code>$ npm install axios
+
+added 23 packages, and audited 302 packages in 1s
+
+71 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+</code></pre>
+<p>إذن لن يثبّت الأمر مكتبة Axios فقط، بل أكثر من 20 حزمة npm أخرى تحتاجها Axios لتعمل.</p>
+<p>توفّر <em>Fetch API</em> طريقة مشابهة لإجراء طلبات HTTP كما في Axios، لكن استخدام Fetch API لا يتطلب تثبيت مكتبات خارجية. وتصبح صيانة التطبيق أسهل عندما تكون المكتبات الواجب تحديثها أقل، كما يتحسن الأمان لأن سطح الهجوم المحتمل للتطبيق يقل. يُتناول أمان التطبيقات وصيانتها في <a href="../../part7#security-in-react-and-node-applications" target="_blank" rel="noopener">الجزء السابع</a> من المقرر.</p>
+<p>تُجرى الطلبات عملياً باستخدام دالة <em>fetch()</em>. ولهذه الصيغة بعض الاختلافات مقارنةً بـ Axios. وسنلاحظ قريباً أن Axios اعتنى ببعض الأمور نيابةً عنا ويسّر حياتنا. غير أننا سنستخدم Fetch API الآن لأنه حل أصلي واسع الاستخدام ينبغي أن يكون كل مطوّر Full Stack على دراية به.</p>
+<h3 id="جلب-البيانات-من-الخادم">جلب البيانات من الخادم</h3>
+<p>لننشئ دالة تجلب البيانات من الواجهة الخلفية في ملف <em>src/services/notes.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> baseUrl = <span class="hljs-string">&#x27;http://localhost:3001/notes&#x27;</span>
+
+<span class="hljs-keyword">const</span> getAll = <span class="hljs-title function_">async</span> () =&amp;gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl)
+
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to fetch notes&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+  <span class="hljs-keyword">return</span> data
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> { getAll }
+</code></pre>
+<p>لنلقِ نظرة أدق على تنفيذ دالة <em>getAll</em>. تُجلب الملاحظات الآن من الواجهة الخلفية باستدعاء دالة <em>fetch()</em> التي أُعطي لها عنوان URL الخاص بالواجهة الخلفية كوسيط. ولم يُحدَّد نوع الطلب بشكل منفصل، لذا تنفّذ <em>fetch</em> الإجراء الافتراضي، وهو طلب GET.</p>
+<p>عند وصول الاستجابة، نتحقق مما إذا كان الطلب قد نجح بالنظر إلى حقل <em>response.ok</em> ونرفع خطأً عند الحاجة:</p>
+<pre><code>if (!response.ok) {
+  throw new Error('Failed to fetch notes')
+}
+</code></pre>
+<p>تأخذ السمة <em>response.ok</em> القيمة <em>true</em> إذا نجح الطلب، أي إذا كان رمز حالة الاستجابة ضمن النطاق 200-299. أما لجميع رموز الحالة الأخرى، مثل 404 أو 500، فتأخذ القيمة <em>false</em>.</p>
+<p>لاحظ أن <em>fetch</em> لا ترفع خطأً تلقائياً حتى إذا كان رمز حالة الاستجابة، مثلاً، 404. يجب تنفيذ معالجة الأخطاء يدوياً، كما فعلنا الآن.</p>
+<p>إذا نجح الطلب، تُحوَّل البيانات الواردة في الاستجابة إلى صيغة JSON:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+</code></pre>
+<p>لا تحوّل <em>fetch</em> تلقائياً البيانات التي قد تصحب الاستجابة إلى صيغة JSON؛ بل يجب إجراء التحويل يدوياً. ويجدر بالذكر أيضاً أن <em>response.json()</em> دالة غير متزامنة، لذا يجب استخدام الكلمة المفتاحية <em>await</em> معها.</p>
+<p>لنبسّط الشيفرة قليلاً بإعادة البيانات التي تُعيدها دالة <em>response.json()</em> مباشرةً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getAll</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl)
+
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to fetch notes&#x27;</span>)
+  }
+
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+}
+</code></pre>
+<p>لنضف إلى الـ store دالة يمكن استخدامها لتهيئة الحالة بملاحظات مجلوبة من الخادم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-attr">setFilter</span>: <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">filter</span>: value })),
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">initialize</span>: <span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ notes }))
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+  }
+}))
+</code></pre>
+<p>لننفّذ تهيئة الملاحظات في مكوّن <em>App</em>. وكما جرت العادة عند جلب البيانات من الخادم، نستخدم خطاف <em>useEffect</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> { initialize } = <span class="hljs-title function_">useNoteActions</span>()
+
+ <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    noteService.<span class="hljs-title function_">getAll</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> <span class="hljs-title function_">initialize</span>(notes))
+  }, [initialize])
+ <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;<span class="hljs-title class_">NoteForm</span> /&gt;
+      &amp;lt;<span class="hljs-title class_">VisibilityFilter</span> /&gt;
+      &amp;lt;<span class="hljs-title class_">NoteList</span> /&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>وهكذا تُجلب الملاحظات من الخادم باستخدام دالة <em>getAll()</em> التي عرّفناها، ثم تُخزَّن باستخدام دالة <em>initialize</em> التابعة للـ store. وتُنفَّذ هذه الإجراءات في خطاف <em>useEffect</em>، ما يعني أنها تُنفَّذ أثناء العرض الأول لمكوّن App.</p>
+<p>لنلقِ نظرة أدق على تفصيل صغير واحد. لقد أضفنا دالة <em>initialize</em> إلى مصفوفة اعتماديات خطاف <em>useEffect</em>. وإذا حاولنا استخدام مصفوفة اعتماديات فارغة، يعطينا ESLint التحذير التالي: <em>React Hook useEffect has a missing dependency: 'initialize'</em>. فما الذي يحدث؟</p>
+<p>ستعمل الشيفرة منطقياً بالطريقة نفسها تماماً حتى لو استخدمنا مصفوفة اعتماديات فارغة، لأن <em>initialize</em> تشير إلى الدالة نفسها طوال تنفيذ البرنامج. ومع ذلك، من ممارسات البرمجة الجيدة إضافة جميع المتغيرات والدوال المستخدمة في خطاف <em>useEffect</em> والمعرَّفة داخل المكوّن إلى الاعتماديات. فهذا يساعد على تجنب أخطاء غير متوقعة.</p>
+<h3 id="إرسال-البيانات-إلى-الخادم">إرسال البيانات إلى الخادم</h3>
+<p>لننفّذ بعد ذلك وظيفة إرسال ملاحظة جديدة إلى الخادم. وفي الوقت نفسه يمكننا التدرّب على كيفية إجراء طلب POST باستخدام دالة <em>fetch()</em>.</p>
+<p>لنوسّع شيفرة التواصل مع الخادم في <em>src/services/notes.js</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> baseUrl = <span class="hljs-string">&#x27;http://localhost:3001/notes&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">getAll</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl)
+
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to fetch notes&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+}
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">createNew</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">content</span>) =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+    <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ content, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> }),
+  })
+
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to create note&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+}
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> { getAll, createNew }
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>لنلقِ نظرة أدق على تنفيذ دالة <em>createNew</em>. يحدّد الوسيط الأول لدالة <em>fetch()</em> عنوان URL الذي يُوجَّه إليه الطلب. أما الوسيط الثاني فهو كائن يحدّد التفاصيل الأخرى للطلب، مثل نوع الطلب والترويسات والبيانات المُرسَلة مع الطلب. ويمكننا زيادة توضيح الشيفرة بتخزين الكائن الذي يحدّد تفاصيل الطلب في متغير مساعد منفصل <em>options</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">createNew</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">content</span>) =&gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> options = {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+    <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ content, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> }),
+  }
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl, options)
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(baseUrl, options)
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to create note&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+}
+</code></pre>
+<p>لنلقِ نظرة أدق على كائن <em>options</em>:</p>
+<ul>
+<li><em>method</em> يحدّد نوع الطلب، وهو في هذه الحالة <em>POST</em></li>
+<li><em>headers</em> يحدّد ترويسات الطلب. نُرفق بالطلب الترويسة <em>'Content-Type': 'application/json'</em> لكي يعرف الخادم أن البيانات المضمّنة مع الطلب بصيغة JSON، ويتمكن من التعامل مع الطلب بشكل صحيح</li>
+<li><em>body</em> يحتوي على البيانات التي ستُرسَل مع الطلب. لا يمكن أن يحتوي الحقل على كائن JavaScript مباشرةً، بل يجب أولاً تحويله إلى نص JSON باستدعاء <em>JSON.stringify()</em></li>
+</ul>
+<p>وكما في طلب GET، نتحقق هنا أيضاً من رمز حالة الاستجابة بحثاً عن أخطاء:</p>
+<pre><code>if (!response.ok) {
+  throw new Error('Failed to create note')
+}
+</code></pre>
+<p>إذا نجح الطلب، يُعيد <em>JSON Server</em> الملاحظة التي أُنشئت للتو، وقد ولّد لها أيضاً <em>id</em> فريداً. ولا تزال البيانات الواردة في الاستجابة بحاجة إلى التحويل إلى صيغة JSON باستخدام دالة <em>response.json()</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+</code></pre>
+<p>لنغيّر بعد ذلك مكوّن <em>NoteForm</em> في تطبيقنا بحيث تُرسَل الملاحظة الجديدة إلى الواجهة الخلفية. وتتغير دالة <em>addNote</em> في المكوّن قليلاً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useNoteActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+<span class="hljs-keyword">import</span> noteService <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./services/notes&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> { add } = <span class="hljs-title function_">useNoteActions</span>()
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">e</span>) =&gt; {
+    e.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-keyword">const</span> content = e.<span class="hljs-property">target</span>.<span class="hljs-property">note</span>.<span class="hljs-property">value</span>
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-keyword">const</span> newNote = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">createNew</span>(content)
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+    <span class="hljs-title function_">add</span>(newNote)
+    e.<span class="hljs-property">target</span>.<span class="hljs-title function_">reset</span>()
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;form onSubmit={addNote}&gt;
+      &amp;lt;input name=<span class="hljs-string">&quot;note&quot;</span> /&gt;
+      &amp;lt;button type=<span class="hljs-string">&quot;submit&quot;</span>&gt;add&amp;lt;/button&gt;
+    &amp;lt;/form&gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">NoteForm</span>
+</code></pre>
+<p>عند إنشاء ملاحظة جديدة في الواجهة الخلفية باستدعاء دالة <em>createNew()</em>، نحصل في المقابل على كائن يصف الملاحظة، وقد ولّدت الواجهة الخلفية له <em>id</em>.</p>
+<p>الشيفرة الحالية للتطبيق متاحة كاملة على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-4" target="_blank" rel="noopener">GitHub</a>، في الفرع <em>part6-4</em>.</p>
+<h3 id="الـ-actions-غير-المتزامنة">الـ actions غير المتزامنة</h3>
+<p>مقاربتنا جيدة إلى حد كبير، لكنها مؤسفة من جهة واحدة، إذ يحدث التواصل مع الخادم داخل شيفرة الدوال التي تعرّف المكوّنات. وسيكون أفضل لو أمكن تجريد التواصل بعيداً عن المكوّنات، بحيث لا تحتاج إلا إلى استدعاء دالة مناسبة يوفّرها الـ store.</p>
+<p>نريد أن يهيّئ <em>App</em> حالة التطبيق كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { initialize } = <span class="hljs-title function_">useNoteActions</span>()
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-title function_">initialize</span>()
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+  }, [initialize])
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;<span class="hljs-title class_">NoteForm</span> /&gt;
+      &amp;lt;<span class="hljs-title class_">VisibilityFilter</span> /&gt;
+      &amp;lt;<span class="hljs-title class_">NoteList</span> /&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>ويُنشئ <em>NoteForm</em> بدوره ملاحظة جديدة هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">NoteForm</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> { add } = <span class="hljs-title function_">useNoteActions</span>()
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">e</span>) =&gt; {
+    e.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-keyword">const</span> content = e.<span class="hljs-property">target</span>.<span class="hljs-property">note</span>.<span class="hljs-property">value</span>
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">add</span>(content)
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+    e.<span class="hljs-property">target</span>.<span class="hljs-title function_">reset</span>()
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;form onSubmit={addNote}&gt;
+      &amp;lt;input name=<span class="hljs-string">&quot;note&quot;</span> /&gt;
+      &amp;lt;button type=<span class="hljs-string">&quot;submit&quot;</span>&gt;add&amp;lt;/button&gt;
+    &amp;lt;/form&gt;
+  )
+}
+</code></pre>
+<p>أما التغيير في <em>store.js</em> فهو كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">import</span> noteService <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./services/notes&#x27;</span>
+
+<span class="hljs-comment">// END HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">add</span>: <span class="hljs-title function_">async</span> (content) =&gt; {
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> newNote = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">createNew</span>(content)
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(newNote) }))
+    },
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">initialize</span>: <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">getAll</span>()
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ notes }))
+    },
+    <span class="hljs-comment">// ...</span>
+  }
+}))
+</code></pre>
+<p>وهكذا حُوّلت الدالتان <em>add</em> و<em>initialize</em> إلى دالتين غير متزامنتين، تستدعيان أولاً دالة <em>noteService</em> المناسبة، ثم تحدّثان الحالة.</p>
+<p>الحل أنيق، إذ أصبحت إدارة الحالة والتواصل مع الخادم منفصلين تماماً خارج مكوّنات React.</p>
+<p>لنُكمل التطبيق بمزامنة تغييرات تبديل الأهمية مع الخادم.</p>
+<p>نوسّع <em>noteService.js</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> update = <span class="hljs-title function_">async</span> (id, note) =&amp;gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`<span class="hljs-subst">${baseUrl}</span>/<span class="hljs-subst">${id}</span>`</span>, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span>,
+    <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(note),
+  })
+
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Failed to update note&#x27;</span>)
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> { getAll, createNew, update }
+</code></pre>
+<p>أما التغيير في دالة <em>toggleImportance</em> التابعة للـ store فهو كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">add</span>: <span class="hljs-title function_">async</span> (content) =&gt; {
+      <span class="hljs-keyword">const</span> newNote = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">createNew</span>(content)
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(newNote) }))
+    },
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">toggleImportance</span>: <span class="hljs-title function_">async</span> (id) =&gt; {
+      <span class="hljs-keyword">const</span> note = useNoteStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">notes</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id)
+      <span class="hljs-keyword">const</span> updated = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">update</span>(
+        id, { ...note, <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> }
+      )
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+        <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id ? updated : n)
+      }))
+    },
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+    <span class="hljs-attr">setFilter</span>: <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">filter</span>: value })),
+    <span class="hljs-attr">initialize</span>: <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">getAll</span>()
+      <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ notes }))
+    }
+  }
+}))
+</code></pre>
+<p>ثمة تفصيل جدير بالملاحظة في الدالة الجديدة. تستقبل الدالة معرّف الملاحظة (id) كوسيط. لكن يجب إرسال الملاحظة المعدَّلة إلى الواجهة الخلفية. ويمكن العثور عليها باستدعاء دالة <em>getState</em> التابعة للـ store:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> note = useNoteStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">notes</span>.<span class="hljs-title function_">find</span>(n =&amp;gt; n.<span class="hljs-property">id</span> === id)
+</code></pre>
+<p>تحتوي stores الخاصة بـ Zustand أيضاً على عدد من <a href="https://zustand.docs.pmnd.rs/reference/apis/create#returns" target="_blank" rel="noopener">الدوال المساعدة</a> الأخرى، قد تكون مفيدة في بعض الحالات.</p>
+<p>لنغيّر أيضاً تعريف الـ store بحيث نمرّر كذلك الوسيط <a href="https://zustand.docs.pmnd.rs/reference/apis/create#parameters">get</a> إلى الدالة المُعطاة لـ <em>create</em>، والذي يمكننا من خلاله الوصول إلى قيم الحالة عند الحاجة:</p>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function">(<span class="hljs-params">set, get</span>) =&gt;</span> ({
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">toggleImportance</span>: <span class="hljs-title function_">async</span> (id) =&gt; {
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> note = <span class="hljs-title function_">get</span>().<span class="hljs-property">notes</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id)
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> updated = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">update</span>(
+        id, { ...note, <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> }
+      )
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+        <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id ? updated : n)
+      }))
+    },
+    <span class="hljs-comment">// ...</span>
+  }
+}))
+</code></pre>
+<p>تُعيد دالة <em>get</em> الحالة الحالية للـ store. فمثلاً، يعطينا الاستدعاء <em>get().notes</em> ملاحظات الـ store الحالية. ودالة <em>get</em> مكافئة وظيفياً لاستدعاء <em>useNoteStore.getState()</em>، لكنها الطريقة الأكثر أصالة للإشارة إلى حالة الـ store من داخل دوال الـ store نفسها.</p>
+<p>شيفرة التطبيق على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-5" target="_blank" rel="noopener">GitHub</a> في الفرع <em>part6-5</em>.</p>
+<div class="tasks">
+<p><strong>8. anecdotes، الخطوة 6</strong></p>
+</div>
+<div class="tasks">
+<p><strong>9. anecdotes، الخطوة 7</strong></p>
+</div>
+<div class="tasks">
+<p><strong>10. anecdotes، الخطوة 8</strong></p>
+</div>
+<div class="tasks">
+<p><strong>11. anecdotes، الخطوة 9</strong></p>
+</div>
+<div class="tasks">
+<p><strong>12. anecdotes، الخطوة 10</strong></p>
+</div>
+<div class="tasks">
+<p><strong>13. فحص anecdotes</strong></p>
+</div>
+<h3 id="الوسيطات">الوسيطات</h3>
+<p>عند تطوير تطبيق، تصادفك غالباً حالات يصعب فيها فهم سبب سلوك التطبيق على نحو غير متوقع. فتتغير الحالة نتيجة استدعاء دالة action ما، لكن لا يتضح أي استدعاء غيّر ماذا وبأي ترتيب. ولا يساعد التسجيل التقليدي للدوال الفردية في وحدة التحكم إلا بحدود ضيقة.</p>
+<p>يدعم Zustand ما يُسمى الوسيطات (middlewares)، ويمكن استخدامها لإضافة وظائف إلى stores بشكل شفاف، دون المساس بمنطق الـ store نفسه. وفكرة الوسيط بسيطة: فهو «يلتفّ» حول الـ store ويمكنه، مثلاً، تسجيل كل تغيير في الحالة تلقائياً.</p>
+<p>وصيغة دوال الوسيط غامضة بعض الشيء. وفي ما يلي <em>logger</em> يطبع دائماً الحالة القديمة والجديدة للـ store كلما تغيرت الحالة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> logger = (config) =&amp;gt; (set, get) =&amp;gt; <span class="hljs-title function_">config</span>(
+  (...args) =&amp;gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;prev state&#x27;</span>, <span class="hljs-title function_">get</span>());
+    <span class="hljs-title function_">set</span>(...args);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;next state&#x27;</span>, <span class="hljs-title function_">get</span>());
+  },
+  get
+);
+</code></pre>
+<p>يُفعَّل الوسيط بـ«التفاف» الدالة المُعطاة كوسيط لـ <em>create</em> في Zustand:</p>
+<pre><code class="language-js"><span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-title function_">logger</span>(<span class="hljs-function">(<span class="hljs-params">set, get</span>) =&gt;</span> ({
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-comment">// ...</span>
+  }
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+})))
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>الآن، كلما تغيرت حالة الـ store، يمكننا دائماً رؤية كيف تتغير الحالة في وحدة التحكم:</p>
+<p><img src="../../images/mooc/37834b06ad73.webp" alt="صورة توضيحية"></p>
+<p>عملياً، يعمل الوسيط الذي عرّفناه باستبدال الدالة الأصلية <em>set</em> بالدالة</p>
+<pre><code>  (...args) =&amp;gt; {
+    console.log('prev state', get());
+    set(...args);
+    console.log('next state', get());
+  }
+</code></pre>
+<p>التي تطبع، إضافةً إلى استدعاء <em>set</em>، الحالة القديمة والجديدة (المتاحة عبر دالة <em>get</em>) في وحدة التحكم. أما الوسيط الثاني فهو <em>get</em> القديمة دون تغيير.</p>
+<p>يمتلك Zustand أيضاً وسيط <em>devtools</em> جاهزاً يدمج الـ store مع إضافة <a href="https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd" target="_blank" rel="noopener">Redux DevTools</a> في المتصفح. وتُعدّ Devtools أداة تطوير مفيدة للغاية، إذ تتيح لك تتبّع تغييرات الحالة بصرياً.</p>
+<p>الإعداد بسيط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">import</span> { devtools } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand/middleware&#x27;</span>
+<span class="hljs-comment">// END HIGHLIGHT</span>
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-title function_">devtools</span>(<span class="hljs-function">(<span class="hljs-params">set, get</span>) =&gt;</span> ({
+
+<span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-comment">// ...</span>
+  }
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+})))
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>عند تثبيت إضافة Redux DevTools في المتصفح، يمكن فحص حالة الـ store وتغييراتها في أدوات تطوير المتصفح:</p>
+<p><img src="../../images/mooc/8e1caa33c0a1.webp" alt="صورة توضيحية"></p>
+<h3 id="اختبار-stores-في-zustand">اختبار stores في Zustand</h3>
+<p>أخيراً، لننظر في اختبار stores الخاصة بـ Zustand باستخدام Vitest.</p>
+<p>لنبدأ، للتبسيط، بـ store العدّاد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+
+<span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({
+  <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">increment</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> + <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">decrement</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">counter</span>: state.<span class="hljs-property">counter</span> - <span class="hljs-number">1</span> })),
+    <span class="hljs-attr">zero</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })),
+  }
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useCounter</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">counter</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useCounterControls</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">actions</span>)
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> useCounterStore
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>أضفنا إلى التعريف تصديراً لأجل الاختبارات، يتيح للاختبار الوصول إلى الـ store.</p>
+<p>لنثبّت Vitest:</p>
+<pre><code class="language-bash">npm install --save-dev vitest
+</code></pre>
+<p>لننفّذ الاختبار في ملف <em>store.test.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { beforeEach, describe, expect, it } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>
+<span class="hljs-keyword">import</span> useCounterStore <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-title function_">beforeEach</span>(() =&amp;gt; {
+  useCounterStore.<span class="hljs-title function_">setState</span>({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })
+})
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;counter store&#x27;</span>, () =&amp;gt; {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;initial state is 0&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-title function_">expect</span>(useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">counter</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">0</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;increment increases counter by 1&#x27;</span>, () =&amp;gt; {
+    useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">actions</span>.<span class="hljs-title function_">increment</span>()
+    <span class="hljs-title function_">expect</span>(useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">counter</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">1</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;decrement decreases counter by 1&#x27;</span>, () =&amp;gt; {
+    useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">actions</span>.<span class="hljs-title function_">decrement</span>()
+    <span class="hljs-title function_">expect</span>(useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">counter</span>).<span class="hljs-title function_">toBe</span>(-<span class="hljs-number">1</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;zero resets counter to 0&#x27;</span>, () =&amp;gt; {
+    useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">actions</span>.<span class="hljs-title function_">increment</span>()
+    useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">actions</span>.<span class="hljs-title function_">increment</span>()
+    useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">actions</span>.<span class="hljs-title function_">zero</span>()
+    <span class="hljs-title function_">expect</span>(useCounterStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">counter</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">0</span>)
+  })
+})
+</code></pre>
+<p>الاختبارات بسيطة إلى حد كبير، إذ تستفيد من دالة <a href="https://zustand.docs.pmnd.rs/reference/apis/create#returns" target="_blank" rel="noopener">getState</a> التابعة للـ store، ما يتيح لها قراءة حالة الـ store وتنفيذ دواله.</p>
+<p>قبل كل اختبار، يُعاد ضبط الـ store إلى حالته الأولية في كتلة <em>beforeEach</em> باستخدام دالة <a href="https://zustand.docs.pmnd.rs/reference/apis/create#returns" target="_blank" rel="noopener">setState</a> التابعة له.</p>
+<p>إعادة ضبط الـ store إلى حالته الأولية بسيطة في حالتنا. لكن الأمر ليس كذلك دائماً بالضرورة. يصف <a href="https://zustand.docs.pmnd.rs/learn/guides/testing#vitest" target="_blank" rel="noopener">توثيق</a> Zustand طريقة لإنشاء نسخة من stores لأجل الاختبار تُعاد ضبطها تلقائياً إلى حالتها الأولية قبل كل اختبار. غير أن الطريقة معقّدة بما يكفي وغير ضرورية لنا، لذا سنتجاهلها الآن.</p>
+<p>إذن تستخدم الاختبارات الـ store مباشرةً. وإذا نُفّذ منطق أكثر تعقيداً عبر خطافات مخصّصة لاستخدام الـ store، فقد يلزم كتابة اختبارات تستفيد أيضاً من الخطافات. وفي العدّاد، يحدث استخدام الـ store عبر الخطافين <em>useCounter</em> و <em>useCounterControls</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({
+  <span class="hljs-comment">// ...</span>
+}))
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useCounter</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">counter</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useCounterControls</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useCounterStore</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.<span class="hljs-property">actions</span>)
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>في هذه الحالة لا تحتوي الخطافات على أي منطق، بل تكشف فقط وبشكل منفصل القيمة المخزنة في الـ store ودوال الـ store. لذا فإن أسلوب الاختبار الذي استخدمناه أعلاه جيد تماماً.</p>
+<p>ومع ذلك، لنصنع نسخة أخرى من الاختبارات لأغراض التوضيح، يُستخدم فيها الـ store بالطريقة نفسها تماماً التي يستخدمه بها التطبيق.</p>
+<p>إن <em>useCounter</em> و <em>useCounterControls</em> خطافان من React، لذا يتطلب اختبارهما <a href="https://github.com/testing-library/react-testing-library" target="_blank" rel="noopener">React Testing Library</a> ومكتبة <a href="https://github.com/jsdom/jsdom" target="_blank" rel="noopener">jsdom</a>:</p>
+<pre><code class="language-bash">npm install --save-dev @testing-library/react jsdom
+</code></pre>
+<p>لنضف إعداد بيئة الاختبار إلى <em>vite.config.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">test</span>: {
+    <span class="hljs-attr">environment</span>: <span class="hljs-string">&#x27;jsdom&#x27;</span>,
+  },
+   <span class="hljs-comment">// END HIGHLIGHT</span>
+})
+</code></pre>
+<p>والاختبارات كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { beforeEach, describe, expect, it } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>
+<span class="hljs-keyword">import</span> { renderHook, act } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+<span class="hljs-keyword">import</span> useCounterStore, { useCounter, useCounterControls } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+<span class="hljs-title function_">beforeEach</span>(() =&amp;gt; {
+  useCounterStore.<span class="hljs-title function_">setState</span>({ <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span> })
+})
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;counter hooks&#x27;</span>, () =&amp;gt; {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;useCounter returns initial value of 0&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-keyword">const</span> { result } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounter</span>())
+    <span class="hljs-title function_">expect</span>(result.<span class="hljs-property">current</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">0</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;increment updates counter&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: counter } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounter</span>())
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: controls } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounterControls</span>())
+
+    <span class="hljs-title function_">act</span>(() =&amp;gt; controls.<span class="hljs-property">current</span>.<span class="hljs-title function_">increment</span>())
+
+    <span class="hljs-title function_">expect</span>(counter.<span class="hljs-property">current</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">1</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;decrement updates counter&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: counter } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounter</span>())
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: controls } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounterControls</span>())
+
+    <span class="hljs-title function_">act</span>(() =&amp;gt; controls.<span class="hljs-property">current</span>.<span class="hljs-title function_">decrement</span>())
+
+    <span class="hljs-title function_">expect</span>(counter.<span class="hljs-property">current</span>).<span class="hljs-title function_">toBe</span>(-<span class="hljs-number">1</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;zero resets counter&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: counter } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounter</span>())
+    <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: controls } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounterControls</span>())
+
+    <span class="hljs-title function_">act</span>(() =&amp;gt; {
+      controls.<span class="hljs-property">current</span>.<span class="hljs-title function_">increment</span>()
+      controls.<span class="hljs-property">current</span>.<span class="hljs-title function_">increment</span>()
+      controls.<span class="hljs-property">current</span>.<span class="hljs-title function_">zero</span>()
+    })
+
+    <span class="hljs-title function_">expect</span>(counter.<span class="hljs-property">current</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">0</span>)
+  })
+})
+</code></pre>
+<p>ثمة أمور قليلة مثيرة للاهتمام في الاختبار. في بداية الاختبارات، تُعرَض الخطافات باستخدام دالة <a href="https://testing-library.com/docs/react-testing-library/api/#renderhook" target="_blank" rel="noopener">renderHook</a>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: counter } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounter</span>())
+<span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: controls } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useCounterControls</span>())
+</code></pre>
+<p>وبهذه الطريقة يصل الاختبار إلى القيم التي تُعيدها الخطافات، والمخزنة في المتغيرين <em>counter</em> و <em>controls</em>.</p>
+<p>تُستدعى الخطافات بتغليف الاستدعاء داخل دالة <a href="https://testing-library.com/docs/react-testing-library/api/#act" target="_blank" rel="noopener">act</a>:</p>
+<pre><code>act(() =&amp;gt; {
+  controls.current.increment()
+  controls.current.increment()
+  controls.current.zero()
+})
+</code></pre>
+<p>وأخيراً يأتي توقّع الاختبار:</p>
+<pre><code>expect(counter.current).toBe(0)
+</code></pre>
+<p>وكما نرى، للوصول إلى الخطاف نفسه لا نزال بحاجة إلى أخذ الحقل <em>current</em> من الكائن الذي تُعيده <em>renderHook</em>، وهو ما يقابل القيمة الحالية للخطاف.</p>
+<blockquote>
+<p>ما هي act؟</p>
+<p><em>act</em> دالة مساعدة تضمن معالجة جميع تحديثات الحالة وآثارها الجانبية قبل أن تتابع شيفرة الاختبار.</p>
+<p>عندما يحدث تغيير في الحالة داخل مكوّن أو خطاف في React، لا يحدّث React الحالة فوراً بل يضع التحديثات في قائمة انتظار. وتجبر act هذه التحديثات المنتظرة على التنفيذ.</p>
+<p>بدون act، قد يتحقق اختبار من الحالة قبل أن يتيح لـ React الوقت لتحديثها، ما يؤدي إلى فشل الاختبار أو إعطاء نتائج غير صحيحة.</p>
+<p>تُغلّف React Testing Library كثيراً من دوالها (مثل fireEvent وuserEvent) داخل act تلقائياً، لكن عند اختبار الخطافات مباشرةً تكون الحاجة إليها مطلوبة عادةً.</p>
+</blockquote>
+<p>يستخدم الاختبار عبر الخطافات مكتبة React Testing Library ويعرض الخطافات في سياق React حقيقي باستخدام jsdom. وهذا الأسلوب أبطأ بكثير من الاختبارات التي تستخدم الـ store مباشرةً، لذا إذا لم تحتوِ الخطافات على منطق معقّد، فقد يكفي إجراء الاختبارات باستخدام الـ store مباشرة.</p>
+<p>الشيفرة التي تحتوي على اختبارات عدّاد Zustand متاحة على <a href="https://github.com/fullstack-hy2020/zustand-counter" target="_blank" rel="noopener">GitHub</a>.</p>
+<h3 id="اختبار-store-الملاحظات">اختبار store الملاحظات</h3>
+<p>اختبار store تطبيق الملاحظات حالة أكثر تحدياً بعض الشيء، لأن الـ store يحتوي على دوال غير متزامنة تستدعي الخادم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;zustand&#x27;</span>
+<span class="hljs-keyword">import</span> noteService <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./services/notes&#x27;</span>
+
+<span class="hljs-keyword">const</span> useNoteStore = <span class="hljs-title function_">create</span>(<span class="hljs-function"><span class="hljs-params">set</span> =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: [],
+  <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-attr">add</span>: <span class="hljs-title function_">async</span> (content) =&gt; {
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> newNote = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">createNew</span>(content)
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">concat</span>(newNote) }))
+    },
+    <span class="hljs-attr">toggleImportance</span>: <span class="hljs-title function_">async</span> (id) =&gt; {
+      <span class="hljs-keyword">const</span> note = useNoteStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">notes</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id)
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> updated = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">update</span>(
+        id, { ...note, <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> }
+      )
+       <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+        <span class="hljs-attr">notes</span>: state.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span> === id ? updated : n)
+      }))
+    },
+    <span class="hljs-attr">setFilter</span>: <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">filter</span>: value })),
+    <span class="hljs-attr">initialize</span>: <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> noteService.<span class="hljs-title function_">getAll</span>()
+      <span class="hljs-comment">// END HIGHLIGHT</span>
+      <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({ notes }))
+    }
+  }
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNotes</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">notes</span>)
+  <span class="hljs-keyword">const</span> filter = <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">filter</span>)
+
+  <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;important&#x27;</span>) <span class="hljs-keyword">return</span> notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">important</span>)
+  <span class="hljs-keyword">if</span> (filter === <span class="hljs-string">&#x27;nonimportant&#x27;</span>) <span class="hljs-keyword">return</span> notes.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> !n.<span class="hljs-property">important</span>)
+  <span class="hljs-keyword">return</span> notes
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useFilter</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">filter</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNoteActions</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">useNoteStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">actions</span>)
+</code></pre>
+<p>هذه المرة تحتوي <em>useNotes</em> أيضاً على قدر كبير من المنطق، لذا يُحتمل أن يكون الاختبار عبر الخطافات باستخدام React Testing Library هو الأنسب.</p>
+<p>لنثبّت المكتبات المطلوبة:</p>
+<pre><code class="language-bash">npm install --save-dev vitest @testing-library/react jsdom
+</code></pre>
+<p>لنضف إعداد بيئة الاختبار إلى <em>vite.config.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>
+<span class="hljs-keyword">import</span> react <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">test</span>: {
+    <span class="hljs-attr">environment</span>: <span class="hljs-string">&#x27;jsdom&#x27;</span>,
+  },
+   <span class="hljs-comment">// END HIGHLIGHT</span>
+})
+</code></pre>
+<p>الجزء الأول من الاختبارات كما يلي:</p>
+<pre><code class="language-sql">import { <span class="hljs-keyword">describe</span>, it, expect, beforeEach, vi } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>
+import { renderHook, act } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@testing-library/react&#x27;</span>
+
+vi.mock(<span class="hljs-string">&#x27;./services/notes&#x27;</span>, () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; ({
+  <span class="hljs-keyword">default</span>: {
+    getAll: vi.fn(),
+    createNew: vi.fn(),
+    <span class="hljs-keyword">update</span>: vi.fn(),
+  }
+}))
+
+import noteService <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./services/notes&#x27;</span>
+import useNoteStore, { useNotes, useFilter, useNoteActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./store&#x27;</span>
+
+beforeEach(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+  useNoteStore.setState({ notes: [], <span class="hljs-keyword">filter</span>: <span class="hljs-string">&#x27;&#x27;</span> })
+  vi.clearAllMocks()
+})
+
+<span class="hljs-keyword">describe</span>(<span class="hljs-string">&#x27;useNoteActions&#x27;</span>, () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+  it(<span class="hljs-string">&#x27;initialize loads notes from service&#x27;</span>, async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+    const mockNotes <span class="hljs-operator">=</span> [{ id: <span class="hljs-number">1</span>, content: <span class="hljs-string">&#x27;Test&#x27;</span>, important: <span class="hljs-literal">false</span> }]
+    noteService.getAll.mockResolvedValue(mockNotes)
+
+    const { <span class="hljs-keyword">result</span> } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNoteActions())
+
+    await act(async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+      await result.current.initialize()
+    })
+
+    const { <span class="hljs-keyword">result</span>: notesResult } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNotes())
+    expect(notesResult.current).toEqual(mockNotes)
+  })
+
+  it(<span class="hljs-string">&#x27;add appends a new note&#x27;</span>, async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+    const newNote <span class="hljs-operator">=</span> { id: <span class="hljs-number">2</span>, content: <span class="hljs-string">&#x27;New note&#x27;</span>, important: <span class="hljs-literal">false</span> }
+    noteService.createNew.mockResolvedValue(newNote)
+
+    const { <span class="hljs-keyword">result</span> } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNoteActions())
+
+    await act(async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+      await result.current.add(<span class="hljs-string">&#x27;New note&#x27;</span>)
+    })
+
+    const { <span class="hljs-keyword">result</span>: notesResult } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNotes())
+    expect(notesResult.current).toContainEqual(newNote)
+  })
+
+  it(<span class="hljs-string">&#x27;toggleImportance flips important flag&#x27;</span>, async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+    const note <span class="hljs-operator">=</span> { id: <span class="hljs-number">1</span>, content: <span class="hljs-string">&#x27;Test&#x27;</span>, important: <span class="hljs-literal">false</span> }
+    useNoteStore.setState({ notes: [note] })
+    noteService.update.mockResolvedValue({ ...note, important: <span class="hljs-literal">true</span> })
+
+    const { <span class="hljs-keyword">result</span> } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNoteActions())
+
+    await act(async () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; {
+      await result.current.toggleImportance(<span class="hljs-number">1</span>)
+    })
+
+    const { <span class="hljs-keyword">result</span>: notesResult } <span class="hljs-operator">=</span> renderHook(() <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; useNotes())
+    expect(notesResult.current[<span class="hljs-number">0</span>].important).toBe(<span class="hljs-literal">true</span>)
+  })
+})
+</code></pre>
+<p>ثمة الكثير مما يحتاج إلى استيعاب في هذه الاختبارات. تنشئ الاختبارات، باستخدام Vitest، نسخة <a href="https://vitest.dev/guide/mocking" target="_blank" rel="noopener">mock</a> من <em>noteService</em> المسؤولة عن التواصل مع الخادم:</p>
+<pre><code class="language-sql">import { <span class="hljs-keyword">describe</span>, it, expect, beforeEach, vi } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>
+
+vi.mock(<span class="hljs-string">&#x27;./services/notes&#x27;</span>, () <span class="hljs-operator">=</span><span class="hljs-operator">&amp;</span>gt; ({
+  <span class="hljs-keyword">default</span>: {
+    getAll: vi.fn(),
+    createNew: vi.fn(),
+    <span class="hljs-keyword">update</span>: vi.fn(),
+  }
+}))
+</code></pre>
+<p>تستبدل <a href="https://vitest.dev/api/vi.html#vi-mock" target="_blank" rel="noopener">vi.mock</a> الـ <em>noteService</em> في وحدة <em>./services/notes</em> بنسختها الخاصة، حيث تُستبدل جميع الدوال بدوال mock تُعيدها <a href="https://vitest.dev/api/vi.html#vi-fn" target="_blank" rel="noopener">vi.fn</a>.</p>
+<p>قبل كل اختبار، يُعاد ضبط الـ store إلى حالته الأولية وتُفرَّغ دوال mock:</p>
+<pre><code>beforeEach(() =&amp;gt; {
+  useNoteStore.setState({ notes: [], filter: '' })
+  vi.clearAllMocks()
+})
+</code></pre>
+<p>في بداية كل اختبار، يُخبَر <em>noteService</em> المُستبدَل، عبر دالة <a href="https://vitest.dev/api/mock.html#mockresolvedvalue" target="_blank" rel="noopener">mockResolvedValue</a>، بكيفية تصرفه في سياق الاختبار:</p>
+<pre><code class="language-js"><span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;initialize loads notes from service&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> mockNotes = [{ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Test&#x27;</span>, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> }]
+  noteService.<span class="hljs-property">getAll</span>.<span class="hljs-title function_">mockResolvedValue</span>(mockNotes)
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">const</span> { result } = <span class="hljs-title function_">renderHook</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">useNoteActions</span>())
+
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">act</span>(<span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> result.<span class="hljs-property">current</span>.<span class="hljs-title function_">initialize</span>()
+  })
+
+  <span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: notesResult } = <span class="hljs-title function_">renderHook</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">useNotes</span>())
+  <span class="hljs-title function_">expect</span>(notesResult.<span class="hljs-property">current</span>).<span class="hljs-title function_">toEqual</span>(mockNotes)
+})
+</code></pre>
+<p>أولاً، يحدّد الاختبار أنه عند استدعاء دالة <em>noteService.getAll</em>، تُعاد إلى الـ store الملاحظات الموجودة في مصفوفة <em>mockNotes</em>.</p>
+<p>والشيء الذي يجري اختباره هو استدعاء دالة <em>initialize</em>:</p>
+<pre><code>await act(async () =&amp;gt; {
+  await result.current.initialize()
+})
+</code></pre>
+<p>ولأن هذه دالة غير متزامنة، يجب انتظار اكتمال الاستدعاء بالكلمة المفتاحية <em>await</em>.</p>
+<p>وأخيراً، يتحقق الاختبار من أن حالة الـ store تحتوي على القائمة نفسها من الملاحظات التي أعادتها <em>noteService.getAll</em> المُستبدَلة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { <span class="hljs-attr">result</span>: notesResult } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useNotes</span>())
+<span class="hljs-title function_">expect</span>(notesResult.<span class="hljs-property">current</span>).<span class="hljs-title function_">toEqual</span>(mockNotes)
+</code></pre>
+<p>تتبع الاختبارات الأخرى النمط نفسه: أولاً يُحدَّد ما تُعيده دالة <em>noteService</em> التي يستدعيها الـ store، ثم يُشغَّل الاختبار الفعلي.</p>
+<p>ويتحقق الجزء الثاني من الاختبارات من أن الترشيح يعمل بشكل صحيح:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;useNotes filtering&#x27;</span>, () =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = [
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span> },
+  ]
+
+  <span class="hljs-title function_">beforeEach</span>(() =&amp;gt; {
+    useNoteStore.<span class="hljs-title function_">setState</span>({ notes })
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;returns all notes with no filter&#x27;</span>, () =&amp;gt; {
+    <span class="hljs-keyword">const</span> { result } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useNotes</span>())
+    <span class="hljs-title function_">expect</span>(result.<span class="hljs-property">current</span>).<span class="hljs-title function_">toHaveLength</span>(<span class="hljs-number">2</span>)
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;filters important notes&#x27;</span>, () =&amp;gt; {
+    useNoteStore.<span class="hljs-title function_">setState</span>({ notes, <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;important&#x27;</span> })
+    <span class="hljs-keyword">const</span> { result } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useNotes</span>())
+    <span class="hljs-title function_">expect</span>(result.<span class="hljs-property">current</span>).<span class="hljs-title function_">toEqual</span>([notes[<span class="hljs-number">0</span>]])
+  })
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;filters nonimportant notes&#x27;</span>, () =&amp;gt; {
+    useNoteStore.<span class="hljs-title function_">setState</span>({ notes, <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;nonimportant&#x27;</span> })
+    <span class="hljs-keyword">const</span> { result } = <span class="hljs-title function_">renderHook</span>(() =&amp;gt; <span class="hljs-title function_">useNotes</span>())
+    <span class="hljs-title function_">expect</span>(result.<span class="hljs-property">current</span>).<span class="hljs-title function_">toEqual</span>([notes[<span class="hljs-number">1</span>]])
+  })
+})
+</code></pre>
+<p>تُهيَّأ الحالة بملاحظتين، إحداهما مهمة والأخرى غير مهمة. وتتحقق حالات الاختبار الثلاث من أن <em>useNotes</em> تُعيد الملاحظات الصحيحة لجميع قيم المرشّح.</p>
+<p>شيفرة التطبيق النهائية على <a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-6" target="_blank" rel="noopener">GitHub</a> في الفرع <em>part6-6</em>.</p>
+<h4></h4>
+<div class="tasks">
+<p><strong>14. anecdotes، الخطوة 11</strong></p>
+</div>
+<div class="tasks">
+<p><strong>15. anecdotes، الخطوة 12</strong></p>
+</div>
+<div class="tasks">
+<p><strong>16. anecdotes، الخطوة 13</strong></p>
+</div>
+<div class="tasks">
+<p><strong>17. anecdotes، الخطوة 14</strong></p>
+</div>
+<div class="tasks">
+<p><strong>18. anecdotes، الفحص النهائي</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part6/flux_architecture_and_zustand"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">معمارية Flux وZustand</span></a><!--]--> <!--[0--><a class="next" href="../../part6/react_query_context_api"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">React Query وContext API</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

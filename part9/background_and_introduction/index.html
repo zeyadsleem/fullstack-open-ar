@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعلّم TypeScript وطبّقه على تطبيقات Express وتطبيقات React."/><!----><title>الخلفية والمقدمة - الجزء 9 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#المبدأ-الأساسي">المبدأ الأساسي</a></li><li class="toc__depth-3"><a href="#الميزات-اللغوية-الرئيسية-في-typescript">الميزات اللغوية الرئيسية في TypeScript</a></li><li class="toc__depth-3"><a href="#لماذا-ينبغي-استخدام-typescript">لماذا ينبغي استخدام TypeScript؟</a></li><li class="toc__depth-3"><a href="#ما-الذي-لا-تصلحه-typescript">ما الذي لا تصلحه TypeScript؟</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#D4FCB5"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part9">الجزء 9: TypeScript</a></p> <h1>الخلفية والمقدمة</h1></div> <div class="course-content"><!----><p><a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer noopener">TypeScript</a> هي لغة برمجة صُمّمت لتطوير JavaScript على نطاق واسع، ابتكرتها Microsoft. على سبيل المثال، كُتب كلٌّ من <em>Azure Management Portal</em> التابع لـ Microsoft (1.2 مليون سطر من الشيفرة) و<em>Visual Studio Code</em> (300 000 سطر من الشيفرة) بلغة TypeScript. ولدعم بناء تطبيقات JavaScript واسعة النطاق، تقدّم TypeScript ميزات مثل أدوات تطوير أفضل أثناء التطوير، وتحليل ساكن للشيفرة، وفحص للأنواع وقت الترجمة، وتوثيق على مستوى الشيفرة.</p>
+<h3 id="المبدأ-الأساسي">المبدأ الأساسي</h3>
+<p>TypeScript هي مجموعة شاملة مُنمّطة (typed superset) من JavaScript، وتُترجم في النهاية إلى شيفرة JavaScript عادية. بل يستطيع المبرمج أن يحدّد نسخة الشيفرة الناتجة، بشرط أن تكون ECMAScript 3 أو أحدث. وكون TypeScript مجموعة شاملة من JavaScript يعني أنها تتضمن كل ميزات JavaScript وميزاتها الإضافية أيضاً. بعبارة أخرى، كل شيفرة JavaScript الموجودة هي TypeScript صالحة.</p>
+<p>تتكوّن TypeScript من ثلاثة أجزاء منفصلة، لكن يكمل بعضها بعضاً:</p>
+<ul>
+<li>اللغة</li>
+<li>المترجم</li>
+<li>خدمة اللغة</li>
+</ul>
+<p><img src="../../images/mooc/da97af4b5c14.webp" alt="صورة توضيحية"></p>
+<p>تتكوّن <em>اللغة</em> من الصياغة (syntax) والكلمات المفتاحية وتوصيفات الأنواع. والصياغة مشابهة لصياغة JavaScript لكنها ليست هي نفسها. ومن بين الأجزاء الثلاثة لـ TypeScript، يكون احتكاك المبرمجين باللغة هو الأكثر مباشرة.</p>
+<p>يتولّى <em>المترجم</em> مسؤولية محو معلومات الأنواع (أي إزالة معلومات التنميط) وتحويلات الشيفرة. وتمكّن تحويلات الشيفرة من ترجمة شيفرة TypeScript بينياً إلى JavaScript قابلة للتنفيذ. ويُزال كل ما يتعلق بالأنواع وقت الترجمة، لذا ليست TypeScript شيفرة مُنمّطة ساكناً بالمعنى الحقيقي.</p>
+<p>تقليدياً، تعني <em>الترجمة</em> (compiling) أن تُحوَّل الشيفرة من صيغة يقرأها الإنسان إلى صيغة تقرأها الآلة. وفي TypeScript، تُحوَّل الشيفرة المصدرية التي يقرأها الإنسان إلى شيفرة مصدرية أخرى يقرأها الإنسان، لذا فالمصطلح الأدق هو <em>الترجمة البينية</em> (transpiling). غير أن compiling هو المصطلح الأكثر استخداماً في هذا السياق، لذا سنستمر في استخدامه.</p>
+<p>ويجري المترجم أيضاً تحليلاً ساكناً للشيفرة. ويمكنه إصدار تحذيرات أو أخطاء إذا وجد سبباً لذلك، ويمكن ضبطه لأداء مهام إضافية مثل دمج الشيفرة الناتجة في ملف واحد.</p>
+<p>تجمع <em>خدمة اللغة</em> معلومات الأنواع من الشيفرة المصدرية. ويمكن لأدوات التطوير استخدام معلومات الأنواع لتقديم الإكمال التلقائي (intellisense)، وتلميحات الأنواع، وبدائل إعادة الهيكلة الممكنة.</p>
+<h3 id="الميزات-اللغوية-الرئيسية-في-typescript">الميزات اللغوية الرئيسية في TypeScript</h3>
+<p>في هذا القسم، سنصف بعض الميزات الرئيسية للغة TypeScript. والهدف هو أن نمنحك فهماً أساسياً للميزات الرئيسية في TypeScript لمساعدتك على فهم المزيد مما سيأتي خلال هذه الدورة.</p>
+<h4 id="توصيفات-الأنواع">توصيفات الأنواع</h4>
+<p>توصيفات الأنواع في TypeScript طريقة خفيفة لتسجيل <em>العقد</em> المقصود لدالة أو متغير. في المثال أدناه، عرّفنا دالة <em>birthdayGreeter</em> تقبل وسيطين: أحدهما من نوع string والآخر من نوع number. وستعيد الدالة نصاً.</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> birthdayGreeter = (<span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">string</span> =&amp;gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`Happy birthday <span class="hljs-subst">${name}</span>, you are now <span class="hljs-subst">${age}</span> years old!`</span>;
+};
+
+<span class="hljs-keyword">const</span> birthdayHero = <span class="hljs-string">&quot;Jane User&quot;</span>;
+<span class="hljs-keyword">const</span> age = <span class="hljs-number">22</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">birthdayGreeter</span>(birthdayHero, age));
+</code></pre>
+<h4 id="الكلمات-المفتاحية">الكلمات المفتاحية</h4>
+<p>الكلمات المفتاحية في TypeScript كلمات محجوزة خصيصاً تحمل معنى غائياً محدّداً داخل بنية اللغة. ولا يمكن استخدامها كمعرّفات (أسماء متغيرات أو دوال أو أصناف، إلخ) لأنها جزء من صياغة اللغة. ومحاولة استخدام هذه الكلمات المفتاحية ستؤدي إلى خطأ في الصياغة أو في الدلالة. وهناك نحو 40-50 كلمة مفتاحية في TypeScript. ومن هذه الكلمات: type وenum وinterface وvoid وnull وinstanceof إلخ. ومن الجدير بالملاحظة أن TypeScript ترث كل الكلمات المحجوزة من JavaScript، وتضيف إليها بعض الكلمات المفتاحية الخاصة بها والمتعلقة بالأنواع مثل interface وtype وenum إلخ.</p>
+<h4 id="التنميط-البنيوي">التنميط البنيوي</h4>
+<p>TypeScript لغة مُنمّطة بنيوياً. في التنميط البنيوي، يُعتبر عنصران متوافقين مع بعضهما إذا كان لكل خصيصة ضمن نوع العنصر الأول خصيصة مقابلة ومطابقة موجودة ضمن نوع العنصر الثاني. ويُعتبر نوعان متطابقين إذا كانا متوافقين مع بعضهما.</p>
+<h4 id="استنتاج-الأنواع">استنتاج الأنواع</h4>
+<p>يستطيع مترجم TypeScript أن يحاول استنتاج معلومات الأنواع إذا لم يُحدَّد أي نوع. ويمكن استنتاج أنواع المتغيرات بناءً على القيمة المُسنَدة إليها واستخدامها. ويحدث استنتاج الأنواع عند تهيئة المتغيرات والأعضاء، وضبط القيم الافتراضية للمعاملات، وتحديد أنواع القيم المعادة من الدوال.</p>
+<p>على سبيل المثال، تأمّل الدالة <em>add</em>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> add = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>) =&amp;gt; {
+  <span class="hljs-comment">/* تُستخدم القيمة المُعادة لتحديد
+     نوع الإرجاع للدالة */</span>
+  <span class="hljs-keyword">return</span> a + b;
+}
+</code></pre>
+<p>يُستنتج نوع القيمة المعادة للدالة بتتبّع الشيفرة رجوعاً إلى تعبير الإرجاع. ويجري تعبير الإرجاع عملية جمع للمعاملين a وb. ويمكننا أن نرى أن a وb عددان بناءً على نوعيهما. وهكذا نستنتج أن القيمة المعادة من النوع <em>number</em>.</p>
+<h4 id="محو-الأنواع">محو الأنواع</h4>
+<p>تزيل TypeScript كل بنى نظام الأنواع أثناء الترجمة.</p>
+<p>المدخل:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> <span class="hljs-attr">x</span>: <span class="hljs-title class_">SomeType</span>;
+</code></pre>
+<p>المخرج:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x;
+</code></pre>
+<p>وهذا يعني أنه لا تبقى أي معلومات عن الأنواع وقت التشغيل؛ فلا شيء يقول إن المتغير x قد أُعلن من النوع <em>SomeType</em>.</p>
+<p>قد يكون غياب معلومات الأنواع وقت التشغيل مفاجئاً للمبرمجين المعتادين على الاستخدام المكثّف للانعكاس (reflection) أو أنظمة البيانات الوصفية الأخرى.</p>
+<h3 id="لماذا-ينبغي-استخدام-typescript">لماذا ينبغي استخدام TypeScript؟</h3>
+<p>في المنتديات المختلفة، قد تصادف الكثير من الحجج المختلفة سواء لصالح TypeScript أو ضدها. والحقيقة على الأرجح غامضة إلى هذا الحد؛ فهي تعتمد على احتياجاتك وعلى استخدام الوظائف التي تقدّمها TypeScript. على أي حال، إليك بعض أسبابنا التي نرى بها أن لاستخدام TypeScript بعض المزايا.</p>
+<p>أولاً، تقدّم TypeScript <em>فحص الأنواع والتحليل الساكن للشيفرة</em>. يمكننا أن نشترط أن تكون القيم من نوع معيّن وأن ينبّهنا المترجم عند استخدامها بشكل خاطئ. وهذا قد يقلّل أخطاء وقت التشغيل، بل قد تتمكن حتى من تقليل عدد اختبارات الوحدة المطلوبة في مشروع، على الأقل بالنسبة للاختبارات المتعلقة بالأنواع فقط. ولا يقتصر التحليل الساكن للشيفرة على التنبيه إلى الاستخدام الخاطئ للأنواع، بل ينبّه أيضاً إلى أخطاء أخرى مثل الخطأ في كتابة اسم متغير أو دالة، أو محاولة استخدام متغير خارج نطاقه.</p>
+<p>الميزة الثانية لـ TypeScript هي أن توصيفات الأنواع في الشيفرة يمكن أن تعمل كنوع من <em>التوثيق على مستوى الشيفرة</em>. فمن السهل أن تعرف من توقيع الدالة (function signature) نوع الوسائط التي يمكن للدالة أن تستهلكها وما نوع البيانات التي ستعيدها. وهذا الشكل من التوثيق المرتبط بتوصيفات الأنواع سيكون دائماً محدّثاً، ويسهّل على المبرمجين الجدد البدء في العمل على مشروع موجود. وهو مفيد أيضاً عند العودة للعمل على مشروع قديم.</p>
+<p>ويمكن إعادة استخدام الأنواع في كل أنحاء قاعدة الشيفرة، وسينعكس أي تغيير في تعريف نوع تلقائياً في كل مكان يُستخدم فيه هذا النوع. وقد يجادل أحدهم بأنه يمكن تحقيق توثيق مشابه على مستوى الشيفرة باستخدام مثلاً <a href="https://jsdoc.app/about-getting-started.html" target="_blank" rel="noreferrer noopener">JSDoc</a>، لكنه ليس مرتبطاً بالشيفرة بإحكام كما هي أنواع TypeScript، وقد يخرج عن التزامن بسهولة أكبر، وهو أيضاً أكثر إسهاباً.</p>
+<p>الميزة الثالثة لـ TypeScript هي أن بيئات التطوير المتكاملة (IDEs) يمكنها تقديم <em>إكمال تلقائي أكثر تحديداً وذكاءً</em> (IntelliSense) عندما تعرف بالضبط أنواع البيانات التي تعالجها.</p>
+<p>كل هذه الميزات مفيدة للغاية عندما تحتاج إلى إعادة هيكلة شيفرتك. فالتحليل الساكن للشيفرة ينبّهك إلى أي أخطاء في شيفرتك، ويمكن أن يمنحك IntelliSense تلميحات حول الخصائص المتاحة وحتى خيارات إعادة الهيكلة الممكنة. ويساعدك التوثيق على مستوى الشيفرة على فهم الشيفرة الموجودة. وبضبط إعداداته، تسهّل TypeScript تبنّي أحدث ميزات JavaScript مبكراً.</p>
+<h3 id="ما-الذي-لا-تصلحه-typescript">ما الذي لا تصلحه TypeScript؟</h3>
+<p>كما ذُكر أعلاه، فإن توصيفات الأنواع وفحص الأنواع في TypeScript توجد فقط وقت الترجمة ولا توجد بعد ذلك وقت التشغيل. وحتى إذا لم يُطلق المترجم أي أخطاء، فما زالت أخطاء وقت التشغيل ممكنة. وهذه الأخطاء وقت التشغيل شائعة بشكل خاص عند التعامل مع مدخلات خارجية، مثل البيانات الواردة من طلب عبر الشبكة.</p>
+<p>وأخيراً، نسرد أدناه بعض المشكلات التي يجدها كثيرون مع TypeScript، وقد يكون من الجيد أن تكون على دراية بها:</p>
+<h4 id="أنواع-ناقصة-أو-غير-صالحة-أو-مفقودة-في-المكتبات-الخارجية">أنواع ناقصة أو غير صالحة أو مفقودة في المكتبات الخارجية</h4>
+<p>عند استخدام مكتبات خارجية، قد تجد أن بعضها لديه تعريفات أنواع مفقودة أو غير صالحة بطريقة ما. وفي أغلب الأحيان، يعود السبب إلى أن المكتبة لم تُكتب بـ TypeScript، وأن الشخص الذي أضاف تعريفات الأنواع يدوياً لم يقم بالمهمة على نحو جيد. في هذه الحالات، قد تحتاج إلى تعريف الأنواع بنفسك. ومع ذلك، هناك احتمال كبير أن يكون أحدهم قد أضاف بالفعل تعريفات الأنواع للحزمة التي تستخدمها. تحقق دائماً أولاً من <a href="https://github.com/DefinitelyTyped/DefinitelyTyped" target="_blank" rel="noreferrer noopener">صفحة GitHub</a> الخاصة بـ DefinitelyTyped. فهي على الأرجح المصدر الأكثر شهرة لملفات تعريف الأنواع. وإلا، فقد ترغب في البدء بالتعرّف على <a href="https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html" target="_blank" rel="noreferrer noopener">توثيق</a> TypeScript المتعلق بتعريفات الأنواع.</p>
+<h4 id="أحيانا-يحتاج-استنتاج-الأنواع-إلى-مساعدة">أحياناً يحتاج استنتاج الأنواع إلى مساعدة</h4>
+<p>استنتاج الأنواع في TypeScript جيد جداً، لكنه ليس مثالياً تماماً. أحياناً تبدو أنواعك صحيحة، ومع ذلك يشتكي المترجم من أن خاصية غير موجودة أو أن استخداماً غير مسموح به. في هذه الحالات، قد تحتاج إلى إرشاد المترجم بفحص إضافي. لكن كن حذراً: فتأكيدات الأنواع (casts) وحرّاس الأنواع (type guards) لا تضيف أماناً فحسب، بل يمكن أن تعمل أيضاً كتلميحات قسرية. فعندما تستخدمها، فأنت تقول للمترجم فعلياً: «ثق بي، هذه القيمة من هذا النوع»، وتتحمّل المسؤولية إذا كان هذا الافتراض خاطئاً.</p>
+<h4 id="أخطاء-أنواع-غامضة">أخطاء أنواع غامضة</h4>
+<p>قد يكون من الصعب جداً أحياناً فهم الأخطاء التي يعطيها نظام الأنواع، خاصة إذا كنت تستخدم أنواعاً معقدة. وكقاعدة عامة، تحتوي رسائل أخطاء TypeScript على المعلومات الأكثر فائدة في نهاية الرسالة. وعند مصادفة رسائل طويلة ومربكة، ابدأ بقراءتها من النهاية.</p>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part9/getting_started"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">البدء</span></a><!--]--> <!--[0--><a class="next" href="../../part9/first_steps_with_typescript"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">الخطوات الأولى مع TypeScript</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

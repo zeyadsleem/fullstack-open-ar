@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على Docker وبناء بيئات التشغيل وأساسيات تنسيق الحاويات."/><!----><title>بناء البيئات وتهيئتها - الجزء 12 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#dockerfile">Dockerfile</a></li><li class="toc__depth-3"><a href="#صورة-أكثر-فائدة">صورة أكثر فائدة</a></li><li class="toc__depth-3"><a href="#أفضل-ممارسات-dockerfile">أفضل ممارسات Dockerfile</a></li><li class="toc__depth-3"><a href="#استخدام-docker-compose">استخدام Docker compose</a></li><li class="toc__depth-3"><a href="#الاستفادة-من-الحاويات-أثناء-التطوير">الاستفادة من الحاويات أثناء التطوير</a></li><li class="toc__depth-3"><a href="#الربط-bind-mount-وتهيئة-قاعدة-البيانات">الربط (bind mount) وتهيئة قاعدة البيانات</a></li><li class="toc__depth-3"><a href="#ما-زالت-هناك-مشكلات">ما زالت هناك مشكلات؟</a></li><li class="toc__depth-3"><a href="#حفظ-البيانات-بشكل-دائم-باستخدام-وحدات-التخزين">حفظ البيانات بشكل دائم باستخدام وحدات التخزين</a></li><li class="toc__depth-3"><a href="#تصحيح-المشكلات-في-الحاويات">تصحيح المشكلات في الحاويات</a></li><li class="toc__depth-3"><a href="#redis">Redis</a></li><li class="toc__depth-3"><a href="#حفظ-بيانات-redis-بشكل-دائم">حفظ بيانات Redis بشكل دائم</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#F9B9D3"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part12">الجزء 12: الحاويات</a></p> <h1>بناء البيئات وتهيئتها</h1></div> <div class="course-content"><!----><p>في القسم السابق، استخدمنا صورتين أساسيتين مختلفتين: ubuntu وnode، وقمنا ببعض العمل اليدوي لتشغيل تطبيق بسيط يطبع «Hello, World!». وستكون الأدوات والأوامر التي تعلمناها خلال تلك العملية مفيدة. في هذا القسم، سنتعلم كيفية بناء الصور وتهيئة البيئات لتطبيقاتنا. سنبدأ بواجهة خلفية عادية بـExpress/Node.js ثم نبني فوقها خدمات أخرى، بما في ذلك قاعدة بيانات MongoDB.</p>
+<h3 id="dockerfile">Dockerfile</h3>
+<p>بدلاً من تعديل حاوية عبر نسخ الملفات إليها، يمكننا إنشاء صورة جديدة تحتوي على تطبيق «Hello, World!». الأداة اللازمة لذلك هي <a href="https://docs.docker.com/build/concepts/dockerfile/" data-type="link" data-id="https://docs.docker.com/build/concepts/dockerfile/">Dockerfile.</a> وملف Dockerfile هو ملف نصي بسيط يحتوي على كل التعليمات اللازمة لإنشاء صورة. لننشئ ملف Dockerfile مثالياً لتطبيق «Hello, World!».</p>
+<p>لننشئ الآن مجلداً وملفاً باسم <em>Dockerfile</em> داخل ذلك المجلد. ولنضع أيضاً ملف <em>index.js</em> يحتوي على <em>console.log('Hello, World!')</em> بجانب ملف Dockerfile. يبدو هيكل المجلد هكذا:</p>
+<pre><code>├── index.js
+└── Dockerfile
+</code></pre>
+<p>داخل ملف Dockerfile سنخبر الصورة بثلاثة أمور:</p>
+<ul>
+<li>استخدام <a href="https://hub.docker.com/_/node">node:24</a> كأساس لصورتنا</li>
+<li>تضمين ملف index.js داخل الصورة، حتى لا نحتاج إلى نسخه يدوياً إلى الحاوية</li>
+<li>عند تشغيل حاوية من الصورة، استخدم Node لتنفيذ ملف index.js.</li>
+</ul>
+<p>ستترجم الأمنيات أعلاه إلى ملف Dockerfile أساسي. وأفضل مكان لوضع هذا الملف هو عادةً جذر المشروع.</p>
+<p>يبدو <em>Dockerfile</em> الناتج هكذا:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY ./index.js ./index.js
+
+CMD [&quot;node&quot;, &quot;index.js&quot;]
+</code></pre>
+<p>تُخبر تعليمة <a href="https://docs.docker.com/reference/dockerfile/#from" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#from">FROM</a> برنامج Docker بأن أساس الصورة هو node:24. وتنسخ تعليمة <a href="https://docs.docker.com/reference/dockerfile/#copy" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#copy">COPY</a> الملف <em>index.js</em> من الجهاز المضيف إلى ملف بالاسم نفسه داخل الصورة. أما تعليمة <a href="https://docs.docker.com/reference/dockerfile/#cmd" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#cmd">CMD</a> فتحدد الأمر الافتراضي الذي يُنفَّذ عند تشغيل حاوية باستخدام <code>docker run</code>. نحن نستخدم صيغة <a href="https://docs.docker.com/reference/dockerfile/#exec-form" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#exec-form">exec</a> <code>CMD [&quot;node&quot;, &quot;index.js&quot;]</code> التي تنفّذ الملف التنفيذي <em>node</em> مع <em>index.js</em> كوسيط له.</p>
+<p>أُضيفت تعليمة <a href="https://docs.docker.com/reference/dockerfile/#workdir" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#workdir">WORKDIR</a> لضمان عدم تعارضنا مع محتويات الصورة. فهي تضمن أن يكون <em>/usr/src/app</em> هو مجلد العمل لجميع الأوامر التالية. وإذا لم يكن المجلد موجوداً في الصورة الأساسية، فسيُنشأ تلقائياً.</p>
+<blockquote>
+<p>إذا لم نحدد WORKDIR، فإننا نخاطر بالكتابة فوق ملفات مهمة عن طريق الخطأ. وإذا فحصت الجذر (<em>/</em>) في صورة node:24 باستخدام <code>docker run node:24 ls</code> فستلاحظ كل المجلدات والملفات المضمّنة أصلاً في الصورة.</p>
+</blockquote>
+<p>يمكننا الآن استخدام الأمر <code>docker build</code> لبناء صورة انطلاقاً من ملف Dockerfile. لنضف إلى الأمر علامة إضافية واحدة: <code>-t</code> التي ستساعدنا على تسمية الصورة:</p>
+<pre><code>$ docker build -t fs-hello-world .
+[+] Building 3.9s (8/8) FINISHED
+...
+</code></pre>
+<p>إذن النتيجة هي</p>
+<blockquote>
+<p>يا Docker، ابنِ بالوسم (يمكنك اعتبار الوسم اسم الصورة الناتجة) <em>fs-hello-world</em> ملفَ Dockerfile الموجود في هذا المجلد.</p>
+</blockquote>
+<p>يمكنك الإشارة إلى أي ملف Dockerfile، لكن في حالتنا تعني النقطة البسيطة أن ملف Dockerfile موجود في <em>هذا</em> المجلد. ولهذا ينتهي الأمر بنقطة. بعد انتهاء البناء، يمكنك تشغيله باستخدام <code>docker run fs-hello-world</code>:</p>
+<pre><code>$ docker run fs-hello-world
+Hello, World
+</code></pre>
+<p>بما أن الصور مجرد ملفات، فيمكن نقلها وتنزيلها وحذفها. يمكنك سرد الصور الموجودة لديك محلياً باستخدام <code>docker image ls</code>، وحذفها باستخدام <code>docker image rm</code>. ولمعرفة الأوامر الأخرى المتاحة لديك استخدم <code>docker image --help</code>.</p>
+<p>أمر آخر: ذُكر أن الأمر الافتراضي المحدد بواسطة CMD في ملف Dockerfile يمكن تجاوزه عند الحاجة. يمكننا مثلاً فتح جلسة bash في الحاوية وفحص محتواها:</p>
+<pre><code>$ docker run -it fs-hello-world bash
+root@2932e32dbc09:/usr/src/app# ls
+index.js
+root@2932e32dbc09:/usr/src/app#
+</code></pre>
+<h3 id="صورة-أكثر-فائدة">صورة أكثر فائدة</h3>
+<p>نقل خادم Express إلى حاوية ينبغي أن يكون بسيطاً مثل نقل تطبيق «Hello, World!» إلى حاوية. الفرق الوحيد هو وجود ملفات أكثر. ولحسن الحظ، يمكن لتعليمة <em>COPY</em> التعامل مع كل ذلك. لنحذف ملف index.js وننشئ خادم Express جديداً. لنستخدم <a href="https://expressjs.com/en/starter/generator.html" target="_blank" rel="noreferrer noopener">express-generator</a> لإنشاء هيكل أساسي لتطبيق Express.</p>
+<pre><code>$ npx express-generator
+  ...
+
+  install dependencies:
+    $ npm install
+
+  run the app:
+    $ DEBUG=playground:* npm start
+</code></pre>
+<p>أولاً، لنشغّل التطبيق لنأخذ فكرة عما أنشأناه للتو. لاحظ أن أمر تشغيل التطبيق قد يختلف لديك؛ فمجلدي كان اسمه playground.</p>
+<pre><code>$ npm install
+$ DEBUG=playground:* npm start
+  playground:server Listening on port 3000 +0ms
+</code></pre>
+<p>رائع، يمكننا الآن الانتقال إلى <a href="http://localhost:3000/" target="_blank" rel="noreferrer noopener">http://localhost:3000</a> حيث يعمل التطبيق:</p>
+<p><img src="../../images/mooc/7b576695c8d1.webp" alt="صورة توضيحية"></p>
+<p>وضع ذلك في حاوية ينبغي أن يكون سهلاً نسبياً بناءً على المثال السابق.</p>
+<ul>
+<li>استخدام node كأساس</li>
+<li>تحديد مجلد العمل حتى لا نتعارض مع محتويات الصورة الأساسية</li>
+<li>نسخ كل ملفات هذا المجلد إلى الصورة</li>
+<li>البدء بـ DEBUG=playground:* npm start</li>
+</ul>
+<p>تتوقع <a href="https://docs.docker.com/reference/dockerfile/#shell-and-exec-form" target="_blank" rel="noreferrer noopener">صيغة exec</a> من تعليمة CMD وسائط بالصيغة [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;, ...]، أي أن العنصر الأول يجب أن يكون أمراً تنفيذياً. في حالتنا، يبدأ الأمر بتعيين متغير بيئة، وهذا لا يحقق هذا الشرط. النهج الصحيح هو تعيين متغير البيئة باستخدام تعليمة <a href="https://docs.docker.com/reference/dockerfile/#env" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#env">ENV</a> بدلاً من ذلك.</p>
+<p>لنضع ملف Dockerfile التالي في جذر المشروع:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV DEBUG=playground:*
+
+CMD [&quot;npm&quot;, &quot;start&quot;]
+</code></pre>
+<p>يمكننا الآن بناء الصورة من ملف Dockerfile وتشغيلها:</p>
+<pre><code class="language-bash">docker build -t express-server .
+docker run -p 3123:3000 express-server
+</code></pre>
+<p>تُخبر العلامة <code>-p</code> في أمر التشغيل برنامج Docker بضرورة فتح منفذ من الجهاز المضيف وتوجيهه إلى منفذ في الحاوية. الصيغة هي <code>-p host-port:application-port</code>.</p>
+<p>التطبيق يعمل الآن! لنختبره بإرسال طلب GET إلى <a href="http://localhost:3123/" target="_blank" rel="noreferrer noopener">http://localhost:3123/</a>.</p>
+<blockquote>
+<p>إذا لم يعمل لديك، فتجاوز إلى القسم التالي. فهناك تفسير لسبب عدم عمله حتى لو اتبعت الخطوات بشكل صحيح.</p>
+</blockquote>
+<p>إيقاف التطبيق يمثل صداعاً في الوقت الحالي. استخدم طرفية أخرى وأمر <code>docker kill</code> لقتل التطبيق. سيرسل الأمر <code>docker kill</code> إشارة قتل (SIGKILL) إلى التطبيق لإجباره على الإيقاف. ويحتاج إلى اسم الحاوية أو معرّفها كوسيط.</p>
+<p>لاحظ أنه عند استخدام المعرّف كوسيط، تكفي بداية المعرّف ليعرف Docker أي حاوية نقصد.</p>
+<pre><code>$ docker container ls
+  CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+  48096ca3ffec   express-server   &quot;docker-entrypoint.s…&quot;   9 seconds ago   Up 6 seconds   0.0.0.0:3123-&amp;gt;3000/tcp, :::3123-&amp;gt;3000/tcp   infallible_booth
+
+$ docker kill 48
+  48
+</code></pre>
+<p>في المستقبل، لنستخدم المنفذ نفسه على جانبي <code>-p</code>. حتى لا نضطر إلى تذكر أي منفذ اخترناه.</p>
+<h4 id="إصلاح-المشكلات-المحتملة-التي-أنشأناها-بالنسخ-واللصق">إصلاح المشكلات المحتملة التي أنشأناها بالنسخ واللصق</h4>
+<p>هناك بضع خطوات نحتاج إلى تغييرها لإنشاء ملف Dockerfile أكثر شمولاً. بل قد لا يعمل المثال أعلاه في جميع الحالات لأننا تخطينا خطوة مهمة.</p>
+<p>عندما شغّلنا <code>npm install</code> على جهازنا، فقد يقوم مدير حزم Node في بعض الحالات بتثبيت اعتماديات خاصة بنظام التشغيل أثناء خطوة التثبيت. وقد ننقل بالخطأ أجزاء غير عاملة إلى الصورة عبر تعليمة COPY. ويمكن أن يحدث هذا بسهولة إذا نسخنا مجلد <em>node_modules</em> إلى الصورة.</p>
+<p>هذا أمر بالغ الأهمية يجب تذكره عند بناء صورنا. من الأفضل إنجاز معظم الأمور، مثل تشغيل <code>npm install</code> أثناء عملية البناء، <em>داخل الحاوية</em>، بدلاً من القيام بها قبل البناء. القاعدة السهلة هي نسخ الملفات التي ستدفعها إلى GitHub فقط. لا ينبغي نسخ نواتج البناء أو الاعتماديات لأنها يمكن تثبيتها أثناء عملية البناء.</p>
+<p>يمكننا استخدام ملف <em>.dockerignore</em> لحل المشكلة. ملف .dockerignore شبيه جداً بملف .gitignore، ويمكنك استخدامه لمنع نسخ الملفات غير المرغوب فيها إلى صورتك. وينبغي وضع الملف بجانب ملف Dockerfile. إليك محتوى محتملاً لملف <em>.dockerignore</em></p>
+<pre><code>.dockerignore
+.gitignore
+node_modules
+Dockerfile
+</code></pre>
+<p>في حالتنا، لا يُعد ملف .dockerignore الشيء الوحيد المطلوب. نحتاج أيضاً إلى تثبيت الاعتماديات أثناء خطوة البناء. يتغير ملف <em>Dockerfile</em> إلى:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+// BEGIN HIGHLIGHT
+RUN npm install
+
+ENV DEBUG=express:*
+
+CMD [&quot;npm&quot;, &quot;start&quot;]
+// END HIGHLIGHT
+</code></pre>
+<p>قد يكون <code>npm install</code> محفوفاً بالمخاطر. فبدلاً من استخدام npm install، يقدم npm أداة أفضل بكثير لتثبيت الاعتماديات، وهي أمر <a href="https://docs.npmjs.com/cli/v9/commands/npm-ci" data-type="link" data-id="https://docs.npmjs.com/cli/v9/commands/npm-ci">ci</a>.</p>
+<p>الفروق بين ci وinstall:</p>
+<ul>
+<li>قد يحدّث install ملف package-lock.json</li>
+<li>قد يثبّت install إصداراً مختلفاً من إحدى الاعتماديات إذا كان لديك ^ أو ~ في إصدار الاعتمادية.</li>
+<li>سيحذف ci مجلد node_modules قبل تثبيت أي شيء</li>
+<li>سيتبع ci ملف package-lock.json ولن يغيّر أي ملفات</li>
+</ul>
+<p>باختصار: <em>ci</em> ينشئ عمليات بناء موثوقة، بينما <em>install</em> هو الذي تستخدمه عندما تريد تثبيت اعتماديات جديدة.</p>
+<p>بما أننا لا نثبّت أي شيء جديد أثناء خطوة البناء، ولا نريد أن تتغير الإصدارات فجأة، فسنستخدم <em>ci</em>:</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+// BEGIN HIGHLIGHT
+RUN npm ci
+
+ENV DEBUG=express:*
+
+CMD [&quot;npm&quot;, &quot;start&quot;]
+// END HIGHLIGHT
+</code></pre>
+<p>والأفضل من ذلك، يمكننا استخدام <code>npm ci --omit=dev</code> لعدم إضاعة الوقت في تثبيت اعتماديات التطوير.</p>
+<blockquote>
+<p>كما لاحظت في المقارنة أعلاه، يحذف <code>npm ci</code> مجلد node_modules، لذا لم يكن لإنشاء ملف .dockerignore أي أهمية. ومع ذلك، يُعد .dockerignore أداة رائعة عندما تريد تحسين عملية البناء. سنتحدث بإيجاز عن هذه التحسينات لاحقاً.</p>
+</blockquote>
+<p>الآن ينبغي أن يعمل ملف Dockerfile مرة أخرى. جرّبه باستخدام <code>docker build -t express-server . &amp;&amp; docker run -p 3123:3000 express-server</code></p>
+<blockquote>
+<p>لاحظ أننا هنا نسلسل أمرين من أوامر bash باستخدام &amp;&amp;. يمكننا الحصول على التأثير نفسه (تقريباً) بتشغيل الأمرين بشكل منفصل. عند تسلسل الأوامر باستخدام &amp;&amp;، إذا فشل أحد الأوامر فلن تُنفَّذ الأوامر التالية في السلسلة.</p>
+</blockquote>
+<h3 id="أفضل-ممارسات-dockerfile">أفضل ممارسات Dockerfile</h3>
+<p>هناك قاعدتان عامتان ينبغي اتباعهما عند إنشاء الصور:</p>
+<ul>
+<li>حاول إنشاء صورة <strong>آمنة</strong> قدر الإمكان</li>
+<li>حاول إنشاء صورة <strong>صغيرة</strong> قدر الإمكان</li>
+</ul>
+<p>الصور الأصغر أكثر أماناً لأن مساحة الهجوم فيها أقل، كما تنتقل أسرع في خطوط أنابيب النشر.</p>
+<p>لدى Snyk قائمة رائعة بأفضل 10 ممارسات لوضع تطبيقات Node/Express في حاويات. اقرأها من <a href="https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<p>لا تزال هناك مشكلة مهمة هي أن التطبيق يعمل بصلاحيات root بدلاً من مستخدم أقل امتيازاً. لنُجرِ تغييراً أخيراً على ملف Dockerfile ونستخدم تعليمة <a href="https://docs.docker.com/reference/dockerfile/#user" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#user">USER</a> لتعيين المستخدم إلى غير root.</p>
+<pre><code>FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node . . // HIGHLIGHT LINE
+
+RUN npm ci
+
+ENV DEBUG=playground:*
+
+USER node // HIGHLIGHT LINE
+
+CMD [&quot;npm&quot;, &quot;start&quot;]
+</code></pre>
+<div class="tasks">
+<p><strong>5. وضع تطبيق Node في حاوية</strong></p>
+</div>
+<h3 id="استخدام-docker-compose">استخدام Docker compose</h3>
+<p>في القسم السابق، أنشأنا خادم Express مع علمنا بأنه سيعمل على المنفذ 3123، واستخدمنا الأمرين <code>docker build -t express-server . &amp;&amp; docker run -p 3123:3000 express-server</code> لتشغيله. يبدو هذا بالفعل كشيء ستحتاج إلى وضعه في سكربت لتتذكره. لحسن الحظ، يقدم لنا Docker حلاً أفضل.</p>
+<p><a href="https://docs.docker.com/compose/" target="_blank" rel="noreferrer noopener">Docker compose</a> أداة رائعة أخرى يمكنها مساعدتنا في إدارة الحاويات. لنبدأ باستخدام compose بينما نتعلم المزيد عن الحاويات لأنه سيوفر علينا بعض الوقت في التهيئة.</p>
+<p>يمكننا الآن تحويل التعويذة السابقة إلى ملف yaml. وأفضل ما في ملفات yaml هو أنه يمكنك حفظها في مستودع Git!</p>
+<p>سننشئ الآن ملف <em>docker-compose.yml</em> ونضعه في جذر المشروع بجانب ملف Dockerfile. هذه المرة، سنستخدم المنفذ نفسه للمضيف والحاوية. محتوى الملف هو:</p>
+<pre><code>services:
+  app:                    # اسم الخدمة، يمكن أن يكون أي شيء
+    image: express-server # يحدد الصورة التي سيتم استخدامها
+    build: .              # يحدد مكان البناء إذا لم توجد الصورة
+    ports:                # يحدد المنافذ التي سيتم نشرها
+      - 3000:3000
+</code></pre>
+<p>شُرح معنى كل سطر في تعليق. وإذا أردت رؤية المواصفات الكاملة فراجع <a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="noreferrer noopener">التوثيق</a>.</p>
+<p>يمكننا الآن استخدام <code>docker compose up</code> لبناء التطبيق وتشغيله. وإذا أردنا إعادة بناء الصور، يمكننا استخدام <code>docker compose up --build</code>.</p>
+<p>يمكنك أيضاً تشغيل التطبيق في الخلفية باستخدام <code>docker compose up -d</code> (حيث <code>-d</code> تعني منفصل) وإغلاقه باستخدام <code>docker compose down</code>.</p>
+<blockquote>
+<p><em>لاحظ أن بعض إصدارات Docker الأقدم (خاصة في Windows) لا تدعم الأمر docker compose. ومن طرق التحايل على هذه المشكلة <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noreferrer noopener">تثبيت</a> الأمر المستقل docker-compose الذي يعمل بشكل مشابه في الغالب لـdocker compose. لكن الإصلاح الأفضل هو تحديث Docker إلى إصدار أحدث.</em></p>
+</blockquote>
+<p>غالباً ما تكون ممارسة رائعة إنشاء ملفات مثل <em>docker-compose.yml</em> <em>تُصرّح</em> بما تريده بدلاً من ملفات سكربت تحتاج إلى تشغيلها بترتيب معين أو عدد معين من المرات.</p>
+<div class="tasks">
+<p><strong>6. Docker compose</strong></p>
+</div>
+<h3 id="الاستفادة-من-الحاويات-أثناء-التطوير">الاستفادة من الحاويات أثناء التطوير</h3>
+<p>عند تطوير البرمجيات، يمكن استخدام الحاويات بطرق متنوعة لتحسين جودة حياتك. فباستخدام الحاويات، يمكنك تجنب تهيئة الأدوات عدة مرات، وفي كثير من الحالات يمكنك تخطي تثبيتها على جهازك المضيف تماماً.</p>
+<p>يمكنك حتى وضع بيئة التطوير بأكملها في حاوية إذا أردت السير في هذا الاتجاه، وسنعود إلى هذه الفكرة لاحقاً. لكننا الآن سنركّز على تشغيل تطبيق Node <em>داخل</em> حاوية مع إبقاء بقية سير عملك على المضيف.</p>
+<p>التطبيق الذي قابلناه في التمارين السابقة يستخدم MongoDB. لنستكشف <a href="https://hub.docker.com/" target="_blank" rel="noreferrer noopener">Docker Hub</a> للعثور على صورة MongoDB. Docker Hub هو المكان الافتراضي الذي يسحب منه Docker الصور، ويمكنك استخدام سجلات أخرى أيضاً، لكن بما أننا غرقنا حتى الرُّكب في Docker فهو خيار جيد. ببحث سريع، يمكننا العثور على <a href="https://hub.docker.com/_/mongo" target="_blank" rel="noreferrer noopener">https://hub.docker.com/_/mongo</a></p>
+<p>أنشئ ملف yaml جديداً باسم <em>todo-app/todo-backend/docker-compose.dev.yml</em> يبدو كما يلي:</p>
+<pre><code>services:
+  mongo:
+    image: mongo
+    ports:
+      - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+</code></pre>
+<p>شُرح معنى أول متغيري بيئة معرّفين أعلاه في صفحة Docker Hub:</p>
+<blockquote>
+<p><em>هذان المتغيران، عند استخدامهما معاً، ينشئان مستخدماً جديداً ويعينان كلمة مروره. يُنشأ هذا المستخدم في قاعدة بيانات مصادقة المدير ويُمنح دور root، وهو دور «المستخدم الخارق».</em></p>
+</blockquote>
+<p>متغير البيئة الأخير <em>MONGO_INITDB_DATABASE</em> سيخبر MongoDB بإنشاء قاعدة بيانات بهذا الاسم.</p>
+<p>يمكنك استخدام العلامة <code>-f</code> لتحديد <em>ملف</em> لتشغيل أمر Docker Compose، وعلينا استخدام العلامة الآن لأن لدينا أكثر من ملف compose. لنشغّل الآن MongoDB:</p>
+<pre><code class="language-bash">docker compose -f docker-compose.dev.yml up -d
+</code></pre>
+<p>كما ذُكر سابقاً، <strong>لا</strong> نريد حالياً تشغيل تطبيق Node داخل حاوية. فالتطوير بينما التطبيق نفسه داخل حاوية يمثل تحدياً. سنستكشف ذلك الخيار لاحقاً في هذا الجزء.</p>
+<p>شغّل أولاً الأمر القديم الجيد <code>npm install</code> على جهازك لإعداد تطبيق Node. ثم ابدأ التطبيق بمتغير البيئة المناسب. يمكنك تعديل الشيفرة لتعيينها كقيم افتراضية أو استخدام ملف .env. ولا ضرر في وضع هذه المفاتيح على GitHub لأنها تُستخدم فقط في بيئة التطوير المحلية لديك. سنضعها مع <code>npm run dev</code> لمساعدتك في النسخ واللصق.</p>
+<pre><code>MONGO_URL=mongodb://localhost:3456/the_database npm run dev
+</code></pre>
+<p>لن يكون هذا كافياً؛ نحتاج إلى إنشاء مستخدم ليُصرَّح له داخل الحاوية. فالرابط <a href="http://localhost:3000/todos" target="_blank" rel="noreferrer noopener">http://localhost:3000/todos</a> يؤدي إلى خطأ في المصادقة:</p>
+<pre><code>[nodemon] 3.1.14
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node ./bin/www`
+GET /todos 500 10015.695 ms - 519
+MongooseError: Operation `todos.find()` buffering timed out after 10000ms
+    at Timeout._onTimeout (/Users/mluukkai/opetus/2026-fs/osa12/tehtavat/todo-app/todo-backend/node_modules/mongoose/lib/drivers/node-mongodb-native/collection.js:131:25)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+GET /todos 500 12.396 ms - 1808
+MongoServerError: Command find requires authentication
+    at Connection.sendCommand (/Users/mluukkai/opetus/2026-fs/osa12/tehtavat/todo-app/todo-backend/node_modules/mongodb/lib/cmap/connection.js:320:27)
+</code></pre>
+<p>يمكننا استخدام مستخدم المدير الخارق لمصادقة قاعدة البيانات، بحيث يعمل الأمر التالي</p>
+<pre><code>MONGO_URL=mongodb://root:example@localhost:3456/the_database?authSource=admin npm run dev
+</code></pre>
+<p>لكن ليس من الجيد استخدام حساب مستخدم خارق للوصول العادي إلى قاعدة البيانات، لذا سنختار حلاً أكثر أماناً.</p>
+<h3 id="الربط-bind-mount-وتهيئة-قاعدة-البيانات">الربط (bind mount) وتهيئة قاعدة البيانات</h3>
+<p>في توثيق MongoDB على Docker Hub، يوضح قسم <a href="https://hub.docker.com/_/mongo/#initializing-a-fresh-instance">تهيئة نسخة جديدة</a> كيفية تقديم ملفات JavaScript تعمل عند بدء حاوية Mongo. وهذا يتيح لك أتمتة خطوات الإعداد مثل إنشاء المستخدمين أو تهيئة قواعد البيانات.</p>
+<p>يحتوي مشروع التمرين على ملف <em>todo-app/todo-backend/mongo/mongo-init.js</em> بمحتوى:</p>
+<pre><code>db.createUser({
+  user: 'the_username',
+  pwd: 'the_password',
+  roles: [
+    {
+      role: 'dbOwner',
+      db: 'the_database',
+    },
+  ],
+});
+
+db.createCollection('todos');
+
+db.todos.insert({ text: 'Write code', done: true });
+db.todos.insert({ text: 'Learn about containers', done: false });
+</code></pre>
+<p>سيهيّئ هذا الملف قاعدة البيانات بمستخدم وبعض المهام (todos). بعد ذلك، نحتاج إلى إدخاله إلى الحاوية عند بدء التشغيل.</p>
+<p>يمكننا إنشاء صورة جديدة FROM mongo ونسخ الملف إليها، أو يمكننا استخدام <a href="https://docs.docker.com/storage/bind-mounts/" target="_blank" rel="noreferrer noopener">ربط bind mount</a> لتثبيت الملف <em>mongo-init.js</em> في الحاوية. لنفعل الخيار الأخير.</p>
+<p>الربط (bind mount) هو ربط ملف (أو مجلد) على الجهاز المضيف بملف (أو مجلد) في الحاوية. ويتم الربط بإضافة العلامة <code>-v</code> إلى الأمر <code>container run</code>. الصيغة هي <code>-v FILE-IN-HOST:FILE-IN-CONTAINER</code>.</p>
+<p>بما أننا تعلمنا بالفعل عن Docker Compose فلنتخطَّ ذلك. يُصرَّح عن الربط تحت المفتاح <em>volumes</em> في ملف docker-compose.dev.yml. وبخلاف ذلك، الصيغة نفسها: المضيف أولاً ثم الحاوية:</p>
+<pre><code>  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:       // HIGHLIGHT LINE
+    - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js // HIGHLIGHT LINE
+</code></pre>
+<p>نتيجة الربط هي أن الملف <em>mongo-init.js</em> في مجلد mongo على الجهاز المضيف هو نفسه الملف <em>mongo-init.js</em> في مجلد /docker-entrypoint-initdb.d داخل الحاوية. وأي تغييرات في أحد الملفين ستكون متاحة في الآخر. ولا نحتاج إلى إجراء أي تغييرات أثناء وقت التشغيل. لكن هذا سيكون مفتاح تطوير البرمجيات في الحاويات.</p>
+<p>شغّل <code>docker compose -f docker-compose.dev.yml down --volumes</code> للتأكد من عدم بقاء أي شيء، وابدأ من صفحة بيضاء باستخدام <code>docker compose -f docker-compose.dev.yml up</code> لتهيئة قاعدة البيانات.</p>
+<p>إذا ظهر لك خطأ كهذا:</p>
+<pre><code>mongo_database | failed to load: /docker-entrypoint-initdb.d/mongo-init.js
+mongo_database | exiting with code -3
+</code></pre>
+<p>فقد تكون لديك مشكلة في صلاحية القراءة. وهذه ليست غير شائعة عند التعامل مع وحدات التخزين (volumes). في الحالة أعلاه، يمكنك استخدام <code>chmod a+r mongo-init.js</code> الذي سيمنح الجميع صلاحية قراءة ذلك الملف. كن حذراً عند استخدام <em>chmod</em> لأن منح مزيد من الامتيازات قد يمثل مشكلة أمنية. استخدم <em>chmod</em> فقط على ملف mongo-init.js على جهازك.</p>
+<p>الآن ينبغي أن يعمل تشغيل تطبيق Express مع متغير البيئة الصحيح:</p>
+<pre><code>MONGO_URL=mongodb://the_username:the_password@localhost:3456/the_database npm run dev
+</code></pre>
+<p>لنتحقق من أن <a href="http://localhost:3000/todos" target="_blank" rel="noreferrer noopener">http://localhost:3000/todos</a> يعيد المهمتين (todos) اللتين أدخلناهما في التهيئة. يمكننا، بل <em>ينبغي</em>، استخدام Postman لاختبار الوظائف الأساسية للتطبيق، مثل إضافة مهمة أو حذفها.</p>
+<h3 id="ما-زالت-هناك-مشكلات">ما زالت هناك مشكلات؟</h3>
+<p>لسبب ما، سببت تهيئة Mongo مشكلات لكثيرين.</p>
+<p>إذا لم يعمل التطبيق وما زلت تنتهي بالخطأ التالي:</p>
+<pre><code>/Users/mluukkai/dev/fs-ci/repo/todo-app/todo-backend/node_modules/mongodb/lib/cmap/connection.js:272
+          callback(new MongoError(document));
+                   ^
+MongoError: command find requires authentication
+    at MessageStream.messageHandler (/Users/mluukkai/dev/fs-ci/repo/todo-app/todo-backend/node_modules/mongodb/lib/cmap/connection.js:272:20)
+</code></pre>
+<p>شغّل هذه الأوامر:</p>
+<pre><code class="language-bash">docker compose -f docker-compose.dev.yml down --volumes
+docker image <span class="hljs-built_in">rm</span> mongo
+</code></pre>
+<p>بعد ذلك، حاول تشغيل Mongo مرة أخرى.</p>
+<p>إذا استمرت المشكلة، فلنتخلَّ عن فكرة وحدة التخزين (volume) تماماً وننسخ سكربت التهيئة إلى صورة مخصصة. أنشئ ملف <em>Dockerfile</em> التالي في المجلد <em>todo-app/todo-backend/mongo</em>:</p>
+<pre><code>FROM mongo
+
+COPY ./mongo-init.js /docker-entrypoint-initdb.d/
+</code></pre>
+<p>ابنِه إلى صورة بالأمر:</p>
+<pre><code class="language-bash">docker build -t initialized-mongo .
+</code></pre>
+<p>الآن غيّر ملف <em>docker-compose.dev.yml</em> ليستخدم الصورة الجديدة:</p>
+<pre><code>  mongo:
+    image: initialized-mongo  // HIGHLIGHT LINE
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+</code></pre>
+<p>الآن ينبغي أن يعمل التطبيق أخيراً.</p>
+<h3 id="حفظ-البيانات-بشكل-دائم-باستخدام-وحدات-التخزين">حفظ البيانات بشكل دائم باستخدام وحدات التخزين</h3>
+<p>افتراضياً، لن تحافظ حاويات قواعد البيانات على بياناتنا. وعند إغلاق حاوية قاعدة البيانات قد تتمكن أو <em>قد لا تتمكن</em> من استعادة البيانات.</p>
+<blockquote>
+<p>في الواقع، Mongo حالة نادرة حيث تحافظ الحاوية فعلاً على البيانات. ويحدث هذا لأن المطورين الذين صنعوا صورة Docker لـMongo عرّفوا وحدة تخزين (volume) لاستخدامها. <a href="https://github.com/docker-library/mongo/blob/master/8.0/Dockerfile#L111" target="_blank" rel="noreferrer noopener">هذا السطر</a> في ملف Dockerfile سيرشد Docker إلى الحفاظ على البيانات في وحدة تخزين.</p>
+</blockquote>
+<p>هناك طريقتان مختلفتان لتخزين البيانات:</p>
+<ul>
+<li>تحديد موقع في نظام ملفاتك (يُسمى <a href="https://docs.docker.com/storage/bind-mounts/" target="_blank" rel="noreferrer noopener">ربط bind mount</a>)</li>
+<li>ترك Docker يقرر مكان تخزين البيانات (<a href="https://docs.docker.com/storage/volumes/" target="_blank" rel="noreferrer noopener">وحدة تخزين volume</a>)</li>
+</ul>
+<p>الخيار الأول مفضل في معظم الحالات كلما احتاج المرء <em>حقاً</em> إلى تجنب حذف البيانات.</p>
+<p>لنرَ كليهما عملياً مع Docker compose. لنبدأ بـ<em>الربط bind mount:</em></p>
+<pre><code>services:
+  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./mongo_data:/data/db // HIGHLIGHT LINE
+</code></pre>
+<p>سينشئ ما سبق مجلداً باسم <em>mongo_data</em> في نظام ملفاتك المحلي ويربطه في الحاوية باسم <em>/data/db</em>. وهذا يعني أن البيانات في <em>/data/db</em> تُخزَّن خارج الحاوية لكنها تبقى متاحة للحاوية! فقط تذكر إضافة المجلد إلى .gitignore.</p>
+<p>يمكن تحقيق نتيجة مشابهة باستخدام <em>وحدة تخزين مسماة:</em></p>
+<pre><code>services:
+  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db // HIGHLIGHT LINE
+
+volumes:   // HIGHLIGHT LINE
+  mongo_data: // HIGHLIGHT LINE
+</code></pre>
+<p>الآن أُنشئت وحدة التخزين وتديرها Docker. بعد تشغيل التطبيق (<code>docker compose -f docker-compose.dev.yml up</code>) يمكنك سرد وحدات التخزين باستخدام <code>docker volume ls</code>، وفحص إحداها باستخدام <code>docker volume inspect</code>، وحتى حذفها باستخدام <code>docker volume rm</code>:</p>
+<pre><code>$ docker volume ls
+DRIVER    VOLUME NAME
+local     todo-backend_mongo_data
+$ docker volume inspect todo-backend_mongo_data
+[
+    {
+        &quot;CreatedAt&quot;: &quot;2026-03-01T11:48:30Z&quot;,
+        &quot;Driver&quot;: &quot;local&quot;,
+        &quot;Labels&quot;: {
+            &quot;com.docker.compose.config-hash&quot;: &quot;04a085ca56ca9326ae3e24058b0dc2a710003ba3ca583a2e333b4d6c491cfb94&quot;,
+            &quot;com.docker.compose.project&quot;: &quot;todo-backend&quot;,
+            &quot;com.docker.compose.version&quot;: &quot;2.33.1&quot;,
+            &quot;com.docker.compose.volume&quot;: &quot;mongo_data&quot;
+        },
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/todo-backend_mongo_data/_data&quot;,
+        &quot;Name&quot;: &quot;todo-backend_mongo_data&quot;,
+        &quot;Options&quot;: null,
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+</code></pre>
+<p>لا تزال وحدة التخزين المسماة مخزنة في نظام ملفاتك المحلي، لكن معرفة <em>مكان</em> تخزينها قد لا يكون بهذه السهولة كما في الخيار السابق.</p>
+<div class="tasks">
+<p><strong>7. قليل من البرمجة بـMongoDB</strong></p>
+</div>
+<h3 id="تصحيح-المشكلات-في-الحاويات">تصحيح المشكلات في الحاويات</h3>
+<blockquote>
+<p><em>عند البرمجة، من المرجح أن تنتهي في حالة يكون فيها كل شيء معطلاً.</em></p>
+<ul>
+<li>Matti Luukkainen</li>
+</ul>
+</blockquote>
+<p>عند التطوير باستخدام الحاويات، نحتاج إلى تعلم أدوات جديدة لتصحيح الأخطاء، إذ لا يمكننا ببساطة «console.log» كل شيء. وعندما تحتوي الشيفرة على خطأ، غالباً ما تكون في حالة يعمل فيها شيء ما على الأقل، فتستطيع التقدم انطلاقاً من ذلك. أما التهيئة فغالباً ما تكون في إحدى حالتين: 1. تعمل أو 2. معطلة. سنستعرض بعض الأدوات التي يمكنها المساعدة عندما يكون تطبيقك في الحالة الثانية.</p>
+<p>عند تطوير البرمجيات، يمكنك التقدم بأمان خطوة بخطوة، متحققاً طوال الوقت من أن ما كتبته يتصرف كما هو متوقع. لكن هذا غالباً لا ينطبق على التهيئة. فالتهيئة التي قد تكتبها يمكن أن تكون معطلة حتى اللحظة التي تكتمل فيها. لذا عندما تكتب ملف docker-compose.yml أو Dockerfile طويلاً ولا يعمل، عليك أن تتوقف لحظة وتفكر في الطرق المختلفة التي يمكنك بها التأكد من أن شيئاً ما يعمل.</p>
+<p><em>شكّك في كل شيء</em> لا يزال قابلاً للتطبيق هنا. وكما قيل في <a href="../../part3/saving_data_to_mongo_db" target="_blank" rel="noreferrer noopener">الجزء 3</a>: المفتاح هو أن تكون منهجياً. وبما أن المشكلة قد توجد في أي مكان، <em>فعليك أن تشكّ في كل شيء</em>، وتستبعد كل مصادر الخطأ المحتملة واحداً تلو الآخر.</p>
+<p>بالنسبة لي، أثمن طريقة لتصحيح الأخطاء هي التوقف والتفكير في ما أحاول إنجازه بدلاً من مجرد خبط رأسي في المشكلة. فغالباً ما يوجد حل بديل بسيط أو بحث سريع على Google يدفعني إلى الأمام.</p>
+<h4 id="exec">exec</h4>
+<p>أمر Docker <a href="https://docs.docker.com/engine/reference/commandline/exec/" target="_blank" rel="noreferrer noopener">exec</a> سلاح قوي. ويمكن استخدامه للقفز مباشرة إلى الحاوية عندما تكون قيد التشغيل.</p>
+<p>لنبدأ خادم ويب في الخلفية ونقم بقليل من التصحيح لنجعله يعمل ويعرض الرسالة «Hello, exec!» في متصفحنا. لنختر <a href="https://www.nginx.com/" target="_blank" rel="noreferrer noopener">Nginx</a> وهو، بين أمور أخرى، خادم قادر على تقديم ملفات HTML الثابتة. وله ملف index.html افتراضي يمكننا استبداله.</p>
+<pre><code>$ docker container run -d nginx
+</code></pre>
+<p>حسناً، الأسئلة الآن هي:</p>
+<ul>
+<li>إلى أين نذهب بمتصفحنا؟</li>
+<li>هل هو حتى قيد التشغيل؟</li>
+</ul>
+<p>نعرف كيف نجيب عن السؤال الأخير: بسرد الحاويات قيد التشغيل.</p>
+<pre><code>$ docker container ls
+CONTAINER ID   IMAGE   COMMAND  CREATED     STATUS    PORTS     NAMES
+3f831a57b7cc   nginx   ...      3 sec ago   Up 2 sec  80/tcp    keen_darwin
+</code></pre>
+<p>أجل! لقد أجبنا عن السؤال الأول أيضاً. يبدو أنه يستمع على المنفذ 80، كما يظهر في المخرجات أعلاه.</p>
+<p>لنوقفه ونعيد تشغيله بالعلامة <code>-p</code> ليتسنى لمتصفحنا الوصول إليه.</p>
+<pre><code>$ docker container stop keen_darwin
+$ docker container rm keen_darwin
+
+$ docker container run -d -p 8080:80 nginx
+</code></pre>
+<blockquote>
+<p><em><strong>ملاحظة المحرر:</strong> أثناء التطوير، من <strong>الضروري</strong> متابعة سجلات الحاوية باستمرار. أنا عادةً لا أشغّل الحاويات في الوضع المنفصل (أي مع <code>-d</code>) لأنه يتطلب جهداً إضافياً بسيطاً لفتح السجلات.</em></p>
+<p><em>عندما أكون متأكداً 100% أن كل شيء يعمل... لا، عندما أكون متأكداً 200%، حينها قد أسترخي قليلاً وأشغّل الحاويات في الوضع المنفصل. إلى أن ينهار كل شيء مرة أخرى ويحين وقت فتح السجلات من جديد.</em></p>
+</blockquote>
+<p>لننظر إلى التطبيق بالانتقال إلى <a href="http://localhost:8080/" target="_blank" rel="noreferrer noopener">http://localhost:8080</a>. يبدو أنه يعرض رسالة خاطئة! لنقفز مباشرة إلى الحاوية ونصلح هذا. أبقِ متصفحك مفتوحاً، فلن نحتاج إلى إيقاف الحاوية لإجراء هذا الإصلاح. سننفّذ bash داخل الحاوية، والعلامتان <code>-it</code> تضمنان أننا نستطيع التفاعل مع الحاوية:</p>
+<pre><code>$ docker container ls
+CONTAINER ID   IMAGE     COMMAND  PORTS                  NAMES
+7edcb36aff08   nginx     ...      0.0.0.0:8080-&amp;gt;80/tcp   wonderful_ramanujan
+
+$ docker exec -it wonderful_ramanujan bash
+root@7edcb36aff08:/#
+</code></pre>
+<p>بعد أن دخلنا، نحتاج إلى إيجاد الملف المعطوب واستبداله. يخبرنا بحث سريع على Google أن الملف نفسه هو <em>/usr/share/nginx/html/index.html</em>.</p>
+<p>لننتقل إلى المجلد ونحذف الملف</p>
+<pre><code>root@7edcb36aff08:/# cd /usr/share/nginx/html/
+root@7edcb36aff08:/# rm index.html
+</code></pre>
+<p>الآن، إذا ذهبنا إلى <a href="http://localhost:8080/" target="_blank" rel="noreferrer noopener">http://localhost:8080/</a> نعرف أننا حذفنا الملف الصحيح. تعرض الصفحة 404. لنستبدله بملف يحتوي على المحتوى الصحيح:</p>
+<pre><code>root@7edcb36aff08:/# echo &quot;Hello, exec!&quot; &amp;gt; index.html
+</code></pre>
+<p>حدّث الصفحة، وستُعرض رسالتنا! الآن نعرف كيف يمكن استخدام exec للتفاعل مع الحاويات. تذكر أن كل التغييرات تُفقد عند حذف الحاوية. وللحفاظ على التغييرات، عليك استخدام <code>commit</code > تماماً كما فعلنا في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-containers/chapter-2" target="_blank" rel="noreferrer noopener">القسم السابق</a>.</p>
+<div class="tasks">
+<p><strong>8. Mongo CLI</strong></p>
+</div>
+<h3 id="redis">Redis</h3>
+<p><a href="https://redis.io/" target="_blank" rel="noreferrer noopener">Redis</a> هو مخزن <a href="https://redis.com/nosql/key-value-databases/" target="_blank" rel="noreferrer noopener">مفتاح-قيمة (key-value)</a>، أي أنه يخزّن البيانات كأزواج بسيطة: <strong>مفتاح</strong> و<strong>القيمة</strong> المرتبطة به. وخلافاً لقواعد البيانات الموجّهة بالمستندات مثل MongoDB، لا ينظّم Redis البيانات في مجموعات أو جداول. بل يحتفظ بقطع بيانات فردية تسترجعها مباشرةً بالإشارة إلى مفاتيحها.</p>
+<p>افتراضياً، يعمل Redis <em>في الذاكرة (in-memory)</em>، ما يعني أنه لا يخزّن البيانات بشكل دائم.</p>
+<p>من حالات الاستخدام الممتازة لـRedis استخدامه كذاكرة مؤقتة (cache). فغالباً ما تُستخدم الذاكرات المؤقتة لتخزين بيانات يكون جلبها بطيئاً بخلاف ذلك، وحفظها حتى تصبح غير صالحة. وبعد أن تصبح الذاكرة المؤقتة غير صالحة، تجلب البيانات مرة أخرى وتخزّنها في الذاكرة المؤقتة.</p>
+<p>لا علاقة لـRedis بالحاويات. لكن بما أننا قادرون بالفعل على إضافة <em>أي</em> خدمة طرف ثالث إلى تطبيقاتك، فلمَ لا نتعرف على خدمة جديدة؟</p>
+<div class="tasks">
+<p><strong>9. إعداد Redis للمشروع</strong></p>
+</div>
+<div class="tasks">
+<p><strong>10. استعد للانطلاق!</strong></p>
+</div>
+<div class="tasks">
+<p><strong>11. Redis CLI</strong></p>
+</div>
+<h3 id="حفظ-بيانات-redis-بشكل-دائم">حفظ بيانات Redis بشكل دائم</h3>
+<p>ذُكر في القسم السابق أن Redis <em>افتراضياً</em> لا يحفظ البيانات بشكل دائم. لكن تفعيل الحفظ الدائم سهل. نحتاج فقط إلى تشغيل Redis بأمر مختلف، كما هو موضح في <a href="https://hub.docker.com/_/redis" target="_blank" rel="noreferrer noopener">صفحة Docker Hub</a>:</p>
+<pre><code>services:
+  redis:
+    # كل ما تبقى
+    command: ['redis-server', '--appendonly', 'yes'] # الكتابة فوق CMD
+    volumes: # التصريح عن وحدة التخزين
+      - ./redis_data:/data
+</code></pre>
+<p>ستُحفظ البيانات الآن بشكل دائم في المجلد <em>redis_data</em> على الجهاز المضيف. تذكر إضافة المجلد إلى .gitignore!</p>
+<h4 id="وظائف-أخرى-لـredis">وظائف أخرى لـRedis</h4>
+<p>بالإضافة إلى عمليات GET وSET وDEL على المفاتيح والقيم، يمكن لـRedis فعل الكثير أيضاً. فيمكنه مثلاً إنهاء صلاحية المفاتيح تلقائياً، وهي ميزة مفيدة جداً عند استخدام Redis كذاكرة مؤقتة.</p>
+<p>يمكن أيضاً استخدام Redis لتنفيذ ما يُسمى نمط <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern" target="_blank" rel="noreferrer noopener">النشر-الاشتراك (publish-subscribe)</a> (أو PubSub) وهو آلية اتصال غير متزامنة للبرمجيات الموزعة. في هذا السيناريو، يعمل Redis كـ<em>وسيط رسائل</em> بين خدمتين أو أكثر. بعض الخدمات <em>تنشر</em> رسائل بإرسالها إلى Redis، والذي يخبر عند وصول رسالة الأطراف التي <em>اشتركت</em> في تلك الرسائل.</p>
+<div class="tasks">
+<p><strong>12. حفظ البيانات بشكل دائم في Redis</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part12/introduction_to_containers"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">مقدمة إلى الحاويات</span></a><!--]--> <!--[0--><a class="next" href="../../part12/basics_of_container_orchestration"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">أساسيات تنسيق الحاويات</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

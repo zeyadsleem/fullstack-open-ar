@@ -1,0 +1,858 @@
+const e=4,c="b",s="part4b.md",n="اختبار الواجهة الخلفية",a="testing_the_backend",p="/images/part-4.svg",t=[{depth:3,id:"بيئة-الاختبار",text:"بيئة الاختبار"},{depth:3,id:"supertest",text:"supertest"},{depth:3,id:"تهيئة-قاعدة-البيانات-قبل-الاختبارات",text:"تهيئة قاعدة البيانات قبل الاختبارات"},{depth:3,id:"تشغيل-الاختبارات-واحدا-واحدا",text:"تشغيل الاختبارات واحداً واحداً"},{depth:3,id:"asyncawait",text:"async/await"},{depth:3,id:"asyncawait-في-الواجهة-الخلفية",text:"async/await في الواجهة الخلفية"},{depth:3,id:"إعادة-هيكلة-المسار-المسؤول-عن-إضافة-ملاحظة",text:"إعادة هيكلة المسار المسؤول عن إضافة ملاحظة"},{depth:3,id:"إعادة-هيكلة-المسار-المسؤول-عن-جلب-ملاحظة-واحدة",text:"إعادة هيكلة المسار المسؤول عن جلب ملاحظة واحدة"},{depth:3,id:"إعادة-هيكلة-المسار-المسؤول-عن-حذف-ملاحظة",text:"إعادة هيكلة المسار المسؤول عن حذف ملاحظة"},{depth:3,id:"تحسين-دالة-beforeeach",text:"تحسين دالة beforeEach"},{depth:3,id:"قسم-مطور-full-stack-الحقيقي",text:"قسم مطوّر full stack الحقيقي"},{depth:3,id:"تمارين-48-412",text:"تمارين 4.8.-4.12."},{depth:3,id:"إعادة-هيكلة-الاختبارات",text:"إعادة هيكلة الاختبارات"},{depth:3,id:"تمارين-413-414",text:"تمارين 4.13.-4.14."}],l=`<div class="content">
+<p>سنبدأ الآن بكتابة اختبارات للواجهة الخلفية. بما أن الواجهة الخلفية لا تحتوي على منطق معقّد، فلا معنى لكتابة <a href="https://en.wikipedia.org/wiki/Unit_testing">اختبارات الوحدة</a> لها. الشيء الوحيد المحتمل الذي يمكننا اختباره كوحدة هو دالة <em>toJSON</em> المستخدمة في تنسيق الملاحظات.</p>
+<p>في بعض الحالات، قد يكون من المفيد تنفيذ بعض اختبارات الواجهة الخلفية عبر محاكاة قاعدة البيانات بدلاً من استخدام قاعدة بيانات حقيقية. إحدى المكتبات التي يمكن استخدامها لهذا الغرض هي <a href="https://github.com/nodkz/mongodb-memory-server">mongodb-memory-server</a>.</p>
+<p>بما أن الواجهة الخلفية لتطبيقنا ما تزال بسيطة نسبياً، سنقرر اختبار التطبيق بأكمله عبر واجهة REST الخاصة به، بحيث تُشمَل قاعدة البيانات أيضاً. هذا النوع من الاختبار، حيث تُختبر عدة مكوّنات من النظام كمجموعة واحدة، يُسمى <a href="https://en.wikipedia.org/wiki/Integration_testing">اختبار التكامل</a>.</p>
+<h3 id="بيئة-الاختبار">بيئة الاختبار</h3>
+<p>في أحد الفصول السابقة من مادة الدورة، ذكرنا أنه عندما يعمل خادم الواجهة الخلفية لديك في Fly.io أو Render، فإنه يكون في وضع <i>الإنتاج</i>.</p>
+<p>الاصطلاح المتبع في Node هو تعريف وضع تنفيذ التطبيق عبر متغير البيئة <i>NODE_ENV</i>. في تطبيقنا الحالي، لا نحمّل متغيرات البيئة المعرّفة في ملف <i>.env</i> إلا إذا كان التطبيق <i>ليس</i> في وضع الإنتاج.</p>
+<p>من الممارسات الشائعة تعريف أوضاع منفصلة للتطوير والاختبار.</p>
+<p>بعد ذلك، لنغيّر السكربتات في ملف <i>package.json</i> لتطبيق الملاحظات، بحيث عندما تُشغَّل الاختبارات تحصل <i>NODE_ENV</i> على القيمة <i>test</i>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NODE_ENV=production node index.js&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NODE_ENV=development node --watch index.js&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;test&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NODE_ENV=test node --test&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eslint .&quot;</span>
+  <span class="hljs-punctuation">}</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>حدّدنا وضع التطبيق ليكون <i>development</i> في سكربت <em>npm run dev</em>. وحدّدنا أيضاً أن الأمر الافتراضي <em>npm start</em> سيعرّف الوضع بأنه <i>production</i>.</p>
+<p>هناك مشكلة صغيرة في الطريقة التي حدّدنا بها وضع التطبيق في سكربتاتنا: فهي لن تعمل على Windows. يمكننا تصحيح ذلك بتثبيت حزمة <a href="https://www.npmjs.com/package/cross-env">cross-env</a> كاعتمادية للمشروع باستخدام الأمر:</p>
+<pre><code class="language-bash">npm install cross-env
+</code></pre>
+<p>يمكننا بعد ذلك تحقيق التوافق عبر المنصات باستخدام مكتبة cross-env في سكربتات npm المعرّفة في <i>package.json</i>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cross-env NODE_ENV=production node index.js&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cross-env NODE_ENV=development node --watch index.js&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;test&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cross-env  NODE_ENV=test node --test&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eslint .&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>الآن يمكننا تعديل طريقة عمل تطبيقنا في الأوضاع المختلفة. وكمثال على ذلك، يمكننا تعريف التطبيق ليستخدم قاعدة بيانات اختبار منفصلة عندما يشغّل الاختبارات.</p>
+<p>يمكننا إنشاء قاعدة بيانات الاختبار المنفصلة لدينا في MongoDB Atlas. هذا ليس حلاً مثالياً في الحالات التي يطوّر فيها أشخاص كثيرون التطبيق نفسه. فتنفيذ الاختبارات على وجه الخصوص يتطلب عادةً نسخة قاعدة بيانات واحدة لا تستخدمها اختبارات تعمل في الوقت نفسه.</p>
+<p>سيكون من الأفضل تشغيل اختباراتنا باستخدام قاعدة بيانات مثبّتة وتعمل على جهاز المطوّر المحلي. الحل الأمثل هو أن يستخدم كل تنفيذ للاختبارات قاعدة بيانات منفصلة. تحقيق ذلك «بسيط نسبياً» عبر <a href="https://docs.mongodb.com/manual/core/inmemory/">تشغيل Mongo في الذاكرة</a> أو باستخدام حاويات <a href="https://www.docker.com">Docker</a>. لن نعقّد الأمور، وسنواصل بدلاً من ذلك استخدام قاعدة بيانات MongoDB Atlas.</p>
+<p>لنجرِ بعض التغييرات على الوحدة التي تعرّف إعدادات التطبيق في <em>utils/config.js</em>:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>()
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">PORT</span>
+
+<span class="hljs-comment">// highlight-start</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MONGODB_URI</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;test&#x27;</span> 
+  ? process.<span class="hljs-property">env</span>.<span class="hljs-property">TEST_MONGODB_URI</span>
+  : process.<span class="hljs-property">env</span>.<span class="hljs-property">MONGODB_URI</span>
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-variable constant_">MONGODB_URI</span>,
+  <span class="hljs-variable constant_">PORT</span>
+}
+</code></pre>
+<p>يحتوي ملف <i>.env</i> على <i>متغيرات منفصلة</i> لعناوين قاعدتي بيانات التطوير والاختبار:</p>
+<pre><code class="language-bash">MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=<span class="hljs-literal">true</span>&amp;w=majority&amp;appName=Cluster0
+PORT=3001
+
+// highlight-start
+TEST_MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/testNoteApp?retryWrites=<span class="hljs-literal">true</span>&amp;w=majority&amp;appName=Cluster0
+// highlight-end
+</code></pre>
+<p>تشبه الوحدة <em>config</em> التي نفّذناها قليلاً حزمة <a href="https://github.com/lorenwest/node-config">node-config</a>. كتابة تنفيذنا الخاص مبرَّرة لأن تطبيقنا بسيط، وأيضاً لأنها تعلّمنا دروساً قيّمة.</p>
+<p>هذه هي التغييرات الوحيدة التي نحتاج إلى إجرائها على شيفرة تطبيقنا.</p>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part4-2</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-2">مستودع GitHub هذا</a>.</p>
+<h3 id="supertest">supertest</h3>
+<p>لنستخدم حزمة <a href="https://github.com/visionmedia/supertest">supertest</a> لمساعدتنا في كتابة اختباراتنا لاختبار واجهة API.</p>
+<p>سنثبّت الحزمة كاعتمادية تطوير:</p>
+<pre><code class="language-bash">npm install --save-dev supertest
+</code></pre>
+<p>لنكتب اختبارنا الأول في ملف <i>tests/note_api.test.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, after } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> supertest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;supertest&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../app&#x27;</span>)
+
+<span class="hljs-keyword">const</span> api = <span class="hljs-title function_">supertest</span>(app)
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;notes are returned as json&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+})
+
+<span class="hljs-title function_">after</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>يستورد الاختبار تطبيق Express من الوحدة <i>app.js</i> ويلفّه بدالة <i>supertest</i> في كائن يُسمى <a href="https://github.com/visionmedia/superagent">superagent</a>. يُسنَد هذا الكائن إلى المتغير <i>api</i>، ويمكن للاختبارات استخدامه لإرسال طلبات HTTP إلى الواجهة الخلفية.</p>
+<p>يرسل اختبارنا طلب HTTP GET إلى عنوان <i>api/notes</i> ويتحقق من أن الطلب يُجاب عليه برمز الحالة 200. كما يتحقق الاختبار من أن ترويسة <i>Content-Type</i> مضبوطة على <i>application/json</i>، ما يشير إلى أن البيانات بالصيغة المطلوبة.</p>
+<p>فحص قيمة الترويسة يستخدم صيغة تبدو غريبة بعض الشيء:</p>
+<pre><code class="language-js">.<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+</code></pre>
+<p>القيمة المطلوبة معرّفة الآن كـ <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">تعبير نمطي</a> أو regex اختصاراً. يبدأ التعبير النمطي بشرطة مائلة / وينتهي بها، وبما أن النص المطلوب <i>application/json</i> يحتوي أيضاً على الشرطة المائلة نفسها، فقد سُبقت بعلامة \\ حتى لا تُفسَّر كمحرف إنهاء للتعبير النمطي.</p>
+<p>من حيث المبدأ، كان يمكن أيضاً تعريف الاختبار كنص</p>
+<pre><code class="language-js">.<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-string">&#x27;application/json&#x27;</span>)
+</code></pre>
+<p>لكن المشكلة هنا هي أنه عند استخدام نص، يجب أن تكون قيمة الترويسة مطابقة تماماً. أما مع التعبير النمطي الذي عرّفناه، فمن المقبول أن <i>تحتوي</i> الترويسة على النص المذكور. القيمة الفعلية للترويسة هي <i>application/json; charset=utf-8</i>، أي أنها تحتوي أيضاً على معلومات حول ترميز المحارف. لكن اختبارنا لا يهمه ذلك، ولذا من الأفضل تعريف الاختبار كتعبير نمطي بدلاً من نص مطابق تماماً.</p>
+<p>يحتوي الاختبار على بعض التفاصيل التي سنستكشفها <a href="/part4/testing_the_backend#async-await">بعد قليل</a>. تُسبق دالة السهم التي تعرّف الاختبار بالكلمة المفتاحية <i>async</i>، ويُسبق استدعاء الدالة على الكائن <i>api</i> بالكلمة المفتاحية <i>await</i>. سنكتب بضعة اختبارات ثم نلقي نظرة أقرب على سحر async/await هذا. لا تشغل نفسك بهما الآن، فقط كن مطمئناً إلى أن الاختبارات المثال تعمل بشكل صحيح. ترتبط صيغة async/await بكون إرسال طلب إلى API عملية <i>غير متزامنة</i>. يمكن استخدام صيغة async/await لكتابة شيفرة غير متزامنة بمظهر الشيفرة المتزامنة.</p>
+<p>بعد انتهاء تشغيل جميع الاختبارات (يوجد حالياً اختبار واحد فقط) علينا إغلاق اتصال قاعدة البيانات الذي يستخدمه Mongoose. من دون ذلك لن ينتهِ برنامج الاختبار. يمكن تحقيق ذلك بسهولة باستخدام الدالة <a href="https://nodejs.org/api/test.html#afterfn-options">after</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">after</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>تفصيل صغير لكن مهم: في <a href="/part4/structure_of_backend_application_introduction_to_testing#project-structure">بداية</a> هذا الجزء استخرجنا تطبيق Express إلى ملف <i>app.js</i>، وتغيّر دور ملف <i>index.js</i> ليصبح تشغيل التطبيق على المنفذ المحدّد عبر <em>app.listen</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./app&#x27;</span>) <span class="hljs-comment">// تطبيق Express الفعلي</span>
+<span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/config&#x27;</span>)
+<span class="hljs-keyword">const</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/logger&#x27;</span>)
+
+app.<span class="hljs-title function_">listen</span>(config.<span class="hljs-property">PORT</span>, <span class="hljs-function">() =&gt;</span> {
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">\`Server running on port <span class="hljs-subst">\${config.PORT}</span>\`</span>)
+})
+</code></pre>
+<p>تستخدم الاختبارات فقط تطبيق Express المعرّف في ملف <i>app.js</i>، وهو لا يستمع إلى أي منافذ:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> supertest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;supertest&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../app&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-keyword">const</span> api = <span class="hljs-title function_">supertest</span>(app) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<p>تقول وثائق supertest ما يلي:</p>
+<blockquote>
+<p><i>إذا لم يكن الخادم يستمع بالفعل للاتصالات، فسيُربَط لك بمنفذ مؤقت، لذا لا حاجة لتتبّع المنافذ.</i></p>
+</blockquote>
+<p>بعبارة أخرى، يحرص supertest على تشغيل التطبيق قيد الاختبار على المنفذ الذي يستخدمه داخلياً. هذا أحد أسباب اختيارنا supertest بدلاً من شيء مثل axios، إذ لا نحتاج إلى تشغيل نسخة أخرى من الخادم بشكل منفصل قبل بدء الاختبار. والسبب الآخر هو أن supertest يوفر دوال مثل <code>expect()</code>، ما يسهّل الاختبار.</p>
+<p>لنضف ملاحظتين إلى قاعدة بيانات الاختبار باستخدام برنامج <em>mongo.js</em> (وهنا يجب أن نتذكر التبديل إلى عنوان قاعدة البيانات الصحيح).</p>
+<p>لنكتب بضعة اختبارات إضافية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;all notes are returned&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, <span class="hljs-number">2</span>)
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a specific note is within the returned notes&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> contents = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e.<span class="hljs-property">content</span>)
+  assert.<span class="hljs-title function_">strictEqual</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;HTML is easy&#x27;</span>), <span class="hljs-literal">true</span>)
+})
+
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<p>يخزّن كلا الاختبارين استجابة الطلب في المتغير <em>response</em>، وعلى عكس الاختبار السابق الذي استخدم الدوال التي يوفرها <em>supertest</em> للتحقق من رمز الحالة والترويسات، نفحص هذه المرة بيانات الاستجابة المخزّنة في خاصية <i>response.body</i>. تتحقق اختباراتنا من صيغة بيانات الاستجابة ومحتواها باستخدام الدالة <a href="https://nodejs.org/docs/latest/api/assert.html#assertstrictequalactual-expected-message">strictEqual</a> من مكتبة assert.</p>
+<p>يمكننا تبسيط الاختبار الثاني قليلاً، واستخدام <a href="https://nodejs.org/docs/latest/api/assert.html#assertokvalue-message">assert</a> نفسها للتحقق من أن الملاحظة ضمن الملاحظات المُعادة:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a specific note is within the returned notes&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> contents = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e.<span class="hljs-property">content</span>)
+  <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;HTML is easy&#x27;</span>))
+})
+</code></pre>
+<p>بدأت فائدة استخدام صيغة async/await تتضح. عادةً سنضطر إلى استخدام دوال الاستدعاء المرتد للوصول إلى البيانات التي تعيدها الوعود (promises)، لكن مع الصيغة الجديدة أصبحت الأمور أكثر راحة بكثير:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+<span class="hljs-comment">// لا يصل التنفيذ إلى هنا إلا بعد اكتمال طلب HTTP</span>
+<span class="hljs-comment">// تُحفظ نتيجة طلب HTTP في المتغير response</span>
+assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, <span class="hljs-number">2</span>)
+</code></pre>
+<p>يعيق الوسيط الذي يطبع معلومات عن طلبات HTTP مخرجات تنفيذ الاختبارات. لنعدّل logger بحيث لا يطبع إلى الطرفية في وضع الاختبار:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">info</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">if</span> (process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> !== <span class="hljs-string">&#x27;test&#x27;</span>) { 
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(...params)
+  }
+  <span class="hljs-comment">// highlight-end</span>
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">error</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">if</span> (process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> !== <span class="hljs-string">&#x27;test&#x27;</span>) { 
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(...params)
+  }
+  <span class="hljs-comment">// highlight-end  </span>
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  info, error
+}
+</code></pre>
+<h3 id="تهيئة-قاعدة-البيانات-قبل-الاختبارات">تهيئة قاعدة البيانات قبل الاختبارات</h3>
+<p>حالياً، تعاني اختباراتنا من مشكلة أن نجاحها يعتمد على حالة قاعدة البيانات. تنجح الاختبارات إذا صادف أن قاعدة بيانات الاختبار تحتوي على ملاحظتين، إحداهما محتواها <i>'HTML is easy'</i>. لجعلها أكثر متانة، علينا إعادة ضبط قاعدة البيانات وتوليد بيانات الاختبار اللازمة بطريقة مضبوطة قبل تشغيل الاختبارات.</p>
+<p>تستخدم اختباراتنا بالفعل الدالة <a href="https://nodejs.org/api/test.html#afterfn-options">after</a> لإغلاق الاتصال بقاعدة البيانات بعد انتهاء تنفيذ الاختبارات. توفر مكتبة node:test دوال أخرى كثيرة يمكن استخدامها لتنفيذ عمليات مرة واحدة قبل تشغيل أي اختبار أو في كل مرة قبل تشغيل اختبار.</p>
+<p>لنهيّئ قاعدة البيانات <i>قبل كل اختبار</i> باستخدام الدالة <a href="https://nodejs.org/api/test.html#beforeeachfn-options">beforeEach</a>:</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+<span class="hljs-keyword">const</span> { test, after, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> supertest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;supertest&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../app&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+
+<span class="hljs-keyword">const</span> api = <span class="hljs-title function_">supertest</span>(app)
+
+<span class="hljs-comment">// highlight-start</span>
+<span class="hljs-keyword">const</span> initialNotes = [
+  {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;HTML is easy&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span>,
+  },
+  {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Browser can execute only JavaScript&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+  },
+]
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-comment">// highlight-start</span>
+<span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  <span class="hljs-keyword">let</span> noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(initialNotes[<span class="hljs-number">0</span>])
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+
+  noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(initialNotes[<span class="hljs-number">1</span>])
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+})
+<span class="hljs-comment">// highlight-end</span>
+
+<span class="hljs-comment">// ...</span>
+</code></pre>
+<p>تُفرَّغ قاعدة البيانات في البداية، وبعد ذلك نحفظ الملاحظتين المخزّنتين في المصفوفة <em>initialNotes</em> في قاعدة البيانات. بهذا نضمن أن تكون قاعدة البيانات في الحالة نفسها قبل تشغيل كل اختبار.</p>
+<p>لنعدّل الاختبار الذي يتحقق من عدد الملاحظات كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;all notes are returned&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, initialNotes.<span class="hljs-property">length</span>) <span class="hljs-comment">// highlight-line</span>
+})
+
+<span class="hljs-comment">// ...</span>
+
+</code></pre>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part4-3</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-3">مستودع GitHub هذا</a>.</p>
+<h3 id="تشغيل-الاختبارات-واحدا-واحدا">تشغيل الاختبارات واحداً واحداً</h3>
+<p>ينفّذ الأمر <em>npm test</em> جميع اختبارات التطبيق. عندما نكتب اختبارات، من الحكمة عادةً تنفيذ اختبار واحد أو اثنين فقط.</p>
+<p>توجد بضع طرق مختلفة لتحقيق ذلك، إحداها دالة <a href="https://nodejs.org/api/test.html#testonlyname-options-fn">only</a>. بهذه الدالة يمكننا تعريف الاختبارات التي ينبغي تنفيذها في الشيفرة:</p>
+<pre><code class="language-js">test.<span class="hljs-title function_">only</span>(<span class="hljs-string">&#x27;notes are returned as json&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+})
+
+test.<span class="hljs-title function_">only</span>(<span class="hljs-string">&#x27;all notes are returned&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, <span class="hljs-number">2</span>)
+})
+</code></pre>
+<p>عند تشغيل الاختبارات مع الخيار <em>--test-only</em>، أي بالأمر:</p>
+<pre><code>npm test -- --test-only
+</code></pre>
+<p>تُنفَّذ فقط الاختبارات المعلَّمة بـ <em>only</em>.</p>
+<p>خطر <em>only</em> هو أن ينسى المرء إزالتها من الشيفرة.</p>
+<p>خيار آخر هو تحديد الاختبارات التي يجب تشغيلها كوسائط للأمر <i>npm test</i>.</p>
+<p>الأمر التالي يشغّل فقط الاختبارات الموجودة في ملف <i>tests/note_api.test.js</i>:</p>
+<pre><code class="language-js">npm test -- tests/note_api.<span class="hljs-property">test</span>.<span class="hljs-property">js</span>
+</code></pre>
+<p>يمكن استخدام الخيار <a href="https://nodejs.org/api/test.html#filtering-tests-by-name">--test-name-pattern</a> لتشغيل اختبارات باسم محدد:</p>
+<pre><code class="language-js">npm test -- --test-name-pattern=<span class="hljs-string">&quot;a specific note is within the returned notes&quot;</span>
+</code></pre>
+<p>يمكن أن تشير الوسيطة المقدَّمة إلى اسم الاختبار أو كتلة describe. ويمكن أن تحتوي أيضاً على جزء من الاسم فقط. الأمر التالي سيشغّل جميع الاختبارات التي يحتوي اسمها على <i>notes</i>:</p>
+<pre><code class="language-js">npm run test -- --test-name-pattern=<span class="hljs-string">&quot;notes&quot;</span>
+</code></pre>
+<h3 id="asyncawait">async/await</h3>
+<p>قبل أن نكتب المزيد من الاختبارات، لنلقِ نظرة على الكلمتين المفتاحيتين <em>async</em> و_await_.</p>
+<p>صيغة async/await التي قُدِّمت في ES7 تجعل من الممكن استخدام <i>الدوال غير المتزامنة التي تعيد وعداً</i> بطريقة تجعل الشيفرة تبدو متزامنة.</p>
+<p>وكمثال، يبدو جلب الملاحظات من قاعدة البيانات باستخدام الوعود هكذا:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;operation returned the following notes&#x27;</span>, notes)
+})
+</code></pre>
+<p>تعيد الدالة <em>Note.find()</em> وعداً، ويمكننا الوصول إلى نتيجة العملية بتسجيل دالة استدعاء مرتد عبر الدالة <em>then</em>.</p>
+<p>تُكتب كل الشيفرة التي نريد تنفيذها بعد انتهاء العملية في دالة الاستدعاء المرتد. لو أردنا إجراء عدة استدعاءات دوال غير متزامنة بالتتابع، لصارت الحالة مؤلمة بسرعة. سيتعين إجراء الاستدعاءات غير المتزامنة داخل دالة الاستدعاء المرتد. وهذا على الأرجح سيؤدي إلى شيفرة معقّدة وقد يولّد ما يُسمى <a href="https://stackoverflow.com/a/25098230">جحيم الاستدعاءات المرتدة</a>.</p>
+<p>عبر <a href="https://javascript.info/promise-chaining">تسلسل الوعود</a> يمكننا إبقاء الحالة تحت السيطرة نوعاً ما، وتجنّب جحيم الاستدعاءات المرتدة بإنشاء سلسلة نظيفة إلى حد كبير من استدعاءات الدالة <em>then</em>. رأينا بعضاً منها خلال الدورة. ولتوضيح ذلك، يمكنك الاطلاع على مثال مصطنع لدالة تجلب جميع الملاحظات ثم تحذف الأولى:</p>
+<pre><code class="language-js"><span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> {
+    <span class="hljs-keyword">return</span> notes[<span class="hljs-number">0</span>].<span class="hljs-title function_">deleteOne</span>()
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;the first note is removed&#x27;</span>)
+    <span class="hljs-comment">// مزيد من الشيفرة هنا</span>
+  })
+</code></pre>
+<p>سلسلة then جيدة، لكن يمكننا فعل أفضل. قدّمت <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator">دوال المولّد</a> التي أُضيفت في ES6 <a href="https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/async%20%26%20performance/ch4.md#iterating-generators-asynchronously">طريقة ذكية</a> لكتابة شيفرة غير متزامنة بطريقة «تبدو متزامنة». لكن الصيغة ثقيلة بعض الشيء وغير مستخدمة على نطاق واسع.</p>
+<p>تأتي الكلمتان المفتاحيتان <em>async</em> و_await_ المقدَّمتان في ES7 بالوظيفة نفسها التي تقدمها دوال المولّد، لكن بطريقة مفهومة وأنظف نحوياً بين يدي جميع أبناء عالم JavaScript.</p>
+<p>يمكننا جلب جميع الملاحظات في قاعدة البيانات باستخدام المعامل <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await">await</a> هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;operation returned the following notes&#x27;</span>, notes)
+</code></pre>
+<p>تبدو الشيفرة تماماً كالشيفرة المتزامنة. يتوقف تنفيذ الشيفرة عند <em>const notes = await Note.find({})</em> وينتظر حتى يتحقق الوعد <i>fulfilled</i> المرتبط به، ثم يواصل تنفيذه إلى السطر التالي. وعندما يستمر التنفيذ، تُسنَد نتيجة العملية التي أعادت وعداً إلى المتغير <em>notes</em>.</p>
+<p>المثال المعقّد قليلاً المعروض أعلاه يمكن تنفيذه باستخدام await هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> notes[<span class="hljs-number">0</span>].<span class="hljs-title function_">deleteOne</span>()
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;the first note is removed&#x27;</span>)
+</code></pre>
+<p>بفضل الصيغة الجديدة، أصبحت الشيفرة أبسط بكثير من سلسلة then السابقة.</p>
+<p>هناك بعض التفاصيل المهمة التي يجب الانتباه إليها عند استخدام صيغة async/await. لاستخدام المعامل await مع العمليات غير المتزامنة، يجب أن تعيد وعداً. وهذا ليس مشكلة بحد ذاته، إذ يسهل تغليف الدوال غير المتزامنة العادية التي تستخدم دوال الاستدعاء المرتد بالوعود.</p>
+<p>لا يمكن استخدام الكلمة المفتاحية await في أي مكان في شيفرة JavaScript. استخدام await ممكن فقط داخل دالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">async</a>.</p>
+<p>هذا يعني أنه لكي تعمل الأمثلة السابقة، يجب أن تستخدم دوال async. لاحظ السطر الأول في تعريف دالة السهم:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">main</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;operation returned the following notes&#x27;</span>, notes)
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> notes[<span class="hljs-number">0</span>].<span class="hljs-title function_">deleteOne</span>()
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;the first note is removed&#x27;</span>)
+}
+
+<span class="hljs-title function_">main</span>() <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>تعلن الشيفرة أن الدالة المُسنَدة إلى <em>main</em> غير متزامنة. بعد ذلك، تستدعي الشيفرة الدالة بـ <code>main()</code>.</p>
+<h3 id="asyncawait-في-الواجهة-الخلفية">async/await في الواجهة الخلفية</h3>
+<p>لنبدأ بتغيير الواجهة الخلفية إلى async وawait. لنبدأ بالمسار المسؤول عن جلب جميع الملاحظات.</p>
+<p>بما أن جميع العمليات غير المتزامنة تُنفَّذ حالياً داخل دالة، يكفي تغيير دوال معالجة المسارات إلى دوال async. المسار الخاص بجلب جميع الملاحظات</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">notes</span>) =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(notes)
+  })
+})
+</code></pre>
+<p>يتغيّر إلى ما يلي:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-title function_">async</span> (request, response) =&gt; { 
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+  response.<span class="hljs-title function_">json</span>(notes)
+})
+</code></pre>
+<p>يمكننا التحقق من نجاح إعادة الهيكلة باختبار نقطة النهاية عبر المتصفح وتشغيل الاختبارات التي كتبناها سابقاً.</p>
+<h3 id="إعادة-هيكلة-المسار-المسؤول-عن-إضافة-ملاحظة">إعادة هيكلة المسار المسؤول عن إضافة ملاحظة</h3>
+<p>عند إعادة هيكلة الشيفرة، يوجد دائماً خطر <a href="https://en.wikipedia.org/wiki/Regression_testing">الانحدار</a>، أي أن الوظائف الموجودة قد تتعطل. لنعِد هيكلة العمليات المتبقية بكتابة اختبار لكل مسار من مسارات API أولاً.</p>
+<p>لنبدأ بعملية إضافة ملاحظة جديدة. لنكتب اختباراً يضيف ملاحظة جديدة ويتحقق من أن عدد الملاحظات التي تعيدها API يزداد وأن الملاحظة المضافة حديثاً موجودة في القائمة.</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a valid note can be added &#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> newNote = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+  }
+
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">send</span>(newNote)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">201</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> contents = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> r.<span class="hljs-property">content</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, initialNotes.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>)
+
+  <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>))
+})
+</code></pre>
+<p>يفشل الاختبار لأننا أعدنا بالخطأ رمز الحالة <i>200 OK</i> عند إنشاء ملاحظة جديدة. لنغيّر ذلك إلى رمز الحالة <i>201 CREATED</i>:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+    <span class="hljs-attr">content</span>: body.<span class="hljs-property">content</span>,
+    <span class="hljs-attr">important</span>: body.<span class="hljs-property">important</span> || <span class="hljs-literal">false</span>,
+  })
+
+  note.<span class="hljs-title function_">save</span>()
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">savedNote</span> =&gt;</span> {
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">201</span>).<span class="hljs-title function_">json</span>(savedNote) <span class="hljs-comment">// highlight-line</span>
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+</code></pre>
+<p>لنكتب أيضاً اختباراً يتحقق من أن ملاحظة بلا محتوى لن تُحفظ في قاعدة البيانات.</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;note without content is not added&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> newNote = {
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">send</span>(newNote)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">400</span>)
+
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, initialNotes.<span class="hljs-property">length</span>)
+})
+</code></pre>
+<p>يتحقق كلا الاختبارين من الحالة المخزّنة في قاعدة البيانات بعد عملية الحفظ، عبر جلب جميع ملاحظات التطبيق.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+</code></pre>
+<p>ستتكرر خطوات التحقق نفسها في اختبارات أخرى لاحقاً، ومن الجيد استخراج هذه الخطوات في دوال مساعدة. لنضف الدالة إلى ملف جديد باسم <i>tests/test_helper.js</i> يقع في المجلد نفسه الذي يقع فيه ملف الاختبار.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+
+<span class="hljs-keyword">const</span> initialNotes = [
+  {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;HTML is easy&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">false</span>
+  },
+  {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Browser can execute only JavaScript&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+]
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">nonExistingId</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({ <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;willremovethissoon&#x27;</span> })
+  <span class="hljs-keyword">await</span> note.<span class="hljs-title function_">save</span>()
+  <span class="hljs-keyword">await</span> note.<span class="hljs-title function_">deleteOne</span>()
+
+  <span class="hljs-keyword">return</span> note.<span class="hljs-property">_id</span>.<span class="hljs-title function_">toString</span>()
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">notesInDb</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({})
+  <span class="hljs-keyword">return</span> notes.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-title function_">toJSON</span>())
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  initialNotes, nonExistingId, notesInDb
+}
+</code></pre>
+<p>تعرّف الوحدة الدالة <em>notesInDb</em> التي يمكن استخدامها للتحقق من الملاحظات المخزّنة في قاعدة البيانات. كما توجد في الوحدة المصفوفة <em>initialNotes</em> التي تحتوي على الحالة الأولية لقاعدة البيانات. ونعرّف أيضاً مسبقاً الدالة <em>nonExistingId</em> التي يمكن استخدامها لإنشاء معرّف كائن في قاعدة البيانات لا ينتمي إلى أي كائن ملاحظة فيها.</p>
+<p>يمكن لاختباراتنا الآن استخدام الوحدة المساعدة وتُعدَّل هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+<span class="hljs-keyword">const</span> { test, after, beforeEach } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> supertest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;supertest&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../app&#x27;</span>)
+<span class="hljs-keyword">const</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./test_helper&#x27;</span>) <span class="hljs-comment">// highlight-line</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+
+<span class="hljs-keyword">const</span> api = <span class="hljs-title function_">supertest</span>(app)
+
+<span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  <span class="hljs-keyword">let</span> noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(helper.<span class="hljs-property">initialNotes</span>[<span class="hljs-number">0</span>]) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+
+  noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(helper.<span class="hljs-property">initialNotes</span>[<span class="hljs-number">1</span>]) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;notes are returned as json&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;all notes are returned&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span>) <span class="hljs-comment">// highlight-line</span>
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a specific note is within the returned notes&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+  <span class="hljs-keyword">const</span> contents = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e.<span class="hljs-property">content</span>)
+  <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;HTML is easy&#x27;</span>))
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a valid note can be added &#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> newNote = {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>,
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+  }
+
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">send</span>(newNote)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">201</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+
+  <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>() <span class="hljs-comment">// highlight-line</span>
+  assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>) <span class="hljs-comment">// highlight-line</span>
+
+  <span class="hljs-keyword">const</span> contents = notesAtEnd.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">content</span>) <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>))
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;note without content is not added&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> newNote = {
+    <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>
+  }
+
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+    .<span class="hljs-title function_">send</span>(newNote)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">400</span>)
+
+  <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>() <span class="hljs-comment">// highlight-line</span>
+
+  assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span>) <span class="hljs-comment">// highlight-line</span>
+})
+
+<span class="hljs-title function_">after</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>تعمل الشيفرة التي تستخدم الوعود وتنجح الاختبارات. نحن جاهزون لإعادة هيكلة شيفرتنا لاستخدام صيغة async/await.</p>
+<p>المسار المسؤول عن إضافة ملاحظة جديدة</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+    <span class="hljs-attr">content</span>: body.<span class="hljs-property">content</span>,
+    <span class="hljs-attr">important</span>: body.<span class="hljs-property">important</span> || <span class="hljs-literal">false</span>,
+  })
+
+  note
+    .<span class="hljs-title function_">save</span>()
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">savedNote</span>) =&gt;</span> {
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">201</span>).<span class="hljs-title function_">json</span>(savedNote)
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+</code></pre>
+<p>يتغيّر كما يلي:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-title function_">async</span> (request, response) =&gt; { <span class="hljs-comment">// highlight-line</span>
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+    <span class="hljs-attr">content</span>: body.<span class="hljs-property">content</span>,
+    <span class="hljs-attr">important</span>: body.<span class="hljs-property">important</span> || <span class="hljs-literal">false</span>,
+  })
+
+  <span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> savedNote = <span class="hljs-keyword">await</span> note.<span class="hljs-title function_">save</span>()
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">201</span>).<span class="hljs-title function_">json</span>(savedNote)
+  <span class="hljs-comment">// highlight-end</span>
+})
+</code></pre>
+<p>تحتاج إلى إضافة الكلمة المفتاحية <em>async</em> في بداية المعالج لتمكين استخدام صيغة <em>async/await</em>. تصبح الشيفرة أبسط بكثير.</p>
+<p>والجدير بالذكر أن الأخطاء المحتملة لم تعد بحاجة إلى تمريرها بشكل منفصل للمعالجة. في الشيفرة التي تستخدم الوعود، كان الخطأ المحتمل يُمرَّر إلى الوسيط المسؤول عن معالجة الأخطاء هكذا:</p>
+<pre><code class="language-js">  note
+    .<span class="hljs-title function_">save</span>()
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">savedNote</span>) =&gt;</span> {
+      response.<span class="hljs-title function_">json</span>(savedNote)
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-title function_">next</span>(error)) <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>عند استخدام صيغة <em>async/await</em>، سيستدعي Express <a href="https://expressjs.com/en/guide/error-handling.html">تلقائياً</a> الوسيط المسؤول عن معالجة الأخطاء إذا رمى عبارة await خطأً أو رُفض الوعد المنتظر. هذا يجعل الشيفرة النهائية أنظف.</p>
+<p><strong>ملاحظة:</strong> هذه الميزة متاحة بدءاً من الإصدار 5 من Express. إذا ثبّتت Express كاعتمادية قبل 31 مارس 2025، فقد تكون ما زلت تستخدم الإصدار 4. يمكنك التحقق من إصدار Express في مشروعك من ملف <em>package.json</em>. إذا كان لديك إصدار أقدم، حدّثه إلى الإصدار 5 بالأمر التالي:</p>
+<pre><code class="language-bash">npm install express@5 
+</code></pre>
+<h3 id="إعادة-هيكلة-المسار-المسؤول-عن-جلب-ملاحظة-واحدة">إعادة هيكلة المسار المسؤول عن جلب ملاحظة واحدة</h3>
+<p>بعد ذلك، لنكتب اختباراً لعرض تفاصيل ملاحظة واحدة. تُبرز الشيفرة عملية API الفعلية التي تُنفَّذ:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a specific note can be viewed&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> notesAtStart = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+  <span class="hljs-keyword">const</span> noteToView = notesAtStart[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment">// highlight-start</span>
+  <span class="hljs-keyword">const</span> resultNote = <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">get</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${noteToView.id}</span>\`</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+<span class="hljs-comment">// highlight-end</span>
+
+  assert.<span class="hljs-title function_">deepStrictEqual</span>(resultNote.<span class="hljs-property">body</span>, noteToView)
+})
+</code></pre>
+<p>أولاً، يجلب الاختبار ملاحظة واحدة من قاعدة البيانات. ثم يتحقق من إمكانية استرجاع تلك الملاحظة المحددة عبر API. وأخيراً، يتحقق من أن محتوى الملاحظة المجلوبة كما هو متوقع.</p>
+<p>هناك نقطة جديرة بالملاحظة في الاختبار. فبدلاً من الدالة <a href="https://nodejs.org/api/assert.html#assertstrictequalactual-expected-message">strictEqual</a> المستخدمة سابقاً، تُستخدم الدالة <a href="https://nodejs.org/api/assert.html#assertdeepstrictequalactual-expected-message">deepStrictEqual</a>:</p>
+<pre><code class="language-js">assert.<span class="hljs-title function_">deepStrictEqual</span>(resultNote.<span class="hljs-property">body</span>, noteToView)
+</code></pre>
+<p>السبب هو أن <em>strictEqual</em> تستخدم الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is">Object.is</a> لمقارنة التشابه، أي أنها تقارن ما إذا كان الكائنان نفسيهما. في حالتنا، نريد التحقق من أن محتويات الكائنات، أي قيم حقولها، متماثلة. ولهذا الغرض تصلح <em>deepStrictEqual</em>.</p>
+<p>تنجح الاختبارات ويمكننا بأمان إعادة هيكلة المسار المُختبَر لاستخدام async/await:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-title function_">async</span> (request, response) =&gt; {
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+  <span class="hljs-keyword">if</span> (note) {
+    response.<span class="hljs-title function_">json</span>(note)
+  } <span class="hljs-keyword">else</span> {
+    response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+  }
+})
+</code></pre>
+<h3 id="إعادة-هيكلة-المسار-المسؤول-عن-حذف-ملاحظة">إعادة هيكلة المسار المسؤول عن حذف ملاحظة</h3>
+<p>لنضف أيضاً اختباراً للمسار الذي يتعامل مع حذف ملاحظة:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a note can be deleted&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> notesAtStart = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+  <span class="hljs-keyword">const</span> noteToDelete = notesAtStart[<span class="hljs-number">0</span>]
+
+  <span class="hljs-keyword">await</span> api
+    .<span class="hljs-title function_">delete</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${noteToDelete.id}</span>\`</span>)
+    .<span class="hljs-title function_">expect</span>(<span class="hljs-number">204</span>)
+
+  <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+
+  <span class="hljs-keyword">const</span> ids = notesAtEnd.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span>)
+  <span class="hljs-title function_">assert</span>(!ids.<span class="hljs-title function_">includes</span>(noteToDelete.<span class="hljs-property">id</span>))
+
+  assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>)
+})
+</code></pre>
+<p>بُني الاختبار بشكل مشابه للاختبار الذي يتحقق من عرض ملاحظة واحدة. أولاً، تُجلب ملاحظة واحدة من قاعدة البيانات، ثم يُختبَر حذفها عبر API. وأخيراً، يُتحقق من أن الملاحظة لم تعد موجودة في قاعدة البيانات وأن العدد الإجمالي للملاحظات انخفض بمقدار واحد.</p>
+<p>ما زالت الاختبارات تنجح، لذا يمكننا المضي بأمان في إعادة هيكلة المسار:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-title function_">async</span> (request, response) =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByIdAndDelete</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">204</span>).<span class="hljs-title function_">end</span>()
+})
+</code></pre>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part4-4</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-4">مستودع GitHub هذا</a>.</p>
+<h3 id="تحسين-دالة-beforeeach">تحسين دالة beforeEach</h3>
+<p>لنعُد إلى كتابة اختباراتنا ونلقِ نظرة أقرب على الدالة <em>beforeEach</em> التي تهيّئ الاختبارات:</p>
+<pre><code class="language-js"><span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  <span class="hljs-keyword">let</span> noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(helper.<span class="hljs-property">initialNotes</span>[<span class="hljs-number">0</span>])
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+
+  noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(helper.<span class="hljs-property">initialNotes</span>[<span class="hljs-number">1</span>])
+  <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+})
+</code></pre>
+<p>تحفظ الدالة أول ملاحظتين من المصفوفة <em>helper.initialNotes</em> في قاعدة البيانات بعمليتين منفصلتين. الحل مقبول، لكن توجد طريقة أفضل لحفظ عدة كائنات في قاعدة البيانات:</p>
+<pre><code class="language-js"><span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;cleared&#x27;</span>)
+
+  helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-title function_">async</span> (note) =&gt; {
+    <span class="hljs-keyword">let</span> noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(note)
+    <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;saved&#x27;</span>)
+  })
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;done&#x27;</span>)
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;notes are returned as json&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;entered test&#x27;</span>)
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>نحفظ الملاحظات المخزّنة في المصفوفة في قاعدة البيانات داخل حلقة <em>forEach</em>. لكن الاختبارات لا تبدو تعمل تماماً، لذا أضفنا بعض سجلات الطرفية لمساعدتنا في إيجاد المشكلة.</p>
+<p>تعرض الطرفية المخرجات التالية:</p>
+<pre><code>cleared
+done
+entered test
+saved
+saved
+</code></pre>
+<p>رغم استخدامنا صيغة async/await، لا يعمل حلّنا كما توقعنا. يبدأ تنفيذ الاختبار قبل تهيئة قاعدة البيانات!</p>
+<p>المشكلة هي أن كل تكرار في حلقة <em>forEach</em> يولّد عمليته غير المتزامنة الخاصة، ولا تنتظر الدالة <em>beforeEach</em> اكتمالها. بعبارة أخرى، أوامر await داخل حلقة <em>forEach</em> ليست جزءاً من الدالة <em>beforeEach</em> بل تقع في دوال منفصلة لا تنتظرها <em>beforeEach</em>. إضافة إلى ذلك، <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#description">تتوقع الدالة <em>forEach</em> دالة متزامنة كوسيط لها</a>، لذا لا تعمل بنية <em>async/await</em> بشكل صحيح داخلها.</p>
+<p>وبما أن تنفيذ الاختبارات يبدأ فور انتهاء تنفيذ <em>beforeEach</em>، فإن تنفيذ الاختبارات يبدأ قبل تهيئة حالة قاعدة البيانات.</p>
+<p>إحدى طرق إصلاح ذلك هي انتظار انتهاء تنفيذ جميع العمليات غير المتزامنة باستخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all">Promise.all</a>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  <span class="hljs-keyword">const</span> noteObjects = helper.<span class="hljs-property">initialNotes</span>
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(note))
+  <span class="hljs-keyword">const</span> promiseArray = noteObjects.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> note.<span class="hljs-title function_">save</span>())
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(promiseArray)
+})
+</code></pre>
+<p>الحل متقدّم نوعاً ما رغم مظهره المتراص. يُسنَد المتغير <em>noteObjects</em> إلى مصفوفة من كائنات Mongoose المُنشأة بالباني <em>Note</em> لكل ملاحظة من ملاحظات المصفوفة <em>helper.initialNotes</em>. وينشئ السطر التالي من الشيفرة مصفوفة جديدة <i>تتكوّن من وعود</i>، تُنشأ باستدعاء الدالة <em>save</em> لكل عنصر في المصفوفة <em>noteObjects</em>. بعبارة أخرى، إنها مصفوفة وعود لحفظ كل عنصر في قاعدة البيانات.</p>
+<p>يمكن استخدام الدالة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all">Promise.all</a> لتحويل مصفوفة وعود إلى وعد واحد يتحقق <i>fulfilled</i> بمجرد أن يُحَلّ كل وعد في المصفوفة الممرَّرة إليها كوسيطة. ينتظر السطر الأخير من الشيفرة <em>await Promise.all(promiseArray)</em> حتى ينتهي كل وعد لحفظ ملاحظة، أي أن قاعدة البيانات قد هُيّئت.</p>
+<blockquote>
+<p>لا يزال من الممكن الوصول إلى القيم المُعادة لكل وعد في المصفوفة عند استخدام الدالة Promise.all. فإذا انتظرنا حلّ الوعود بصيغة <em>await</em> <em>const results = await Promise.all(promiseArray)</em>، ستعيد العملية مصفوفة تحتوي على القيم المحلولة لكل وعد في <em>promiseArray</em>، وتظهر بالترتيب نفسه الذي تظهر به الوعود في المصفوفة.</p>
+</blockquote>
+<p>ينتظر <code>Promise.all</code> الوعود التي يتلقاها حتى تُحسم جميعها في الوقت نفسه. وإذا احتاجت العمليات إلى الحدوث بترتيب معين، فسيكون ذلك مشكلة. في حالات كهذه، يمكن تنفيذ العمليات في <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">حلقة for...of</a> باستخدام المعامل <code>await</code>، ما يضمن اكتمال كل عملية قبل بدء التالية.</p>
+<pre><code class="language-js"><span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> note <span class="hljs-keyword">of</span> helper.<span class="hljs-property">initialNotes</span>) {
+    <span class="hljs-keyword">const</span> noteObject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>(note)
+    <span class="hljs-keyword">await</span> noteObject.<span class="hljs-title function_">save</span>()
+  }
+})
+</code></pre>
+<p>قد تؤدي الطبيعة غير المتزامنة لـ JavaScript إلى سلوك مفاجئ، ولهذا السبب من المهم الانتباه جيداً عند استخدام صيغة async/await. فرغم أن الصيغة تسهّل التعامل مع الوعود، فإنه ما زال ضرورياً فهم كيفية عمل الوعود!</p>
+<p>لكن توجد طريقة أبسط لتنفيذ الدالة <em>beforeEach</em>. أسهل طريقة للتعامل مع الحالة هي استخدام دالة Mongoose المدمجة <em>insertMany</em>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">insertMany</span>(helper.<span class="hljs-property">initialNotes</span>) <span class="hljs-comment">// highlight-line</span>
+})
+</code></pre>
+<p>يمكن العثور على شيفرة تطبيقنا على <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-5">GitHub</a>، فرع <i>part4-5</i>.</p>
+<h3 id="قسم-مطور-full-stack-الحقيقي">قسم مطوّر full stack الحقيقي</h3>
+<p>تضيف كتابة الاختبارات طبقة أخرى من التحدي إلى البرمجة. علينا تحديث قسم مطوّر full stack لتذكيرك بأن المنهجية أساسية أيضاً عند تطوير الاختبارات.</p>
+<p>لذا ينبغي أن نوسّع قسمنا مرة أخرى:</p>
+<p>تطوير full stack <i>صعب للغاية</i>، ولهذا سأستخدم كل الوسائل الممكنة لتسهيله</p>
+<ul>
+<li>سأبقي طرفية مطوّر المتصفح مفتوحة طوال الوقت</li>
+<li>سأستخدم تبويب الشبكة في أدوات مطوّر المتصفح للتأكد من أن الواجهة الأمامية والواجهة الخلفية تتواصلان كما أتوقع</li>
+<li>سأراقب باستمرار حالة الخادم للتأكد من أن البيانات التي ترسلها الواجهة الأمامية إليه تُحفظ كما أتوقع</li>
+<li>سأراقب قاعدة البيانات: هل تحفظ الواجهة الخلفية البيانات فيها بالصيغة الصحيحة</li>
+<li>سأتقدم بخطوات صغيرة</li>
+<li><i>سأكتب الكثير من عبارات <em>console.log</em> للتأكد من فهمي كيفية تصرف الشيفرة والاختبارات وللمساعدة في تحديد المشكلات</i></li>
+<li>إذا لم تعمل شيفرتي، لن أكتب المزيد من الشيفرة. بل سأبدأ بحذف الشيفرة حتى تعمل أو أعود ببساطة إلى حالة كان فيها كل شيء ما زال يعمل</li>
+<li><i>إذا لم ينجح اختبار، أتأكد من أن الوظيفة المُختبَرة تعمل بالتأكيد في التطبيق</i></li>
+<li>عندما أطلب المساعدة في قناة Discord الخاصة بالدورة أو في مكان آخر، أصوغ أسئلتي بشكل صحيح، انظر <a href="/part0/general_info#how-to-get-help-in-discord">كيفية طلب المساعدة</a></li>
+</ul>
+</div>
+<div class="tasks">
+<h3 id="تمارين-48-412">تمارين 4.8.-4.12.</h3>
+<p><strong>تحذير:</strong> إذا وجدت نفسك تستخدم async/await ودوال <i>then</i> في الشيفرة نفسها، فمن شبه المؤكد أنك تفعل شيئاً خاطئاً. استخدم أحدهما دون الآخر ولا تخلط بينهما.</p>
+<h4 id="48-اختبارات-قائمة-المدونات-الخطوة-1">4.8: اختبارات قائمة المدونات، الخطوة 1</h4>
+<p>استخدم مكتبة SuperTest لكتابة اختبار يرسل طلب HTTP GET إلى عنوان <i>/api/blogs</i>. تحقق من أن تطبيق قائمة المدونات يعيد العدد الصحيح من منشورات المدونات بصيغة JSON.</p>
+<p>بعد الانتهاء من الاختبار، أعد هيكلة معالج المسار ليستخدم صيغة async/await بدلاً من الوعود.</p>
+<p>لاحظ أنه سيتعين عليك إجراء تغييرات مشابهة على الشيفرة كتلك التي أُجريت <a href="/part4/testing_the_backend#test-environment">في المادة</a>، مثل تعريف بيئة الاختبار حتى تتمكن من كتابة اختبارات تستخدم قواعد بيانات منفصلة.</p>
+<p><strong>ملاحظة:</strong> عندما تكتب اختباراتك <strong><i>من الأفضل ألا تنفّذها كلها</i></strong>، نفّذ فقط التي تعمل عليها. اقرأ المزيد عن هذا <a href="/part4/testing_the_backend#running-tests-one-by-one">هنا</a>.</p>
+<h4 id="49-اختبارات-قائمة-المدونات-الخطوة-2">4.9: اختبارات قائمة المدونات، الخطوة 2</h4>
+<p>اكتب اختباراً يتحقق من أن خاصية المعرّف الفريد لمنشورات المدونات اسمها <i>id</i>، إذ تسمّي قاعدة البيانات الخاصية <i>_id</i> افتراضياً.</p>
+<p>أجرِ التغييرات المطلوبة على الشيفرة حتى ينجح الاختبار. الدالة <a href="/part3/saving_data_to_mongo_db#connecting-the-backend-to-a-database">toJSON</a> التي نوقشت في الجزء 3 مكان مناسب لتعريف الوسيط <i>id</i>.</p>
+<h4 id="410-اختبارات-قائمة-المدونات-الخطوة-3">4.10: اختبارات قائمة المدونات، الخطوة 3</h4>
+<p>اكتب اختباراً يتحقق من أن إرسال طلب HTTP POST إلى عنوان <i>/api/blogs</i> ينشئ بنجاح منشور مدونة جديداً. على الأقل، تحقق من أن العدد الإجمالي للمدونات في النظام يزداد بمقدار واحد. ويمكنك أيضاً التحقق من أن محتوى منشور المدونة يُحفظ بشكل صحيح في قاعدة البيانات.</p>
+<p>بعد الانتهاء من الاختبار، أعد هيكلة العملية لتستخدم async/await بدلاً من الوعود.</p>
+<h4 id="411-اختبارات-قائمة-المدونات-الخطوة-4">4.11*: اختبارات قائمة المدونات، الخطوة 4</h4>
+<p>اكتب اختباراً يتحقق من أنه إذا كانت خاصية <i>likes</i> مفقودة من الطلب، فستكون قيمتها الافتراضية 0. لا تختبر الخصائص الأخرى للمدونات المُنشأة بعد.</p>
+<p>أجرِ التغييرات المطلوبة على الشيفرة حتى ينجح الاختبار.</p>
+<h4 id="412-اختبارات-قائمة-المدونات-الخطوة-5">4.12*: اختبارات قائمة المدونات، الخطوة 5</h4>
+<p>اكتب اختبارات متعلقة بإنشاء مدونات جديدة عبر نقطة النهاية <i>/api/blogs</i>، تتحقق من أنه إذا كانت خاصيتا <i>title</i> أو <i>url</i> مفقودتين من بيانات الطلب، تستجيب الواجهة الخلفية للطلب برمز الحالة <i>400 Bad Request</i>.</p>
+<p>أجرِ التغييرات المطلوبة على الشيفرة حتى ينجح الاختبار.</p>
+</div>
+<div class="content">
+<h3 id="إعادة-هيكلة-الاختبارات">إعادة هيكلة الاختبارات</h3>
+<p>تغطية اختباراتنا ناقصة حالياً. بعض الطلبات مثل <i>GET /api/notes/:id</i> و<i>DELETE /api/notes/:id</i> لا تُختبر عندما يُرسَل الطلب بمعرّف غير صالح. كما يمكن تحسين تجميع الاختبارات وتنظيمها، إذ توجد جميع الاختبارات على «المستوى الأعلى» نفسه في ملف الاختبار. ستتحسن قابلية قراءة الاختبار إذا جمّعنا الاختبارات المرتبطة في كتل <i>describe</i>.</p>
+<p>فيما يلي مثال على ملف الاختبار بعد إجراء بعض التحسينات الصغيرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+<span class="hljs-keyword">const</span> { test, after, beforeEach, describe } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> supertest = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;supertest&#x27;</span>)
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../app&#x27;</span>)
+<span class="hljs-keyword">const</span> helper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./test_helper&#x27;</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+
+<span class="hljs-keyword">const</span> api = <span class="hljs-title function_">supertest</span>(app)
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;when there is initially some notes saved&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">deleteMany</span>({})
+    <span class="hljs-keyword">await</span> <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">insertMany</span>(helper.<span class="hljs-property">initialNotes</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;notes are returned as json&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> api
+      .<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+      .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+      .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;all notes are returned&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+    assert.<span class="hljs-title function_">strictEqual</span>(response.<span class="hljs-property">body</span>.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a specific note is within the returned notes&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+
+    <span class="hljs-keyword">const</span> contents = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e.<span class="hljs-property">content</span>)
+    <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;HTML is easy&#x27;</span>))
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;viewing a specific note&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;succeeds with a valid id&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> notesAtStart = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+      <span class="hljs-keyword">const</span> noteToView = notesAtStart[<span class="hljs-number">0</span>]
+
+      <span class="hljs-keyword">const</span> resultNote = <span class="hljs-keyword">await</span> api
+        .<span class="hljs-title function_">get</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${noteToView.id}</span>\`</span>)
+        .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>)
+        .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+
+      assert.<span class="hljs-title function_">deepStrictEqual</span>(resultNote.<span class="hljs-property">body</span>, noteToView)
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;fails with statuscode 404 if note does not exist&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> validNonexistingId = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">nonExistingId</span>()
+
+      <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${validNonexistingId}</span>\`</span>).<span class="hljs-title function_">expect</span>(<span class="hljs-number">404</span>)
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;fails with statuscode 400 id is invalid&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> invalidId = <span class="hljs-string">&#x27;5a3d5da59070081a82a3445&#x27;</span>
+
+      <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">get</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${invalidId}</span>\`</span>).<span class="hljs-title function_">expect</span>(<span class="hljs-number">400</span>)
+    })
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;addition of a new note&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;succeeds with valid data&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> newNote = {
+        <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>,
+        <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span>,
+      }
+
+      <span class="hljs-keyword">await</span> api
+        .<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>)
+        .<span class="hljs-title function_">send</span>(newNote)
+        .<span class="hljs-title function_">expect</span>(<span class="hljs-number">201</span>)
+        .<span class="hljs-title function_">expect</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-regexp">/application\\/json/</span>)
+
+      <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+      assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>)
+
+      <span class="hljs-keyword">const</span> contents = notesAtEnd.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">content</span>)
+      <span class="hljs-title function_">assert</span>(contents.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;async/await simplifies making async calls&#x27;</span>))
+    })
+
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;fails with status code 400 if data invalid&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> newNote = { <span class="hljs-attr">important</span>: <span class="hljs-literal">true</span> }
+
+      <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>).<span class="hljs-title function_">send</span>(newNote).<span class="hljs-title function_">expect</span>(<span class="hljs-number">400</span>)
+
+      <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+
+      assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span>)
+    })
+  })
+
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;deletion of a note&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;succeeds with status code 204 if id is valid&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> notesAtStart = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+      <span class="hljs-keyword">const</span> noteToDelete = notesAtStart[<span class="hljs-number">0</span>]
+
+      <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">delete</span>(<span class="hljs-string">\`/api/notes/<span class="hljs-subst">\${noteToDelete.id}</span>\`</span>).<span class="hljs-title function_">expect</span>(<span class="hljs-number">204</span>)
+
+      <span class="hljs-keyword">const</span> notesAtEnd = <span class="hljs-keyword">await</span> helper.<span class="hljs-title function_">notesInDb</span>()
+
+      <span class="hljs-keyword">const</span> ids = notesAtEnd.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n.<span class="hljs-property">id</span>)
+      <span class="hljs-title function_">assert</span>(!ids.<span class="hljs-title function_">includes</span>(noteToDelete.<span class="hljs-property">id</span>))
+
+      assert.<span class="hljs-title function_">strictEqual</span>(notesAtEnd.<span class="hljs-property">length</span>, helper.<span class="hljs-property">initialNotes</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>)
+    })
+  })
+})
+
+<span class="hljs-title function_">after</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> mongoose.<span class="hljs-property">connection</span>.<span class="hljs-title function_">close</span>()
+})
+</code></pre>
+<p>تُجمَّع مخرجات الاختبار في الطرفية وفقاً لكتل <i>describe</i>:</p>
+<p><img src="/images/content/4/7new.webp" alt="مخرجات node:test تُظهر كتل describe المجمّعة"></p>
+<p>ما زال هناك مجال للتحسين، لكن حان وقت المضي قدماً.</p>
+<p>هذه الطريقة في اختبار API، عبر إرسال طلبات HTTP وفحص قاعدة البيانات باستخدام Mongoose، ليست بأي حال الطريقة الوحيدة ولا الأفضل لإجراء اختبارات تكامل على مستوى API لتطبيقات الخوادم. لا توجد طريقة مثلى شاملة لكتابة الاختبارات، فكل شيء يعتمد على التطبيق قيد الاختبار والموارد المتاحة.</p>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part4-6</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-6">مستودع GitHub هذا</a>.</p>
+</div>
+<div class="tasks">
+<h3 id="تمارين-413-414">تمارين 4.13.-4.14.</h3>
+<h4 id="413-توسيع-قائمة-المدونات-الخطوة-1">4.13 توسيع قائمة المدونات، الخطوة 1</h4>
+<p>نفّذ وظيفة حذف مورد منشور مدونة واحد.</p>
+<p>استخدم صيغة async/await. اتبع اصطلاحات <a href="/part3/node_js_and_express#rest">RESTful</a> عند تعريف واجهة HTTP API.</p>
+<p>نفّذ اختبارات للوظيفة.</p>
+<h4 id="414-توسيع-قائمة-المدونات-الخطوة-2">4.14 توسيع قائمة المدونات، الخطوة 2</h4>
+<p>نفّذ وظيفة تحديث معلومات منشور مدونة فردي.</p>
+<p>استخدم async/await.</p>
+<p>يحتاج التطبيق غالباً إلى تحديث عدد <i>likes</i> لمنشور مدونة. يمكنك تنفيذ هذه الوظيفة بالطريقة نفسها التي نفّذنا بها تحديث الملاحظات في <a href="/part3/saving_data_to_mongo_db#other-operations">الجزء 3</a>.</p>
+<p>نفّذ اختبارات للوظيفة.</p>
+</div>
+`,i={part:4,letter:"b",file:s,title:n,slug:a,mainImage:p,headings:t,html:l};export{i as default,s as file,t as headings,l as html,c as letter,p as mainImage,e as part,a as slug,n as title};

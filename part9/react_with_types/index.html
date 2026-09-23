@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعلّم TypeScript وطبّقه على تطبيقات Express وتطبيقات React."/><!----><title>React مع الأنواع - الجزء 9 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#vite-مع-typescript">Vite مع TypeScript</a></li><li class="toc__depth-3"><a href="#مكونات-react-مع-typescript">مكوّنات React مع TypeScript</a></li><li class="toc__depth-3"><a href="#استخدام-أعمق-للأنواع">استخدام أعمق للأنواع</a></li><li class="toc__depth-3"><a href="#المزيد-من-تضييق-الأنواع">المزيد من تضييق الأنواع</a></li><li class="toc__depth-3"><a href="#تطبيق-react-مع-الحالة">تطبيق React مع الحالة</a></li><li class="toc__depth-3"><a href="#التواصل-مع-الخادم">التواصل مع الخادم</a></li><li class="toc__depth-3"><a href="#ملاحظة-حول-تعريف-أنواع-الكائنات">ملاحظة حول تعريف أنواع الكائنات</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#D4FCB5"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part9">الجزء 9: TypeScript</a></p> <h1>React مع الأنواع</h1></div> <div class="course-content"><!----><p>قبل أن نبدأ في التعمّق في كيفية استخدام TypeScript مع React، ينبغي أن ننظر أولاً إلى ما نريد تحقيقه. عندما يعمل كل شيء كما ينبغي، ستساعدنا TypeScript في اكتشاف الأخطاء التالية:</p>
+<ul>
+<li>محاولة تمرير prop إضافي/غير مرغوب إلى مكوّن</li>
+<li>نسيان تمرير prop مطلوب إلى مكوّن</li>
+<li>تمرير prop بنوع خاطئ إلى مكوّن</li>
+</ul>
+<p>إذا ارتكبنا أيّاً من هذه الأخطاء، يمكن أن تساعدنا TypeScript في اكتشافها في محرّرنا فوراً. وإذا لم نستخدم TypeScript، فسيتعيّن علينا اكتشاف هذه الأخطاء لاحقاً أثناء الاختبار. وقد نُضطر إلى إجراء بعض تصحيح الأخطاء الممل للعثور على سبب الأخطاء.</p>
+<p>هذا قدر كافٍ من التبرير الآن. لنبدأ العمل فعلياً!</p>
+<h3 id="vite-مع-typescript">Vite مع TypeScript</h3>
+<p>يمكننا استخدام <a href="https://vitejs.dev/" target="_blank" rel="noreferrer noopener">Vite</a> لإنشاء تطبيق TypeScript بتحديد قالب <em>react-ts</em> في سكربت التهيئة. لذا لإنشاء تطبيق TypeScript، نفّذ الأمر التالي:</p>
+<pre><code class="language-bash">npm create vite@latest my-app-name -- --template react-ts
+</code></pre>
+<p>بعد تنفيذ الأمر، سيكون لديك تطبيق React أساسي كامل يستخدم TypeScript. يمكنك تشغيل التطبيق بتنفيذ <code>npm run dev</code> في جذر التطبيق.</p>
+<p>إذا ألقيت نظرة على الملفات والمجلدات، ستلاحظ أن التطبيق لا يختلف كثيراً عن تطبيق يستخدم JavaScript خالصة. الفروق الوحيدة هي أن ملفات <em>.jsx</em> أصبحت الآن ملفات <em>.tsx</em>، وأنها تحتوي على بعض توصيفات الأنواع، وأن المجلد الجذر يحتوي على ملف <em>tsconfig.app.json</em>.</p>
+<p>الآن، لنلقِ نظرة على ملف <em>tsconfig.app.json</em> الذي أُنشئ لنا:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;tsBuildInfoFile&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./node_modules/.tmp/tsconfig.app.tsbuildinfo&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ES2023&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;useDefineForClassFields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;lib&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;ES2023&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;DOM&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;DOM.Iterable&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ESNext&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;types&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;vite/client&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;skipLibCheck&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+
+    <span class="hljs-comment">/* وضع تجميع الحزم */</span>
+    <span class="hljs-attr">&quot;moduleResolution&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;bundler&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;allowImportingTsExtensions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;verbatimModuleSyntax&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;moduleDetection&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;force&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noEmit&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;jsx&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;react-jsx&quot;</span><span class="hljs-punctuation">,</span>
+
+    <span class="hljs-comment">/* فحص الشيفرة */</span>
+    <span class="hljs-attr">&quot;strict&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUnusedLocals&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUnusedParameters&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;erasableSyntaxOnly&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noFallthroughCasesInSwitch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;noUncheckedSideEffectImports&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;include&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;src&quot;</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+
+</code></pre>
+<p>تشمل <em>compilerOptions</em> الآن المفتاح <em>lib</em> مع <em>DOM</em>، وهو ما يضيف تعريفات أنواع لواجهات بيئة المتصفح مثل <em>document</em>. ومعظم الإعدادات الأخرى واضحة إلى حد ما أو مألوفة لنا بالفعل.</p>
+<p>في مشروعنا السابق، استخدمنا ESLint لمساعدتنا في فرض أسلوب كتابة الشيفرة، وسنفعل الشيء نفسه مع هذا التطبيق. لا نحتاج إلى تثبيت أي اعتماديات، لأن Vite تولّى ذلك بالفعل.</p>
+<p>عندما ننظر إلى ملف <em>main.tsx</em> الذي أنشأه Vite، يبدو مألوفاً، لكن هناك فرق صغير لكنه ملحوظ؛ إذ توجد علامة تعجّب بعد العبارة <em>document.getElementById('root')</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.tsx&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;./index.css&#x27;</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)!).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">React</span>.<span class="hljs-property">StrictMode</span>&amp;gt;
+    &amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;
+  &amp;lt;/<span class="hljs-title class_">React</span>.<span class="hljs-property">StrictMode</span>&amp;gt;,
+)
+</code></pre>
+<p>السبب في ذلك أن العبارة قد تُعيد القيمة null، لكن <em>ReactDOM.createRoot</em> لا يقبل null كوسيط. وباستخدام <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-" target="_blank" rel="noreferrer noopener">معامل !</a>، يمكن تأكيد لمترجم TypeScript أن القيمة ليست null.</p>
+<p>في وقت سابق من هذا الجزء، <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript/chapter-3">حذّرنا</a> من مخاطر تأكيدات الأنواع، لكن التأكيد مقبول في حالتنا لأننا متأكدون أن ملف <em>index.html</em> يحتوي فعلاً على هذا المعرّف تحديداً، وأن الدالة تُعيد دائماً عنصر HTMLElement.</p>
+<h3 id="مكونات-react-مع-typescript">مكوّنات React مع TypeScript</h3>
+<p>لنتأمل مثال React التالي المكتوب بـ JavaScript:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Welcome</span> = props =&gt; {
+  <span class="hljs-keyword">return</span> &amp;lt;h1&gt;<span class="hljs-title class_">Hello</span>, {props.<span class="hljs-property">name</span>}&amp;lt;/h1&gt;;
+};
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">Welcome</span> name=<span class="hljs-string">&quot;Sarah&quot;</span> /&gt;
+)
+</code></pre>
+<p>في هذا المثال، لدينا مكوّن يُسمى <em>Welcome</em> نمرّر إليه <em>name</em> كـ prop. ثم يعرض الاسم على الشاشة. نحن نعلم أن <em>name</em> ينبغي أن يكون نصاً. وفي React، لا توجد طريقة لضمان استخدام المكوّن استخداماً صحيحاً.</p>
+<blockquote>
+<p>في إصدارات React الأقدم، كان من الممكن تعريف الأنواع المتوقعة لـ props المكوّن وتلقّي تحذيرات بشأن عدم تطابق الأنواع باستخدام ميزة <a href="https://www.npmjs.com/package/prop-types" target="_blank" rel="noreferrer noopener">prop-types</a>، لكن الدعم لهذا أُزيل في React 19.</p>
+</blockquote>
+<p>مع TypeScript، يمكننا تعريف الأنواع بمساعدة TypeScript، تماماً كما نعرّف الأنواع لدالة عادية، لأن مكوّنات React ليست سوى دوال. سنستخدم interface لأنواع الوسائط (أي props) و<em>JSX.Element</em> كنوع الإرجاع لأي مكوّن React:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">WelcomeProps</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Welcome</span> = (<span class="hljs-attr">props</span>: <span class="hljs-title class_">WelcomeProps</span>): <span class="hljs-variable constant_">JSX</span>.<span class="hljs-property">Element</span> =&amp;gt; {
+  <span class="hljs-keyword">return</span> &amp;lt;h1&amp;gt;<span class="hljs-title class_">Hello</span>, {props.<span class="hljs-property">name</span>}&amp;lt;/h1&amp;gt;;
+};
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)!).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">Welcome</span> name=<span class="hljs-string">&quot;Sarah&quot;</span> /&amp;gt;
+)
+</code></pre>
+<p>عرّفنا نوعاً جديداً هو <em>WelcomeProps</em>، ومرّرناه إلى أنواع وسائط الدالة.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Welcome</span> = (<span class="hljs-attr">props</span>: <span class="hljs-title class_">WelcomeProps</span>): <span class="hljs-variable constant_">JSX</span>.<span class="hljs-property">Element</span> =&amp;gt; {
+</code></pre>
+<p>يمكنك كتابة الشيء نفسه باستخدام صياغة أكثر إسهاباً:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Welcome</span> = ({ name }: { <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> }): <span class="hljs-variable constant_">JSX</span>.<span class="hljs-property">Element</span> =&amp;gt; (
+  &amp;lt;h1&amp;gt;<span class="hljs-title class_">Hello</span>, {name}&amp;lt;/h1&amp;gt;
+);
+</code></pre>
+<p>الآن يعرف محرّرنا أن prop الـ <em>name</em> نص.</p>
+<p>لا حاجة فعلياً إلى تعريف نوع الإرجاع لمكوّن React لأن مترجم TypeScript يستنتج النوع تلقائياً، لذا يمكننا أن نكتب فقط:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">WelcomeProps</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Welcome</span> = (<span class="hljs-params"><span class="hljs-attr">props</span>: <span class="hljs-title class_">WelcomeProps</span></span>) =&gt; {  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+   <span class="hljs-keyword">return</span> &amp;lt;h1&gt;<span class="hljs-title class_">Hello</span>, {props.<span class="hljs-property">name</span>}&amp;lt;/h1&gt;;
+};
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)!).<span class="hljs-title function_">render</span>(
+  &amp;lt;<span class="hljs-title class_">Welcome</span> name=<span class="hljs-string">&quot;Sarah&quot;</span> /&gt;
+)
+</code></pre>
+<div class="tasks">
+<p><strong>17. الدورة، الخطوة 1</strong></p>
+</div>
+<h3 id="استخدام-أعمق-للأنواع">استخدام أعمق للأنواع</h3>
+<p>في التمرين السابق، كان لدينا ثلاثة أجزاء من دورة، وكانت كل الأجزاء تشترك في الخصيصتين <em>name</em> و<em>exerciseCount</em>. لكن ماذا لو احتجنا خصائص إضافية لجزء معيّن؟ كيف سيبدو ذلك من حيث الشيفرة؟ لنتأمل المثال التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> courseParts = [
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Fundamentals&quot;</span>,
+    <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">10</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;This is an awesome course part&quot;</span>
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Using props to pass data&quot;</span>,
+    <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">7</span>,
+    <span class="hljs-attr">groupProjectCount</span>: <span class="hljs-number">3</span>
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Basics of type Narrowing&quot;</span>,
+    <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">7</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;How to go from unknown to string&quot;</span>
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Deeper type usage&quot;</span>,
+    <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">14</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;Confusing description&quot;</span>,
+    <span class="hljs-attr">backgroundMaterial</span>: <span class="hljs-string">&quot;https://type-level-typescript.com/template-literal-types&quot;</span>
+  },
+];
+</code></pre>
+<p>في المثال أعلاه، أضفنا بعض الخصائص الإضافية إلى كل جزء من أجزاء الدورة. لكل جزء خاصيتا <em>name</em> و<em>exerciseCount</em>، لكن الجزء الأول والثالث والرابع لها أيضاً خاصية تُسمى <em>description</em>. كما أن الجزأين الثاني والرابع لهما بعض الخصائص الإضافية المميّزة.</p>
+<p>لنتخيّل أن تطبيقنا يستمر في النمو، وأننا نحتاج إلى تمرير أجزاء الدورة المختلفة في أنحاء شيفرتنا. وفوق ذلك، تُضاف أيضاً خصائص وأجزاء دورة إضافية إلى المزيج. كيف يمكننا أن نعرف أن شيفرتنا قادرة على التعامل مع كل أنواع البيانات المختلفة بشكل صحيح، وأننا مثلاً لا ننسى عرض جزء دورة جديد في إحدى الصفحات؟ هنا تأتي فائدة TypeScript!</p>
+<p>لنبدأ بتعريف أنواع لأجزاء الدورة المختلفة لدينا. نلاحظ أن الأول والثالث لهما المجموعة نفسها من الخصائص. أما الثاني والرابع فمختلفان قليلاً، لذا لدينا ثلاثة أنواع مختلفة من عناصر أجزاء الدورة.</p>
+<p>لذا لنعرّف نوعاً لكل نوع مختلف من أجزاء الدورة:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBasic</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">exerciseCount</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;basic&quot;</span>
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartGroup</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">exerciseCount</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">groupProjectCount</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;group&quot;</span>
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBackground</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">exerciseCount</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">backgroundMaterial</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;background&quot;</span>
+}
+</code></pre>
+<p>إلى جانب الخصائص الموجودة في أجزاء الدورة المختلفة، أدخلنا الآن خاصية إضافية تُسمى <em>kind</em> لها نوع <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types" target="_blank" rel="noreferrer noopener">حرفي</a> (literal)، فهي نص «مُضمَّن مباشرة» مميّز لكل جزء من أجزاء الدورة. وسنرى قريباً أين تُستخدم خاصية kind!</p>
+<p>بعد ذلك، سننشئ نوعاً <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types" target="_blank" rel="noreferrer noopener">اتحادياً</a> (union) من كل هذه الأنواع. ويمكننا حينها استخدامه لتعريف نوع لمصفوفتنا، والذي ينبغي أن يقبل أي نوع من أنواع أجزاء الدورة هذه:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">CoursePart</span> = <span class="hljs-title class_">CoursePartBasic</span> | <span class="hljs-title class_">CoursePartGroup</span> | <span class="hljs-title class_">CoursePartBackground</span>;
+</code></pre>
+<p>الآن يمكننا ضبط نوع المتغير <em>courseParts</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> courseName = <span class="hljs-string">&quot;Half Stack application development&quot;</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">courseParts</span>: <span class="hljs-title class_">CoursePart</span>[] = [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Fundamentals&quot;</span>,
+      <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">10</span>,
+      <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;This is an awesome course part&quot;</span>,
+      <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;basic&quot;</span>    <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Using props to pass data&quot;</span>,
+      <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">7</span>,
+      <span class="hljs-attr">groupProjectCount</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;group&quot;</span>    <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Basics of type Narrowing&quot;</span>,
+      <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">7</span>,
+      <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;How to go from unknown to string&quot;</span>,
+      <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;basic&quot;</span>    <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    },
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Deeper type usage&quot;</span>,
+      <span class="hljs-attr">exerciseCount</span>: <span class="hljs-number">14</span>,
+      <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;Confusing description&quot;</span>,
+      <span class="hljs-attr">backgroundMaterial</span>: <span class="hljs-string">&quot;https://type-level-typescript.com/template-literal-types&quot;</span>,
+      <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;background&quot;</span>    <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    },
+  ]
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لاحظ أننا أضفنا الآن الخاصية <em>kind</em> بقيمة مناسبة إلى كل عنصر من عناصر المصفوفة.</p>
+<p>سينبّهنا محرّرنا تلقائياً إذا استخدمنا نوعاً خاطئاً لخاصية، أو استخدمنا خاصية إضافية، أو نسينا ضبط خاصية متوقعة. فإذا حاولنا مثلاً إضافة ما يلي إلى المصفوفة</p>
+<pre><code>{
+  name: &quot;TypeScript in frontend&quot;,
+  exerciseCount: 10,
+  kind: &quot;basic&quot;,
+},
+</code></pre>
+<p>فسنرى فوراً خطأً في المحرّر:</p>
+<p><img src="../../images/mooc/5bb7273a18a5.webp" alt="تحذير بفقدان description"></p>
+<p>بما أن المدخلة الجديدة لدينا تحتوي على الخاصية <em>kind</em> بقيمة <em>&quot;basic&quot;</em>، تعرف TypeScript أن المدخلة لا تحمل النوع <em>CoursePart</em> فحسب، بل يُقصد بها فعلاً أن تكون <em>CoursePartBasic</em>. إذن هنا «تُضيّق» الخاصية <em>kind</em> نوع المدخلة من نوع أكثر عمومية إلى نوع أكثر تخصيصاً يمتلك مجموعة معيّنة من الخصائص. وسنرى قريباً هذا الأسلوب من تضييق الأنواع مطبَّقاً في الشيفرة!</p>
+<p>لكننا لم نكتفِ بعد! فما زال هناك تكرار كثير في أنواعنا، ونريد تجنّب ذلك. نبدأ بتحديد الخصائص المشتركة بين كل أجزاء الدورة، وتعريف نوع أساسي يحتوي عليها. ثم سنقوم بـ<a href="https://www.typescriptlang.org/docs/handbook/2/objects.html#extending-types" target="_blank" rel="noreferrer noopener">توسيع</a> (extend) ذلك النوع الأساسي لإنشاء أنواعنا الخاصة بكل kind:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBase</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">exerciseCount</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBasic</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CoursePartBase</span> {
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;basic&quot;</span>
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartGroup</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CoursePartBase</span> {
+  <span class="hljs-attr">groupProjectCount</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;group&quot;</span>
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBackground</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">CoursePartBase</span> {
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">backgroundMaterial</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&quot;background&quot;</span>
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">CoursePart</span> = <span class="hljs-title class_">CoursePartBasic</span> | <span class="hljs-title class_">CoursePartGroup</span> | <span class="hljs-title class_">CoursePartBackground</span>;
+</code></pre>
+<h3 id="المزيد-من-تضييق-الأنواع">المزيد من تضييق الأنواع</h3>
+<p>كيف ينبغي لنا الآن استخدام هذه الأنواع في مكوّناتنا؟</p>
+<p>إذا حاولنا الوصول إلى الكائنات في المصفوفة <em>courseParts: CoursePart[],</em> نلاحظ أنه لا يمكن الوصول إلا إلى الخصائص المشتركة بين كل الأنواع في الاتحاد:</p>
+<p><img src="../../images/mooc/ee69c47fc4d6.webp" alt="المحرّر يسمح فقط بالوصول إلى الخصائص المشتركة"></p>
+<p>وبالفعل، تقول <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#working-with-union-types" target="_blank" rel="noreferrer noopener">وثائق</a> TypeScript ما يلي:</p>
+<blockquote>
+<p><em>لن تسمح TypeScript بأي عملية (أو وصول إلى خاصية) إلا إذا كانت صالحة لكل عضو من أعضاء الاتحاد.</em></p>
+</blockquote>
+<p>وتذكر الوثائق أيضاً ما يلي:</p>
+<blockquote>
+<p><em>الحل هو تضييق الاتحاد بالشيفرة... ويحدث التضييق عندما تستطيع TypeScript استنتاج نوع أكثر تخصيصاً لقيمة ما بناءً على بنية الشيفرة.</em></p>
+</blockquote>
+<p>وهكذا مرة أخرى يأتي <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noreferrer noopener">تضييق الأنواع</a> للإنقاذ!</p>
+<p>من الطرق العملية لتضييق هذه الأنواع في TypeScript استخدام تعبيرات <em>switch case</em>. فبمجرد أن تستنتج TypeScript أن متغيراً ما من نوع اتحادي وأن كل نوع في الاتحاد يحتوي على خاصية حرفية معيّنة (وهي <em>kind</em> في حالتنا)، يمكننا استخدامها كمعرّف للنوع. ثم نبني switch case حول تلك الخاصية، وستعرف TypeScript أي الخصائص متاحة داخل كل كتلة case:</p>
+<p>![يُظهر VS Code الآن خصائص أكثر عند تضييق النوع في حالات</p>
+<p>courseParts.forEach(part =&gt; {
+switch (part.kind) {
+case &quot;basic&quot;:
+console.log(part.name, part.description, part.exerciseCount);
+break;
+case &quot;group&quot;:
+console.log(part.name, part.exerciseCount, part.groupProjectCount);
+break;
+case &quot;background&quot;:
+console.log(part.name, part.description, part.backgroundMaterial);
+break;](/images/mooc/d9d3b619180d.webp)</p>
+<p>في المثال أعلاه، تعرف TypeScript أن <em>part</em> من النوع <em>CoursePart</em>، ثم تستنتج أن <em>part</em> إما من النوع <em>CoursePartBasic</em> أو <em>CoursePartGroup</em> أو <em>CoursePartBackground</em> بناءً على قيمة الخاصية <em>kind</em>.</p>
+<p>التقنية المحددة لتضييق الأنواع حيث يُضيّق نوع اتحادي بناءً على قيمة خاصية حرفية تُسمى <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions" target="_blank" rel="noreferrer noopener">الاتحاد المُميَّز</a> (discriminated union).</p>
+<p>لاحظ أن التضييق يمكن بطبيعة الحال أن يجري أيضاً باستخدام جملة <em>if</em>. فيمكننا مثلاً فعل ما يلي:</p>
+<pre><code>  courseParts.forEach(part =&amp;gt; {
+    if (part.kind === 'background') {
+      console.log('see the following:', part.backgroundMaterial)
+    }
+
+    // لا يمكن الإشارة إلى part.backgroundMaterial هنا!
+  });
+</code></pre>
+<p>ماذا عن إضافة أنواع جديدة؟ لو أردنا إضافة جزء دورة جديد، ألن يكون من الجيد أن نعرف ما إذا كنا قد نفّذنا بالفعل التعامل مع ذلك النوع في شيفرتنا؟ في المثال أعلاه، سيذهب النوع الجديد إلى كتلة <em>default</em> ولن يُطبع أي شيء للنوع الجديد. هذا مقبول تماماً أحياناً. فمثلاً، إذا أردت التعامل مع حالات محددة فقط (وليست كلها) من اتحاد أنواع، فوجود default أمر لا بأس به. ومع ذلك، يُوصى في معظم الحالات بالتعامل مع كل التباينات بشكل منفصل.</p>
+<p>مع TypeScript، يمكننا استخدام أسلوب يُسمى <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking" target="_blank" rel="noreferrer noopener">الفحص الشامل للأنواع</a> (exhaustive type checking). ومبدؤه الأساسي أنه إذا صادفنا قيمة غير متوقعة، نستدعي دالة تقبل قيمة من النوع <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-never-type" target="_blank" rel="noreferrer noopener">never</a> ويكون نوع إرجاعها أيضاً <em>never</em>.</p>
+<p>قد تبدو نسخة مباشرة من الدالة هكذا:</p>
+<pre><code class="language-js"><span class="hljs-comment">/**
+ * دالة مساعدة للفحص الشامل للأنواع
+ */</span>
+<span class="hljs-keyword">const</span> assertNever = (<span class="hljs-attr">value</span>: never): never =&amp;gt; {
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(
+    <span class="hljs-string">`Unhandled discriminated union member: <span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(value)}</span>`</span>
+  );
+};
+</code></pre>
+<p>إذا استبدلنا الآن محتوى كتلة <em>default</em> لدينا بما يلي:</p>
+<pre><code class="language-js"><span class="hljs-attr">default</span>:
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">assertNever</span>(part);
+</code></pre>
+<p>وأزلنا الحالة التي تتعامل مع النوع <em>CoursePartBackground</em>، فسنرى الخطأ التالي:</p>
+<p><img src="../../images/mooc/f79e544ebda4.webp" alt="يظهر خطأ إذا لم تكن حالات switch شاملة"></p>
+<p>تقول رسالة الخطأ إن</p>
+<pre><code>'CoursePartBackground' is not assignable to parameter of type 'never'.
+</code></pre>
+<p>وهو ما يخبرنا بأننا نستخدم متغيراً في موضع لا ينبغي أن يُستخدم فيه أبداً. وهذا يخبرنا بأن هناك شيئاً يحتاج إلى إصلاح.</p>
+<div class="tasks">
+<p><strong>18. الدورة، الجزء 2</strong></p>
+</div>
+<h3 id="تطبيق-react-مع-الحالة">تطبيق React مع الحالة</h3>
+<p>حتى الآن، نظرنا فقط إلى تطبيق يحفظ كل البيانات في متغير مُنمّط لكنه لا يحتوي على أي حالة. لنعد مرة أخرى إلى تطبيق <em>الملاحظات</em> القديم الجيد ونبنِ نسخة مُنمّطة منه.</p>
+<p>نبدأ بالشيفرة التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> [notes, setNotes] = <span class="hljs-title function_">useState</span>([]);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+}
+</code></pre>
+<p>عندما نمرّر مؤشر الفأرة فوق استدعاءات <em>useState</em> في المحرّر، نلاحظ أمرين مثيرين للاهتمام.</p>
+<p>يبدو نوع الاستدعاء الأول <em>useState('')</em> هكذا:</p>
+<pre><code class="language-ts">useState&amp;lt;<span class="hljs-built_in">string</span>&amp;gt;(<span class="hljs-attr">initialState</span>: <span class="hljs-built_in">string</span> | (() =&amp;gt; <span class="hljs-built_in">string</span>)):
+  [<span class="hljs-built_in">string</span>, <span class="hljs-title class_">React</span>.<span class="hljs-property">Dispatch</span>&amp;lt;<span class="hljs-title class_">React</span>.<span class="hljs-property">SetStateAction</span>&amp;lt;<span class="hljs-built_in">string</span>&amp;gt;&amp;gt;]
+</code></pre>
+<p>النوع صعب الفكّ إلى حد ما. وله «الشكل» التالي:</p>
+<pre><code>functionName(parameters): return_value
+</code></pre>
+<p>إذن نلاحظ أن مترجم TypeScript استنتج أن الحالة الأولية إما نص أو دالة تُعيد نصاً:</p>
+<pre><code class="language-ts"><span class="hljs-attr">initialState</span>: <span class="hljs-built_in">string</span> | (() =&amp;gt; <span class="hljs-built_in">string</span>))
+</code></pre>
+<p>ونوع المصفوفة المُعادة هو التالي:</p>
+<pre><code>[string, React.Dispatch&amp;lt;React.SetStateAction&amp;lt;string&amp;gt;&amp;gt;]
+</code></pre>
+<p>إذن العنصر الأول، المُسنَد إلى <em>newNote</em>، هو نص، والعنصر الثاني الذي أسنَدناه إلى <em>setNewNote</em> له نوع أكثر تعقيداً قليلاً. نلاحظ أن هناك ذكراً لنص ما، لذا نعرف أنه لا بد أن يكون نوع دالة تضبط بيانات ذات قيمة. انظر <a href="https://codewithstyle.info/Using-React-useState-hook-with-TypeScript/" target="_blank" rel="noreferrer noopener">هنا</a> إذا أردت معرفة المزيد عن أنواع دالة useState.</p>
+<p>من كل هذا نرى أن TypeScript قد <a href="https://www.typescriptlang.org/docs/handbook/type-inference.html#handbook-content" target="_blank" rel="noreferrer noopener">استنتجت</a> نوع أول useState بشكل صحيح، فأُنشئت حالة من النوع string.</p>
+<p>وعندما ننظر إلى useState الثاني الذي له القيمة الأولية <em>[]</em> ، يبدو النوع مختلفاً تماماً</p>
+<pre><code>useState&amp;lt;never[]&amp;gt;(initialState: never[] | (() =&amp;gt; never[])):
+  [never[], React.Dispatch&amp;lt;React.SetStateAction&amp;lt;never[]&amp;gt;&amp;gt;]
+</code></pre>
+<p>تستطيع TypeScript فقط استنتاج أن الحالة من النوع <em>never[]</em>، فهي مصفوفة لكن ليس لديها أي فكرة عن العناصر المخزَّنة فيها، لذا من الواضح أننا نحتاج إلى مساعدة المترجم وتقديم النوع صراحةً.</p>
+<p>من أفضل المصادر للمعلومات عن تنميط React هو <a href="https://react-typescript-cheatsheet.netlify.app/" target="_blank" rel="noreferrer noopener">ورقة غش React وTypeScript</a>. ويوجّهنا فصل الورقة الخاص بخطاف <a href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/hooks#usestate" target="_blank" rel="noreferrer noopener">useState</a> إلى استخدام <em>وسيط نوع</em> (type parameter) في الحالات التي لا يستطيع فيها المترجم استنتاج النوع.</p>
+<p>لنعرّف الآن نوعاً للملاحظات:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Note</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>,
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>
+}
+</code></pre>
+<p>الحل الآن بسيط:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> [notes, setNotes] = useState&amp;lt;<span class="hljs-title class_">Note</span>[]&amp;gt;([]);
+</code></pre>
+<p>وبالفعل، ضُبط النوع بشكل صحيح:</p>
+<pre><code>useState&amp;lt;Note[]&amp;gt;(initialState: Note[] | (() =&amp;gt; Note[])):
+  [Note[], React.Dispatch&amp;lt;React.SetStateAction&amp;lt;Note[]&amp;gt;&amp;gt;]
+</code></pre>
+<p>إذن، بمصطلحات تقنية، useState هي <a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#working-with-generic-type-variables" target="_blank" rel="noreferrer noopener">دالة عامة</a> (generic function)، حيث يجب تحديد النوع كـ<em>وسيط نوع</em> في الحالات التي لا يستطيع فيها المترجم استنتاج النوع.</p>
+<p>أصبح عرض الملاحظات الآن سهلاً. لنضف فقط بعض البيانات إلى الحالة حتى نرى أن الشيفرة تعمل:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Note</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>,
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>
+}
+
+<span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = useState&amp;lt;<span class="hljs-title class_">Note</span>[]&gt;([
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;testing&#x27;</span> } <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  ]);
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;ul&gt;
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+        {notes.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span>
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/li&gt;
+        )}
+<span class="hljs-comment">// END HIGHLIGHT</span>
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>المهمة التالية هي إضافة نموذج يتيح إنشاء ملاحظات جديدة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = useState&amp;lt;<span class="hljs-title class_">Note</span>[]&gt;([
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;testing&#x27;</span> }
+  ]);
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+      &amp;lt;form&gt;
+        &amp;lt;input
+          value={newNote}
+          onChange={<span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)}
+         /&gt;
+        &amp;lt;button type=<span class="hljs-string">&#x27;submit&#x27;</span>&gt;add&amp;lt;/button&gt;
+      &amp;lt;/form&gt;
+<span class="hljs-comment">// END HIGHLIGHT</span>
+      &amp;lt;ul&gt;
+        {notes.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span>
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/li&gt;
+        )}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>إنها تعمل ببساطة، ولا توجد أي شكاوى بشأن الأنواع! وعندما نمرّر مؤشر الفأرة فوق <em>event.target.value</em>، نرى أنه نص بالفعل، وهو بالضبط ما هو متوقع لوسيط <em>setNewNote</em>:</p>
+<p><img src="../../images/mooc/6ae292f825ba.webp" alt="يُظهر VS Code أن event.target.value نص"></p>
+<p>إذن ما زلنا نحتاج إلى معالج الحدث لإضافة الملاحظة الجديدة. لنجرّب ما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">noteCreation</span> = (<span class="hljs-params">event</span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-comment">// ...</span>
+  };
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;form onSubmit={noteCreation}&gt; <span class="hljs-comment">// HIGHLIGHT LINE</span>
+        &amp;lt;input
+          value={newNote}
+          onChange={<span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)}
+        /&gt;
+        &amp;lt;button type=<span class="hljs-string">&#x27;submit&#x27;</span>&gt;add&amp;lt;/button&gt;
+      &amp;lt;/form&gt;
+      <span class="hljs-comment">// ...</span>
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>إنها لا تعمل تماماً، فهناك خطأ من ESLint يشكو من any ضمني:</p>
+<p><img src="../../images/mooc/fa387bd9e00c.webp" alt="يُظهر VS Code خطأً بأن الحدث من النوع any"></p>
+<p>ليس لدى مترجم TypeScript الآن أي فكرة عن نوع الوسيط، ولهذا يكون النوع هو any الضمني سيئ السمعة الذي نريد <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript/chapter-3" target="_blank" rel="noreferrer noopener">تجنّبه</a> بأي ثمن. وتأتي ورقة غش React وTypeScript للإنقاذ مرة أخرى. إذ يكشف الفصل الخاص بـ<a href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events" target="_blank" rel="noreferrer noopener">النماذج والأحداث</a> أن النوع الصحيح لمعالج الحدث هو <em>React.SyntheticEvent</em>.</p>
+<p>تصبح الشيفرة</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Note</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>,
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = useState&amp;lt;<span class="hljs-title class_">Note</span>[]&gt;([]);
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">noteCreation</span> = (<span class="hljs-params"><span class="hljs-attr">event</span>: <span class="hljs-title class_">React</span>.<span class="hljs-title class_">SyntheticEvent</span></span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    <span class="hljs-keyword">const</span> noteToAdd = {
+      <span class="hljs-attr">content</span>: newNote,
+      <span class="hljs-attr">id</span>: <span class="hljs-title class_">String</span>(notes.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>)
+    }
+    <span class="hljs-title function_">setNotes</span>(notes.<span class="hljs-title function_">concat</span>(noteToAdd));
+    <span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  };
+<span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;form onSubmit={noteCreation}&gt;
+        &amp;lt;input value={newNote} onChange={<span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-title function_">setNewNote</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)} /&gt;
+        &amp;lt;button <span class="hljs-keyword">type</span>=<span class="hljs-string">&#x27;submit&#x27;</span>&gt;add&amp;lt;/button&gt;
+      &amp;lt;/form&gt;
+      &amp;lt;ul&gt;
+        {notes.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span>
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/li&gt;
+        )}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>وهذا كل شيء، تطبيقنا جاهز ومُنمّط بإتقان!</p>
+<h3 id="التواصل-مع-الخادم">التواصل مع الخادم</h3>
+<p>لنعدّل التطبيق بحيث تُحفظ الملاحظات في واجهة خلفية من نوع JSON server على الرابط <a href="http://localhost:3001/notes" target="_blank" rel="noreferrer noopener">http://localhost:3001/notes</a></p>
+<p>كما اعتدنا، سنستخدم Axios وخطاف useEffect لجلب الحالة الأولية من الخادم.</p>
+<p>لنجرّب ما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    axios.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://localhost:3001/notes&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">data</span>);
+    })
+  }, [])
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>عندما نمرّر مؤشر الفأرة فوق <em>response.data</em> نرى أن نوعه <em>any</em></p>
+<p><img src="../../images/mooc/b341c307a568.webp" alt="نرى أن response من النوع any"></p>
+<p>لكي نضبط البيانات في الحالة باستخدام الدالة <em>setNotes</em> يجب أن ننمّطها بشكل صحيح.</p>
+<p>مع قليل من <a href="https://upmostly.com/typescript/how-to-use-axios-in-your-typescript-apps" target="_blank" rel="noreferrer noopener">المساعدة من الإنترنت</a>، نجد حيلة ذكية:</p>
+<pre><code>  useEffect(() =&gt; {
+    axios.get&amp;lt;Note[]&gt;('http://localhost:3001/notes').then(response =&gt; {
+      console.log(response.data);
+    })
+  }, [])
+</code></pre>
+<p>عندما نمرّر مؤشر الفأرة فوق response.data نرى أن نوعه صحيح:</p>
+<p><img src="../../images/mooc/6aebedc988f2.webp" alt="فجأة أصبح response.data من النوع Note[]"></p>
+<p>يمكننا الآن ضبط البيانات في الحالة <em>notes</em> لتعمل الشيفرة:</p>
+<pre><code>  useEffect(() =&gt; {
+    axios.get&amp;lt;Note[]&gt;('http://localhost:3001/notes').then(response =&gt; {
+      setNotes(response.data)
+    })
+  }, [])
+</code></pre>
+<p>إذن، تماماً كما في حالة <em>useState</em>، أعطينا وسيط نوع إلى <em>axios.get</em> لنوجّهه إلى كيفية إجراء التنميط. وتماماً مثل <em>useState</em>، فإن <em>axios.get</em> أيضاً <a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#working-with-generic-type-variables" target="_blank" rel="noreferrer noopener">دالة عامة</a>. وعلى عكس بعض الدوال العامة، فإن وسيط النوع في <em>axios.get</em> له قيمة افتراضية هي <em>any</em> ، لذا إذا استُخدمت الدالة دون تعريف وسيط النوع، فسيكون نوع بيانات الاستجابة any.</p>
+<p>الشيفرة تعمل، والمترجم وESLint سعيدان وملتزمان الصمت. غير أن إعطاء وسيط نوع إلى <em>axios.get</em> أمر قد يكون خطيراً. إذ <em>قد يحتوي جسم الاستجابة على بيانات بشكل عشوائي</em>، وعندما نعطي وسيط نوع، فإننا ببساطة نطلب من مترجم TypeScript أن يثق بنا في أن البيانات من النوع <em>Note[]</em>.</p>
+<p>لذا فشيفرتنا في جوهرها آمنة بقدر ما ستكون عليه لو استُخدم <a href="../../part9#type-assertion" target="_blank" rel="noreferrer noopener">تأكيد نوع</a> (وهذا ليس جيداً):</p>
+<pre><code>  useEffect(() =&gt; {
+    axios.get('http://localhost:3001/notes').then(response =&gt; {
+      // response.body من النوع any
+      setNotes(response.data as Note[])
+    })
+  }, [])
+</code></pre>
+<p>بما أن أنواع TypeScript لا وجود لها حتى وقت التشغيل، فشيفرتنا لا تمنحنا أي أمان ضد الحالات التي يحتوي فيها جسم الطلب على بيانات بشكل خاطئ.</p>
+<p>قد يكون إعطاء وسيط نوع إلى <em>axios.get</em> مقبولاً إذا كنا <em>متأكدين تماماً</em> أن الواجهة الخلفية تتصرف بشكل صحيح وتُعيد البيانات دائماً بالشكل الصحيح. وإذا أردنا بناء نظام متين، ينبغي أن نستعد للمفاجآت ونحلّل بيانات الاستجابة (على غرار ما فعلناه <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript/chapter-4" target="_blank" rel="noreferrer noopener">في القسم السابق</a> مع الطلبات إلى الواجهة الخلفية).</p>
+<p>لنُكمل الآن تطبيقنا بتنفيذ إضافة الملاحظة الجديدة:</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> <span class="hljs-title function_">noteCreation</span> = (<span class="hljs-params">event: React.SyntheticEvent</span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    axios.<span class="hljs-property">post</span>&amp;lt;<span class="hljs-title class_">Note</span>&gt;(<span class="hljs-string">&#x27;http://localhost:3001/notes&#x27;</span>, { <span class="hljs-attr">content</span>: newNote })
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+        <span class="hljs-title function_">setNotes</span>(notes.<span class="hljs-title function_">concat</span>(response.<span class="hljs-property">data</span>))
+      })
+<span class="hljs-comment">// END HIGHLIGHT</span>
+    <span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  };
+</code></pre>
+<p>نمنح <em>axios.post</em> مرة أخرى وسيط نوع. نحن نعلم أن استجابة الخادم هي الملاحظة المضافة، لذا فوسيط النوع المناسب هو <em>Note</em>.</p>
+<p>لنرتّب الشيفرة قليلاً. لتعريفات الأنواع، ننشئ ملفاً باسم <em>types.ts</em> بالمحتوى التالي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Note</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>,
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">NewNote</span> = <span class="hljs-title class_">Omit</span>&amp;lt;<span class="hljs-title class_">Note</span>, <span class="hljs-string">&#x27;id&#x27;</span>&amp;gt;
+</code></pre>
+<p>أضفنا نوعاً جديداً لـ<em>ملاحظة جديدة</em>، وهي ملاحظة لم يُسنَد إليها حقل <em>id</em> بعد.</p>
+<p>كما استُخرجت الشيفرة التي تتواصل مع الواجهة الخلفية إلى وحدة في ملف <em>noteService.ts</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>
+<span class="hljs-keyword">import</span> type { <span class="hljs-title class_">Note</span>, <span class="hljs-title class_">NewNote</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./types&#x27;</span>
+
+<span class="hljs-keyword">const</span> baseUrl = <span class="hljs-string">&#x27;http://localhost:3001/notes&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">getAll</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> axios
+    .<span class="hljs-property">get</span>&amp;lt;<span class="hljs-title class_">Note</span>[]&gt;(baseUrl)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.<span class="hljs-property">data</span>)
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">create</span> = (<span class="hljs-params">object: NewNote</span>) =&gt; {
+  <span class="hljs-keyword">return</span> axios
+    .<span class="hljs-property">post</span>&amp;lt;<span class="hljs-title class_">Note</span>&gt;(baseUrl, object)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.<span class="hljs-property">data</span>)
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> { getAll, create }
+
+</code></pre>
+<p>أصبح المكوّن <em>App</em> الآن أنظف بكثير:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> type { <span class="hljs-title class_">Note</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./types&#x27;</span>
+<span class="hljs-keyword">import</span> noteService <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./noteService&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> [notes, setNotes] = useState&amp;lt;<span class="hljs-title class_">Note</span>[]&gt;([]);
+  <span class="hljs-keyword">const</span> [newNote, setNewNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    noteService.<span class="hljs-title function_">getAll</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">initialNotes</span> =&gt;</span> {
+      <span class="hljs-title function_">setNotes</span>(initialNotes)
+    })
+  }, [])
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">noteCreation</span> = (<span class="hljs-params">event: React.SyntheticEvent</span>) =&gt; {
+    event.<span class="hljs-title function_">preventDefault</span>()
+    noteService.<span class="hljs-title function_">create</span>({ <span class="hljs-attr">content</span>: newNote })
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">returnedNote</span> =&gt;</span> {
+        <span class="hljs-title function_">setNotes</span>(notes.<span class="hljs-title function_">concat</span>(returnedNote))
+      })
+    <span class="hljs-title function_">setNewNote</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="hljs-comment">// ...</span>
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+
+</code></pre>
+<p>أصبح التطبيق الآن مُنمّطاً بشكل جيد وجاهزاً لمزيد من التطوير!</p>
+<p>يمكن العثور على شيفرة تطبيق الملاحظات المُنمّط <a href="https://github.com/fullstack-hy2020/typed-notes" target="_blank" rel="noreferrer noopener">هنا</a>.</p>
+<h3 id="ملاحظة-حول-تعريف-أنواع-الكائنات">ملاحظة حول تعريف أنواع الكائنات</h3>
+<p>استخدمنا <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces" target="_blank" rel="noreferrer noopener">واجهات</a> (interfaces) لتعريف أنواع الكائنات، مثل مدخلات اليوميات، في القسم السابق</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">DiaryEntry</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">date</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">weather</span>: <span class="hljs-title class_">Weather</span>;
+  <span class="hljs-attr">visibility</span>: <span class="hljs-title class_">Visibility</span>;
+  <span class="hljs-attr">comment</span>?: <span class="hljs-built_in">string</span>;
+}
+</code></pre>
+<p>وفي جزء الدورة في هذا القسم</p>
+<pre><code class="language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">CoursePartBase</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">exerciseCount</span>: <span class="hljs-built_in">number</span>;
+}
+</code></pre>
+<p>كان يمكننا فعلاً تحقيق الأثر نفسه باستخدام <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases" target="_blank" rel="noreferrer noopener">اسم مستعار للنوع</a> (type alias)</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">DiaryEntry</span> = {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">date</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">weather</span>: <span class="hljs-title class_">Weather</span>;
+  <span class="hljs-attr">visibility</span>: <span class="hljs-title class_">Visibility</span>;
+  <span class="hljs-attr">comment</span>?: <span class="hljs-built_in">string</span>;
+}
+</code></pre>
+<p>في معظم الحالات، يمكنك استخدام <em>type</em> أو <em>interface</em>، أيّهما شئت من الصياغتين. غير أن هناك بعض الأمور التي ينبغي وضعها في الاعتبار. فمثلاً، إذا عرّفت عدة واجهات (interfaces) بالاسم نفسه، فستؤدي إلى واجهة مدموجة، بينما إذا حاولت تعريف عدة أنواع بالاسم نفسه، فسيؤدي ذلك إلى خطأ يفيد بأن نوعاً بالاسم نفسه مُعلَن بالفعل.</p>
+<p>وتوصي <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces" target="_blank" rel="noreferrer noopener">وثائق TypeScript باستخدام interfaces</a> في معظم الحالات.</p>
+<div class="tasks">
+<p><strong>19. يوميات الطيران، الخطوة 1</strong></p>
+</div>
+<div class="tasks">
+<p><strong>20. يوميات الطيران، الخطوة 2</strong></p>
+</div>
+<div class="tasks">
+<p><strong>21. يوميات الطيران، الخطوة 3</strong></p>
+</div>
+<div class="tasks">
+<p><strong>22. يوميات الطيران، الخطوة 4</strong></p>
+</div>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part9/typing_an_express_app"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">كتابة تطبيق Express بالأنواع</span></a><!--]--> <!--[0--><a class="next" href="../../part9/grande_finale_patientor"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">الختام الكبير: Patientor</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

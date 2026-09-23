@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.png" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link href="../../_app/immutable/entry/start.BN4XSYV_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CrewrSOq.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/DJrdS1AM.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CmYNkS84.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="../../_app/immutable/entry/app.BFO8kdbn.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Dp1pzeXC.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C264bP2K.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/knOR16GQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/QgDh9GAy.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C0F87yyz.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/0.CnT1Ee9B.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CVZ9xyFQ.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/D3e0Um1_.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BTHMpFmT.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BcY5ZgYe.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/CkLfrO85.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C1rZhgvB.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/eOYfPuAg.js" rel="modulepreload">
+		<link href="../../_app/immutable/nodes/8.BFB1lH7l.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/C6_Vv0T5.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/BR06V9SE.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/Bm23R1hg.js" rel="modulepreload">
+		<link href="../../_app/immutable/chunks/wnBaq-uh.js" rel="modulepreload">
+		<!--12qhfyh--><!----><!--lak4cp--><meta name="description" content="تعرّف على خطافات React الإضافية، وداخلية Vite وesbuild، ومواضيع متنوعة."/><!----><title>داخلية Vite وesbuild - الجزء 7 | Full Stack open</title>
+		<link href="../../_app/immutable/assets/0.MXGbBaJ0.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="app"><a class="skip-link" href="#main">الانتقال إلى المحتوى</a> <header class="site-header"><div class="container site-header__inner"><a class="logo" href="../../" aria-label="Full Stack open"><span class="logo__mark">{() => fs}</span></a> <button class="menu-toggle" aria-label="قائمة التنقل" aria-expanded="false"><span></span> <span></span> <span></span></button> <nav class="site-nav"><!--[--><a href="../../about">عن الدورة</a><a href="../../#parts">محتويات الدورة</a><a href="../../faq">الأسئلة الشائعة</a><a href="../../companies">الشركاء</a><a href="../../challenge">التحدي</a><!--]--> <a href="../../search">البحث</a> <button class="theme-toggle" aria-label="تبديل السمة">☾</button></nav></div></header> <main id="main"><!--[--><div class="container"><div class="chapter-layout"><aside class="toc"><p class="toc__title">في هذه الصفحة</p> <ul><!--[--><li class="toc__depth-3"><a href="#تجميع-الحزم">تجميع الحزم</a></li><li class="toc__depth-3"><a href="#كيف-يعمل-vite">كيف يعمل Vite</a></li><li class="toc__depth-3"><a href="#فهم-esbuild">فهم esbuild</a></li><li class="toc__depth-3"><a href="#التحويل">التحويل</a></li><li class="toc__depth-3"><a href="#بيئة-التطوير">بيئة التطوير</a></li><li class="toc__depth-3"><a href="#تهيئة-vite">تهيئة Vite</a></li><!--]--></ul></aside> <article><div class="chapter-banner" style="background:#82D2F7"></div> <div class="chapter-header"><p class="chapter-header__part"><a href="../../part7">الجزء 7: إضافات React</a></p> <h1>داخلية Vite وesbuild</h1></div> <div class="course-content"><!----><p>في الأيام الأولى، اشتهر React نوعاً ما بأن تهيئة الأدوات اللازمة لتطوير التطبيقات كانت بالغة الصعوبة. ولتسهيل الأمر طُوِّر <a href="https://github.com/facebookincubator/create-react-app" target="_blank" rel="noopener">Create React App</a> الذي أزال المشكلات المتعلقة بالتهيئة. ومنذ ذلك الحين حلّ <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a>، المستخدم في هذا المقرر، محل Create React App كأداة معيارية لتطبيقات React الجديدة.</p>
+<p>يستخدم كل من Vite وCreate React App <em>أدوات تجميع الحزم</em> (bundlers) للقيام بالعمل الفعلي. في هذا القسم سنلقي نظرة أقرب على ما تفعله أدوات تجميع الحزم فعلاً، وكيف يعمل Vite في الخلفية، وكيف نُهيّئه لسيناريوهات مختلفة. سنفحص أيضاً بإيجاز <a href="https://esbuild.github.io/" target="_blank" rel="noopener">esbuild</a>، وهي أداة تجميع منخفضة المستوى يستخدمها Vite داخلياً؛ وفهم esbuild يساعد في توضيح ما يعنيه تجميع الحزم جوهرياً.</p>
+<blockquote>
+<p>ماذا عن Webpack؟</p>
+<p>كان Webpack أداة تجميع الحزم المهيمنة في معظم سنوات العقد 2010، ولا يزال يُصادف في قواعد الشيفرة القديمة وفي المؤسسات. غطّى هذا المقرر أيضاً Webpack حتى ربيع 2026.</p>
+<p>إذا كنت تعمل على مشروع قديم، فمن المفيد أن تعرف أن Webpack موجود ويستخدم المفاهيم الجوهرية نفسها (نقاط الدخول، والمحمّلات/الإضافات، والمخرجات). ومع ذلك، لا يُنصح بإعداد مشروع جديد باستخدام Webpack في 2026. فتهيئته معقدة، والأدوات الحديثة مثل Vite تقدم تجربة مطوّر أفضل بكثير. لن نغطي تهيئة Webpack في هذا المقرر.</p>
+</blockquote>
+<h3 id="تجميع-الحزم">تجميع الحزم</h3>
+<p>لقد نفّذنا تطبيقاتنا بتقسيم شيفرتنا إلى وحدات منفصلة <em>تُستورَد</em> إلى المواضع التي تحتاجها. ورغم أن وحدات ES6 معرّفة في معيار ECMAScript، فإنه ليست كل بيئات التنفيذ تتعامل تلقائياً مع الشيفرة القائمة على الوحدات. حتى المتصفحات الحديثة تستفيد من معالجة الاعتماديات مسبقاً وتحسينها قبل توصيلها.</p>
+<p>ولهذا السبب، تُجمَّع الشيفرة المقسمة إلى وحدات <em>للإنتاج</em>، أي أن ملفات الشيفرة المصدرية تُحوَّل وتُدمج في مجموعة محسّنة من الملفات يمكن للمتصفح تحميلها بكفاءة. عندما شغّلنا <em>npm run build</em> في الأجزاء السابقة من هذا المقرر، قام Vite بعملية التجميع هذه. تظهر المخرجات في مجلد <em>dist</em>:</p>
+<pre><code>├── assets
+│   ├── index-d526a0c5.css
+│   ├── index-e92ae01e.js
+│   └── react-35ef61ed.svg
+├── index.html
+└── vite.svg
+</code></pre>
+<p>يحمّل ملف <em>index.html</em> في الجذر ملف JavaScript المجمّع عبر وسم <em>script</em>:</p>
+<pre><code>&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&quot;en&quot;&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&quot;UTF-8&quot; /&amp;gt;
+    &amp;lt;link rel=&quot;icon&quot; type=&quot;image/svg+xml&quot; href=&quot;/vite.svg&quot; /&amp;gt;
+    &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&amp;gt;
+    &amp;lt;title&amp;gt;Vite + React&amp;lt;/title&amp;gt;
+    // BEGIN HIGHLIGHT
+    &amp;lt;script type=&quot;module&quot; crossorigin src=&quot;/assets/index-e92ae01e.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    // END HIGHLIGHT
+    // BEGIN HIGHLIGHT
+    &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;/assets/index-d526a0c5.css&quot;&amp;gt;
+    // END HIGHLIGHT
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;root&quot;&amp;gt;&amp;lt;/div&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>
+<p>تُجمَّع CSS أيضاً في ملف واحد.</p>
+<p>عملياً، يبدأ تجميع الحزم من نقطة دخول (entry point)، وهي عادةً <em>main.jsx</em>. لا يضم Vite الشيفرة من نقطة الدخول فحسب، بل أيضاً كل ما تستورده، بشكل متكرر، حتى تُحلّ كامل شبكة الاعتماديات.</p>
+<p>ولأن جزءاً من الملفات المستوردة عبارة عن حزم مثل React وReact-router وAxios، فإن ملف JavaScript المجمّع سيحتوي أيضاً على محتويات كل من هذه المكتبات.</p>
+<blockquote>
+<p>قبل توفر أدوات تجميع الحزم، كان الأسلوب القديم يعتمد على أن ملف index.html يحمّل كل ملفات JavaScript المنفصلة للتطبيق بمساعدة وسوم script. أدى ذلك إلى تراجع الأداء، لأن تحميل كل ملف منفصل يسبب بعض التكلفة الإضافية. ولهذا السبب، فإن الطريقة المفضلة اليوم هي تجميع الشيفرة في ملف واحد. كما يتيح تجميع الحزم تحسينات مثل التصغير (minification) وtree-shaking (إزالة الشيفرة غير المستخدمة).</p>
+</blockquote>
+<h3 id="كيف-يعمل-vite">كيف يعمل Vite</h3>
+<p>لـ Vite وضعا تشغيل مختلفان يعملان بطريقتين مختلفتين تماماً.</p>
+<p><strong>وضع التطوير</strong> (<em>npm run dev</em>) لا يجمّع شيفرتك إطلاقاً. بدلاً من ذلك، يشغّل Vite خادم تطوير يقدّم ملفاتك المصدرية كوحدات ES أصلية، تاركاً للمتصفح حلّ الاستيرادات مباشرة. ولهذا يكون بدء التشغيل فورياً تقريباً بصرف النظر عن حجم المشروع. هناك استثناء واحد: اعتماديات الطرف الثالث من node_modules تُجمَّع مسبقاً بواسطة esbuild قبل تشغيل الخادم. يعالج هذا مشكلتين: كثير من حزم npm لا تزال بصيغة CommonJS (التي لا تستطيع المتصفحات استهلاكها أصلياً)، وبعض المكتبات تتكون من مئات الملفات الداخلية الصغيرة التي قد تتسبب لولا ذلك في مئات الطلبات المنفصلة. يحوّلها esbuild ويدمجها، ويخزّن النتيجة مؤقتاً على القرص، فتصبح عمليات التشغيل اللاحقة فورية تقريباً.</p>
+<p><strong>وضع الإنتاج</strong> (<em>npm run build</em>) يستخدم <a href="https://rollupjs.org/" target="_blank" rel="noopener">Rollup</a> لتجميع الحزم، بينما يظل <a href="https://esbuild.github.io/" data-type="link" data-id="https://esbuild.github.io/">esbuild</a> يتولى مهام أخرى مثل التحويل (transpilation) (JSX وTypeScript) والتصغير. صُمّم Rollup من الأساس لوحدات ES، مما يجعله بارعاً استثنائياً في <em>tree-shaking</em> وهي تقنية تحلل بشكل ساكن أي الصادرات من كل وحدة تُستخدم فعلاً وتزيل الباقي من الحزمة النهائية. مثلاً، إذا استوردت دالة مساعدة واحدة فقط من مكتبة كبيرة، يضمن tree-shaking ألا تُضمَّن بقية شيفرة تلك المكتبة في الحزمة. وهذا يمكن أن يقلل حجم الحزمة بشكل كبير.</p>
+<p>تقسيم العمل، esbuild للسرعة وRollup لجودة الحزمة، أمر جوهري في تصميم Vite.</p>
+<blockquote>
+<p>قد تتساءل لماذا لا يستخدم Vite أداة esbuild أيضاً لتجميع حزم الإنتاج، نظراً لسرعته الكبيرة. السبب هو أن مخرجات تجميع esbuild، رغم صحتها، تنتج نتائج أقل تحسيناً في السيناريوهات المتقدمة: فدعمه لتقسيم الشيفرة محدود، ولا ينتج المستوى نفسه من تحسين القطع (chunks)، ولا يزال نظامه البيئي من الإضافات الخاص بالتحويلات على مستوى الحزمة في طور النضوج. مخرجات Rollup أكثر قابلية للتنبؤ وأفضل ضبطاً لشبكات الاعتماديات المعقدة التي تنتجها التطبيقات الحقيقية. وقد <a href="https://vitejs.dev/guide/why.html#why-not-bundle-with-esbuild" target="_blank" rel="noopener">صرّح</a> مؤلفو Vite بأنهم يعتزمون التحول إلى esbuild لتجميع حزم الإنتاج بمجرد أن تسدّ قدراته هذه الفجوة.</p>
+</blockquote>
+<h3 id="فهم-esbuild">فهم esbuild</h3>
+<p>لفهم ما يتضمنه تجميع الحزم جوهرياً، من المفيد العمل مع <a href="https://esbuild.github.io/" target="_blank" rel="noopener">esbuild</a> مباشرة، دون طبقة التجريد التي يضيفها Vite فوقها. لنبنِ بيئة React بسيطة من الصفر.</p>
+<p>بعد ذلك، سننشئ تطبيق React بسيطاً بالبنية المجلدية التالية:</p>
+<pre><code>├── dist
+│   └── index.html
+├── src
+│   ├── main.jsx
+│   └── App.jsx
+└── package.json
+</code></pre>
+<p>نبدأ بتثبيت React وreact-dom:</p>
+<pre><code class="language-bash">npm install react react-dom
+</code></pre>
+<p>نحتاج أيضاً إلى تثبيت esbuild:</p>
+<pre><code class="language-bash">npm install --save-dev esbuild
+</code></pre>
+<p>في البداية نضيف سكربتين إلى <em>package.json</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbuild src/main.jsx --bundle --outfile=dist/main.js --jsx=automatic&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;serve&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx serve dist&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-comment">// ...</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>نحتاج للتطبيق إلى الملف <em>dist/index.html</em> الذي يحمّل حزمة JavaScript:</p>
+<pre><code>&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&quot;en&quot;&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&quot;UTF-8&quot; /&amp;gt;
+    &amp;lt;title&amp;gt;esbuild app&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;div id=&quot;root&quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;script src=&quot;./main.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+</code></pre>
+<p>نقطة الدخول <em>src/main.jsx</em> هي المعتادة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>
+
+<span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>)).<span class="hljs-title function_">render</span>(&amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;)
+</code></pre>
+<p>مكوّن التطبيق البسيط <em>src/App.jsx</em> كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> [counter, setCounter] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      &amp;lt;p&amp;gt;<span class="hljs-attr">count</span>: {counter}&amp;lt;/p&amp;gt;
+      &amp;lt;button onClick={() =&amp;gt; <span class="hljs-title function_">setCounter</span>(counter + <span class="hljs-number">1</span>)}&amp;gt;increment&amp;lt;/ button&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>
+</code></pre>
+<p>الآن يمكننا تجميع التطبيق:</p>
+<pre><code class="language-bash">npm run build
+</code></pre>
+<p>المخرج هو ملف واحد <em>dist/main.js</em> يحتوي شيفرة تطبيقك مع مكتبة React مجمّعة معاً.</p>
+<p>يمكننا الآن تشغيل التطبيق المجمّع عبر <em>npm run serve</em>. يستخدم هذا حزمة <a href="https://www.npmjs.com/package/serve" target="_blank" rel="noopener">serve</a> لبدء خادم ملفات ساكن محلي لمجلد <em>dist</em>، مما يجعل التطبيق متاحاً على <em><a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000</a></em>:</p>
+<p><img src="../../images/mooc/2ccdf0013182.webp" alt="صورة توضيحية"></p>
+<p>يدعم esbuild أيضاً <a href="https://en.wikipedia.org/wiki/Minification_(programming)" target="_blank" rel="noopener">التصغير</a> عبر أعلام سطر الأوامر. يزيل التصغير المسافات البيضاء والتعليقات، ويقصّر أسماء المتغيرات، ويطبق تحسينات أخرى للحجم. ستكون الحزمة كبيرة بشكل ملحوظ لأنها تتضمن مكتبة React كاملة. يقلل التصغير حجمها بشكل كبير.</p>
+<p>لنُمكّن التصغير الآن:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbuild src/main.jsx --bundle --minify --outfile=dist/main.js --jsx=automatic&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;serve&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx serve dist&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>يخفض التصغير حجم الحزمة من نحو 1.1 MB إلى نحو 190 KB، وهو انخفاض كبير.</p>
+<p>للتصغير مشكلة: إذا ألقى التطبيق خطأ أثناء التشغيل، ستشير أدوات مطوّري المتصفح إلى سطر في ملف <em>main.js</em> المصغّر، وهو أمر شبه مستحيل القراءة:</p>
+<p><img src="../../images/mooc/c2c230177d6f.webp" alt="صورة توضيحية"></p>
+<p>الحل هو <a href="https://developer.mozilla.org/en-US/docs/Glossary/Source_map" target="_blank" rel="noopener">خريطة المصدر</a> (source map): ملف مرافق (<em>dist/main.js.map</em>) يسجّل كيف يقابل كل سطر من الحزمة المصغّرة الشيفرة الأصلية. عند تمكينها، يشير تتبّع المكدس إلى السطر الدقيق في <em>App.jsx</em> أو <em>main.jsx</em> بدلاً من مكان ما داخل جدار غير مقروء من الشيفرة المصغّرة.</p>
+<p>يمكننا تمكين خرائط المصدر بإضافة العلم <em>--sourcemap</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbuild src/main.jsx --bundle --minify --sourcemap --outfile=dist/main.js --jsx=automatic&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;serve&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx serve dist&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>الآن صار الخطأ مفهوماً:</p>
+<p><img src="../../images/mooc/2443fab4a586.webp" alt="صورة توضيحية"></p>
+<p>لاحظ أن خرائط المصدر لا تقدر بثمن أثناء التطوير وتصحيح الأخطاء، لكن قد ترغب في استبعادها من بناء إنتاجي عام. لأن خريطة المصدر تحتوي شيفرتك المصدرية الأصلية، يمكن لأي شخص يفتح أدوات مطوّري المتصفح أن يقرأ منطق تطبيقك غير المصغّر. إذا كان ذلك يقلقك، فما عليك سوى حذف العلم <em>--sourcemap</em> من أمر بناء الإنتاج.</p>
+<h3 id="التحويل">التحويل</h3>
+<p>إلى جانب تجميع الحزم، يؤدي esbuild مهمة جوهرية أخرى: <em>التحويل</em> (transpilation). يعني التحويل تحويل شيفرة مصدرية مكتوبة بصيغة من JavaScript إلى صيغة أخرى، عادةً من صيغة حديثة أو موسّعة إلى JavaScript عادي يمكن للمتصفحات تنفيذه.</p>
+<p>تفهم المتصفحات JavaScript المعياري، لكن JSX ليس JavaScript صالحاً، ولا يمكن لأي متصفح تحليله مباشرة. عندما نكتب:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> element = &amp;lt;<span class="hljs-title class_">App</span> /&amp;gt;
+</code></pre>
+<p>يجب تحويله إلى شيء يمكن للمتصفح تشغيله:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> element = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-title class_">App</span>, <span class="hljs-literal">null</span>)
+</code></pre>
+<p>ولهذا فإن التحويل خطوة مطلوبة لأي مشروع React، وليس تحسيناً اختيارياً. ينفذه esbuild تلقائياً أثناء تجميع الحزم. مع العلم <em>--jsx=automatic</em>، يتعامل esbuild مع JSX دون أي أداة خارجية. في سير العمل القديم القائم على Webpack كان عليك تثبيت <a href="https://babeljs.io/" target="_blank" rel="noopener">Babel</a> والحزم المتعلقة به وتهيئتها لتحويل JSX من أجل المتصفح. مع esbuild، تُحوَّل الملفات المنتهية بـ <em>.jsx</em> مباشرة دون إعداد إضافي.</p>
+<h3 id="بيئة-التطوير">بيئة التطوير</h3>
+<p>حتى الآن، كل تغيير يتطلب تشغيل <em>npm run build</em> وتحديث المتصفح يدوياً، وهي حلقة بطيئة سرعان ما تصبح مملة. يحل هذا <a href="https://esbuild.github.io/api/#serve" target="_blank" rel="noopener">خادم التطوير</a> المدمج في esbuild. أضف سكربت <em>dev</em> إلى <em>package.json</em>:</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbuild src/main.jsx --bundle --minify --sourcemap --outfile=dist/main.js --jsx=automatic&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;serve&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx serve dist&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbuild src/main.jsx --bundle --outfile=dist/main.js --jsx=automatic --servedir=./dist --watch&quot;</span>
+    <span class="hljs-comment">// END HIGHLIGHT</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>تشغيل <em>npm run dev</em> يفعل شيئين في آن واحد. أولاً يخبر <a href="https://esbuild.github.io/api/#watch" target="_blank" rel="noopener">--watch</a> esbuild بمراقبة كل ملفات المصدر المستوردة بحثاً عن تغييرات وإعادة بناء الحزمة تلقائياً كلما حُفظ أي منها. ثانياً يبدأ <a href="https://esbuild.github.io/api/#serve" target="_blank" rel="noopener">--servedir</a> خادم HTTP خفيفاً يقدّم محتويات مجلد <em>dist</em>، أي <em>index.html</em> وملف <em>main.js</em> المبني حديثاً، على <em><a href="http://localhost:8000/" target="_blank" rel="noopener">http://localhost:8000</a></em>.</p>
+<p>العلم <em>--servedir</em> هو ما يجعل الجزأين يعملان معاً: بدونه، سيعيد esbuild البناء في وضع المراقبة فقط لكنه لن يقدّم أي شيء. معه، يوصّل الخادم دائماً أحدث حزمة، فلا تحتاج سوى تحديث المتصفح بعد حفظ الملف.</p>
+<p>لاحظ أنه بخلاف خادم التطوير في Vite، لا يدعم esbuild الاستبدال الحار للوحدات. تتطلب التغييرات في شيفرتك المصدرية تحديث المتصفح يدوياً لتسري.</p>
+<p>توضح بساطة واجهة esbuild ما تفعله أداة تجميع الحزم جوهرياً: تأخذ نقطة دخول، وتتبع كل الاستيرادات، وتنتج مخرجاً محسّناً. يبني Vite على هذه الأساس ويضيف طبقة تجربة المطوّر، خادم تطوير، والاستبدال الحار للوحدات، وإعدادات افتراضية معقولة لمشاريع React.</p>
+<p>الآن بعد أن صارت لدينا صورة أوضح عما يتضمنه تجميع الحزم والتحويل جوهرياً، لنعد إلى Vite وننظر في كيفية تهيئته.</p>
+<h3 id="تهيئة-vite">تهيئة Vite</h3>
+<p>لمعظم مشاريع React، يعمل Vite دون أي تهيئة إطلاقاً. لكن عندما تحتاج فعلاً إلى تخصيص السلوك، تعدّل <em>vite.config.js</em> (أو <em>vite.config.ts</em>).</p>
+<p>تبدو تهيئة Vite الدنيا لمشروع React هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>
+<span class="hljs-keyword">import</span> react <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+})
+</code></pre>
+<p>تمكّن إضافة <em>@vitejs/plugin-react</em> تحويل JSX، والتحديث السريع (الاستبدال الحار للوحدات الذي يحافظ على حالة المكوّن)، وميزات أخرى خاصة بـ React.</p>
+<h4 id="تهيئة-خادم-التطوير">تهيئة خادم التطوير</h4>
+<p>يمكنك تهيئة منفذ خادم التطوير وإعدادات أخرى تحت المفتاح <em>server</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>,
+    <span class="hljs-attr">open</span>: <span class="hljs-literal">true</span>,        <span class="hljs-comment">// فتح المتصفح تلقائياً</span>
+  },
+})
+</code></pre>
+<h4 id="تمرير-طلبات-api-عبر-وسيط">تمرير طلبات API عبر وسيط</h4>
+<p>عند التطوير محلياً، يعمل تطبيق React عادةً على منفذ (مثلاً 3000) بينما تعمل الواجهة الخلفية على آخر (مثلاً 3001). ستمنع سياسة الأصل نفسه في المتصفح عادةً الطلبات بينهما. يحل إعداد الوسيط في Vite هذه المشكلة دون الحاجة إلى تهيئة CORS في الواجهة الخلفية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>,
+    <span class="hljs-attr">proxy</span>: {
+      <span class="hljs-string">&#x27;/api&#x27;</span>: {
+        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;http://localhost:3001&#x27;</span>,
+        <span class="hljs-attr">changeOrigin</span>: <span class="hljs-literal">true</span>,
+      },
+    },
+  },
+})
+</code></pre>
+<p>مع هذه التهيئة، يُمرَّر أي طلب يرسله تطبيق React إلى <em>/api/notes</em> تلقائياً إلى <em><a href="http://localhost:3001/api/notes" target="_blank" rel="noopener">http://localhost:3001/api/notes</a></em> بواسطة خادم التطوير في Vite. لا تحتاج شيفرة واجهتك الأمامية أبداً إلى تضمين <em>localhost:3001</em> في عناوين URL أثناء التطوير.</p>
+<h4 id="متغيرات-البيئة">متغيرات البيئة</h4>
+<p>يدعم Vite مدمجاً متغيرات البيئة باستخدام ملفات <em>.env</em>. هذا هو البديل الحديث لحقن الثوابت يدوياً في الحزمة.</p>
+<p>أنشئ ملف <em>.env</em> في جذر المشروع:</p>
+<pre><code>VITE_BACKEND_URL=http://localhost:3001/api/notes
+</code></pre>
+<p>وملف <em>.env.production</em> لقيم الإنتاج:</p>
+<pre><code>VITE_BACKEND_URL=https://myapp.fly.dev/api/notes
+</code></pre>
+<p><strong>مهم:</strong> يجب أن تبدأ كل متغيرات البيئة المكشوفة للمتصفح بالبادئة <em>VITE_</em>. تبقى المتغيرات بدون هذه البادئة على الخادم فقط ولا تُضمَّن في الحزمة. هذا إجراء أمني متعمد لمنع تسريب الأسرار عن غير قصد.</p>
+<p>يمكنك الوصول إلى المتغير في شيفرة تطبيقك عبر <em>import.meta.env</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; {
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">useNotes</span>(<span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">env</span>.<span class="hljs-property">VITE_BACKEND_URL</span>)
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&amp;gt;
+      {notes.<span class="hljs-property">length</span>} notes on server {<span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">env</span>.<span class="hljs-property">VITE_BACKEND_URL</span>}
+    &amp;lt;/div&amp;gt;
+  )
+}
+</code></pre>
+<p>يختار Vite تلقائياً ملف <em>.env</em> الصحيح بناءً على الوضع:</p>
+<ul>
+<li><em>npm run dev</em> يستخدم <em>.env</em> و<em>.env.development</em></li>
+<li><em>npm run build</em> يستخدم <em>.env</em> و<em>.env.production</em></li>
+</ul>
+<p>أضف <em>.env.production</em> إلى <em>.gitignore</em> إذا كان يحتوي قيماً حساسة، واستخدم <em>.env.example</em> لتوثيق المتغيرات المطلوبة.</p>
+<h4 id="التحويل">التحويل</h4>
+<p>يتولى Vite تحويل الشيفرة تلقائياً. أثناء التطوير، يحوّل esbuild ملفات TypeScript وJSX عند الطلب. إنه سريع بما يكفي لفعل ذلك لكل ملف دون تأخير ملحوظ. أثناء عمليات بناء الإنتاج، يتولى Rollup تجميع الحزم بينما يتولى esbuild التحويل.</p>
+<p>الهدف الافتراضي للتحويل في Vite هو المتصفحات الحديثة التي تدعم وحدات ES الأصلية (Chrome 87+، Firefox 78+، Safari 14+، Edge 88+). إذا كنت تحتاج إلى دعم متصفحات أقدم، يمكنك تهيئة الهدف صراحةً وإضافة إضافة <em>@vitejs/plugin-legacy</em>:</p>
+<pre><code class="language-bash">npm install --save-dev @vitejs/plugin-legacy
+</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>
+<span class="hljs-keyword">import</span> react <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react&#x27;</span>
+<span class="hljs-keyword">import</span> legacy <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-legacy&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [
+    <span class="hljs-title function_">react</span>(),
+    <span class="hljs-title function_">legacy</span>({
+      <span class="hljs-attr">targets</span>: [<span class="hljs-string">&#x27;defaults&#x27;</span>, <span class="hljs-string">&#x27;not IE 11&#x27;</span>],
+    }),
+  ],
+})
+</code></pre>
+<p>تنشئ إضافة legacy تلقائياً حزمة منفصلة للمتصفحات الأقدم باستخدام Babel.</p>
+<h4 id="css">CSS</h4>
+<p>يتعامل Vite مع CSS دون أي تهيئة. ما عليك سوى استيراد ملف CSS من JavaScript:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;./index.css&#x27;</span>
+</code></pre>
+<p>سيعالجه Vite ويضمّنه في البناء. في الإنتاج، تُستخرج CSS إلى ملف منفصل. أثناء التطوير، تُحقن عبر وسوم <em>&lt;style&gt;</em> مع دعم إعادة التحميل الحار.</p>
+<p>يدعم Vite أيضاً أصلياً <a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener">وحدات CSS</a> للأنماط محدودة النطاق. يُعامل أي ملف ينتهي بـ <em>.module.css</em> كوحدة CSS:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> styles <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App.module.css&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">App</span> = () =&amp;gt; (
+  &amp;lt;div className={styles.<span class="hljs-property">container</span>}&amp;gt;
+    hello vite
+  &amp;lt;/div&amp;gt;
+)
+</code></pre>
+<p>يمكن إضافة معالجات CSS المسبقة مثل <a href="https://sass-lang.com/" target="_blank" rel="noopener">Sass</a> بمجرد تثبيت المعالج المسبق، دون إضافة أو تهيئة:</p>
+<pre><code class="language-bash">npm install --save-dev sass
+</code></pre>
+<p>بعد ذلك، تعمل ملفات <em>.scss</em> تلقائياً.</p>
+<h4 id="التصغير">التصغير</h4>
+<p>عند تشغيل <em>npm run build</em>، يصغّر Vite المخرجات. يزيل التصغير المسافات البيضاء والتعليقات، ويقصّر أسماء المتغيرات، ويطبق تحسينات أخرى للحجم. النتيجة ملف أصغر بكثير يُحمَّل أسرع في المتصفح.</p>
+<p>يستخدم Vite أداة esbuild لتصغير JavaScript ومصغّر CSS مدمجاً لأوراق الأنماط.</p>
+<h4 id="خرائط-المصدر">خرائط المصدر</h4>
+<p>تسمح خرائط المصدر لأدوات مطوّري المتصفح بإرجاع الأخطاء ونقاط التوقف إلى شيفرتك المصدرية الأصلية بدلاً من الحزمة المصغّرة. بدونها، يصبح تتبّع مكدس يشير إلى السطر 1 من <em>main.js</em> شبه عديم الفائدة لتصحيح الأخطاء.</p>
+<p>في التطوير، يولّد Vite خرائط المصدر تلقائياً. لعمليات بناء الإنتاج، يمكنك تمكينها صراحةً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>()],
+  <span class="hljs-attr">build</span>: {
+    <span class="hljs-attr">sourcemap</span>: <span class="hljs-literal">true</span>,
+  },
+})
+</code></pre>
+<p>لاحظ أن خرائط مصدر الإنتاج تزيد وقت البناء وتكشف شيفرتك المصدرية لأي شخص ينظر إلى تبويب الشبكة. في كثير من الحالات يكون من الأفضل رفع خرائط المصدر إلى خدمة مراقبة الأخطاء (مثل Sentry) وإبقاؤها خارج الخادم العام.</p>
+<h4 id="الإضافات">الإضافات</h4>
+<p>تُوسَّع وظائف Vite عبر <a href="https://vite.dev/plugins/" target="_blank" rel="noopener">الإضافات</a>. نما نظام الإضافات البيئي بسرعة ويغطي معظم الاحتياجات الشائعة. من الإضافات المستخدمة على نطاق واسع:</p>
+<ul>
+<li><em>@vitejs/plugin-react</em> — دعم React (JSX، التحديث السريع)</li>
+<li><em>@vitejs/plugin-legacy</em> — دعم المتصفحات القديمة</li>
+<li><em>vite-plugin-svgr</em> — استيراد ملفات SVG كمكوّنات React</li>
+<li><em>rollup-plugin-visualizer</em> — تحليل حجم الحزمة</li>
+</ul>
+<p>تُحدَّد الإضافات في مصفوفة <em>plugins</em> في <em>vite.config.js</em>. وهي تتبع الواجهة نفسها التي تتبعها إضافات Rollup، لذا تعمل كثير من إضافات Rollup أيضاً مع Vite.</p>
+<h4 id="الحشوات-التعويضية">الحشوات التعويضية</h4>
+<p>الحشوة التعويضية (polyfill) هي شيفرة تنفّذ ميزة للمتصفحات التي لا تدعمها أصلياً. لا يكفي التحويل وحده للميزات الصحيحة نحوياً لكن غير المنفَّذة. مثلاً، قد يحلل متصفح أقدم <em>Promise</em> بشكل صحيح لكن ليس لديه تنفيذ له.</p>
+<p>مع Vite، تتولى الإضافة <em>@vitejs/plugin-legacy</em> الحشوات التعويضية، إذ تضمّن تلقائياً الحشوات اللازمة بناءً على أهداف المتصفحات لديك. إذا احتجت حشوة تعويضية محددة دون إضافة legacy، يمكنك تثبيتها مباشرة واستيرادها في أعلى ملف الدخول.</p>
+<p>يمكنك التحقق من دعم المتصفحات لواجهات API محددة على <a href="https://caniuse.com/" target="_blank" rel="noopener">https://caniuse.com</a> أو <a href="https://developer.mozilla.org/" target="_blank" rel="noopener">توثيق MDN من Mozilla</a>.</p>
+<!----></div> <div class="prev-next"><!--[0--><a class="prev" href="../../part7/more_about_react_hooks"><span class="prev-next__label">الفصل السابق</span> <span class="prev-next__title">المزيد عن خطافات React</span></a><!--]--> <!--[0--><a class="next" href="../../part7/miscellaneous"><span class="prev-next__label">الفصل التالي</span> <span class="prev-next__title">مواضيع متنوعة</span></a><!--]--></div></article></div></div><!--]--><!----></main> <footer class="site-footer"><div class="container site-footer__inner"><div><p class="site-footer__title">Full Stack open - النسخة العربية</p> <p class="site-footer__text">مادة الدورة الأصلية من إعداد جامعة هلسنكي وHouston Inc.، ومرخّصة بموجب
+          رخصة <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons BY-NC-SA 3.0</a>.</p></div> <nav class="site-footer__nav"><a href="../../about">عن الدورة</a> <a href="../../faq">الأسئلة الشائعة</a> <a href="../../companies">الشركاء</a> <a href="../../challenge">التحدي</a> <a href="../../search">البحث</a></nav></div></footer></div><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_152phen = {
+						base: new URL("../..", location).pathname.slice(0, -1),
+						assets: "/fullstack-open-ar"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../_app/immutable/entry/start.BN4XSYV_.js"),
+						import("../../_app/immutable/entry/app.BFO8kdbn.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 8],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

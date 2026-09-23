@@ -1,0 +1,572 @@
+const t=4,c="a",s="part4a.md",n="بنية تطبيق الخادم ومقدمة في الاختبار",a="structure_of_backend_application_introduction_to_testing",p="/images/part-4.svg",l=[{depth:3,id:"بنية-المشروع",text:"بنية المشروع"},{depth:3,id:"ملاحظة-عن-التصدير",text:"ملاحظة عن التصدير"},{depth:3,id:"تمارين-41-42",text:"تمارين 4.1.-4.2."},{depth:3,id:"اختبار-تطبيقات-node",text:"اختبار تطبيقات Node"},{depth:3,id:"تمارين-43-47",text:"تمارين 4.3.-4.7."}],e=`<div class="content">
+<p>لنواصل عملنا على الواجهة الخلفية لتطبيق الملاحظات الذي بدأناه في <a href="/part3">الجزء 3</a>.</p>
+<h3 id="بنية-المشروع">بنية المشروع</h3>
+<p><strong>ملاحظة</strong>: كُتبت مادة هذا المقرر باستخدام الإصدار v22.3.0 من Node.js. تأكد من أن إصدار Node لديك حديث على الأقل بقدر الإصدار المستخدم في المادة (يمكنك التحقق من الإصدار بتشغيل <em>node -v</em> في سطر الأوامر).</p>
+<p>قبل أن ننتقل إلى موضوع الاختبار، سنعدّل بنية مشروعنا ليلتزم بأفضل ممارسات Node.js.</p>
+<p>بعد إجراء التغييرات على بنية مجلدات مشروعنا، سننتهي بالبنية التالية:</p>
+<pre><code class="language-bash">├── controllers
+│   └── notes.js
+├── dist
+│   └── ...
+├── models
+│   └── note.js
+├── utils
+│   ├── config.js
+│   ├── logger.js
+│   └── middleware.js  
+├── app.js
+├── index.js
+├── package-lock.json
+├── package.json
+</code></pre>
+<p>حتى الآن كنا نستخدم <i>console.log</i> و<i>console.error</i> لطباعة معلومات مختلفة من الشيفرة.
+لكن هذه ليست طريقة جيدة جداً لفعل الأشياء.
+لنفصل كل الطباعة إلى وحدة التحكم في وحدتها الخاصة <i>utils/logger.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">info</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(...params)
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">error</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(...params)
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = { info, error }
+</code></pre>
+<p>يحتوي المسجِّل على دالتين، <strong>info</strong> لطباعة رسائل السجل العادية، و__error__ لجميع رسائل الأخطاء.</p>
+<p>استخراج التسجيل إلى وحدته الخاصة فكرة جيدة من عدة نواحٍ. لو أردنا البدء بكتابة السجلات في ملف أو إرسالها إلى خدمة تسجيل خارجية مثل <a href="https://www.graylog.org/">graylog</a> أو <a href="https://papertrailapp.com">papertrail</a> لما كان علينا سوى إجراء التغييرات في مكان واحد.</p>
+<p>نُقلت معالجة متغيرات البيئة إلى ملف منفصل <i>utils/config.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dotenv&#x27;</span>).<span class="hljs-title function_">config</span>()
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">PORT</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MONGODB_URI</span> = process.<span class="hljs-property">env</span>.<span class="hljs-property">MONGODB_URI</span>
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = { <span class="hljs-variable constant_">MONGODB_URI</span>, <span class="hljs-variable constant_">PORT</span> }
+</code></pre>
+<p>يمكن لأجزاء التطبيق الأخرى الوصول إلى متغيرات البيئة باستيراد وحدة الإعدادات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/config&#x27;</span>)
+
+logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">\`Server running on port <span class="hljs-subst">\${config.PORT}</span>\`</span>)
+</code></pre>
+<p>نُقلت معالجات المسارات أيضاً إلى وحدة مخصصة. يُشار عادةً إلى معالجات أحداث المسارات باسم <i>controllers</i>، ولهذا السبب أنشأنا مجلد <i>controllers</i> جديداً. جميع المسارات المتعلقة بالملاحظات موجودة الآن في وحدة <i>notes.js</i> داخل مجلد <i>controllers</i>.</p>
+<p>محتويات وحدة <i>notes.js</i> هي التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>).<span class="hljs-title class_">Router</span>()
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+
+notesRouter.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">notes</span> =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(notes)
+  })
+})
+
+notesRouter.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (note) {
+        response.<span class="hljs-title function_">json</span>(note)
+      } <span class="hljs-keyword">else</span> {
+        response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+
+notesRouter.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> body = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Note</span>({
+    <span class="hljs-attr">content</span>: body.<span class="hljs-property">content</span>,
+    <span class="hljs-attr">important</span>: body.<span class="hljs-property">important</span> || <span class="hljs-literal">false</span>,
+  })
+
+  note.<span class="hljs-title function_">save</span>()
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">savedNote</span> =&gt;</span> {
+      response.<span class="hljs-title function_">json</span>(savedNote)
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+
+notesRouter.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findByIdAndDelete</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+      response.<span class="hljs-title function_">status</span>(<span class="hljs-number">204</span>).<span class="hljs-title function_">end</span>()
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+
+notesRouter.<span class="hljs-title function_">put</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { content, important } = request.<span class="hljs-property">body</span>
+
+  <span class="hljs-title class_">Note</span>.<span class="hljs-title function_">findById</span>(request.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">note</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!note) {
+        <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">end</span>()
+      }
+
+      note.<span class="hljs-property">content</span> = content
+      note.<span class="hljs-property">important</span> = important
+
+      <span class="hljs-keyword">return</span> note.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">updatedNote</span>) =&gt;</span> {
+        response.<span class="hljs-title function_">json</span>(updatedNote)
+      })
+    })
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">next</span>(error))
+})
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = notesRouter
+</code></pre>
+<p>هذا نسخ ولصق شبه حرفي لملف <i>index.js</i> السابق لدينا.</p>
+<p>لكن هناك بعض التغييرات المهمة. في بداية الملف تماماً ننشئ كائن <a href="http://expressjs.com/en/api.html#router">موجّه</a> (router) جديداً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>).<span class="hljs-title class_">Router</span>()
+
+<span class="hljs-comment">//...</span>
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = notesRouter
+</code></pre>
+<p>تصدّر الوحدة الموجّه ليكون متاحاً لجميع مستهلكي الوحدة.</p>
+<p>تُعرَّف جميع المسارات الآن لكائن الموجّه، على غرار ما كان يُفعل سابقاً مع الكائن الذي يمثل التطبيق بأكمله.</p>
+<p>تجدر الإشارة إلى أن المسارات في معالجات المسارات قد اختُصرت. في النسخة السابقة، كان لدينا:</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;/api/notes/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+</code></pre>
+<p>وفي النسخة الحالية، لدينا:</p>
+<pre><code class="language-js">notesRouter.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response, next</span>) =&gt;</span> {
+</code></pre>
+<p>إذن ما هي كائنات الموجّه هذه بالضبط؟ يقدم دليل Express التفسير التالي:</p>
+<blockquote>
+<p><i>كائن الموجّه هو نسخة معزولة من الوسيط والمسارات. يمكنك التفكير فيه كـ«تطبيق مصغّر»، قادر فقط على أداء وظائف الوسيط والتوجيه. كل تطبيق Express لديه موجّه تطبيق مدمج.</i></p>
+</blockquote>
+<p>الموجّه في الواقع <i>وسيط</i> (middleware)، يمكن استخدامه لتعريف «المسارات المرتبطة» في مكان واحد، ويوضع عادةً في وحدته الخاصة.</p>
+<p>ملف <i>app.js</i> الذي ينشئ التطبيق الفعلي يستخدم الموجّه كما هو موضح أدناه:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./controllers/notes&#x27;</span>)
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, notesRouter)
+</code></pre>
+<p>يُستخدم الموجّه الذي عرّفناه سابقاً <i>إذا</i> بدأ عنوان URL للطلب بـ <i>/api/notes</i>. لهذا السبب، يجب أن يعرّف كائن notesRouter الأجزاء النسبية من المسارات فقط، أي المسار الفارغ <i>/</i> أو المعامل <i>/:id</i> فقط.</p>
+<p>أُنشئ ملف يعرّف التطبيق، <i>app.js</i>، في جذر المستودع:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>)
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+<span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/config&#x27;</span>)
+<span class="hljs-keyword">const</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/logger&#x27;</span>)
+<span class="hljs-keyword">const</span> middleware = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/middleware&#x27;</span>)
+<span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./controllers/notes&#x27;</span>)
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+
+logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;connecting to&#x27;</span>, config.<span class="hljs-property">MONGODB_URI</span>)
+
+mongoose
+  .<span class="hljs-title function_">connect</span>(config.<span class="hljs-property">MONGODB_URI</span>, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+    logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;connected to MongoDB&#x27;</span>)
+  })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+    logger.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;error connection to MongoDB:&#x27;</span>, error.<span class="hljs-property">message</span>)
+  })
+
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">static</span>(<span class="hljs-string">&#x27;dist&#x27;</span>))
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>())
+app.<span class="hljs-title function_">use</span>(middleware.<span class="hljs-property">requestLogger</span>)
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, notesRouter)
+
+app.<span class="hljs-title function_">use</span>(middleware.<span class="hljs-property">unknownEndpoint</span>)
+app.<span class="hljs-title function_">use</span>(middleware.<span class="hljs-property">errorHandler</span>)
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = app
+</code></pre>
+<p>يستخدم الملف وسائط مختلفة، وأحدها <i>notesRouter</i> المرتبط بالمسار <i>/api/notes</i>.</p>
+<p>نُقل الوسيط المخصص لدينا إلى وحدة جديدة <i>utils/middleware.js</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./logger&#x27;</span>)
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">requestLogger</span> = (<span class="hljs-params">request, response, next</span>) =&gt; {
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;Method:&#x27;</span>, request.<span class="hljs-property">method</span>)
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;Path:  &#x27;</span>, request.<span class="hljs-property">path</span>)
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;Body:  &#x27;</span>, request.<span class="hljs-property">body</span>)
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;---&#x27;</span>)
+  <span class="hljs-title function_">next</span>()
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">unknownEndpoint</span> = (<span class="hljs-params">request, response</span>) =&gt; {
+  response.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;unknown endpoint&#x27;</span> })
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">errorHandler</span> = (<span class="hljs-params">error, request, response, next</span>) =&gt; {
+  logger.<span class="hljs-title function_">error</span>(error.<span class="hljs-property">message</span>)
+
+  <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;CastError&#x27;</span>) {
+    <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">send</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;malformatted id&#x27;</span> })
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;ValidationError&#x27;</span>) {
+    <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">json</span>({ <span class="hljs-attr">error</span>: error.<span class="hljs-property">message</span> })
+  }
+
+  <span class="hljs-title function_">next</span>(error)
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler
+}
+</code></pre>
+<p>أُسندت مسؤولية إنشاء الاتصال بقاعدة البيانات إلى وحدة <i>app.js</i>. ملف <i>note.js</i> داخل مجلد <i>models</i> يعرّف فقط مخطط Mongoose للملاحظات.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+
+<span class="hljs-keyword">const</span> noteSchema = <span class="hljs-keyword">new</span> mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">content</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">minlength</span>: <span class="hljs-number">5</span>
+  },
+  <span class="hljs-attr">important</span>: <span class="hljs-title class_">Boolean</span>,
+})
+
+noteSchema.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;toJSON&#x27;</span>, {
+  <span class="hljs-attr">transform</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-variable language_">document</span>, returnedObject</span>) =&gt;</span> {
+    returnedObject.<span class="hljs-property">id</span> = returnedObject.<span class="hljs-property">_id</span>.<span class="hljs-title function_">toString</span>()
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">_id</span>
+    <span class="hljs-keyword">delete</span> returnedObject.<span class="hljs-property">__v</span>
+  }
+})
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Note&#x27;</span>, noteSchema)
+</code></pre>
+<p>تُبسَّط محتويات ملف <i>index.js</i> المستخدم لتشغيل التطبيق كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./app&#x27;</span>) <span class="hljs-comment">// تطبيق Express الفعلي</span>
+<span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/config&#x27;</span>)
+<span class="hljs-keyword">const</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/logger&#x27;</span>)
+
+app.<span class="hljs-title function_">listen</span>(config.<span class="hljs-property">PORT</span>, <span class="hljs-function">() =&gt;</span> {
+  logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">\`Server running on port <span class="hljs-subst">\${config.PORT}</span>\`</span>)
+})
+</code></pre>
+<p>يستورد ملف <i>index.js</i> التطبيق الفعلي فقط من ملف <i>app.js</i> ثم يشغّل التطبيق. تُستخدم دالة <em>info</em> في وحدة المسجِّل للطباعة في وحدة التحكم التي تخبر بأن التطبيق يعمل.</p>
+<p>الآن أصبح تطبيق Express والشيفرة التي تعتني بخادم الويب منفصلين عن بعضهما باتباع <a href="https://dev.to/nermineslimane/always-separate-app-and-server-files--1nc7">أفضل</a> الممارسات. إحدى مزايا هذه الطريقة أن التطبيق يمكن اختباره الآن على مستوى استدعاءات HTTP API دون إجراء استدعاءات فعلياً عبر HTTP على الشبكة، وهذا يجعل تنفيذ الاختبارات أسرع.</p>
+<p>باختصار، تبدو بنية المجلدات هكذا بعد إجراء التغييرات:</p>
+<pre><code class="language-bash">├── controllers
+│   └── notes.js
+├── dist
+│   └── ...
+├── models
+│   └── note.js
+├── utils
+│   ├── config.js
+│   ├── logger.js
+│   └── middleware.js  
+├── app.js
+├── index.js
+├── package-lock.json
+├── package.json
+</code></pre>
+<p>بالنسبة للتطبيقات الأصغر، لا تهم البنية كثيراً. عندما يبدأ التطبيق بالنمو في الحجم، سيتعين عليك إنشاء نوع من البنية وفصل مسؤوليات التطبيق المختلفة في وحدات منفصلة. سيجعل هذا تطوير التطبيق أسهل بكثير.</p>
+<p>لا توجد بنية مجلدات صارمة أو اصطلاح تسمية ملفات مطلوب لتطبيقات Express. في المقابل، يتطلب Ruby on Rails بنية محددة. بنيتنا الحالية تتبع ببساطة بعض أفضل الممارسات التي قد تصادفها على الإنترنت.</p>
+<p>يمكنك العثور على شيفرة تطبيقنا الحالي كاملة في فرع <i>part4-1</i> من <a href="https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-1">مستودع GitHub هذا</a>.</p>
+<p>إذا استنسخت المشروع لنفسك، شغّل الأمر <em>npm install</em> قبل تشغيل التطبيق بـ <em>npm run dev</em>.</p>
+<h3 id="ملاحظة-عن-التصدير">ملاحظة عن التصدير</h3>
+<p>استخدمنا نوعين مختلفين من التصدير في هذا الجزء. أولاً، مثلاً، يقوم ملف <i>utils/logger.js</i> بالتصدير كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">info</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(...params)
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">error</span> = (<span class="hljs-params">...params</span>) =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(...params)
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = { info, error } <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>يصدّر الملف <i>كائناً</i> له حقلان، وكلاهما دالتان. يمكن استخدام الدالتين بطريقتين مختلفتين. الخيار الأول هو طلب الكائن بأكمله والإشارة إلى الدوال عبر الكائن باستخدام الترميز النقطي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/logger&#x27;</span>)
+
+logger.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;message&#x27;</span>)
+
+logger.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;error message&#x27;</span>)
+</code></pre>
+<p>الخيار الآخر هو تفكيك الدوال إلى متغيراتها الخاصة في عبارة <i>require</i>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { info, error } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./utils/logger&#x27;</span>)
+
+<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;message&#x27;</span>)
+<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;error message&#x27;</span>)
+</code></pre>
+<p>قد تكون طريقة التصدير الثانية مفضلة إذا كان جزء صغير فقط من الدوال المصدَّرة يُستخدم في ملف.</p>
+<p>لكن في بعض الحالات، يُصدَّر «شيء» واحد فقط. على سبيل المثال، يصدّر <i>controller/notes.js</i> «شيئاً» واحداً هكذا:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>).<span class="hljs-title class_">Router</span>()
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Note</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../models/note&#x27;</span>)
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = notesRouter <span class="hljs-comment">// highlight-line</span>
+</code></pre>
+<p>لأن «شيئاً» واحداً فقط يُصدَّر، يمكن استيراده واستخدامه فقط ككائن واحد:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> notesRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./controllers/notes&#x27;</span>)
+
+<span class="hljs-comment">// ...</span>
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/api/notes&#x27;</span>, notesRouter)
+</code></pre>
+<p>الآن، يُسند «الشيء» المصدَّر (في هذه الحالة، كائن موجّه) إلى متغير <em>notesRouter</em> ويُستخدم ككائن واحد.</p>
+<h4 id="إيجاد-استخدامات-صادراتك-باستخدام-vs-code">إيجاد استخدامات صادراتك باستخدام VS Code</h4>
+<p>يمتلك VS Code ميزة عملية تتيح لك رؤية أين صُدِّرت وحداتك. يمكن أن يكون هذا مفيداً جداً لإعادة الهيكلة. على سبيل المثال، إذا قررت تقسيم دالة إلى دالتين منفصلتين، فقد تتعطل شيفرتك إذا لم تعدّل جميع الاستخدامات. يصعب ذلك إذا كنت لا تعرف أين توجد. لكن عليك تعريف صادراتك بطريقة معينة ليعمل هذا.</p>
+<p>إذا نقرت بزر الفأرة الأيمن على متغير في الموضع الذي صُدِّر منه واخترت «Find All References»، فسيعرض لك كل مكان يُستورد فيه المتغير. لكن إذا أسندت كائناً مباشرةً إلى module.exports، فلن يعمل ذلك. الحل البديل هو إسناد الكائن الذي تريد تصديره إلى متغير مسمّى ثم تصدير المتغير المسمّى. لن يعمل أيضاً إذا فككت عند الاستيراد؛ عليك استيراد المتغير المسمّى ثم التفكيك، أو استخدام الترميز النقطي فقط لاستخدام الدوال الموجودة في المتغير المسمّى.</p>
+<p>تأثير طبيعة VS Code على طريقة كتابتك للشيفرة ليس مثالياً على الأرجح، لذا عليك أن تقرر بنفسك إن كانت المقايضة تستحق العناء.</p>
+</div>
+<div class="tasks">
+<h3 id="تمارين-41-42">تمارين 4.1.-4.2.</h3>
+<p><strong>ملاحظة</strong>: كُتبت مادة هذا المقرر باستخدام الإصدار v22.3.0 من Node.js. تأكد من أن إصدار Node لديك حديث على الأقل بقدر الإصدار المستخدم في المادة (يمكنك التحقق من الإصدار بتشغيل <em>node -v</em> في سطر الأوامر).</p>
+<p>في تمارين هذا الجزء، سنبني <i>تطبيق قائمة المدونات</i>، يتيح للمستخدمين حفظ معلومات عن مدونات مثيرة للاهتمام صادفوها على الإنترنت. لكل مدونة مدرجة سنحفظ المؤلف والعنوان وURL وعدد التصويتات الإيجابية (upvotes) من مستخدمي التطبيق.</p>
+<h4 id="41-قائمة-المدونات-الخطوة-1">4.1 قائمة المدونات، الخطوة 1</h4>
+<p>لنتخيل موقفاً تستقبل فيه بريداً إلكترونياً يحتوي على جسم التطبيق والتعليمات التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>)
+<span class="hljs-keyword">const</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;mongoose&#x27;</span>)
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>()
+
+<span class="hljs-keyword">const</span> blogSchema = mongoose.<span class="hljs-title class_">Schema</span>({
+  <span class="hljs-attr">title</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">author</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">url</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">likes</span>: <span class="hljs-title class_">Number</span>,
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Blog</span> = mongoose.<span class="hljs-title function_">model</span>(<span class="hljs-string">&#x27;Blog&#x27;</span>, blogSchema)
+
+<span class="hljs-keyword">const</span> mongoUrl = <span class="hljs-string">&#x27;mongodb://localhost/bloglist&#x27;</span>
+mongoose.<span class="hljs-title function_">connect</span>(mongoUrl, { <span class="hljs-attr">family</span>: <span class="hljs-number">4</span> })
+
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">json</span>())
+
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/blogs&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-title class_">Blog</span>.<span class="hljs-title function_">find</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">blogs</span>) =&gt;</span> {
+    response.<span class="hljs-title function_">json</span>(blogs)
+  })
+})
+
+app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/blogs&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> blog = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Blog</span>(request.<span class="hljs-property">body</span>)
+
+  blog.<span class="hljs-title function_">save</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> {
+    response.<span class="hljs-title function_">status</span>(<span class="hljs-number">201</span>).<span class="hljs-title function_">json</span>(result)
+  })
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = <span class="hljs-number">3003</span>
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`Server running on port <span class="hljs-subst">\${PORT}</span>\`</span>)
+})
+</code></pre>
+<p>حوّل التطبيق إلى مشروع <i>npm</i> فعّال. للحفاظ على إنتاجية تطويرك، اضبط التطبيق ليُنفَّذ بـ <i>node --watch</i>. يمكنك إنشاء قاعدة بيانات جديدة لتطبيقك باستخدام MongoDB Atlas، أو استخدام قاعدة البيانات نفسها من تمارين الجزء السابق.</p>
+<p>تحقق من إمكانية إضافة مدونات إلى القائمة باستخدام Postman أو عميل REST في VS Code، ومن أن التطبيق يعيد المدونات المضافة عند نقطة النهاية الصحيحة.</p>
+<h4 id="42-قائمة-المدونات-الخطوة-2">4.2 قائمة المدونات، الخطوة 2</h4>
+<p>أعد هيكلة التطبيق إلى وحدات منفصلة كما هو موضح سابقاً في هذا الجزء من مادة المقرر.</p>
+<p><strong>ملاحظة</strong> أعد هيكلة تطبيقك بخطوات صغيرة وتحقق من أنه يعمل بعد كل تغيير تجريه. إذا حاولت أخذ «طريق مختصر» بإعادة هيكلة أشياء كثيرة دفعة واحدة، فسيدخل <a href="https://en.wikipedia.org/wiki/Murphy%27s_law">قانون مورفي</a> حيز التنفيذ ويكاد يكون مؤكداً أن شيئاً ما سيتعطل في تطبيقك. سينتهي «الطريق المختصر» بمستغرق وقت أطول من التقدم ببطء وبمنهجية.</p>
+<p>من أفضل الممارسات أن تعمل commit لشيفرتك كلما كانت في حالة مستقرة. يسهّل هذا الرجوع إلى حالة كان التطبيق فيها ما يزال يعمل.</p>
+<p>إذا واجهت مشكلات مع كون <i>content.body</i> قيمته <i>undefined</i> بلا سبب ظاهر، فتأكد من أنك لم تنسَ إضافة <i>app.use(express.json())</i> قرب أعلى الملف.</p>
+</div>
+<div class="content">
+<h3 id="اختبار-تطبيقات-node">اختبار تطبيقات Node</h3>
+<p>أهملنا تماماً مجالاً أساسياً من تطوير البرمجيات، ألا وهو الاختبار الآلي.</p>
+<p>لنبدأ رحلتنا في الاختبار بالنظر إلى اختبارات الوحدة. منطق تطبيقنا بسيط جداً لدرجة أنه لا يوجد الكثير مما يستحق اختباره باختبارات الوحدة. لننشئ ملفاً جديداً <i>utils/for_testing.js</i> ونكتب دالتين بسيطتين يمكننا استخدامهما للتدرب على كتابة الاختبارات:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">reverse</span> = (<span class="hljs-params">string</span>) =&gt; {
+  <span class="hljs-keyword">return</span> string
+    .<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+    .<span class="hljs-title function_">reverse</span>()
+    .<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">average</span> = (<span class="hljs-params">array</span>) =&gt; {
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">reducer</span> = (<span class="hljs-params">sum, item</span>) =&gt; {
+    <span class="hljs-keyword">return</span> sum + item
+  }
+
+  <span class="hljs-keyword">return</span> array.<span class="hljs-title function_">reduce</span>(reducer, <span class="hljs-number">0</span>) / array.<span class="hljs-property">length</span>
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  reverse,
+  average,
+}
+</code></pre>
+<blockquote>
+<p>تستخدم دالة <em>average</em> طريقة <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">reduce</a> الخاصة بالمصفوفات. إذا لم تكن الطريقة مألوفة لك بعد، فهذا وقت مناسب لمشاهدة الفيديوهات الثلاثة الأولى من سلسلة <a href="https://www.youtube.com/watch?v=BMUiFMZr7vk&amp;list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84">Functional JavaScript</a> على YouTube.</p>
+</blockquote>
+<p>يتوفر عدد كبير من مكتبات الاختبار، أو <i>مشغّلات الاختبار</i>، لـ JavaScript.
+ملك مكتبات الاختبار القديم هو <a href="https://mochajs.org/">Mocha</a>، الذي حلّ محله قبل بضع سنوات <a href="https://jestjs.io/">Jest</a>. ومن الوافدين الجدد إلى المكتبات <a href="https://vitest.dev/">Vitest</a>، الذي يقدّم نفسه كجيل جديد من مكتبات الاختبار.</p>
+<p>في الوقت الحاضر، لدى Node أيضاً مكتبة اختبار مدمجة <a href="https://nodejs.org/docs/latest/api/test.html">node:test</a>، وهي مناسبة تماماً لاحتياجات المقرر.</p>
+<p>لنعرّف <i>سكربت npm باسم <em>test</em></i> لتنفيذ الاختبارات:</p>
+<pre><code class="language-js">{
+  <span class="hljs-comment">// ...</span>
+  <span class="hljs-string">&quot;scripts&quot;</span>: {
+    <span class="hljs-string">&quot;start&quot;</span>: <span class="hljs-string">&quot;node index.js&quot;</span>,
+    <span class="hljs-string">&quot;dev&quot;</span>: <span class="hljs-string">&quot;node --watch index.js&quot;</span>,
+    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;node --test&quot;</span>, <span class="hljs-comment">// highlight-line</span>
+    <span class="hljs-string">&quot;lint&quot;</span>: <span class="hljs-string">&quot;eslint .&quot;</span>
+  },
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>لننشئ مجلداً منفصلاً لاختباراتنا باسم <i>tests</i> وننشئ ملفاً جديداً باسم <i>reverse.test.js</i> بالمحتويات التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+
+<span class="hljs-keyword">const</span> reverse = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../utils/for_testing&#x27;</span>).<span class="hljs-property">reverse</span>
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;reverse of a&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;a&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-string">&#x27;a&#x27;</span>)
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;reverse of react&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;react&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-string">&#x27;tcaer&#x27;</span>)
+})
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;reverse of saippuakauppias&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;saippuakauppias&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-string">&#x27;saippuakauppias&#x27;</span>)
+})
+</code></pre>
+<p>يُعرِّف الاختبار الكلمة المفتاحية <em>test</em> والمكتبة <a href="https://nodejs.org/docs/latest/api/assert.html">assert</a>، التي تستخدمها الاختبارات للتحقق من نتائج الدوال قيد الاختبار.</p>
+<p>في السطر التالي، يستورد ملف الاختبار الدالة المطلوب اختبارها ويسندها إلى متغير اسمه <em>reverse</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> reverse = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../utils/for_testing&#x27;</span>).<span class="hljs-property">reverse</span>
+</code></pre>
+<p>تُعرَّف حالات الاختبار الفردية بدالة <em>test</em>. الوسيط الأول للدالة هو وصف الاختبار كنص. الوسيط الثاني هو <i>دالة</i> تعرّف الوظيفة الخاصة بحالة الاختبار. تبدو وظيفة حالة الاختبار الثانية هكذا:</p>
+<pre><code class="language-js">() =&gt; {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;react&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-string">&#x27;tcaer&#x27;</span>)
+}
+</code></pre>
+<p>أولاً، ننفذ الشيفرة المطلوب اختبارها، أي نولّد عكس النص <i>react</i>. بعد ذلك، نتحقق من النتائج بالطريقة <a href="https://nodejs.org/docs/latest/api/assert.html#assertstrictequalactual-expected-message">strictEqual</a> من مكتبة <a href="https://nodejs.org/docs/latest/api/assert.html">assert</a>.</p>
+<p>كما هو متوقع، تنجح جميع الاختبارات:</p>
+<p><img src="/images/content/4/1new.webp" alt="مخرجات الطرفية من npm test مع نجاح جميع الاختبارات"></p>
+<p>في المقرر، نتبع الاصطلاح الذي تنتهي فيه أسماء ملفات الاختبار بـ <i>.test.js</i>، لأن مكتبة الاختبار <i>node:test</i> تنفذ تلقائياً ملفات الاختبار المسماة بهذه الطريقة.</p>
+<p>لنُعطّل الاختبار:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;reverse of react&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reverse</span>(<span class="hljs-string">&#x27;react&#x27;</span>)
+
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-string">&#x27;tkaer&#x27;</span>)
+})
+</code></pre>
+<p>يؤدي تشغيل هذا الاختبار إلى رسالة الخطأ التالية:</p>
+<p><img src="/images/content/4/2new.webp" alt="مخرجات الطرفية تُظهر فشلاً من npm test"></p>
+<p>لنضف بعض الاختبارات لدالة average أيضاً. لننشئ ملفاً جديداً <i>tests/average.test.js</i> ونضف إليه المحتوى التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+
+<span class="hljs-keyword">const</span> average = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../utils/for_testing&#x27;</span>).<span class="hljs-property">average</span>
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;average&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;of one value is the value itself&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    assert.<span class="hljs-title function_">strictEqual</span>(<span class="hljs-title function_">average</span>([<span class="hljs-number">1</span>]), <span class="hljs-number">1</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;of many is calculated right&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    assert.<span class="hljs-title function_">strictEqual</span>(<span class="hljs-title function_">average</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]), <span class="hljs-number">3.5</span>)
+  })
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;of empty array is zero&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    assert.<span class="hljs-title function_">strictEqual</span>(<span class="hljs-title function_">average</span>([]), <span class="hljs-number">0</span>)
+  })
+})
+</code></pre>
+<p>يكشف الاختبار أن الدالة لا تعمل بشكل صحيح مع مصفوفة فارغة (السبب أن القسمة على صفر في JavaScript تنتج <i>NaN</i>):</p>
+<p><img src="/images/content/4/3new.webp" alt="مخرجات الطرفية تُظهر فشل المصفوفة الفارغة"></p>
+<p>إصلاح الدالة سهل جداً:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">average</span> = array =&gt; {
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">reducer</span> = (<span class="hljs-params">sum, item</span>) =&gt; {
+    <span class="hljs-keyword">return</span> sum + item
+  }
+
+  <span class="hljs-keyword">return</span> array.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>
+    ? <span class="hljs-number">0</span>
+    : array.<span class="hljs-title function_">reduce</span>(reducer, <span class="hljs-number">0</span>) / array.<span class="hljs-property">length</span>
+}
+</code></pre>
+<p>إذا كان طول المصفوفة 0 فإننا نعيد 0، وفي جميع الحالات الأخرى نستخدم طريقة <em>reduce</em> لحساب المتوسط.</p>
+<p>هناك بعض الأمور التي تجدر ملاحظتها بشأن الاختبارات التي كتبناها للتو. عرّفنا كتلة <i>describe</i> حول الاختبارات التي أُعطي لها الاسم <em>average</em>:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;average&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// الاختبارات</span>
+})
+</code></pre>
+<p>يمكن استخدام كتل describe لتجميع الاختبارات في مجموعات منطقية. يستخدم مخرج الاختبار أيضاً اسم كتلة describe:</p>
+<p><img src="/images/content/4/4new.webp" alt="لقطة شاشة لـ npm test تُظهر كتل describe"></p>
+<p>كما سنرى لاحقاً، تكون كتل <i>describe</i> ضرورية عندما نريد تنفيذ بعض عمليات الإعداد أو التفكيك المشتركة لمجموعة من الاختبارات.</p>
+<p>أمر آخر جدير بالملاحظة أننا كتبنا الاختبارات بطريقة مختصرة جداً، دون إسناد مخرجات الدالة قيد الاختبار إلى متغير:</p>
+<pre><code class="language-js"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;of empty array is zero&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  assert.<span class="hljs-title function_">strictEqual</span>(<span class="hljs-title function_">average</span>([]), <span class="hljs-number">0</span>)
+})
+</code></pre>
+</div>
+<div class="tasks">
+<h3 id="تمارين-43-47">تمارين 4.3.-4.7.</h3>
+<p>لننشئ مجموعة من الدوال المساعدة الأنسب للعمل مع أقسام describe في قائمة المدونات. أنشئ الدوال في ملف باسم <i>utils/list_helper.js</i>. اكتب اختباراتك في ملف اختبار باسم مناسب داخل مجلد <i>tests</i>.</p>
+<h4 id="43-الدوال-المساعدة-واختبارات-الوحدة-الخطوة-1">4.3: الدوال المساعدة واختبارات الوحدة، الخطوة 1</h4>
+<p>أولاً، عرّف دالة <em>dummy</em> تستقبل مصفوفة من منشورات المدونات كوسيط وتعيد دائماً القيمة 1. يجب أن تكون محتويات ملف <i>list_helper.js</i> في هذه المرحلة كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">dummy</span> = (<span class="hljs-params">blogs</span>) =&gt; {
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  dummy
+}
+</code></pre>
+<p>تحقق من أن إعداد الاختبار لديك يعمل بالاختبار التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { test, describe } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:test&#x27;</span>)
+<span class="hljs-keyword">const</span> assert = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:assert&#x27;</span>)
+<span class="hljs-keyword">const</span> listHelper = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../utils/list_helper&#x27;</span>)
+
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;dummy returns one&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> blogs = []
+
+  <span class="hljs-keyword">const</span> result = listHelper.<span class="hljs-title function_">dummy</span>(blogs)
+  assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-number">1</span>)
+})
+</code></pre>
+<h4 id="44-الدوال-المساعدة-واختبارات-الوحدة-الخطوة-2">4.4: الدوال المساعدة واختبارات الوحدة، الخطوة 2</h4>
+<p>عرّف دالة جديدة <em>totalLikes</em> تستقبل قائمة من منشورات المدونات كوسيط. تعيد الدالة المجموع الكلي لـ <i>likes</i> في جميع منشورات المدونات.</p>
+<p>اكتب اختبارات مناسبة للدالة. يُوصى بوضع الاختبارات داخل كتلة <i>describe</i> ليُجمَّع مخرج تقرير الاختبار بشكل مرتب:</p>
+<p><img src="/images/content/4/5.webp" alt="نجاح npm test من أجل list_helper_test"></p>
+<p>يمكن تعريف مدخلات الاختبار للدالة هكذا:</p>
+<pre><code class="language-js"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;total likes&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> listWithOneBlog = [
+    {
+      <span class="hljs-attr">_id</span>: <span class="hljs-string">&#x27;5a422aa71b54a676234d17f8&#x27;</span>,
+      <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Go To Statement Considered Harmful&#x27;</span>,
+      <span class="hljs-attr">author</span>: <span class="hljs-string">&#x27;Edsger W. Dijkstra&#x27;</span>,
+      <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf&#x27;</span>,
+      <span class="hljs-attr">likes</span>: <span class="hljs-number">5</span>,
+      <span class="hljs-attr">__v</span>: <span class="hljs-number">0</span>
+    }
+  ]
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;when list has only one blog, equals the likes of that&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> result = listHelper.<span class="hljs-title function_">totalLikes</span>(listWithOneBlog)
+    assert.<span class="hljs-title function_">strictEqual</span>(result, <span class="hljs-number">5</span>)
+  })
+})
+</code></pre>
+<p>إذا كان تعريف قائمة مدخلات اختبار خاصة بك من المدونات جهداً كبيراً، يمكنك استخدام القائمة الجاهزة <a href="https://github.com/fullstack-hy2020/misc/blob/master/blogs_for_test.md">هنا</a>.</p>
+<p>لا بد أن تواجه مشكلات أثناء كتابة الاختبارات. تذكّر الأمور التي تعلمناها عن <a href="/part3/saving_data_to_mongo_db#debugging-node-applications">تصحيح الأخطاء</a> في الجزء 3. يمكنك طباعة الأشياء إلى وحدة التحكم بـ <em>console.log</em> حتى أثناء تنفيذ الاختبارات.</p>
+<h4 id="45-الدوال-المساعدة-واختبارات-الوحدة-الخطوة-3">4.5*: الدوال المساعدة واختبارات الوحدة، الخطوة 3</h4>
+<p>عرّف دالة جديدة <em>favoriteBlog</em> تستقبل قائمة مدونات كوسيط. تعيد الدالة المدونة الأكثر إعجابات. إذا كانت هناك مدونات مفضلة متعددة، يكفي أن تعيد الدالة أياً منها.</p>
+<p><strong>ملاحظة</strong> عندما تقارن كائنات، فالأرجح أن الطريقة <a href="https://nodejs.org/api/assert.html#assertdeepstrictequalactual-expected-message">deepStrictEqual</a> هي ما تريد استخدامه، لأنها تضمن أن الكائنات لها الخصائص نفسها. للاطلاع على الفروق بين دوال وحدة assert المختلفة، يمكنك الرجوع إلى <a href="https://stackoverflow.com/a/73937068/15291501">إجابة Stack Overflow هذه</a>.</p>
+<p>اكتب اختبارات هذا التمرين داخل كتلة <i>describe</i> جديدة. افعل الشيء نفسه في التمارين المتبقية أيضاً.</p>
+<h4 id="46-الدوال-المساعدة-واختبارات-الوحدة-الخطوة-4">4.6*: الدوال المساعدة واختبارات الوحدة، الخطوة 4</h4>
+<p>هذا التمرين والتمرين التالي أكثر تحدياً قليلاً. إكمال هذين التمرينين ليس مطلوباً للتقدم في مادة المقرر، لذا قد تكون فكرة جيدة العودة إليهما بعد الانتهاء من تصفح مادة هذا الجزء بالكامل.</p>
+<p>يمكن إكمال هذا التمرين دون استخدام مكتبات إضافية. لكن هذا التمرين فرصة رائعة لتعلم كيفية استخدام مكتبة <a href="https://lodash.com/">Lodash</a>.</p>
+<p>عرّف دالة باسم <em>mostBlogs</em> تستقبل مصفوفة مدونات كوسيط. تعيد الدالة <i>المؤلف</i> الذي لديه أكبر عدد من المدونات. تحتوي القيمة المعادة أيضاً على عدد المدونات التي يملكها المؤلف الأعلى:</p>
+<pre><code class="language-js">{
+  <span class="hljs-attr">author</span>: <span class="hljs-string">&quot;Robert C. Martin&quot;</span>,
+  <span class="hljs-attr">blogs</span>: <span class="hljs-number">3</span>
+}
+</code></pre>
+<p>إذا كان هناك العديد من كبار المدونين، فيكفي إعادة أي واحد منهم.</p>
+<h4 id="47-الدوال-المساعدة-واختبارات-الوحدة-الخطوة-5">4.7*: الدوال المساعدة واختبارات الوحدة، الخطوة 5</h4>
+<p>عرّف دالة باسم <em>mostLikes</em> تستقبل مصفوفة مدونات كوسيط لها. تعيد الدالة المؤلف الذي نالت منشوراته أكبر عدد من الإعجابات. تحتوي القيمة المعادة أيضاً على العدد الإجمالي للإعجابات التي تلقاها المؤلف:</p>
+<pre><code class="language-js">{
+  <span class="hljs-attr">author</span>: <span class="hljs-string">&quot;Edsger W. Dijkstra&quot;</span>,
+  <span class="hljs-attr">likes</span>: <span class="hljs-number">17</span>
+}
+</code></pre>
+<p>إذا كان هناك العديد من كبار المدونين، فيكفي إظهار أي واحد منهم.</p>
+</div>
+`,r={part:4,letter:"a",file:s,title:n,slug:a,mainImage:p,headings:l,html:e};export{r as default,s as file,l as headings,e as html,c as letter,p as mainImage,t as part,a as slug,n as title};

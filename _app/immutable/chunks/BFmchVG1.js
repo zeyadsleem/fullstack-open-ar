@@ -1,0 +1,575 @@
+const t=14,r="c",s="c.md",a="قواعد البيانات والترحيلات والعلاقات",n="databases_migrations_and_relations",e="/images/part-14.svg",p=[{depth:3,id:"النشر-إلى-vercel",text:"النشر إلى Vercel"},{depth:3,id:"إنشاء-قاعدة-بيانات",text:"إنشاء قاعدة بيانات"},{depth:3,id:"الوصول-إلى-قاعدة-البيانات-باستخدام-drizzle-orm",text:"الوصول إلى قاعدة البيانات باستخدام Drizzle ORM"},{depth:3,id:"الترحيلات",text:"الترحيلات"},{depth:3,id:"المستخدمون",text:"المستخدمون"},{depth:3,id:"ملاحظات-المستخدمين",text:"ملاحظات المستخدمين"},{depth:3,id:"استعلامات-الربط",text:"استعلامات الربط"},{depth:3,id:"تحذير-بشأن-الترحيلات",text:"تحذير بشأن الترحيلات"}],l=`<h3 id="النشر-إلى-vercel">النشر إلى Vercel</h3>
+<p>في أجزاء سابقة من Full Stack Open، نشرنا الواجهة الخلفية على <a href="https://render.com/">Render</a> أو <a href="https://fly.io/">Fly.io</a>. ومع Next.js، يكون هدف النشر الأكثر طبيعية هو <a href="https://vercel.com/">Vercel</a>، الشركة التي أنشأت Next.js وتواصل صيانته. فمنصّة Vercel مبنية خصيصاً حول Next.js، لذا تعمل ميزات مثل مكوّنات الخادم (Server Components) وإجراءات الخادم (Server Actions) والعرض الثابت وإعادة التحقق مباشرةً دون أي إعداد إضافي.</p>
+<p>لنشر التطبيق، ادفع أولاً شيفرة تطبيق الملاحظات إلى مستودع GitHub. ثم:</p>
+<ul>
+<li>اذهب إلى <a href="https://vercel.com/">vercel.com</a> وسجّل حساباً جديداً (أو سجّل الدخول) باستخدام حسابك على GitHub</li>
+<li>اضغط <em>Add New...</em> ثم <em>Project</em></li>
+<li>اختر مستودع GitHub الذي يحتوي على تطبيق Next.js (لاحظ أنه قد يستغرق بعض الوقت حتى يظهر مستودعك)</li>
+<li>يكتشف Vercel تلقائياً أنه مشروع Next.js ويهيّئ إعدادات البناء. ما عليك سوى الضغط على <em>Deploy</em></li>
+</ul>
+<p>هذا كل شيء. بعد بناء قصير، يمنحك Vercel رابطاً عاماً (شيء مثل <em><a href="https://notes-app-yourname.vercel.app/">https://notes-app-yourname.vercel.app</a></em>) يكون تطبيقك متاحاً عليه:</p>
+<p><img src="/images/mooc/5681d9fdef75.webp" alt="صورة توضيحية"></p>
+<p>في كل مرة تدفع فيها commits جديدة إلى الفرع الرئيسي، يعيد Vercel بناء التطبيق ونشره تلقائياً. وإذا دفعت إلى فرع مختلف أو فتحت طلب سحب، ينشئ Vercel <em>نشراً تجريبياً (preview deployment)</em> برابط فريد خاص به، حتى تتمكن من اختبار التغييرات قبل دمجها.</p>
+<p>يبدو تطبيقنا يعمل، إلى أن نحاول إنشاء ملاحظات جديدة. وهناك شيء غريب يحدث. قد تظهر الملاحظة المُنشأة حديثاً لفترة وجيزة ثم تختفي عند إعادة تحميل الصفحة. أو قد لا تظهر إطلاقاً.</p>
+<p>والسبب أن مكوّنات الخادم وإجراءات الخادم تعمل على Vercel كـ <a href="https://en.wikipedia.org/wiki/Serverless_computing">دوال بلا خادم (serverless functions)</a>. وقد يتولّى معالجة كل طلب نسخة مختلفة من الدالة، وهذه النسخ لا تتشارك الذاكرة. ويمكن تشغيلها أو إيقافها في أي وقت. وطريقتنا الحالية في تخزين الملاحظات داخل مصفوفة JavaScript في الذاكرة معطوبة جوهرياً في هذه البيئة. فعندما تضيف إجراءات الخادم ملاحظة إلى المصفوفة، يوجد هذا التغيير في ذاكرة نسخة واحدة بعينها فقط. وقد يتولّى معالجة الطلب التالي نسخة مختلفة تماماً تملك نسخة جديدة من المصفوفة الأصلية المكتوبة في الشيفرة. وحتى لو تصادف أن تولّت النسخة نفسها معالجة الطلبين، فسيُوقف تشغيلها في النهاية بعد فترة خمول، وتُفقد كل البيانات الموجودة في الذاكرة.</p>
+<p>أثناء التطوير باستخدام <em>npm run dev</em>، يعمل كل شيء في عملية Node.js واحدة طويلة العمر، لذا تعمل المصفوفة الموجودة في الذاكرة بشكل مثالي. وهذه فجوة أخرى بين التطوير والإنتاج ينبغي أن تكون على دراية بها.</p>
+<p>الحل هو تخزين البيانات في قاعدة بيانات خارجية تستطيع جميع نسخ الدوال بلا خادم الوصول إليها. لنفعل ذلك تالياً.</p>
+<h3 id="إنشاء-قاعدة-بيانات">إنشاء قاعدة بيانات</h3>
+<p>في أجزاء سابقة من Full Stack Open، استخدمنا MongoDB قاعدةً للبيانات. وفي <a href="/part13">الجزء 13</a> انتقلنا إلى قاعدة بيانات علائقية هي PostgreSQL. وقواعد البيانات العلائقية هي اختيارنا الآن أيضاً.</p>
+<p>يوفّر Vercel قاعدة بيانات PostgreSQL مُدارة تُسمّى <a href="https://vercel.com/docs/storage/vercel-postgres">Vercel Postgres</a>، وتعمل بقوة <a href="https://neon.tech/">Neon</a>. إنها قاعدة بيانات PostgreSQL بلا خادم تتكامل بسلاسة مع عمليات النشر على Vercel، ما يجعلها مناسبة تماماً لتطبيق Next.js لدينا.</p>
+<p>لإنشاء قاعدة بيانات، انتقل إلى لوحة تحكم Vercel واتبع هذه الخطوات:</p>
+<ul>
+<li>افتح المشروع الذي نشرته سابقاً</li>
+<li>انتقل إلى تبويب <em>Storage</em></li>
+<li>اضغط <em>Create Database</em></li>
+<li>اختر <em>Postgres (Neon)</em> واضغط <em>Continue</em></li>
+<li>اختر منطقة قريبة من مكان النشر، ثم اضغط <em>Create</em></li>
+<li>أعطِ قاعدة البيانات اسماً (مثل <em>notes-db</em>)، واضغط <em>Create</em></li>
+</ul>
+<p>بعد الإنشاء، يضيف Vercel تلقائياً متغيرات البيئة الخاصة بالاتصال إلى مشروعك. يمكنك رؤيتها ضمن <em>Settings &gt; Environment Variables</em>. وأهمها <em>DATABASE_URL</em> الذي يحتوي على نص الاتصال الكامل بقاعدة بيانات PostgreSQL لديك.</p>
+<p>لاستخدام قاعدة البيانات نفسها محلياً أثناء التطوير، انسخ نص الاتصال من لوحة تحكم Vercel وأنشئ ملف <em>.env.local</em> في جذر مشروعك:</p>
+<pre><code>DATABASE_URL=&quot;postgresql://user:password@host:5432/dbname?sslmode=require&quot;
+
+</code></pre>
+<p>استبدل القيمة بنص الاتصال الفعلي من لوحة تحكم Vercel. يحمّل Next.js ملف <em>.env.local</em> تلقائياً أثناء التطوير، لذا لا حاجة إلى أي إعداد إضافي.</p>
+<p><strong>مهم:</strong> أضف <em>.env.local</em> إلى ملف <em>.gitignore</em> حتى لا تُحفظ بيانات اعتماد قاعدة البيانات أبداً في نظام التحكم بالإصدارات:</p>
+<pre><code>echo &quot;.env.local&quot; &gt;&gt; .gitignore
+</code></pre>
+<h3 id="الوصول-إلى-قاعدة-البيانات-باستخدام-drizzle-orm">الوصول إلى قاعدة البيانات باستخدام Drizzle ORM</h3>
+<p>في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases">Full Stack Open: قواعد البيانات العلائقية</a> استخدمنا <a href="https://sequelize.org/">Sequelize</a> مكتبةً للـ ORM (الربط الكائني-العلائقي) للوصول إلى قاعدة بيانات PostgreSQL. وسنستخدم هذه المرة <a href="https://orm.drizzle.team/">Drizzle ORM</a>، الذي أصبح من أكثر الخيارات شيوعاً في منظومة Next.js.</p>
+<p>لماذا Drizzle بدلاً من Sequelize؟ صُمّم Drizzle بحيث يكون TypeScript مواطناً من الدرجة الأولى. فمخطط قاعدة البيانات يُعرَّف بـTypeScript، ويولّد Drizzle نتائج استعلامات منوّعة بالكامل تلقائياً. وهذا يعني أنه إذا قال مخططك إن للملاحظة <em>content</em> (نص) و <em>important</em> (قيمة منطقية)، فستكون كل نتيجة استعلام منوّعة وفقاً لذلك، ويلتقط المترجم الأخطاء قبل أن تشغّل الشيفرة أصلاً. كما ينتج Drizzle استعلامات SQL قريبة جداً مما كنت ستكتبه يدوياً، ما يسهّل فهم ما يحدث في الخلفية. وأخيراً، يوفّر Drizzle دعماً ممتازاً للبيئات بلا خادم مثل Vercel، حيث يجب إدارة الاتصالات بعناية.</p>
+<p>لنهيّئ Drizzle لمشروعنا. أولاً، ثبّت الحزم المطلوبة:</p>
+<pre><code class="language-bash">npm install drizzle-orm @neondatabase/serverless
+npm install -D drizzle-kit
+</code></pre>
+<p>الحزمة <a href="https://www.npmjs.com/package/drizzle-orm">drizzle-orm</a> هي الـ ORM نفسه. والحزمة <a href="https://www.npmjs.com/package/@neondatabase/serverless">@neondatabase/serverless</a> هي مشغّل PostgreSQL المُحسَّن للبيئات بلا خادم مثل Vercel، حيث تعمل قاعدة البيانات على Neon. والحزمة <a href="https://www.npmjs.com/package/drizzle-kit">drizzle-kit</a> أداة سطر أوامر لإدارة ترحيلات قاعدة البيانات.</p>
+<p>بعد ذلك، نعرّف مخطط قاعدة البيانات. ننشئ ملفاً باسم <em>db/schema.ts</em> بالشكل التالي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> { pgTable, serial, text, <span class="hljs-built_in">boolean</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm/pg-core&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;notes&quot;</span>, {
+  <span class="hljs-attr">id</span>: <span class="hljs-title function_">serial</span>(<span class="hljs-string">&quot;id&quot;</span>).<span class="hljs-title function_">primaryKey</span>(),
+  <span class="hljs-attr">content</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;content&quot;</span>).<span class="hljs-title function_">notNull</span>(),
+  <span class="hljs-attr">important</span>: <span class="hljs-title function_">boolean</span>(<span class="hljs-string">&quot;important&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">default</span>(<span class="hljs-literal">false</span>),
+})
+</code></pre>
+<p>يعرّف هذا جدولاً يُسمّى <em>notes</em> بثلاثة أعمدة:</p>
+<ul>
+<li><em>id</em> من النوع <a href="https://orm.drizzle.team/docs/column-types/pg#serial">serial</a> أي أنه عدد صحيح يزداد تلقائياً، وهو مُعلَّم باعتباره <a href="https://orm.drizzle.team/docs/indexes-constraints#primary-key">المفتاح الرئيسي</a> للجدول</li>
+<li><em>content</em> من النوع <a href="https://orm.drizzle.team/docs/column-types/pg#text">text</a> الذي يقابل نوع <em>TEXT</em> في SQL، وهو مُعلَّم بـ <a href="https://orm.drizzle.team/docs/column-types/pg#not-null">not null</a> أي أنه يجب أن يكون لكل ملاحظة محتوى</li>
+<li><em>important</em> من النوع <a href="https://orm.drizzle.team/docs/column-types/pg#boolean">boolean</a> الذي يخزّن <em>true</em> أو <em>false</em>، وهو أيضاً not null وله <a href="https://orm.drizzle.team/docs/column-types/pg#default-value">قيمة افتراضية</a> هي <em>false</em></li>
+</ul>
+<p>لاحظ كيف أن المخطط ليس سوى TypeScript. لا توجد صيغة منفصلة لتتعلمها!</p>
+<p>بعد ذلك ننشئ اتصال قاعدة البيانات في الملف <em>db/index.ts</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { drizzle } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm/neon-http&quot;</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> schema <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./schema&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> db = <span class="hljs-title function_">drizzle</span>(process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>!, { schema })
+</code></pre>
+<p>دالة <em>drizzle</em> من <a href="https://orm.drizzle.team/docs/get-started/neon-new">drizzle-orm/neon-http</a> تنشئ اتصالاً بقاعدة البيانات مناسباً للبيئات بلا خادم باستخدام نص الاتصال من متغير البيئة لدينا. ومشغّل <em>neon-http</em> مُحسَّن للبيئات بلا خادم: فهو يتواصل مع قاعدة بيانات Neon عبر HTTP، لذا لا يوجد اتصال دائم يجب إدارته. والنتيجة المُصدَّرة <em>db</em> هي مُنشئ استعلامات منوّع يمكننا استخدامه في كل أنحاء تطبيقنا.</p>
+<p>وأخيراً، نحتاج إلى ملف إعدادات Drizzle لأدوات الترحيل، ننشئه في الملف <em>drizzle.config.ts</em> في جذر المشروع:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-kit&quot;</span>
+
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> dotenv <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;dotenv&quot;</span>
+dotenv.<span class="hljs-title function_">config</span>({ <span class="hljs-attr">path</span>: <span class="hljs-string">&quot;.env.local&quot;</span> })
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">schema</span>: <span class="hljs-string">&quot;./db/schema.ts&quot;</span>,
+  <span class="hljs-attr">out</span>: <span class="hljs-string">&quot;./drizzle&quot;</span>,
+  <span class="hljs-attr">dialect</span>: <span class="hljs-string">&quot;postgresql&quot;</span>,
+  <span class="hljs-attr">dbCredentials</span>: {
+    <span class="hljs-attr">url</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>!,
+  },
+})
+</code></pre>
+<p>يخبر هذا Drizzle Kit بمكان وجود المخطط، وأين يُخرج ملفات الترحيل، وكيف يتصل بقاعدة البيانات.</p>
+<p>نحتاج أيضاً إلى تثبيت حزمتين إضافيتين:</p>
+<pre><code class="language-bash">npm install --save-dev dotenv postgres
+</code></pre>
+<p>نحتاج إلى حزمة <em>dotenv</em> لأن أوامر Drizzle Kit CLI تعمل كسكربتات Node.js عادية خارج بيئة تشغيل Next.js. فـNext.js يحمّل ملف <em>.env.local</em> تلقائياً لشيفرة تطبيقك، لكن Drizzle Kit لا يستفيد من ذلك. وباستيراد <em>dotenv</em> واستدعاء <em>dotenv.config({ path: &quot;.env.local&quot; })</em> في أعلى <em>drizzle.config.ts</em>، نجعل المتغير <em>DATABASE_URL</em> متاحاً لـDrizzle Kit عند اتصاله بقاعدة البيانات لتشغيل الترحيلات أو فتح Drizzle Studio.</p>
+<p>يستخدم تطبيقنا مشغّل <em>@neondatabase/serverless</em> الذي يتواصل مع قاعدة البيانات عبر HTTP. غير أن أوامر Drizzle Kit CLI تحتاج إلى اتصال أكثر تقليدية بقاعدة البيانات. وبدون تثبيت حزمة <em>postgres</em> ستطبع أوامر Drizzle Kit تحذيرات عن بعض الاعتماديات الناقصة.</p>
+<p>الآن يمكننا توليد الترحيل وتطبيقه على قاعدة البيانات:</p>
+<pre><code class="language-bash">npx drizzle-kit generate
+npx drizzle-kit migrate
+</code></pre>
+<p>يقرأ الأمر الأول المخطط ويولّد ملفات ترحيل SQL في مجلد <em>drizzle</em>. ويطبّق الأمر الثاني تلك الترحيلات على قاعدة البيانات، فينشئ جدول <em>notes</em>.</p>
+<p>قد تتساءل ما هي الترحيلات. لقد غُطّي هذا الموضوع في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-4">Full Stack Open: قواعد البيانات العلائقية</a>، وسنعود إليه قريباً، فلا تقلق بعد!</p>
+<p>يمكننا التحقق من إنشاء الجدول بتنفيذ:</p>
+<pre><code class="language-bash">npx drizzle-kit studio
+</code></pre>
+<p>يفتح هذا <a href="https://orm.drizzle.team/drizzle-studio/overview">Drizzle Studio</a>، وهو متصفح مرئي لقاعدة البيانات على العنوان <a href="https://local.drizzle.studio/">https://local.drizzle.studio</a> حيث يمكننا رؤية جدول <em>notes</em> وأعمدته.</p>
+<p>لنضف أيضاً بضع ملاحظات إلى قاعدة البيانات:</p>
+<p><img src="/images/mooc/ac51472b7ac7.webp" alt="صورة توضيحية"></p>
+<p>الآن نحن مستعدون لتغيير التطبيق ليستخدم قاعدة البيانات. لنبدأ بقائمة الملاحظات.</p>
+<p>نغيّر <em>app/services/notes.ts</em> على النحو التالي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { eq } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm&quot;</span>
+<span class="hljs-keyword">import</span> { db } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../db&quot;</span>
+<span class="hljs-keyword">import</span> { notes } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../db/schema&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getNotes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">notes</span>.<span class="hljs-title function_">findMany</span>()
+}
+
+&lt;em&gt;<span class="hljs-comment">// ...&lt;/em&gt;</span>
+</code></pre>
+<p>تستخدم الدالة <em>getNotes</em> <a href="https://orm.drizzle.team/docs/rqb">واجهة الاستعلامات العلائقية</a> في Drizzle عبر <em>db.query</em>. ويقرأ الاستدعاء <em>db.query.notes.findMany()</em> كل الصفوف من جدول <em>notes</em>. وهو يقابل استعلام SQL التالي:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> id, content, important <span class="hljs-keyword">FROM</span> notes;
+</code></pre>
+<p>لاحظ أن الدالة أصبحت <em>async</em> لأن استعلام قاعدة البيانات يعيد promise. ويستنتج Drizzle نوع الإرجاع تلقائياً من المخطط، لذا يعرف TypeScript أن النتيجة مصفوفة من الكائنات فيها <em>id</em> (عدد) و <em>content</em> (نص) و <em>important</em> (قيمة منطقية).</p>
+<p>يجب تعديل <em>app/notes/page.tsx</em> ليأخذ في الحسبان أن الدالة أصبحت async:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>
+<span class="hljs-keyword">import</span> { getNotes } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../services/notes&quot;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Notes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{ // HIGHLIGHT LINE
+  searchParams,
+}: {
+  searchParams: <span class="hljs-built_in">Promise</span>&amp;lt;{ important?: <span class="hljs-built_in">string</span> }&gt;
+}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { important } = <span class="hljs-keyword">await</span> searchParams
+  <span class="hljs-keyword">const</span> showImportant = important === <span class="hljs-string">&quot;true&quot;</span>
+  <span class="hljs-keyword">const</span> allNotes = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getNotes</span>() <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">const</span> notes = showImportant
+    ? allNotes.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">note</span>) =&gt;</span> note.<span class="hljs-property">important</span>)
+    : allNotes
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>// ...<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>الآن تجلب صفحة الملاحظات بياناتها من قاعدة البيانات:</p>
+<p><img src="/images/mooc/77cdc608c534.webp" alt="صورة توضيحية"></p>
+<p>لنغيّر الآن بقية الدوال في <em>app/services/notes.ts</em> لتستخدم قاعدة البيانات:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getNoteById</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">notes</span>.<span class="hljs-title function_">findFirst</span>({
+    <span class="hljs-attr">where</span>: <span class="hljs-title function_">eq</span>(notes.<span class="hljs-property">id</span>, id),
+  })
+}
+</code></pre>
+<p>تستخدم الدالة <em>getNoteById</em> الطريقة <a href="https://orm.drizzle.team/docs/rqb#find-first">findFirst</a>. وهي تعيد أول صف مطابق، أو <em>undefined</em> إذا لم يطابق أي صف. وتستخدم جملة <em>where</em> المساعد <a href="https://orm.drizzle.team/docs/operators#eq">eq</a> من <em>drizzle-orm</em> لإنشاء شرط مساواة. و SQL المقابل هو:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> id, content, important <span class="hljs-keyword">FROM</span> notes <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+</code></pre>
+<p>ويصبح إنشاء ملاحظة جديدة:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">important</span>: <span class="hljs-built_in">boolean</span></span>) =&gt; {
+  <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">insert</span>(notes).<span class="hljs-title function_">values</span>({ content, important })
+}
+</code></pre>
+<p>تستخدم الدالة <em>addNote</em> مُنشئ الاستعلامات <a href="https://orm.drizzle.team/docs/insert">insert</a> في Drizzle. ويدرج الاستدعاء <em>db.insert(notes).values(...)</em> صفاً جديداً في جدول <em>notes</em>. و SQL المقابل هو:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">INSERT INTO</span> notes (content, important) <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;some content&#x27;</span>, <span class="hljs-literal">true</span>);
+</code></pre>
+<p>لا حاجة إلى تقديم <em>id</em> لأن العمود معرّف كـ <em>serial</em>، فتولّده قاعدة البيانات تلقائياً.</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">toggleImportance</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getNoteById</span>(id)
+  <span class="hljs-keyword">if</span> (note) {
+    <span class="hljs-keyword">await</span> db
+      .<span class="hljs-title function_">update</span>(notes)
+      .<span class="hljs-title function_">set</span>({ <span class="hljs-attr">important</span>: !note.<span class="hljs-property">important</span> })
+      .<span class="hljs-title function_">where</span>(<span class="hljs-title function_">eq</span>(notes.<span class="hljs-property">id</span>, id))
+  }
+}
+</code></pre>
+<p>تجلب الدالة <em>toggleImportance</em> الملاحظة أولاً لقراءة قيمة <em>important</em> الحالية لها، ثم تستخدم مُنشئ الاستعلامات <a href="https://orm.drizzle.team/docs/update">update</a> في Drizzle لقلبها. ويحدّث الاستدعاء <em>db.update(notes).set(...).where(...)</em> الصفوف المطابقة. و SQL المقابل هو:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">UPDATE</span> notes <span class="hljs-keyword">SET</span> important <span class="hljs-operator">=</span> <span class="hljs-keyword">NOT</span> important <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+</code></pre>
+<p>بما أن كل الدوال في <em>services/notes.ts</em> أصبحت async، نحتاج إلى إجراء تغييرات مقابلة في بضعة ملفات. فـ <em>app/notes/[id]</em> يحتاج إلى <em>await</em></p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">NotePage</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{ params }: { params: <span class="hljs-built_in">Promise</span>&amp;lt;{ id: <span class="hljs-built_in">string</span> }&gt; }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { id } = <span class="hljs-keyword">await</span> params
+  <span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getNoteById</span>(<span class="hljs-title class_">Number</span>(id)) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  &lt;em&gt;<span class="hljs-comment">// ...&lt;/em&gt;</span>
+}
+</code></pre>
+<p>كما تحتاج إجراءات الخادم إلى المعالجة نفسها:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">createNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">formData: FormData</span>) =&gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">const</span> content = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;content&quot;</span>) <span class="hljs-keyword">as</span> string
+  <span class="hljs-keyword">const</span> important = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;important&quot;</span>) === <span class="hljs-string">&quot;on&quot;</span>
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">addNote</span>(content, important) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&quot;/notes&quot;</span>)
+  <span class="hljs-title function_">redirect</span>(<span class="hljs-string">&quot;/notes&quot;</span>)
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">toggleNoteImportance</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">formData: FormData</span>) =&gt; { <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-keyword">const</span> id = <span class="hljs-title class_">Number</span>(formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;id&quot;</span>))
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">toggleImportance</span>(id) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">\`/notes/<span class="hljs-subst">\${id}</span>\`</span>)
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&quot;/notes&quot;</span>)
+}
+</code></pre>
+<p>هناك أمر آخر يجب ملاحظته قبل أن نكمل. يجلب المكوّن <em>Notes</em> دائماً كل الملاحظات من قاعدة البيانات، وتُجرى التصفية المحتملة للملاحظات المهمة في JavaScript بعد الاستعلام:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Notes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{
+  searchParams,
+}: {
+  searchParams: <span class="hljs-built_in">Promise</span>&amp;lt;{ important?: <span class="hljs-built_in">string</span> }&gt;
+}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { important } = <span class="hljs-keyword">await</span> searchParams
+  <span class="hljs-keyword">const</span> showImportant = important === <span class="hljs-string">&quot;true&quot;</span>
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-keyword">const</span> allNotes = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getNotes</span>()
+  <span class="hljs-keyword">const</span> notes = showImportant
+    ? allNotes.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">note</span>) =&gt;</span> note.<span class="hljs-property">important</span>)
+    : allNotes
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>// ...<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>بالنسبة لمجموعة بيانات صغيرة، هذا مقبول تماماً، لكن مع عدد كبير من الملاحظات سيكون أكثر كفاءة أن ندع قاعدة البيانات تتولى التصفية بإضافة جملة <em>WHERE</em> إلى استعلام SQL. يمكننا تعديل <em>getNotes</em> ليقبل معاملاً يتحكم في التصفية:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getNotes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">importantOnly</span>: <span class="hljs-built_in">boolean</span></span>) =&gt; {
+  <span class="hljs-keyword">if</span> (importantOnly) {
+    <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">notes</span>.<span class="hljs-title function_">findMany</span>({
+      <span class="hljs-attr">where</span>: <span class="hljs-title function_">eq</span>(notes.<span class="hljs-property">important</span>, <span class="hljs-literal">true</span>),
+    })
+  }
+
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">notes</span>.<span class="hljs-title function_">findMany</span>()
+}
+</code></pre>
+<p>عندما تكون <em>importantOnly</em> قيمتها <em>true</em>، يُنفَّذ الاستعلام مع جملة <em>where(eq(notes.important, true))</em> التي تقابل SQL:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> id, content, important <span class="hljs-keyword">FROM</span> notes <span class="hljs-keyword">WHERE</span> important <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;
+</code></pre>
+<p>وعندما تكون <em>importantOnly</em> قيمتها <em>false</em>، تعيد الدالة كل الملاحظات دون أي تصفية، كما كان الحال سابقاً.</p>
+<p>يمرّر المكوّن <em>Notes</em> الآن راية <em>showImportant</em> مباشرةً إلى <em>getNotes</em>، وتُزال منطقية التصفية التي كانت تُجرى سابقاً في JavaScript:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Notes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{
+  searchParams,
+}: {
+  searchParams: <span class="hljs-built_in">Promise</span>&amp;lt;{ important?: <span class="hljs-built_in">string</span> }&gt;
+}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { important } = <span class="hljs-keyword">await</span> searchParams
+  <span class="hljs-keyword">const</span> showImportant = important === <span class="hljs-string">&quot;true&quot;</span>
+  <span class="hljs-keyword">const</span> notes = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getNotes</span>(showImportant) <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>// ....<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></span>
+  )
+}
+</code></pre>
+<p>هذا أنظف وأكثر كفاءة: فبدلاً من جلب كل الصفوف والتخلص من بعضها في JavaScript، ندع قاعدة البيانات تعيد الصفوف التي نحتاجها فقط.</p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/nextjs-notes">GitHub</a> في الفرع part5.</p>
+<h3 id="الترحيلات">الترحيلات</h3>
+<p>الشيء التالي الذي نريد إضافته إلى تطبيقنا هو إمكانية تسجيل المستخدمين الدخول. ولهذا نحتاج بطبيعة الحال إلى جدول جديد في قاعدة البيانات لحفظ المستخدمين. كما نحتاج إلى إجراء تغيير على جدول الملاحظات لأننا نريد ربط كل ملاحظة بمنشئها.</p>
+<p>قبل أن نجري هذه التغييرات، لنلقِ نظرة أقرب على ترحيلات قاعدة البيانات، وهو مفهوم مررنا عليه سريعاً عند إعداد قاعدة البيانات لأول مرة.</p>
+<p><a href="https://orm.drizzle.team/docs/migrations">الترحيل</a> تغيير في مخطط قاعدة البيانات مُدار بنظام التحكم بالإصدارات. وفي كل مرة تضيف جدولاً أو تحذف عموداً أو تغيّر نوع بيانات، يُلتقط هذا التغيير كترحيل. وتخدم الترحيلات غرضين: فهي توفّر طريقة قابلة للتكرار لتطبيق تغييرات المخطط على قاعدة البيانات، وتحفظ سجلاً لكيفية تطور المخطط بمرور الوقت.</p>
+<p>بدون الترحيلات، كنت ستحتاج إلى تنفيذ عبارات SQL يدوياً مثل <em>CREATE TABLE</em> أو <em>ALTER TABLE</em> في كل بيئة. وهذا عرضة للخطأ ويستحيل تتبعه في نظام التحكم بالإصدارات. أما مع الترحيلات، فتعيش تغييرات المخطط جنباً إلى جنب مع شيفرة تطبيقك في مستودع Git، ويمكن تطبيقها تلقائياً أثناء النشر.</p>
+<p>عندما هيّأنا Drizzle لأول مرة، نفّذنا أمرين:</p>
+<pre><code class="language-bash">npx drizzle-kit generate
+npx drizzle-kit migrate
+</code></pre>
+<p>الأمر الأول، <a href="https://orm.drizzle.team/docs/drizzle-kit-generate">drizzle-kit generate</a>، يقارن مخطط TypeScript الحالي (في <em>db/schema.ts</em>) بالترحيلات المولّدة سابقاً وينتج ملف ترحيل SQL جديداً في مجلد <em>drizzle</em>. وإذا نظرنا إلى ذلك المجلد، سنجد شيئاً مثل:</p>
+<pre><code>drizzle/
+├── 0000_neat_captain_america.sql
+└── meta/
+    ├── _journal.json
+    └── 0000_snapshot.json
+</code></pre>
+<p>يحتوي الملف <em>0000_neat_captain_america.sql</em> على SQL الفعلي الذي وُلّد من مخططنا:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">CREATE TABLE</span> &quot;notes&quot; (
+	&quot;id&quot; serial <span class="hljs-keyword">PRIMARY KEY</span> <span class="hljs-keyword">NOT NULL</span>,
+	&quot;content&quot; text <span class="hljs-keyword">NOT NULL</span>,
+	&quot;important&quot; <span class="hljs-type">boolean</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">NOT NULL</span>
+);
+</code></pre>
+<p>يحتوي مجلد <em>meta</em> على بيانات وصفية يستخدمها Drizzle Kit لتتبع الترحيلات التي وُلّدت وكيف كان شكل المخطط عند كل نقطة.</p>
+<p>الأمر الثاني <a href="https://orm.drizzle.team/docs/drizzle-kit-migrate">drizzle-kit migrate</a> يتصل بقاعدة البيانات وينفّذ أي ملفات ترحيل لم تُطبَّق بعد. ويتتبع Drizzle الترحيلات التي نُفّذت بتخزين معرّفاتها في جدول خاص يُسمّى __<em>drizzle_migrations</em> في قاعدة البيانات. وبهذه الطريقة، يكون تنفيذ <em>drizzle-kit migrate</em> عدة مرات آمناً: فهو يطبّق الترحيلات الجديدة فقط.</p>
+<p>سير العمل لتغيير المخطط هو دائماً نفسه:</p>
+<ul>
+<li>عدّل مخطط TypeScript في <em>app/db/schema.ts</em></li>
+<li>نفّذ <em>npx drizzle-kit generate</em> لإنشاء ملف ترحيل جديد</li>
+<li>راجع SQL المولّد للتأكد من صحة مظهره</li>
+<li>نفّذ <em>npx drizzle-kit migrate</em> لتطبيق الترحيل على قاعدة بياناتك</li>
+</ul>
+<p>الخطوة الثالثة مهمة. تحقق دائماً مما ولّده Drizzle قبل تنفيذه على قاعدة بياناتك. يبذل Drizzle قصارى جهده لاستنتاج SQL الصحيح، لكن خصوصاً مع التغييرات المدمّرة (حذف أعمدة، إعادة تسمية جداول)، ينبغي أن تتحقق من المخرجات.</p>
+<div class="tasks">
+<p><strong>7. النشر إلى Vercel</strong></p>
+</div>
+<div class="tasks">
+<p><strong>8. DrizzleORM وقاعدة بيانات</strong></p>
+</div>
+<h3 id="المستخدمون">المستخدمون</h3>
+<p>لنطبّق هذا عملياً الآن. نحتاج إلى إضافة جدول <em>users</em> وتعديل جدول <em>notes</em> ليشير إلى المستخدم الذي أنشأ كل ملاحظة.</p>
+<p>يتغيّر <em>schema.ts</em> على النحو التالي. الجدول الجديد <em>users</em> له ثلاثة أعمدة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> users = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;users&quot;</span>, {
+  <span class="hljs-attr">id</span>: <span class="hljs-title function_">serial</span>(<span class="hljs-string">&quot;id&quot;</span>).<span class="hljs-title function_">primaryKey</span>(),
+  <span class="hljs-attr">username</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;username&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">unique</span>(),
+  <span class="hljs-attr">name</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;name&quot;</span>).<span class="hljs-title function_">notNull</span>(),
+})
+</code></pre>
+<p>لعمود <em>username</em> قيد إضافي هو <a href="https://orm.drizzle.team/docs/indexes-constraints#unique">unique</a>، ما يعني أنه لا يمكن أن يكون لمستخدمين اثنين اسم المستخدم نفسه. وبمصطلحات SQL، سيولّد Drizzle قيد <em>UNIQUE</em> على هذا العمود، وسترفض قاعدة البيانات أي إدراج ينشئ تكراراً.</p>
+<p>يكتسب جدول <em>notes</em> عموداً جديداً هو <em>userId</em> يربط كل ملاحظة بالمستخدم الذي أنشأها:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;notes&quot;</span>, {
+  <span class="hljs-attr">id</span>: <span class="hljs-title function_">serial</span>(<span class="hljs-string">&quot;id&quot;</span>).<span class="hljs-title function_">primaryKey</span>(),
+  <span class="hljs-attr">content</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;content&quot;</span>).<span class="hljs-title function_">notNull</span>(),
+  <span class="hljs-attr">important</span>: <span class="hljs-title function_">boolean</span>(<span class="hljs-string">&quot;important&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">default</span>(<span class="hljs-literal">false</span>),
+  <span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+  <span class="hljs-attr">userId</span>: <span class="hljs-title function_">integer</span>(<span class="hljs-string">&quot;user_id&quot;</span>).<span class="hljs-title function_">references</span>(<span class="hljs-function">() =&gt;</span> users.<span class="hljs-property">id</span>),
+  <span class="hljs-comment">// END HIGHLIGHT</span>
+})
+</code></pre>
+<p>عمود <em>userId</em> من النوع <a href="https://orm.drizzle.team/docs/column-types/pg#integer">integer</a> ويستخدم الدالة <a href="https://orm.drizzle.team/docs/indexes-constraints#foreign-key">references</a> لإنشاء قيد <a href="https://en.wikipedia.org/wiki/Foreign_key">مفتاح أجنبي</a> يشير إلى عمود <em>id</em> في جدول <em>users</em>. ويخبر هذا قاعدة البيانات بأن كل قيمة في <em>user_id</em> يجب أن تقابل صفاً موجوداً في جدول <em>users</em>. وإذا حاول أحدهم إدراج ملاحظة بقيمة <em>user_id</em> غير موجودة في <em>users</em>، فسترفضها قاعدة البيانات. ويعني المفتاح الأجنبي أيضاً أنه لا يمكن حذف مستخدم لا تزال له ملاحظات تشير إليه.</p>
+<p>لاحظ كيف أن العمود مُسمّى <em>userId</em> في TypeScript (camelCase) لكنه يقابل <em>user_id</em> في قاعدة البيانات (snake_case). وهذا اصطلاح شائع: تستخدم شيفرة TypeScript صيغة camelCase بينما يستخدم SQL صيغة snake_case، ويتولى Drizzle هذا الربط عبر وسيط النص الممرَّر إلى <em>integer(&quot;user_id&quot;)</em>.</p>
+<p>الآن نولّد الترحيل ونطبّقه:</p>
+<pre><code class="language-bash">npx drizzle-kit generate
+npx drizzle-kit migrate
+</code></pre>
+<p>إذا فحصنا ملف الترحيل المولّد، سنرى شيئاً مثل:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">CREATE TABLE</span> &quot;users&quot; (
+	&quot;id&quot; serial <span class="hljs-keyword">PRIMARY KEY</span> <span class="hljs-keyword">NOT NULL</span>,
+	&quot;username&quot; text <span class="hljs-keyword">NOT NULL</span>,
+	&quot;name&quot; text <span class="hljs-keyword">NOT NULL</span>,
+	<span class="hljs-keyword">CONSTRAINT</span> &quot;users_username_unique&quot; <span class="hljs-keyword">UNIQUE</span>(&quot;username&quot;)
+);
+
+<span class="hljs-keyword">ALTER TABLE</span> &quot;notes&quot; <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">COLUMN</span> &quot;user_id&quot; <span class="hljs-type">integer</span>;<span class="hljs-operator">&lt;</span>em<span class="hljs-operator">&gt;</span><span class="hljs-comment">--&gt; statement-breakpoint&lt;/em&gt;</span>
+<span class="hljs-keyword">ALTER TABLE</span> &quot;notes&quot; <span class="hljs-keyword">ADD CONSTRAINT</span> &quot;notes_user_id_users_id_fk&quot; <span class="hljs-keyword">FOREIGN KEY</span> (&quot;user_id&quot;) <span class="hljs-keyword">REFERENCES</span> &quot;public&quot;.&quot;users&quot;(&quot;id&quot;) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">no</span> action <span class="hljs-keyword">ON</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">no</span> action;
+</code></pre>
+<p>ينشئ الترحيل جدول <em>users</em> ويضيف عمود <em>user_id</em> مع قيد المفتاح الأجنبي الخاص به إلى جدول <em>notes</em> الموجود. لاحظ أن Drizzle لا يعيد إنشاء جدول <em>notes</em> من الصفر. بل يقارن المخطط الجديد بلقطة الترحيل السابقة ويولّد فقط عبارات <em>ALTER TABLE</em> اللازمة لجعل قاعدة البيانات متوافقة.</p>
+<p>لننشئ مستخدماً من Drizzle Studio، ونربطه بالملاحظات الموجودة أصلاً في قاعدة البيانات:</p>
+<p><img src="/images/mooc/7cda3289ffb7.webp" alt="صورة توضيحية"></p>
+<p>الآن يمكننا إجراء تغيير صغير على مخططنا: نريد تعديله بحيث يصبح المفتاح الأجنبي user_id في جدول <em>notes</em> مطلوباً وألا يقبل القيمة الفارغة:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;notes&quot;</span>, {
+  <span class="hljs-attr">id</span>: <span class="hljs-title function_">serial</span>(<span class="hljs-string">&quot;id&quot;</span>).<span class="hljs-title function_">primaryKey</span>(),
+  <span class="hljs-attr">content</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;content&quot;</span>).<span class="hljs-title function_">notNull</span>(),
+  <span class="hljs-attr">important</span>: <span class="hljs-title function_">boolean</span>(<span class="hljs-string">&quot;important&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">default</span>(<span class="hljs-literal">false</span>),
+  <span class="hljs-attr">userId</span>: <span class="hljs-title function_">integer</span>(<span class="hljs-string">&quot;user_id&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">references</span>(<span class="hljs-function">() =&gt;</span> users.<span class="hljs-property">id</span>), <span class="hljs-comment">// HIGHLIGHT LINE</span>
+})
+</code></pre>
+<p>مرة أخرى، نولّد الترحيل:</p>
+<pre><code class="language-bash">npx drizzle-kit generate
+</code></pre>
+<p>عند فحص SQL المولّد في الترحيل، نرى عبارة واحدة:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">ALTER TABLE</span> &quot;notes&quot; <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">COLUMN</span> &quot;user_id&quot; <span class="hljs-keyword">SET</span> <span class="hljs-keyword">NOT NULL</span>;
+</code></pre>
+<p>هذا بالضبط ما توقعناه: العمود موجود بالفعل، لذا يحتاج Drizzle فقط إلى إضافة قيد <em>NOT NULL</em>. وبما أننا ربطنا بالفعل كل الملاحظات الموجودة بمستخدم في Drizzle Studio، فلا يوجد أي صف بقيمة <em>user_id</em> فارغة، وسينجح الترحيل. ولو كانت أي ملاحظات لا تزال بقيمة <em>user_id</em> فارغة، لرفضت قاعدة البيانات عبارة <em>ALTER TABLE</em> بخطأ.</p>
+<p>يمكننا الآن تطبيق الترحيل:</p>
+<pre><code class="language-bash">npx drizzle-kit migrate
+</code></pre>
+<h3 id="ملاحظات-المستخدمين">ملاحظات المستخدمين</h3>
+<p>لننفّذ الآن صفحتين جديدتين، الأولى تعرض قائمة مستخدمي التطبيق. وهي مباشرة إلى حد بعيد. يجب أن يكون المكوّن <em>Users</em> على المسار <em>/users</em>، ولإتباع اصطلاح موجّه التطبيقات في Next.js نضعه في الملف <em>app/users/page.tsx</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>
+<span class="hljs-keyword">import</span> { getUsers } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../services/users&quot;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Users</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> users = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUsers</span>()
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;h2&gt;<span class="hljs-title class_">Users</span>&amp;lt;/h2&gt;
+      &amp;lt;ul&gt;
+        {users.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">user</span>) =&gt;</span> (
+          &amp;lt;li key={user.<span class="hljs-property">id</span>}&gt;
+            &amp;lt;<span class="hljs-title class_">Link</span> href={<span class="hljs-string">\`/users/<span class="hljs-subst">\${user.id}</span>\`</span>}&gt;{user.<span class="hljs-property">name</span>}&amp;lt;/<span class="hljs-title class_">Link</span>&gt;
+          &amp;lt;/li&gt;
+        ))}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>اسم المستخدم رابط إلى صفحة المستخدم الفردية التي سننفّذها قريباً.</p>
+<p>الدالة <em>getUsers</em> في الملف <em>services/users.ts</em> مباشرة وبسيطة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { db } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../db&quot;</span>
+<span class="hljs-keyword">import</span> { users } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../db/schema&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getUsers</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">users</span>.<span class="hljs-title function_">findMany</span>()
+}
+</code></pre>
+<p>يُضاف الرابط إلى صفحة المستخدمين أيضاً إلى <em>app/layout.tsx</em>. والنتيجة النهائية تبدو هكذا:</p>
+<p><img src="/images/mooc/d9d61fc7ecff.webp" alt="صورة توضيحية"></p>
+<p>وبعد ذلك صفحة المستخدم الفردي. نريد أن نعرض فيها أيضاً الملاحظات المرتبطة بذلك المستخدم.</p>
+<p>باتّباع اصطلاحات موجّه التطبيقات في Next.js، يُنفَّذ المكوّن <em>UserPage</em> في الملف <em>app/users/[id]/page.tsx</em></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>
+<span class="hljs-keyword">import</span> { notFound } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/navigation&quot;</span>
+<span class="hljs-keyword">import</span> { getUserById } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../services/users&quot;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">UserPage</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{ params }: { params: <span class="hljs-built_in">Promise</span>&amp;lt;{ id: <span class="hljs-built_in">string</span> }&gt; }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { id } = <span class="hljs-keyword">await</span> params
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserById</span>(<span class="hljs-title class_">Number</span>(id))
+
+  <span class="hljs-keyword">if</span> (!user) {
+    <span class="hljs-title function_">notFound</span>()
+  }
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;h2&gt;{user.<span class="hljs-property">name</span>}&amp;lt;/h2&gt;
+      &amp;lt;p&gt;<span class="hljs-title class_">Username</span>: {user.<span class="hljs-property">username</span>}&amp;lt;/p&gt;
+      &amp;lt;h3&gt;<span class="hljs-title class_">Notes</span>&amp;lt;/h3&gt;
+      &amp;lt;ul&gt;
+        {user.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">note</span>) =&gt;</span> (
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;
+            &amp;lt;<span class="hljs-title class_">Link</span> href={<span class="hljs-string">\`/notes/<span class="hljs-subst">\${note.id}</span>\`</span>}&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/<span class="hljs-title class_">Link</span>&gt;
+            {note.<span class="hljs-property">important</span> &amp;amp;&amp;amp; &amp;lt;strong&gt; (important)&amp;lt;/strong&gt;}
+          &amp;lt;/li&gt;
+        ))}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>تبدو الدوال في <em>services/users.ts</em> كما يلي:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getUserById</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">users</span>.<span class="hljs-title function_">findFirst</span>({
+    <span class="hljs-attr">where</span>: <span class="hljs-title function_">eq</span>(users.<span class="hljs-property">id</span>, id),
+  })
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getNotesByUserId</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">userId</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">notes</span>.<span class="hljs-title function_">findMany</span>({
+    <span class="hljs-attr">where</span>: <span class="hljs-title function_">eq</span>(notes.<span class="hljs-property">userId</span>, userId),
+  })
+}
+</code></pre>
+<p>تبدو صفحة المستخدم هكذا:</p>
+<p><img src="/images/mooc/9c4da15279ca.webp" alt="صورة توضيحية"></p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/nextjs-notes">GitHub</a> في الفرع part6.</p>
+<h3 id="استعلامات-الربط">استعلامات الربط</h3>
+<p>يبرز سؤال: تنفيذ <em>UserPage</em> الحالي يجري استعلامين منفصلين على قاعدة البيانات، أحدهما لجلب المستخدم والآخر لجلب ملاحظاته. فهل يمكننا إجراء استعلام واحد فقط يربط المستخدم بالملاحظات المقابلة؟</p>
+<p>في SQL، يُفعل هذا عادةً باستخدام <em>JOIN</em>:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">SELECT</span> users.<span class="hljs-operator">*</span>, notes.<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users
+<span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span> notes <span class="hljs-keyword">ON</span> notes.user_id <span class="hljs-operator">=</span> users.id
+<span class="hljs-keyword">WHERE</span> users.id <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+</code></pre>
+<p>يقدّم Drizzle ميزة تُسمّى <a href="https://orm.drizzle.team/docs/relations">العلاقات (relations)</a> تتيح لنا تعريف العلاقات بين الجداول على مستوى التطبيق. ولا تُخزَّن تعريفات العلاقات هذه في قاعدة البيانات، ولا تولّد أي قيود SQL أو ترحيلات. بل توجد فقط لتخبر Drizzle كيف تتصل الجداول ببعضها، حتى تستطيع <a href="https://orm.drizzle.team/docs/rqb">واجهة الاستعلامات العلائقية</a> في Drizzle ربط البيانات المرتبطة تلقائياً نيابةً عنا.</p>
+<p>يتغيّر <em>schema.ts</em> إلى</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { pgTable, serial, text, boolean, integer } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm/pg-core&quot;</span>
+<span class="hljs-keyword">import</span> { relations } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> users = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;users&quot;</span>, {
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>// ...<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></span>
+})
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;notes&quot;</span>, {
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>// ...<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span></span>
+})
+
+<span class="hljs-comment">// BEGIN HIGHLIGHT</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> usersRelations = <span class="hljs-title function_">relations</span>(users, <span class="hljs-function">(<span class="hljs-params">{ many }</span>) =&gt;</span> ({
+  <span class="hljs-attr">notes</span>: <span class="hljs-title function_">many</span>(notes),
+}))
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notesRelations = <span class="hljs-title function_">relations</span>(notes, <span class="hljs-function">(<span class="hljs-params">{ one }</span>) =&gt;</span> ({
+  <span class="hljs-attr">user</span>: <span class="hljs-title function_">one</span>(users, {
+    <span class="hljs-attr">fields</span>: [notes.<span class="hljs-property">userId</span>],
+    <span class="hljs-attr">references</span>: [users.<span class="hljs-property">id</span>],
+  }),
+}))
+<span class="hljs-comment">// END HIGHLIGHT</span>
+</code></pre>
+<p>تُستخدم دالة <a href="https://orm.drizzle.team/docs/relations">relations</a> من <em>drizzle-orm</em> للإعلان عن كيفية ارتباط الجداول ببعضها. والوسيط الأول هو الجدول، والثاني دالة رد نداء تستقبل دوال مساعدة (<em>many</em> و <em>one</em>) وتعيد كائناً يصف الجداول المرتبطة.</p>
+<p>يقول تعريف <em>usersRelations</em> إن المستخدم يمكن أن تكون له <a href="https://orm.drizzle.team/docs/relations#one-to-many">ملاحظات كثيرة (many)</a>.</p>
+<p>ويقول تعريف <em>notesRelations</em> إن الملاحظة تنتمي إلى <a href="https://orm.drizzle.team/docs/relations#one-to-one">مستخدم واحد (one)</a>. وتخبر خاصيتا <em>fields</em> و <em>references</em> Drizzle بالأعمدة التي تشكّل الرابط: <em>notes.userId</em> في جدول الملاحظات يشير إلى <em>users.id</em> في جدول المستخدمين.</p>
+<p>لاحظ أن خاصيتي <em>fields</em> و <em>references</em> مطلوبتان دائماً في الجهة التي تحمل عمود المفتاح الأجنبي، وهي في حالتنا جهة <em>notes</em>، لأن <em>user_id</em> يقع في جدول الملاحظات.</p>
+<p>من المهم أن تفهم أن تعريفات العلاقات هذه منفصلة عن المفتاح الأجنبي <em>references</em> الذي عرّفناه سابقاً في استدعاء <em>pgTable</em>. فقيد المفتاح الأجنبي تفرضه قاعدة البيانات، بينما تُستخدم تعريفات <em>relations</em> فقط في واجهة الاستعلامات في Drizzle لمعرفة كيفية ربط البيانات. تحتاج إلى كليهما: المفتاح الأجنبي لسلامة البيانات، والعلاقات للاستعلام المريح.</p>
+<p>الآن يتغيّر <em>services/users.ts</em> إلى</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getUserWithNotes</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+  <span class="hljs-keyword">return</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">users</span>.<span class="hljs-title function_">findFirst</span>({
+    <span class="hljs-attr">where</span>: <span class="hljs-title function_">eq</span>(users.<span class="hljs-property">id</span>, id),
+    <span class="hljs-attr">with</span>: { <span class="hljs-attr">notes</span>: <span class="hljs-literal">true</span> },
+  })
+}
+</code></pre>
+<p>الإضافة الجوهرية إلى ما رأيناه سابقاً هي <a href="https://orm.drizzle.team/docs/rqb#include-relations">with: { notes: true }</a> التي تخبر Drizzle بأن يجلب أيضاً كل الملاحظات المرتبطة بذلك المستخدم في العملية نفسها.</p>
+<p>في الخلفية، يترجم Drizzle هذا إلى استعلام فعّال يربط جدولي users وnotes. والنتيجة كائن مستخدم واحد مرفقة به مصفوفة <em>notes</em>، شيء مثل:</p>
+<pre><code>{
+  id: 1,
+  username: &quot;mluukkai&quot;,
+  name: &quot;Matti Luukkainen&quot;,
+  notes: [
+    { id: 1, content: &quot;next.js utilizes React Server Components&quot;, important: true, userId: 1 },
+    { id: 2, content: &quot;next.js is built on top of React&quot;, important: true, userId: 1 },
+  ]
+}
+</code></pre>
+<p>يحل هذا محل الدالتين المنفصلتين <em>getUserById</em> و <em>getNotesByUserId</em> بدالة واحدة تجلب كل شيء دفعة واحدة.</p>
+<p>هذه هي الدالة الوحيدة اللازمة في <em>UserPage</em></p>
+<pre><code class="language-ts"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>
+<span class="hljs-keyword">import</span> { notFound } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/navigation&quot;</span>
+<span class="hljs-keyword">import</span> { getUserWithNotes } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../../services/users&quot;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">UserPage</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">{ params }: { params: <span class="hljs-built_in">Promise</span>&amp;lt;{ id: <span class="hljs-built_in">string</span> }&gt; }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> { id } = <span class="hljs-keyword">await</span> params
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserWithNotes</span>(<span class="hljs-title class_">Number</span>(id))  <span class="hljs-comment">// HIGHLIGHT LINE</span>
+
+  <span class="hljs-keyword">return</span> (
+    &amp;lt;div&gt;
+      &amp;lt;h2&gt;{user.<span class="hljs-property">name</span>}&amp;lt;/h2&gt;
+      &amp;lt;p&gt;<span class="hljs-title class_">Username</span>: {user.<span class="hljs-property">username</span>}&amp;lt;/p&gt;
+      &amp;lt;h3&gt;<span class="hljs-title class_">Notes</span>&amp;lt;/h3&gt;
+      &amp;lt;ul&gt;
+        {user.<span class="hljs-property">notes</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">note</span>) =&gt;</span> ( <span class="hljs-comment">// HIGHLIGHT LINE</span>
+          &amp;lt;li key={note.<span class="hljs-property">id</span>}&gt;
+            &amp;lt;<span class="hljs-title class_">Link</span> href={<span class="hljs-string">\`/notes/<span class="hljs-subst">\${note.id}</span>\`</span>}&gt;{note.<span class="hljs-property">content</span>}&amp;lt;/<span class="hljs-title class_">Link</span>&gt;
+            {note.<span class="hljs-property">important</span> &amp;amp;&amp;amp; &amp;lt;strong&gt; (important)&amp;lt;/strong&gt;}
+          &amp;lt;/li&gt;
+        ))}
+      &amp;lt;/ul&gt;
+    &amp;lt;/div&gt;
+  )
+}
+</code></pre>
+<p>أصبح المكوّن أبسط الآن: فبدلاً من استدعاء دالتين ودمج النتيجتين يدوياً، يستدعي <em>getUserWithNotes</em> مرة واحدة ويحصل على كائن مستخدم يحتوي أصلاً على مصفوفة الملاحظات. و <em>user.notes.map(...)</em> يمر على الملاحظات المضمّنة مباشرةً، دون حاجة إلى استعلام منفصل.</p>
+<p>توجد الآن مشكلة صغيرة في إنشاء ملاحظات جديدة. فمخططنا يتطلب أن يكون لكل ملاحظة <em>user_id</em> يشير إلى منشئها:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> notes = <span class="hljs-title function_">pgTable</span>(<span class="hljs-string">&quot;notes&quot;</span>, {
+  <span class="hljs-attr">id</span>: <span class="hljs-title function_">serial</span>(<span class="hljs-string">&quot;id&quot;</span>).<span class="hljs-title function_">primaryKey</span>(),
+  <span class="hljs-attr">content</span>: <span class="hljs-title function_">text</span>(<span class="hljs-string">&quot;content&quot;</span>).<span class="hljs-title function_">notNull</span>(),
+  <span class="hljs-attr">important</span>: <span class="hljs-title function_">boolean</span>(<span class="hljs-string">&quot;important&quot;</span>).<span class="hljs-title function_">notNull</span>().<span class="hljs-title function_">default</span>(<span class="hljs-literal">false</span>),
+  <span class="hljs-attr">userId</span>: <span class="hljs-title function_">integer</span>(<span class="hljs-string">&quot;user_id&quot;</span>)
+    .<span class="hljs-title function_">notNull</span>() <span class="hljs-comment">// HIGHLIGHT LINE</span>
+    .<span class="hljs-title function_">references</span>(<span class="hljs-function">() =&gt;</span> users.<span class="hljs-property">id</span>),
+})
+</code></pre>
+<p>بما أن التطبيق لا يدعم تسجيل دخول المستخدمين بعد، لا يمكننا معرفة من ينشئ الملاحظة. وكحل مؤقت، لنربط كل ملاحظة جديدة بمستخدم عشوائي من قاعدة البيانات. نغيّر دالة <em>addNote</em> في <em>services/notes.ts</em>:</p>
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">addNote</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">important</span>: <span class="hljs-built_in">boolean</span></span>) =&gt; {
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> db.<span class="hljs-property">query</span>.<span class="hljs-property">users</span>.<span class="hljs-title function_">findFirst</span>({
+    <span class="hljs-attr">orderBy</span>: sql<span class="hljs-string">\`RANDOM()\`</span>,
+  })
+
+  <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">insert</span>(notes).<span class="hljs-title function_">values</span>({ content, important, <span class="hljs-attr">userId</span>: user.<span class="hljs-property">id</span> })
+}
+</code></pre>
+<p>تستخدم الدالة <em>findFirst</em> مع <em>orderBy: sql<code>RANDOM()</code></em> لاختيار مستخدم عشوائي من قاعدة البيانات. ويتيح لنا وسم القالب <a href="https://orm.drizzle.team/docs/sql">sql</a> من <em>drizzle-orm</em> كتابة أجزاء SQL خام عندما لا يملك Drizzle دالة مساعدة مدمجة لشيء ما. ثم تُدرج الملاحظة بمعرّف ذلك المستخدم <em>id</em> كرقم <em>userId</em>. وسنستبدل هذا الحل المؤقت بمصادقة مستخدمين مناسبة قريباً.</p>
+<p>تجد الشيفرة الحالية للتطبيق على <a href="https://github.com/fullstack-hy2020/nextjs-notes">GitHub</a> في الفرع part7.</p>
+<h4 id="مسجل-الاستعلامات">مسجّل الاستعلامات</h4>
+<p>عندما يتصرف شيء ما بشكل غير متوقع، يفيد رؤية SQL الفعلي الذي يرسله Drizzle إلى قاعدة البيانات. يمكنك تفعيل التسجيل بتمرير خيار <em>logger</em> عند إنشاء الاتصال في <em>db/index.ts</em>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { drizzle } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;drizzle-orm/neon-http&quot;</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> schema <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./schema&quot;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> db = <span class="hljs-title function_">drizzle</span>(process.<span class="hljs-property">env</span>.<span class="hljs-property">DATABASE_URL</span>!, {
+  schema,
+  <span class="hljs-attr">logger</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// HIGHLIGHT LINE</span>
+})
+
+</code></pre>
+<p>مع <em>logger: true</em>، يطبع Drizzle كل عبارة SQL ومعاملاتها إلى الطرفية أثناء معالجة تطبيقك للطلبات. مثلاً، جلب الملاحظات ينتج مخرجات مثل:</p>
+<pre><code>Query: select &quot;id&quot;, &quot;content&quot;, &quot;important&quot;, &quot;user_id&quot; from &quot;notes&quot; where &quot;notes&quot;.&quot;important&quot; = $1 -- params: [true]
+
+</code></pre>
+<p>يسهّل هذا اكتشاف مشكلات مثل جلب كل الصفوف سهواً بدلاً من التصفية، أو تنفيذ استعلامات أكثر من المتوقع، أو تمرير معامل خاطئ. تذكّر أن توقف التسجيل في الإنتاج لتجنب إثقال سجلاتك.</p>
+<h3 id="تحذير-بشأن-الترحيلات">تحذير بشأن الترحيلات</h3>
+<p>قد تكون الترحيلات خادعة، خصوصاً أثناء التطوير حين يتغير المخطط بشكل متكرر. ومن الشائع أن ينتهي بك الأمر إلى حالة تصبح فيها حالة الترحيل غير متزامنة مع قاعدة البيانات الفعلية، مثلاً إذا عدّلت قاعدة البيانات يدوياً، أو حرّرت ملف ترحيل بعد تطبيقه، أو ولّدت ترحيلاً ثم غيّرت المخطط مرة أخرى قبل تطبيقه.</p>
+<p>وعندما تسوء الأمور، سترى عادةً أخطاء مثل &quot;relation already exists&quot; أو &quot;column does not exist&quot; عند تنفيذ <em>drizzle-kit migrate</em>. ويحدث هذا لأن متتبع الترحيلات في Drizzle يظن أن قاعدة البيانات في حالة معينة، بينما قاعدة البيانات الفعلية في حالة أخرى.</p>
+<p>أثناء التطوير، وحين لا تحتوي قاعدة البيانات على أي بيانات مهمة، فإن أبسط استراتيجية للتعافي هي البدء من جديد. ويمكنك فعل ذلك في خطوتين:</p>
+<p>أولاً، أزل تتبع ترحيلات Drizzle من قاعدة البيانات وأسقط كل الجداول التي أنشأتها:</p>
+<pre><code class="language-sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> drizzle.__drizzle_migrations CASCADE;
+<span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> notes CASCADE;
+<span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> users CASCADE;
+</code></pre>
+<p>يمكنك تنفيذ عبارات SQL هذه في Drizzle Studio أو مباشرةً في طرفية Neon على لوحة تحكم Vercel.</p>
+<p>ثانياً، أزل سجل الترحيلات المحلي حتى ينسى Drizzle Kit كل الترحيلات المولّدة سابقاً:</p>
+<pre><code class="language-bash">npx drizzle-kit drop
+</code></pre>
+<p>يتيح لك الأمر <a href="https://orm.drizzle.team/docs/drizzle-kit-drop">drizzle-kit drop</a> اختيار إدخالات الترحيل التي تريد إزالتها من السجل المحلي. وبعد إسقاطها، يمكنك إعادة توليد كل شيء وتطبيقه من جديد بشكل نظيف:</p>
+<pre><code class="language-bash">npx drizzle-kit generate
+npx drizzle-kit migrate
+</code></pre>
+<p>يمنحك هذا بداية جديدة: فملفات الترحيل تُولَّد مجدداً من المخطط الحالي، وجداول قاعدة البيانات تُنشأ من الصفر.</p>
+<p>خيار &quot;الحل الجذري&quot; هذا مقبول تماماً أثناء التطوير. أما في الإنتاج فلا ينبغي أبداً إسقاط الجداول أو حذف سجل الترحيلات، لأن ذلك يعني فقدان بيانات مستخدمين حقيقية. وفي بيئة الإنتاج، النهج الصحيح هو التقدم دائماً إلى الأمام: اكتب ترحيلاً جديداً يصلح المشكلة بدلاً من محاولة التراجع عن الترحيلات السابقة. لكن لأغراضنا في هذه الدورة، البدء من جديد هو أسرع طريقة للخروج من المأزق.</p>
+<div class="tasks">
+<p><strong>9. المستخدمون</strong></p>
+</div>
+<div class="tasks">
+<p><strong>10. صفحة المستخدم</strong></p>
+</div>
+`,o={part:14,letter:"c",file:s,title:a,slug:n,mainImage:e,headings:p,html:l};export{o as default,s as file,p as headings,l as html,r as letter,e as mainImage,t as part,n as slug,a as title};

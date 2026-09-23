@@ -1,0 +1,455 @@
+const l=0,i="b",s="part0b.md",a="أساسيات تطبيقات الويب",n="fundamentals_of_web_apps",e="/images/part-0.svg",p=[{depth:3,id:"http-get",text:"HTTP GET"},{depth:3,id:"تطبيقات-الويب-التقليدية",text:"تطبيقات الويب التقليدية"},{depth:3,id:"تشغيل-منطق-التطبيق-في-المتصفح",text:"تشغيل منطق التطبيق في المتصفح"},{depth:3,id:"معالجات-الأحداث-ودوال-الاستدعاء-الراجع",text:"معالجات الأحداث ودوال الاستدعاء الراجع"},{depth:3,id:"نموذج-كائن-المستند-أو-dom",text:"نموذج كائن المستند أو DOM"},{depth:3,id:"التلاعب-بكائن-المستند-من-وحدة-التحكم",text:"التلاعب بكائن المستند من وحدة التحكم"},{depth:3,id:"css",text:"CSS"},{depth:3,id:"تحميل-صفحة-تحتوي-على-javascript-مراجعة",text:"تحميل صفحة تحتوي على JavaScript — مراجعة"},{depth:3,id:"النماذج-و-http-post",text:"النماذج و HTTP POST"},{depth:3,id:"ajax",text:"AJAX"},{depth:3,id:"تطبيق-الصفحة-الواحدة",text:"تطبيق الصفحة الواحدة"},{depth:3,id:"مكتبات-javascript",text:"مكتبات JavaScript"},{depth:3,id:"تطوير-الويب-full-stack",text:"تطوير الويب Full stack"},{depth:3,id:"إرهاق-javascript",text:"إرهاق JavaScript"},{depth:3,id:"تمارين-01-06",text:"تمارين 0.1.-0.6."}],t=`<div class="content">
+<p>قبل أن نبدأ البرمجة، سنستعرض بعض مبادئ تطوير الويب من خلال فحص تطبيق مثال على العنوان <a href="https://studies.cs.helsinki.fi/exampleapp">https://studies.cs.helsinki.fi/exampleapp</a>.</p>
+<p>التطبيق موجود فقط لتوضيح بعض المفاهيم الأساسية في الدورة، وهو بأي حال من الأحوال ليس مثالاً على <i>كيفية</i> بناء تطبيق ويب حديث. بل على العكس، إنه يوضح بعض التقنيات القديمة في تطوير الويب، والتي قد تُعتبر اليوم <i>ممارسات سيئة</i>.</p>
+<p>ستتوافق الشيفرة مع أفضل الممارسات المعاصرة بدءاً من <a href="/part1">الجزء 1</a> فصاعداً.</p>
+<p>افتح <a href="https://studies.cs.helsinki.fi/exampleapp">تطبيق المثال</a> في متصفحك. قد يستغرق هذا بعض الوقت أحياناً.</p>
+<p>أُعدّت مواد الدورة باستخدام متصفح Chrome وتم تكييفها له.</p>
+<p><strong>القاعدة الأولى في تطوير الويب</strong>: أبقِ وحدة تحكم المطوّر مفتوحة دائماً في متصفحك. على macOS، افتح وحدة التحكم بالضغط على <em>fn</em>-<em>F12</em> أو <em>option-cmd-i</em> معاً. على Windows أو Linux، افتح وحدة التحكم بالضغط على <em>Fn</em>-<em>F12</em> أو <em>ctrl-shift-i</em> معاً. يمكن أيضاً فتح وحدة التحكم عبر <a href="https://en.wikipedia.org/wiki/Menu_key">قائمة السياق</a>.</p>
+<p>تذكّر أن تُبقي وحدة تحكم المطوّر مفتوحة <i>دائماً</i> أثناء تطوير تطبيقات الويب.</p>
+<p>تبدو وحدة التحكم هكذا:</p>
+<p><img src="/images/content/0/1e.webp" alt="لقطة شاشة لأدوات المطوّر مفتوحة في المتصفح"></p>
+<p>تأكد من أن تبويب <i>Network</i> مفتوح، وفعّل خيار <i>Disable cache</i> كما هو موضح. قد يكون <i>Preserve log</i> مفيداً أيضاً (فهو يحفظ السجلات التي يطبعها التطبيق عند إعادة تحميل الصفحة)، وكذلك &quot;Hide extension URLs&quot; (الذي يخفي طلبات أي إضافات مثبّتة في المتصفح، وهي غير ظاهرة في الصورة أعلاه).</p>
+<p><strong>ملاحظة:</strong> أهم تبويب هو تبويب <i>Console</i>. لكننا سنستخدم تبويب <i>Network</i> كثيراً في هذه المقدمة.</p>
+<h3 id="http-get">HTTP GET</h3>
+<p>يتواصل الخادم ومتصفح الويب مع بعضهما باستخدام بروتوكول <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">HTTP</a>. يُظهر تبويب <i>Network</i> كيف يتواصل المتصفح والخادم.</p>
+<p>عند إعادة تحميل الصفحة (لتحديث صفحة ويب على Windows، اضغط المفتاحين <em>Fn</em>-<em>F5</em>. على macOS، اضغط <em>command</em>-<em>R</em>. أو اضغط رمز ↻ في متصفحك)، ستُظهر وحدة التحكم أن حدثين قد وقعا:</p>
+<ul>
+<li>جلب المتصفح محتويات الصفحة <i>studies.cs.helsinki.fi/exampleapp</i> من الخادم</li>
+<li>ونزّل الصورة <i>kuva.png</i></li>
+</ul>
+<p><img src="/images/content/0/2e.webp" alt="لقطة شاشة لوحدة تحكم المطوّر تُظهر هذين الحدثين"></p>
+<p>على الشاشات الصغيرة، قد تحتاج إلى توسيع نافذة وحدة التحكم لرؤية ذلك.</p>
+<p>بالنقر على الحدث الأول تظهر مزيد من المعلومات حول ما يجري:</p>
+<p><img src="/images/content/0/3e.webp" alt="عرض تفصيلي لحدث واحد"></p>
+<p>يُظهر الجزء العلوي <i>General</i> أن المتصفح طلب العنوان <i><a href="https://studies.cs.helsinki.fi/exampleapp">https://studies.cs.helsinki.fi/exampleapp</a></i> (وإن كان العنوان قد تغيّر قليلاً منذ التقاط هذه الصورة) باستخدام طريقة <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET</a>، وأن الطلب كان ناجحاً لأن استجابة الخادم حملت <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">رمز الحالة</a> 200.</p>
+<p>يحمل الطلب واستجابة الخادم عدة <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">ترويسات</a>:</p>
+<p><img src="/images/content/0/4e.webp" alt="لقطة شاشة لترويسات الاستجابة"></p>
+<p>تخبرنا <i>Response headers</i> في الأعلى مثلاً بحجم الاستجابة بالبايتات ووقت الاستجابة الدقيق. ويخبرنا ترويس مهم هو <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type">Content-Type</a> بأن الاستجابة ملف نصي بصيغة <a href="https://en.wikipedia.org/wiki/UTF-8">utf-8</a> وأن محتوياته منسّقة بـ HTML. بهذه الطريقة يعرف المتصفح أن الاستجابة صفحة <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> عادية ويعرضها في المتصفح «كصفحة ويب».</p>
+<p>يعرض تبويب <i>Response</i> بيانات الاستجابة، وهي صفحة HTML عادية. ويحدد قسم <i>body</i> بنية الصفحة المعروضة على الشاشة:</p>
+<p><img src="/images/content/0/5e.webp" alt="لقطة شاشة لتبويب الاستجابة"></p>
+<p>تحتوي الصفحة على عنصر <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div">div</a>، يحتوي بدوره على عنوان ورابط إلى الصفحة <i>notes</i> ووسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img">img</a>، وتعرض عدد الملاحظات المُنشأة.</p>
+<p>بسبب وسم img، يُجري المتصفح <i>طلب HTTP</i> ثانياً لجلب الصورة <i>kuva.png</i> من الخادم. تفاصيل الطلب كما يلي:</p>
+<p><img src="/images/content/0/6e.webp" alt="عرض تفصيلي للحدث الثاني"></p>
+<p>أُرسل الطلب إلى العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/kuva.png">https://studies.cs.helsinki.fi/exampleapp/kuva.png</a> ونوعه HTTP GET. تخبرنا ترويسات الاستجابة أن حجم الاستجابة 89350 بايت، وأن <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type">Content-type</a> هو <i>image/png</i>، أي أنها صورة png. يستخدم المتصفح هذه المعلومات لعرض الصورة بشكل صحيح على الشاشة.</p>
+<p>تشكّل سلسلة الأحداث الناتجة عن فتح الصفحة <a href="https://studies.cs.helsinki.fi/exampleapp">https://studies.cs.helsinki.fi/exampleapp</a> في المتصفح <a href="https://www.geeksforgeeks.org/unified-modeling-language-uml-sequence-diagrams/">مخطط التتابع</a> التالي:</p>
+<p><img src="/images/content/0/7m.webp" alt="مخطط تتابع للتدفق المشروح أعلاه"></p>
+<p>يوضّح مخطط التتابع كيفية تواصل المتصفح والخادم مع مرور الوقت. يتدفق الوقت في المخطط من الأعلى إلى الأسفل، لذا يبدأ المخطط بأول طلب يرسله المتصفح إلى الخادم، تليه الاستجابة.</p>
+<p>أولاً، يرسل المتصفح طلب HTTP GET إلى الخادم لجلب شيفرة HTML للصفحة. ويدفع وسم <i>img</i> في HTML المتصفحَ إلى جلب الصورة <i>kuva.png</i>. ثم يعرض المتصفح صفحة HTML والصورة على الشاشة.</p>
+<p>ورغم صعوبة ملاحظة ذلك، تبدأ صفحة HTML في العرض قبل جلب الصورة من الخادم.</p>
+<h3 id="تطبيقات-الويب-التقليدية">تطبيقات الويب التقليدية</h3>
+<p>تعمل الصفحة الرئيسية لتطبيق المثال مثل <i>تطبيق ويب تقليدي</i>. عند دخول الصفحة، يجلب المتصفح من الخادم مستند HTML الذي يوضّح بنية الصفحة ومحتواها النصي.</p>
+<p>كوّن الخادم هذا المستند بطريقة ما. قد يكون المستند ملفاً نصياً <i>ثابتاً</i> محفوظاً في مجلد الخادم. ويمكن للخادم أيضاً تكوين مستندات HTML <i>ديناميكياً</i> وفقاً لشيفرة التطبيق، باستخدام بيانات من قاعدة البيانات مثلاً.
+وقد كُوّنت شيفرة HTML لتطبيق المثال ديناميكياً لأنها تحتوي على معلومات عن عدد الملاحظات المُنشأة.</p>
+<p>تُكوَّن شيفرة HTML للصفحة الرئيسية ديناميكياً على الخادم كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getFrontPageHtml</span> = noteCount =&gt; {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">\`
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class=&#x27;container&#x27;&gt;
+          &lt;h1&gt;Full stack example app&lt;/h1&gt;
+          &lt;p&gt;number of notes created <span class="hljs-subst">\${noteCount}</span>&lt;/p&gt;
+          &lt;a href=&#x27;/notes&#x27;&gt;notes&lt;/a&gt;
+          &lt;img src=&#x27;kuva.png&#x27; width=&#x27;200&#x27; /&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+\`</span>
+}
+
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> page = <span class="hljs-title function_">getFrontPageHtml</span>(notes.<span class="hljs-property">length</span>)
+  res.<span class="hljs-title function_">send</span>(page)
+})
+</code></pre>
+<p>لا يلزمك فهم الشيفرة الآن.</p>
+<p>حُفظ محتوى صفحة HTML كنص قالب (template string)، أي نص يسمح بتقييم متغيرات مثل <em>noteCount</em> في وسطه. ويُستبدل الجزء المتغيّر ديناميكياً من الصفحة الرئيسية، وهو عدد الملاحظات المحفوظة (في الشيفرة <em>noteCount</em>)، بالعدد الحالي للملاحظات (في الشيفرة <em>notes.length</em>) داخل نص القالب.</p>
+<p>كتابة HTML وسط الشيفرة ليست فكرة ذكية بالطبع، لكنها كانت ممارسة عادية لدى مبرمجي PHP من المدرسة القديمة.</p>
+<p>في تطبيقات الويب التقليدية، يكون المتصفح &quot;غبياً&quot;. فهو يجلب بيانات HTML فقط من الخادم، ويكون كل منطق التطبيق على الخادم. ويمكن إنشاء خادم باستخدام <a href="https://spring.io/projects/spring-framework">Java Spring</a> أو <a href="https://flask.palletsprojects.com/en/2.2.x/">Python Flask</a> أو <a href="http://rubyonrails.org/">Ruby on Rails</a> على سبيل المثال لا الحصر.</p>
+<p>يستخدم المثال مكتبة <a href="https://expressjs.com/">Express</a> مع Node.js. وستستخدم هذه الدورة Node.js و Express لإنشاء خوادم ويب.</p>
+<h3 id="تشغيل-منطق-التطبيق-في-المتصفح">تشغيل منطق التطبيق في المتصفح</h3>
+<p>أبقِ وحدة تحكم المطوّر مفتوحة. أفرغ وحدة التحكم بالنقر على رمز 🚫، أو بكتابة clear() في وحدة التحكم.
+الآن عند انتقالك إلى صفحة <a href="https://studies.cs.helsinki.fi/exampleapp/notes">notes</a>، يُجري المتصفح 4 طلبات HTTP:</p>
+<p><img src="/images/content/0/8e.webp" alt="لقطة شاشة لوحدة تحكم المطوّر مع ظهور الطلبات الأربعة"></p>
+<p>لكل الطلبات أنواع <i>مختلفة</i>. نوع الطلب الأول هو <i>document</i>. وهو شيفرة HTML للصفحة، ويبدو كما يلي:</p>
+<p><img src="/images/content/0/9e.webp" alt="عرض تفصيلي للطلب الأول"></p>
+<p>عندما نقارن الصفحة المعروضة في المتصفح بشيفرة HTML التي يعيدها الخادم، نلاحظ أن الشيفرة لا تحتوي على قائمة الملاحظات.
+يحتوي قسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head">head</a> في HTML على وسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script">script</a>، وهو ما يجعل المتصفح يجلب ملف JavaScript يُسمى <i>main.js</i>.</p>
+<p>تبدو شيفرة JavaScript كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> xhttp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()
+
+xhttp.<span class="hljs-property">onreadystatechange</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">readyState</span> == <span class="hljs-number">4</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> == <span class="hljs-number">200</span>) {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">responseText</span>)
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data)
+
+    <span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;ul&#x27;</span>)
+    ul.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>, <span class="hljs-string">&#x27;notes&#x27;</span>)
+
+    data.<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">note</span>) {
+      <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>)
+
+      ul.<span class="hljs-title function_">appendChild</span>(li)
+      li.<span class="hljs-title function_">appendChild</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createTextNode</span>(note.<span class="hljs-property">content</span>))
+    })
+
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;notes&#x27;</span>).<span class="hljs-title function_">appendChild</span>(ul)
+  }
+}
+
+xhttp.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/data.json&#x27;</span>, <span class="hljs-literal">true</span>)
+xhttp.<span class="hljs-title function_">send</span>()
+</code></pre>
+<p>تفاصيل الشيفرة ليست مهمة الآن، لكن أُدرجت بعض الشيفرة لإثراء الصور والنص. سنبدأ البرمجة فعلياً في <a href="/part1">الجزء 1</a>. وشيفرة المثال في هذا الجزء لا علاقة لها إطلاقاً بتقنيات البرمجة في هذه الدورة.</p>
+<blockquote>
+<p>قد يتساءل البعض لماذا يُستخدم كائن xhttp بدلاً من fetch الحديث. السبب هو عدم الرغبة في الخوض في promises بعد، ولأن للشيفرة دوراً ثانوياً في هذا الجزء. سنعود إلى الطرق الحديثة لإرسال الطلبات إلى الخادم في <a href="/part2">الجزء 2</a>.</p>
+</blockquote>
+<p>فور جلب وسم <i>script</i>، يبدأ المتصفح في تنفيذ الشيفرة.</p>
+<p>يوجّه السطران الأخيران المتصفحَ إلى إرسال طلب HTTP GET إلى عنوان الخادم <i>/data.json</i>:</p>
+<pre><code class="language-js">xhttp.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/data.json&#x27;</span>, <span class="hljs-literal">true</span>)
+xhttp.<span class="hljs-title function_">send</span>()
+</code></pre>
+<p>هذا هو الطلب الأخير في الأسفل الظاهر في تبويب Network.</p>
+<p>يمكننا محاولة الانتقال إلى العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/data.json">https://studies.cs.helsinki.fi/exampleapp/data.json</a> مباشرة من المتصفح:</p>
+<p><img src="/images/content/0/10e.webp" alt="بيانات JSON الخام"></p>
+<p>هناك نجد الملاحظات في &quot;بيانات <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> الخام&quot;. افتراضياً، ليست المتصفحات المبنية على Chromium جيدة جداً في عرض بيانات JSON. ويمكن استخدام إضافات للتعامل مع التنسيق. ثبّت مثلاً <a href="https://chromewebstore.google.com/detail/gmegofmjomhknnokphhckolhcffdaihd">JSONView</a> على Chrome، ثم أعد تحميل الصفحة. ستصبح البيانات الآن منسّقة بشكل جميل:</p>
+<p><img src="/images/content/0/11e.webp" alt="مخرجات JSON المنسّقة"></p>
+<p>إذن، تُنزّل شيفرة JavaScript لصفحة notes أعلاه بيانات JSON التي تحتوي على الملاحظات، وتكوّن قائمة نقطية من محتويات الملاحظات:</p>
+<p>يحدث هذا بالشيفرة التالية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> data = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">responseText</span>)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data)
+
+<span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;ul&#x27;</span>)
+ul.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>, <span class="hljs-string">&#x27;notes&#x27;</span>)
+
+data.<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">note</span>) {
+  <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>)
+
+  ul.<span class="hljs-title function_">appendChild</span>(li)
+  li.<span class="hljs-title function_">appendChild</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createTextNode</span>(note.<span class="hljs-property">content</span>))
+})
+
+<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;notes&#x27;</span>).<span class="hljs-title function_">appendChild</span>(ul)
+</code></pre>
+<p>تنشئ الشيفرة أولاً قائمة غير مرتّبة بوسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul">ul</a>...</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;ul&#x27;</span>)
+ul.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;class&#x27;</span>, <span class="hljs-string">&#x27;notes&#x27;</span>)
+</code></pre>
+<p>...ثم تضيف وسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li">li</a> واحداً لكل ملاحظة. ولا يصبح محتوى وسم li إلا الحقل <i>content</i> لكل ملاحظة. أما الطوابع الزمنية الموجودة في البيانات الخام فلا تُستخدم لشيء هنا.</p>
+<pre><code class="language-js">data.<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">note</span>) {
+  <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>)
+
+  ul.<span class="hljs-title function_">appendChild</span>(li)
+  li.<span class="hljs-title function_">appendChild</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createTextNode</span>(note.<span class="hljs-property">content</span>))
+})
+</code></pre>
+<p>افتح الآن تبويب <i>Console</i> في وحدة تحكم المطوّر:</p>
+<p><img src="/images/content/0/12e.webp" alt="لقطة شاشة لتبويب Console في وحدة تحكم المطوّر"></p>
+<p>بالنقر على المثلث الصغير في بداية السطر، يمكنك توسيع النص في وحدة التحكم.</p>
+<p><img src="/images/content/0/13e.webp" alt="لقطة شاشة لأحد العناصر المطوية سابقاً بعد توسيعه"></p>
+<p>هذا الناتج في وحدة التحكم ناتج عن الأمر <em>console.log</em> في الشيفرة:</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> data = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">responseText</span>)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data)
+</code></pre>
+<p>إذن، بعد استلام البيانات من الخادم، تطبعها الشيفرة في وحدة التحكم.</p>
+<p>سيصبح تبويب <i>Console</i> والأمر <em>console.log</em> مألوفين جداً لك خلال الدورة.</p>
+<h3 id="معالجات-الأحداث-ودوال-الاستدعاء-الراجع">معالجات الأحداث ودوال الاستدعاء الراجع</h3>
+<p>بنية هذه الشيفرة غريبة بعض الشيء:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> xhttp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()
+
+xhttp.<span class="hljs-property">onreadystatechange</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// الشيفرة التي تتولى معالجة استجابة الخادم</span>
+}
+
+xhttp.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/data.json&#x27;</span>, <span class="hljs-literal">true</span>)
+xhttp.<span class="hljs-title function_">send</span>()
+</code></pre>
+<p>يُرسل الطلب إلى الخادم في السطر الأخير، لكن شيفرة معالجة الاستجابة موجودة في الأعلى. فما الذي يحدث؟</p>
+<pre><code class="language-js">xhttp.<span class="hljs-property">onreadystatechange</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+</code></pre>
+<p>في هذا السطر، يُعرَّف <i>معالج حدث</i> للحدث <i>onreadystatechange</i> للكائن <em>xhttp</em> الذي يُجري الطلب. وعندما تتغيّر حالة الكائن، يستدعي المتصفح دالة معالج الحدث. وتتحقق شيفرة الدالة من أن <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState">readyState</a> يساوي 4 (وهو ما يعبّر عن الحالة <i>اكتملت العملية</i>) ومن أن رمز حالة HTTP للاستجابة هو 200.</p>
+<pre><code class="language-js">xhttp.<span class="hljs-property">onreadystatechange</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">readyState</span> == <span class="hljs-number">4</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> == <span class="hljs-number">200</span>) {
+    <span class="hljs-comment">// الشيفرة التي تتولى معالجة استجابة الخادم</span>
+  }
+}
+</code></pre>
+<p>آلية استدعاء معالجات الأحداث شائعة جداً في JavaScript. وتُسمى دوال معالجات الأحداث <a href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function">دوال استدعاء راجع</a> (callback). فلا تستدعي شيفرة التطبيق الدوال بنفسها، بل تستدعيها بيئة التشغيل — أي المتصفح — في الوقت المناسب عندما يقع <i>الحدث</i>.</p>
+<h3 id="نموذج-كائن-المستند-أو-dom">نموذج كائن المستند أو DOM</h3>
+<p>يمكننا التفكير في صفحات HTML كبنى شجرية ضمنية.</p>
+<pre><code>html
+  head
+    link
+    script
+  body
+    div
+      h1
+      div
+        ul
+          li
+          li
+          li
+      form
+        input
+        input
+</code></pre>
+<p>ويمكن رؤية البنية الشجرية نفسها في تبويب <i>Elements</i> بوحدة التحكم.</p>
+<p><img src="/images/content/0/14e.webp" alt="لقطة شاشة لتبويب Elements في وحدة تحكم المطوّر"></p>
+<p>يقوم عمل المتصفح على فكرة تمثيل عناصر HTML كشجرة.</p>
+<p>نموذج كائن المستند، أو <a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a>، هو واجهة برمجة تطبيقات (<i>API</i>) تتيح تعديل <i>أشجار العناصر</i> المقابلة لصفحات الويب برمجياً.</p>
+<p>استخدمت شيفرة JavaScript المقدَّمة في الفصل السابق واجهة DOM-API لإضافة قائمة ملاحظات إلى الصفحة.</p>
+<p>تنشئ الشيفرة التالية عقدة جديدة، وتُسندها إلى المتغير <em>ul</em>، وتضيف إليها بعض العقد الفرعية:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> ul = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;ul&#x27;</span>)
+
+data.<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">note</span>) {
+  <span class="hljs-keyword">var</span> li = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>)
+
+  ul.<span class="hljs-title function_">appendChild</span>(li)
+  li.<span class="hljs-title function_">appendChild</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createTextNode</span>(note.<span class="hljs-property">content</span>))
+})
+</code></pre>
+<p>وأخيراً، يُوصل فرع الشجرة الخاص بالمتغير <em>ul</em> إلى مكانه الصحيح في شجرة HTML للصفحة كاملة:</p>
+<pre><code class="language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;notes&#x27;</span>).<span class="hljs-title function_">appendChild</span>(ul)
+</code></pre>
+<h3 id="التلاعب-بكائن-المستند-من-وحدة-التحكم">التلاعب بكائن المستند من وحدة التحكم</h3>
+<p>تُسمى العقدة العليا في شجرة DOM لمستند HTML كائن <em>document</em>. ويمكننا إجراء عمليات متنوعة على صفحة ويب باستخدام DOM-API. ويمكنك الوصول إلى كائن <em>document</em> بكتابة <em>document</em> في تبويب Console:</p>
+<p><img src="/images/content/0/15e.webp" alt="document في تبويب Console في أدوات المطوّر"></p>
+<p>لنضف ملاحظة جديدة إلى الصفحة من وحدة التحكم.</p>
+<p>أولاً، سنحصل على قائمة الملاحظات من الصفحة. القائمة موجودة في أول عنصر ul في الصفحة:</p>
+<pre><code class="language-js">list = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&#x27;ul&#x27;</span>)[<span class="hljs-number">0</span>]
+</code></pre>
+<p>ثم أنشئ عنصر li جديداً وأضف إليه بعض المحتوى النصي:</p>
+<pre><code class="language-js">newElement = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>)
+newElement.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;Page manipulation from console is easy&#x27;</span>
+</code></pre>
+<p>وأضف عنصر li الجديد إلى القائمة:</p>
+<pre><code class="language-js">list.<span class="hljs-title function_">appendChild</span>(newElement)
+</code></pre>
+<p><img src="/images/content/0/16e.webp" alt="لقطة شاشة للصفحة بعد إضافة الملاحظة الجديدة إلى القائمة"></p>
+<p>رغم أن الصفحة تتحدّث في متصفحك، فإن التغييرات ليست دائمة. فإذا أُعيد تحميل الصفحة، ستختفي الملاحظة الجديدة لأن التغييرات لم تُرسل إلى الخادم. وشيفرة JavaScript التي يجلبها المتصفح ستنشئ دائماً قائمة الملاحظات بناءً على بيانات JSON من العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/data.json">https://studies.cs.helsinki.fi/exampleapp/data.json</a>.</p>
+<h3 id="css">CSS</h3>
+<p>يحتوي عنصر <i>head</i> في شيفرة HTML لصفحة Notes على وسم <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link">link</a>، وهو يحدد أنه على المتصفح جلب ورقة أنماط <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a> من العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/main.css">main.css</a>.</p>
+<p>أوراق الأنماط المتتالية (Cascading Style Sheets)، أو CSS، هي لغة أوراق أنماط تُستخدم لتحديد مظهر صفحات الويب.</p>
+<p>يبدو ملف CSS المجلوب كما يلي:</p>
+<pre><code class="language-css"><span class="hljs-selector-class">.container</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid;
+}
+
+<span class="hljs-selector-class">.notes</span> {
+  <span class="hljs-attribute">color</span>: blue;
+}
+</code></pre>
+<p>يعرّف الملف <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors">محددَي فئة</a> (class selectors). ويُستخدمان لتحديد أجزاء معينة من الصفحة وتعريف قواعد تنسيق لتنسيقها.</p>
+<p>يبدأ تعريف محدد الفئة دائماً بنقطة ويحتوي على اسم الفئة.</p>
+<p>الفئات هي <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class">خصائص</a>، ويمكن إضافتها إلى عناصر HTML.</p>
+<p>يمكن فحص خصائص CSS في تبويب <i>Elements</i> بوحدة التحكم:</p>
+<p><img src="/images/content/0/17e.webp" alt="لقطة شاشة لتبويب Elements في وحدة تحكم المطوّر"></p>
+<p>يحمل عنصر <i>div</i> الخارجي الفئة <i>container</i>. ويحمل عنصر <i>ul</i> الذي يحتوي على قائمة الملاحظات الفئة <i>notes</i>.</p>
+<p>تحدد قاعدة CSS أن العناصر ذات الفئة <i>container</i> ستُحيط بها <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border">حدود</a> بعرض بكسل واحد. كما تضبط <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/padding">حشوة</a> بمقدار 10 بكسلات للعنصر. وهذا يضيف بعض المساحة الفارغة بين محتوى العنصر والحدود.</p>
+<p>تضبط قاعدة CSS الثانية لون النص للفئة <i>notes</i> على الأزرق.</p>
+<p>يمكن أن تحمل عناصر HTML خصائص أخرى غير الفئات. فعنصر <i>div</i> الذي يحتوي على الملاحظات يحمل خاصية <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id">id</a>. وتستخدم شيفرة JavaScript المعرّف (id) للعثور على العنصر.</p>
+<p>يمكن استخدام تبويب <i>Elements</i> في وحدة التحكم لتغيير أنماط العناصر.</p>
+<p><img src="/images/content/0/18e.webp" alt="تبويب Elements في أدوات المطوّر يُظهر قواعد CSS المطبَّقة على الفئة container"></p>
+<p>لن تكون التغييرات المُجراة في وحدة التحكم دائمة. وإذا أردت إجراء تغييرات دائمة، فيجب حفظها في ورقة أنماط CSS على الخادم.</p>
+<h3 id="تحميل-صفحة-تحتوي-على-javascript-مراجعة">تحميل صفحة تحتوي على JavaScript — مراجعة</h3>
+<p>لنراجع ما يحدث عند فتح الصفحة <a href="https://studies.cs.helsinki.fi/exampleapp/notes">https://studies.cs.helsinki.fi/exampleapp/notes</a> في المتصفح.</p>
+<p><img src="/images/content/0/19m.webp" alt="مخطط تتابع لتفاعل المتصفح/الخادم"></p>
+<ul>
+<li>يجلب المتصفح من الخادم شيفرة HTML التي تحدد محتوى الصفحة وبنيتها باستخدام طلب HTTP GET.</li>
+<li>تدفع الروابط في شيفرة HTML المتصفحَ إلى جلب ورقة أنماط CSS <i>main.css</i> أيضاً...</li>
+<li>...وملف شيفرة JavaScript <i>main.js</i></li>
+<li>ينفّذ المتصفح شيفرة JavaScript. وتُرسل الشيفرة طلب HTTP GET إلى العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/data.json">https://studies.cs.helsinki.fi/exampleapp/data.json</a>، الذي يعيد الملاحظات كبيانات JSON.</li>
+<li>عند جلب البيانات، ينفّذ المتصفح <i>معالج حدث</i>، يعرض الملاحظات في الصفحة باستخدام DOM-API.</li>
+</ul>
+<h3 id="النماذج-و-http-post">النماذج و HTTP POST</h3>
+<p>بعد ذلك، لنفحص كيفية إضافة ملاحظة جديدة.</p>
+<p>تحتوي صفحة Notes على <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form">عنصر نموذج</a>.</p>
+<p><img src="/images/content/0/20e.webp" alt="إبراز عنصر النموذج في صفحة الويب وأدوات المطوّر"></p>
+<p>عند النقر على الزر في النموذج، يرسل المتصفح إدخال المستخدم إلى الخادم. لنفتح تبويب <i>Network</i> ونرَ كيف يبدو إرسال النموذج:</p>
+<p><img src="/images/content/0/21e.webp" alt="لقطة شاشة لتبويب Network حيث تظهر أحداث إرسال النموذج"></p>
+<p>والمفاجئ أن إرسال النموذج يتسبب في ما لا يقل عن <i>خمسة</i> طلبات HTTP.
+الأول هو حدث إرسال النموذج. لنتفحّصه عن قرب:</p>
+<p><img src="/images/content/0/22e.webp" alt="عرض تفصيلي للطلب الأول"></p>
+<p>إنه طلب <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST">HTTP POST</a> إلى عنوان الخادم <i>new_note</i>. ويستجيب الخادم برمز حالة HTTP هو 302. وهذا <a href="https://en.wikipedia.org/wiki/URL_redirection">إعادة توجيه URL</a>، يطلب به الخادم من المتصفح إجراء طلب HTTP GET جديد إلى العنوان المحدد في ترويسة <i>Location</i> — أي العنوان <i>notes</i>.</p>
+<p>إذن، يعيد المتصفح تحميل صفحة Notes. وتتسبب إعادة التحميل في ثلاثة طلبات HTTP أخرى: جلب ورقة الأنماط (main.css)، وشيفرة JavaScript (main.js)، والبيانات الخام للملاحظات (data.json).</p>
+<p>يعرض تبويب Network أيضاً البيانات المُرسلة مع النموذج. ويمكنك عرض البيانات باختيار اسم الطلب أولاً ثم فحص تبويب Payload:</p>
+<p><img src="/images/content/0/23g.webp" alt="قائمة منسدلة لبيانات النموذج في أدوات المطوّر"></p>
+<p>يحمل وسم Form الخاصيتين <i>action</i> و <i>method</i>، وهما تحددان أن إرسال النموذج يتم كطلب HTTP POST إلى العنوان <i>new_note</i>.</p>
+<p><img src="/images/content/0/24e.webp" alt="إبراز action و method"></p>
+<p>الشيفرة الموجودة على الخادم والمسؤولة عن طلب POST بسيطة جداً (ملاحظة: هذه الشيفرة على الخادم، وليست في شيفرة JavaScript التي يجلبها المتصفح):</p>
+<pre><code class="language-js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/new_note&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  notes.<span class="hljs-title function_">push</span>({
+    <span class="hljs-attr">content</span>: req.<span class="hljs-property">body</span>.<span class="hljs-property">note</span>,
+    <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),
+  })
+
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">redirect</span>(<span class="hljs-string">&#x27;/notes&#x27;</span>)
+})
+</code></pre>
+<p>تُرسل البيانات كـ <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST">body</a> لطلب POST.</p>
+<p>ويمكن للخادم الوصول إلى البيانات عبر الحقل <em>req.body</em> في كائن الطلب <em>req</em>.</p>
+<p>ينشئ الخادم كائن ملاحظة جديداً، ويضيفه إلى مصفوفة تُسمى <em>notes</em>.</p>
+<pre><code class="language-js">notes.<span class="hljs-title function_">push</span>({
+  <span class="hljs-attr">content</span>: req.<span class="hljs-property">body</span>.<span class="hljs-property">note</span>,
+  <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),
+})
+</code></pre>
+<p>لكل كائن ملاحظة حقلان: <i>content</i> الذي يحتوي على المحتوى الفعلي للملاحظة، و <i>date</i> الذي يحتوي على تاريخ ووقت إنشاء الملاحظة.</p>
+<p>لا يحفظ الخادم الملاحظات الجديدة في قاعدة بيانات، لذا تختفي الملاحظات الجديدة عند إعادة تشغيل الخادم.</p>
+<h3 id="ajax">AJAX</h3>
+<p>تتبع صفحة Notes في التطبيق أسلوب تطوير الويب في أوائل التسعينيات وتستخدم &quot;Ajax&quot;. وهي بذلك في ذروة موجة تقنية الويب في أوائل الألفينيات.</p>
+<p><a href="https://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a> (JavaScript و XML غير المتزامنين) مصطلح ظهر في فبراير 2005 على خلفية التطورات في تقنية المتصفحات، لوصف نهج ثوري جديد أتاح جلب محتوى إلى صفحات الويب باستخدام JavaScript المضمّن داخل HTML، دون الحاجة إلى إعادة عرض الصفحة.</p>
+<p>قبل عصر AJAX، كانت كل صفحات الويب تعمل مثل <a href="/part0/fundamentals_of_web_apps#traditional-web-applications">تطبيق الويب التقليدي</a> الذي رأيناه سابقاً في هذا الفصل.
+وكانت كل البيانات المعروضة في الصفحة تُجلب مع شيفرة HTML التي يولّدها الخادم.</p>
+<p>تستخدم صفحة Notes تقنية AJAX لجلب بيانات الملاحظات. أما إرسال النموذج فلا يزال يستخدم الآلية التقليدية لإرسال نماذج الويب.</p>
+<p>تعكس عناوين URL في التطبيق تلك الأزمنة القديمة الخالية من الهموم. فبيانات JSON تُجلب من العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/data.json">https://studies.cs.helsinki.fi/exampleapp/data.json</a>، وتُرسل الملاحظات الجديدة إلى العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/new_note">https://studies.cs.helsinki.fi/exampleapp/new_note</a>.
+وفي أيامنا هذه لن تُعتبر عناوين كهذه مقبولة، لأنها لا تتبع الأعراف المتعارف عليها لواجهات <a href="https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_web_services">RESTful</a>، والتي سنتناولها بمزيد من التفصيل في <a href="/part3">الجزء 3</a>.</p>
+<p>أصبح ما يُسمى AJAX الآن شائعاً إلى حد أنه صار أمراً مسلّماً به. فقد تلاشى المصطلح في طيّ النسيان، ولم يعد الجيل الجديد قد سمع به حتى.</p>
+<h3 id="تطبيق-الصفحة-الواحدة">تطبيق الصفحة الواحدة</h3>
+<p>في تطبيقنا المثال، تعمل الصفحة الرئيسية كصفحة ويب تقليدية: فكل المنطق على الخادم، ولا يفعل المتصفح سوى عرض HTML كما هو مطلوب.</p>
+<p>تسند صفحة Notes بعض المسؤولية، وهي توليد شيفرة HTML للملاحظات الموجودة، إلى المتصفح. ويتولى المتصفح هذه المهمة بتنفيذ شيفرة JavaScript التي جلبها من الخادم. فتجلب الشيفرة الملاحظات من الخادم كبيانات JSON، وتضيف إلى الصفحة عناصر HTML لعرض الملاحظات باستخدام <a href="/part0/fundamentals_of_web_apps#document-object-model-or-dom">DOM-API</a>.</p>
+<p>في السنوات الأخيرة، برز أسلوب <a href="https://en.wikipedia.org/wiki/Single-page_application">تطبيق الصفحة الواحدة</a> (SPA) في إنشاء تطبيقات الويب. فلا تجلب مواقع أسلوب SPA كل صفحاتها منفصلة من الخادم كما يفعل تطبيقنا المثال، بل تتألف من صفحة HTML واحدة فقط تُجلب من الخادم، ويُتلاعب بمحتوياتها بـ JavaScript يُنفَّذ في المتصفح.</p>
+<p>تشبه صفحة Notes في تطبيقنا تطبيقات أسلوب SPA إلى حد ما، لكنها ليست كذلك تماماً بعد. فرغم أن منطق عرض الملاحظات يُنفَّذ في المتصفح، لا تزال الصفحة تستخدم الطريقة التقليدية لإضافة ملاحظات جديدة. إذ تُرسل البيانات إلى الخادم عبر إرسال النموذج، ويطلب الخادم من المتصفح إعادة تحميل صفحة Notes بـ<i>إعادة توجيه</i>.</p>
+<p>يمكن العثور على نسخة تطبيق الصفحة الواحدة من تطبيقنا المثال على العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/spa">https://studies.cs.helsinki.fi/exampleapp/spa</a>.
+للوهلة الأولى، يبدو التطبيق مطابقاً تماماً للتطبيق السابق.
+فشيفرة HTML متطابقة تقريباً، لكن ملف JavaScript مختلف (<i>spa.js</i>) وهناك تغيير صغير في كيفية تعريف وسم form:</p>
+<p><img src="/images/content/0/25e.webp" alt="نموذج بلا action أو method"></p>
+<p>لا يحمل النموذج الخاصيتين <i>action</i> أو <i>method</i> لتحديد كيفية إرسال بيانات الإدخال وإلى أين.</p>
+<p>افتح تبويب <i>Network</i> وأفرغه. والآن عند إنشاء ملاحظة جديدة، ستلاحظ أن المتصفح يرسل طلباً واحداً فقط إلى الخادم.</p>
+<p><img src="/images/content/0/26e.webp" alt="تبويب Network يُظهر طلب POST واحداً إلى new_note_spa"></p>
+<p>يحتوي طلب POST إلى العنوان <i>new_note_spa</i> على الملاحظة الجديدة كبيانات JSON تضم كلاً من محتوى الملاحظة (<i>content</i>) والطابع الزمني (<i>date</i>):</p>
+<pre><code class="language-js">{
+  <span class="hljs-attr">content</span>: <span class="hljs-string">&quot;single page app does not reload the whole page&quot;</span>,
+  <span class="hljs-attr">date</span>: <span class="hljs-string">&quot;2019-05-25T15:15:59.905Z&quot;</span>
+}
+</code></pre>
+<p>تُخبر ترويسة <i>Content-Type</i> في الطلب الخادمَ بأن البيانات المضمّنة ممثلة بصيغة JSON.</p>
+<p><img src="/images/content/0/27e.webp" alt="إبراز ترويسة Content-type بقيمة application/json"></p>
+<p>بدون هذه الترويسة، لن يعرف الخادم كيفية تحليل البيانات بشكل صحيح.</p>
+<p>يستجيب الخادم برمز الحالة <a href="https://httpstatuses.com/201">201 created</a>. وهذه المرة لا يطلب الخادم إعادة توجيه، فيبقى المتصفح في الصفحة نفسها ولا يرسل مزيداً من طلبات HTTP.</p>
+<p>لا ترسل نسخة SPA من التطبيق بيانات النموذج بالطريقة التقليدية، بل تستخدم شيفرة JavaScript التي جلبها من الخادم.
+وسننظر في هذه الشيفرة قليلاً، رغم أن فهم كل تفاصيلها ليس مهماً بعد.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> form = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;notes_form&#x27;</span>)
+form.<span class="hljs-property">onsubmit</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) {
+  e.<span class="hljs-title function_">preventDefault</span>()
+
+  <span class="hljs-keyword">var</span> note = {
+    <span class="hljs-attr">content</span>: e.<span class="hljs-property">target</span>.<span class="hljs-property">elements</span>[<span class="hljs-number">0</span>].<span class="hljs-property">value</span>,
+    <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),
+  }
+
+  notes.<span class="hljs-title function_">push</span>(note)
+  e.<span class="hljs-property">target</span>.<span class="hljs-property">elements</span>[<span class="hljs-number">0</span>].<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;&#x27;</span>
+  <span class="hljs-title function_">redrawNotes</span>()
+  <span class="hljs-title function_">sendToServer</span>(note)
+}
+</code></pre>
+<p>يوجّه الأمر <em>document.getElementById('notes_form')</em> الشيفرةَ إلى جلب مرجع إلى عنصر نموذج HTML في الصفحة الذي يحمل المعرّف &quot;notes_form&quot; وتسجيل <i>معالج حدث</i> للتعامل مع حدث إرسال النموذج. ويستدعي معالج الحدث فوراً الدالة <em>e.preventDefault()</em> لمنع المعالجة الافتراضية لإرسال النموذج. فالطريقة الافتراضية سترسل البيانات إلى الخادم وتتسبب في طلب GET جديد، وهو ما لا نريده.</p>
+<p>ثم ينشئ معالج الحدث ملاحظة جديدة، ويضيفها إلى قائمة الملاحظات بالأمر <em>notes.push(note)</em>، ويعيد عرض قائمة الملاحظات في الصفحة، ويرسل الملاحظة الجديدة إلى الخادم.</p>
+<p>شيفرة إرسال الملاحظة إلى الخادم كما يلي:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> sendToServer = <span class="hljs-keyword">function</span>(<span class="hljs-params">note</span>) {
+  <span class="hljs-keyword">var</span> xhttpForPost = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>()
+  <span class="hljs-comment">// ...</span>
+
+  xhttpForPost.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-string">&#x27;/new_note_spa&#x27;</span>, <span class="hljs-literal">true</span>)
+  xhttpForPost.<span class="hljs-title function_">setRequestHeader</span>(<span class="hljs-string">&#x27;Content-type&#x27;</span>, <span class="hljs-string">&#x27;application/json&#x27;</span>)
+  xhttpForPost.<span class="hljs-title function_">send</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(note))
+}
+</code></pre>
+<p>تحدد الشيفرة أن البيانات ستُرسل بطلب HTTP POST وأن نوع البيانات هو JSON. ويُحدد نوع البيانات بترويسة <i>Content-type</i>. ثم تُرسل البيانات كنص JSON.</p>
+<p>شيفرة التطبيق متاحة على <a href="https://github.com/mluukkai/example_app">https://github.com/mluukkai/example_app</a>.
+ويجدر التذكير بأن التطبيق مقصود فقط لتوضيح مفاهيم الدورة. فالشيفرة تتبع أسلوب تطوير رديئاً في بعض النواحي، ولا ينبغي استخدامها كمثال عند إنشاء تطبيقاتك. وينطبق الشيء نفسه على عناوين URL المستخدمة. فعنوان URL <i>new_note_spa</i> الذي تُرسل إليه الملاحظات الجديدة لا يتوافق مع أفضل الممارسات الحالية.</p>
+<h3 id="مكتبات-javascript">مكتبات JavaScript</h3>
+<p>أُنجز التطبيق المثال بما يُسمى <a href="https://www.freecodecamp.org/news/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34/">JavaScript الخالص</a> (vanilla JavaScript)، باستخدام DOM-API و JavaScript فقط للتلاعب ببنية الصفحات.</p>
+<p>وبدلاً من استخدام JavaScript و DOM-API فقط، تُستخدم غالباً مكتبات مختلفة تحتوي على أدوات أسهل في التعامل من DOM-API للتلاعب بالصفحات. ومن هذه المكتبات <a href="https://jquery.com/">jQuery</a> الشائعة جداً.</p>
+<p>طُوّرت jQuery في زمن كانت فيه تطبيقات الويب تتبع أساساً الأسلوب التقليدي حيث يولّد الخادم صفحات HTML، وتُعزَّز وظائفها في المتصفح باستخدام JavaScript المكتوبة بـ jQuery. ومن أسباب نجاح jQuery ما يُسمى التوافق عبر المتصفحات. فقد كانت المكتبة تعمل بغض النظر عن المتصفح أو الشركة المصنّعة له، فلم تكن هناك حاجة إلى حلول خاصة بكل متصفح. أما اليوم فلم يعد استخدام jQuery مبرَّراً بنفس القدر نظراً لتقدم JavaScript، ولأن المتصفحات الأكثر شعبية تدعم الوظائف الأساسية جيداً عموماً.</p>
+<p>جلب صعود تطبيق الصفحة الواحدة عدة طرق «أحدث» لتطوير الويب من jQuery. وكانت <a href="http://backbonejs.org/">BackboneJS</a> المفضلة لدى الموجة الأولى من المطورين. وبعد <a href="https://github.com/angular/angular.js/blob/master/CHANGELOG.md#100rc1-moir%C3%A9-vision-2012-03-13">إطلاقها</a> في 2012، سرعان ما أصبحت <a href="https://angularjs.org/">AngularJS</a> من Google المعيار الفعلي تقريباً لتطوير الويب الحديث.</p>
+<p>غير أن شعبية Angular انهارت في أكتوبر 2014 بعد أن <a href="https://web.archive.org/web/20151208002550/https://jaxenter.com/angular-2-0-announcement-backfires-112127.html">أعلن فريق Angular أن الدعم للإصدار 1 سينتهي</a>، وأن Angular 2 لن يكون متوافقاً مع الإصدار الأول. ولم يلقَ Angular 2 والإصدارات الأحدث ترحيباً حاراً.</p>
+<p>حالياً، الأداة الأكثر شعبية لتنفيذ منطق تطبيقات الويب في المتصفح هي مكتبة <a href="https://react.dev/">React</a> من Facebook.
+وخلال هذه الدورة، سنتعرف على React ومكتبة <a href="https://github.com/pmndrs/zustand">Zustand</a>، اللتين كثيراً ما تُستخدمان معاً.</p>
+<p>تبدو مكانة React قوية، لكن عالم JavaScript دائم التغير. فمثلاً، استحوذت حديثاً <a href="https://vuejs.org/">VueJS</a> الوافدة الجديدة على بعض الاهتمام.</p>
+<h3 id="تطوير-الويب-full-stack">تطوير الويب Full stack</h3>
+<p>ماذا يعني اسم الدورة، <i>تطوير الويب Full stack</i>؟ كلمة Full stack مصطلح رائج يتحدث عنه الجميع، لكن لا أحد يعرف معناه. أو على الأقل، لا يوجد تعريف متفق عليه للمصطلح.</p>
+<p>عملياً، لجميع تطبيقات الويب (طبقتان) على الأقل: المتصفح، لكونه أقرب إلى المستخدم النهائي، هو الطبقة العليا، والخادم هو الطبقة السفلى. وكثيراً ما توجد أيضاً طبقة قاعدة بيانات أسفل الخادم. لذا يمكننا التفكير في <i>معمارية</i> تطبيق الويب كـ<i>كومة</i> من الطبقات.</p>
+<p>وكثيراً ما نتحدث أيضاً عن <a href="https://en.wikipedia.org/wiki/Front_and_back_ends">الواجهة الأمامية والواجهة الخلفية</a>. فالمتصفح هو الواجهة الأمامية، و JavaScript التي تعمل في المتصفح هي شيفرة الواجهة الأمامية. أما الخادم فهو الواجهة الخلفية.</p>
+<p>في سياق هذه الدورة، يعني تطوير الويب Full stack أننا نركّز على كل أجزاء التطبيق: الواجهة الأمامية والواجهة الخلفية وقاعدة البيانات. وأحياناً يُنظر إلى البرمجيات على الخادم ونظام تشغيله كأجزاء من الحزمة، لكننا لن نخوض في ذلك.</p>
+<p>سنبرمج الواجهة الخلفية بـ JavaScript باستخدام بيئة التشغيل <a href="https://nodejs.org/en/">Node.js</a>. واستخدام لغة البرمجة نفسها في طبقات متعددة من الحزمة يمنح تطوير الويب Full stack بُعداً جديداً تماماً. ومع ذلك، ليس من متطلبات تطوير الويب Full stack استخدام لغة البرمجة نفسها (JavaScript) في كل طبقات الحزمة.</p>
+<p>كان من الشائع أكثر أن يتخصص المطورون في طبقة واحدة من الحزمة، مثل الواجهة الخلفية. فقد كانت التقنيات في الواجهة الخلفية والأمامية مختلفة تماماً. ومع اتجاه Full stack، أصبح من الشائع أن يكون المطورون بارعين في كل طبقات التطبيق وقاعدة البيانات. وغالباً ما يجب أن يمتلك مطورو Full stack أيضاً مهارات كافية في الإعداد والإدارة لتشغيل تطبيقاتهم، مثلاً في السحابة.</p>
+<h3 id="إرهاق-javascript">إرهاق JavaScript</h3>
+<p>تطوير الويب Full stack مليء بالتحديات من نواحٍ كثيرة. فالأمور تحدث في أماكن كثيرة في آن واحد، وتصحيح الأخطاء أصعب بكثير مما هو عليه في تطبيقات سطح المكتب العادية. ولا تعمل JavaScript دائماً كما تتوقع (مقارنة بلغات أخرى كثيرة)، كما أن الطريقة غير المتزامنة التي تعمل بها بيئات تشغيلها تسبب شتى التحديات. ويتطلب التواصل على الويب معرفة ببروتوكول HTTP. وعلى المرء أيضاً التعامل مع قواعد البيانات وإدارة الخادم وإعداده. ويُستحسن أيضاً معرفة قدر كافٍ من CSS لجعل التطبيقات مقبولة المظهر على الأقل.</p>
+<p>يتطور عالم JavaScript بسرعة، وهذا يجلب معه مجموعة تحدياته الخاصة. فالأدوات والمكتبات واللغة نفسها في تطوير مستمر. وقد بدأ بعضهم يتعب من التغيير الدائم، فصاغوا له مصطلحاً: <em>إرهاق JavaScript</em>. انظر <a href="https://auth0.com/blog/how-to-manage-javascript-fatigue/">كيفية إدارة إرهاق JavaScript على auth0</a> أو <a href="https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4">إرهاق JavaScript على Medium</a>.</p>
+<p>ستعاني أنت أيضاً من إرهاق JavaScript خلال هذه الدورة. ولحسن الحظ، هناك بضع طرق لتسهيل منحنى التعلم، ويمكننا البدء بالبرمجة بدلاً من الإعداد. لا يمكننا تجنّب الإعداد تماماً، لكن يمكننا المضي قُدماً بسرور في الأسابيع القليلة القادمة مع تجنّب أسوأ جحيم الإعدادات.</p>
+</div>
+<div class="tasks">
+  <h3 id="تمارين-01-06">تمارين 0.1.-0.6.</h3>
+<p>تُسلَّم التمارين عبر GitHub، وبتعليم التمارين كمنجزة في تبويب &quot;my submissions&quot; في <a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">نظام التسليم</a>.</p>
+<p>يمكنك تسليم كل التمارين في المستودع نفسه، أو استخدام عدة مستودعات مختلفة. وإذا سلّمت تمارين من أجزاء مختلفة في المستودع نفسه، فسمِّ مجلداتك تسمية جيدة. وإذا استخدمت مستودعاً خاصاً لتسليم التمارين، فأضف <em>mluukkai</em> كمتعاون فيه.</p>
+<p>من الطرق الجيدة لتسمية المجلدات في مستودع تسليمك ما يلي:</p>
+<pre><code class="language-text">part0
+part1
+  courseinfo
+  unicafe
+  anecdotes
+part2
+  courseinfo
+  phonebook
+  countries
+</code></pre>
+<p>إذن، لكل جزء مجلده الخاص، الذي يحتوي على مجلد لكل مجموعة تمارين (مثل تمارين unicafe في الجزء 1).</p>
+<p>تُسلَّم التمارين <strong>جزءاً واحداً في كل مرة</strong>. وعند تسليم تمارين جزء ما، لن تتمكن بعد ذلك من تسليم أي تمارين فائتة لذلك الجزء.</p>
+  <h4 id="01-html">0.1: HTML</h4>
+<p>راجع أساسيات HTML بقراءة هذا الدرس من Mozilla: <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics">درس HTML</a>.</p>
+<p><i>لا يُسلَّم هذا التمرين إلى GitHub، ويكفي قراءة الدرس فقط</i></p>
+  <h4 id="02-css">0.2: CSS</h4>
+<p>راجع أساسيات CSS بقراءة هذا الدرس من Mozilla: <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics">درس CSS</a>.</p>
+<p><i>لا يُسلَّم هذا التمرين إلى GitHub، ويكفي قراءة الدرس فقط</i></p>
+  <h4 id="03-نماذج-html">0.3: نماذج HTML</h4>
+<p>تعلّم أساسيات نماذج HTML بقراءة درس Mozilla <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form">نموذجك الأول</a>.</p>
+<p><i>لا يُسلَّم هذا التمرين إلى GitHub، ويكفي قراءة الدرس فقط</i></p>
+  <h4 id="04-مخطط-ملاحظة-جديدة">0.4: مخطط ملاحظة جديدة</h4>
+<p>في قسم <a href="/part0/fundamentals_of_web_apps#loading-a-page-containing-java-script-review">تحميل صفحة تحتوي على JavaScript — مراجعة</a>، تُمثَّل سلسلة الأحداث الناتجة عن فتح الصفحة <a href="https://studies.cs.helsinki.fi/exampleapp/notes">https://studies.cs.helsinki.fi/exampleapp/notes</a> بـ<a href="https://www.geeksforgeeks.org/unified-modeling-language-uml-sequence-diagrams/">مخطط تتابع</a></p>
+<p>أُعدّ المخطط كملف GitHub Markdown باستخدام صيغة <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams">Mermaid</a>، كما يلي:</p>
+<pre><code class="language-text">sequenceDiagram
+    participant browser
+    participant server
+
+    browser-&gt;&gt;server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server--&gt;&gt;browser: HTML document
+    deactivate server
+
+    browser-&gt;&gt;server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server--&gt;&gt;browser: the css file
+    deactivate server
+
+    browser-&gt;&gt;server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server--&gt;&gt;browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser-&gt;&gt;server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server--&gt;&gt;browser: [{ &quot;content&quot;: &quot;HTML is easy&quot;, &quot;date&quot;: &quot;2023-1-1&quot; }, ... ]
+    deactivate server
+
+    Note right of browser: The browser executes the callback function that renders the notes
+</code></pre>
+<p><strong>أنشئ مخططاً مشابهاً</strong> يوضّح الحالة التي ينشئ فيها المستخدم ملاحظة جديدة في الصفحة <a href="https://studies.cs.helsinki.fi/exampleapp/notes">https://studies.cs.helsinki.fi/exampleapp/notes</a> بكتابة شيء في حقل النص والنقر على زر <i>Save</i>.</p>
+<p>إذا لزم الأمر، اعرض العمليات في المتصفح أو على الخادم كتعليقات في المخطط.</p>
+<p>لا يلزم أن يكون المخطط مخطط تتابع. فأي طريقة معقولة لعرض الأحداث تكون مقبولة.</p>
+<p>يمكن العثور على كل المعلومات اللازمة للقيام بذلك، وللتمرينين التاليين، في نص <a href="/part0/fundamentals_of_web_apps#forms-and-http-post">هذا الجزء</a>.
+والفكرة من هذه التمارين هي قراءة النص مرة أخرى والتفكير في ما يجري فيه. وقراءة <a href="https://github.com/mluukkai/example_app">شيفرة</a> التطبيق ليست ضرورية، لكنها ممكنة بالطبع.</p>
+<p>يمكنك إعداد المخططات بأي برنامج، لكن ربما أسهل وأفضل طريقة لعمل المخططات هي صيغة <a href="https://github.com/mermaid-js/mermaid#sequence-diagram-docs---live-editor">Mermaid</a> المُدمجة الآن في صفحات <a href="https://github.blog/2022-02-14-include-diagrams-markdown-files-mermaid/">GitHub</a> Markdown!</p>
+  <h4 id="05-مخطط-تطبيق-الصفحة-الواحدة">0.5: مخطط تطبيق الصفحة الواحدة</h4>
+<p>أنشئ مخططاً يوضّح الحالة التي ينتقل فيها المستخدم إلى نسخة <a href="/part0/fundamentals_of_web_apps#single-page-app">تطبيق الصفحة الواحدة</a> من تطبيق الملاحظات على العنوان <a href="https://studies.cs.helsinki.fi/exampleapp/spa">https://studies.cs.helsinki.fi/exampleapp/spa</a>.</p>
+  <h4 id="06-ملاحظة-جديدة-في-مخطط-تطبيق-الصفحة-الواحدة">0.6: ملاحظة جديدة في مخطط تطبيق الصفحة الواحدة</h4>
+<p>أنشئ مخططاً يوضّح الحالة التي ينشئ فيها المستخدم ملاحظة جديدة باستخدام نسخة الصفحة الواحدة من التطبيق.</p>
+<p>كان هذا آخر تمرين، وقد حان وقت رفع إجاباتك إلى GitHub وتعليم التمارين كمنجزة في <a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">نظام التسليم</a>.</p>
+</div>
+`,c={part:0,letter:"b",file:s,title:a,slug:n,mainImage:e,headings:p,html:t};export{c as default,s as file,p as headings,t as html,i as letter,e as mainImage,l as part,n as slug,a as title};
