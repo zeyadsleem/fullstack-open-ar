@@ -1,5 +1,7 @@
 # Full Stack open — النسخة العربية
 
+الموقع المنشور: <https://zeyadsleem.github.io/fullstack-open-ar/>
+
 موقع عربي كامل لدورة **Full Stack open** من جامعة هلسنكي وHouston Inc.، مبني من
 الصفر باستخدام **SvelteKit**، مع دعم كامل للعربية واتجاه RTL.
 
