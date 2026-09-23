@@ -1,0 +1,5018 @@
+{
+ "courseId": "463de96b-4d52-411e-aa96-8ee315f1211b",
+ "chapters": [
+  {
+   "id": "9aaf52f2-a7f8-4b10-abbc-ff89845f2e2e",
+   "created_at": "2026-03-10T13:55:43.604869Z",
+   "updated_at": "2026-03-15T10:04:59.617681Z",
+   "name": "Deployment",
+   "color": "#c188d4",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 4,
+   "front_page_id": "bf6c350d-6d92-4364-83ba-318fb6c13856",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/jfJj7XuJQ3hC6rWg8uH3yQ9EXPllj1.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  },
+  {
+   "id": "5d5eb4f4-2c91-4ee4-bc8d-2d5c1a400f8d",
+   "created_at": "2026-03-10T13:55:52.830445Z",
+   "updated_at": "2026-03-15T10:05:27.827252Z",
+   "name": "Keeping green",
+   "color": "#ae6bc5",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 5,
+   "front_page_id": "4f9f5a65-a3b2-451d-af51-f067690d3e25",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/J0dlmTKcoIczXaP1sqlpEvSSU6UGrx.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  },
+  {
+   "id": "9dddec07-809f-4452-8d6c-96dc46c068b1",
+   "created_at": "2026-03-10T13:56:06.439502Z",
+   "updated_at": "2026-03-15T10:05:54.939825Z",
+   "name": "Expanding further",
+   "color": "#9a4fb7",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 6,
+   "front_page_id": "629c80f4-06aa-4b11-a41e-431ab6117d3d",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/aSuns4uovy22isjNJ60UgJShBgFABa.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  },
+  {
+   "id": "f63cdd46-aa21-4650-be32-eb4dfb0919c0",
+   "created_at": "2026-03-10T13:55:24.582076Z",
+   "updated_at": "2026-03-15T10:02:27.447576Z",
+   "name": "Introduction to CI/CD",
+   "color": "#e5c9ed",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 2,
+   "front_page_id": "24d6c6f0-d3e4-4c23-a09b-c4ec3f148423",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/8W4WJM0BzxzimEla1r4ibuDDKJJLA6.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  },
+  {
+   "id": "5d5f22b3-7570-45c7-aeb7-e007d6f16f13",
+   "created_at": "2026-03-10T13:55:16.927824Z",
+   "updated_at": "2026-03-15T10:02:07.282004Z",
+   "name": "Getting started",
+   "color": "#efe0f5",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 1,
+   "front_page_id": "03f44ce3-0d33-4c31-988c-ac39bbe33105",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/3wePvm6FYRqEIlyLy7roTOU1pnfKk2.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  },
+  {
+   "id": "a2b54d9e-1f24-4818-8248-0a401228d7ea",
+   "created_at": "2026-03-10T13:55:35.236070Z",
+   "updated_at": "2026-03-15T10:03:01.103847Z",
+   "name": "Getting started with GitHub Actions",
+   "color": "#ddb8e7",
+   "course_id": "463de96b-4d52-411e-aa96-8ee315f1211b",
+   "deleted_at": null,
+   "chapter_number": 3,
+   "front_page_id": "60514e93-004c-412f-8d38-0fd29503d83a",
+   "opens_at": null,
+   "deadline": null,
+   "status": "open",
+   "chapter_image_url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/n6mBadCIfnmYaX56MiNBykevFHEwZw.svg",
+   "course_module_id": "2432d663-a863-4458-ba47-b17d743290d4",
+   "exercise_deadline_override_count": 0,
+   "exercise_deadline_override_distinct_count": 0,
+   "earliest_exercise_deadline_override": null
+  }
+ ],
+ "pages": [
+  {
+   "chapter": 4,
+   "chapterName": "Deployment",
+   "urlPath": "/chapter-4",
+   "title": "Deployment",
+   "id": "bf6c350d-6d92-4364-83ba-318fb6c13856",
+   "size": 36368,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#c188d4",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Deployment"
+     },
+     "clientId": "8300ddd5-53f4-4b57-b1f8-74d681914811",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "73866e61-fce0-44b3-9574-3eb4f62cafba",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "Having written a nice application it's time to think about how we're going to deploy it to the use of real users.",
+      "dropCap": false
+     },
+     "clientId": "8c686e1f-91e6-43d1-8733-e2cca834ff4b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In&nbsp;<a href=\"https://fullstackopen.com/en/part3/deploying_app_to_internet\" target=\"_blank\" rel=\"noreferrer noopener\">part 3</a>&nbsp;of this course, we did this by simply running a single command from terminal to get the code up and running the servers of the cloud provider&nbsp;<a href=\"https://fly.io/\" target=\"_blank\" rel=\"noreferrer noopener\">Fly.io</a>&nbsp;or&nbsp;<a href=\"https://render.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Render</a>.",
+      "dropCap": false
+     },
+     "clientId": "9f0e7049-8884-4897-a45f-c5522bf5bb4f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It is pretty simple to release software in Fly.io and Render at least compared to many other types of hosting setups but it still contains risks: nothing prevents us from accidentally releasing broken code to production.",
+      "dropCap": false
+     },
+     "clientId": "d6611092-a5a6-4531-a51a-16685f2034a5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Next, we're going to look at the principles of making a deployment safely and some of the principles of deploying software on both a small and large scale.",
+      "dropCap": false
+     },
+     "clientId": "166c1018-488d-4693-85b8-5ddcf209201e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Anything that can go wrong...",
+      "level": 3
+     },
+     "clientId": "daf63e01-44fd-498d-b82c-10ee8b496b1a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "We'd like to define some rules about how our deployment process should work but before that, we have to look at some constraints of reality.",
+      "dropCap": false
+     },
+     "clientId": "451cc03d-4818-42ab-8c48-c97f7b89be65",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "One phrasing of Murphy's Law holds that: \"Anything that can go wrong will go wrong.\"",
+      "dropCap": false
+     },
+     "clientId": "00fc7496-6b6e-4a72-9f2e-159f713db9af",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It's important to remember this when we plan out our deployment system. Some of the things we'll need to consider could include:",
+      "dropCap": false
+     },
+     "clientId": "39c0c2c8-7384-497e-bde1-d7cf51c8a328",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "87020caf-0ce8-4c5d-a365-db07d86c0839",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "What if my computer crashes or hangs during deployment?"
+       },
+       "clientId": "eb106b08-7f1d-4b9f-b942-6c20d1d0a1f1",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "I'm connected to the server and deploying over the internet, what happens if my internet connection dies?"
+       },
+       "clientId": "e120fedf-ca76-4d11-b13c-506cdd3b00c6",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "What happens if any specific instruction in my deployment script/system fails?"
+       },
+       "clientId": "c5b88134-bcc5-4b6a-bac9-fcd7ed012ba0",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "What happens if, for whatever reason, my software doesn't work as expected on the server I'm deploying to? Can I roll back to a previous version?"
+       },
+       "clientId": "10778e2d-70ed-49f7-8fcf-7097632a68f0",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "What happens if a user does an HTTP request to our software just before we do deployment (we didn't have time to send a response to the user)?"
+       },
+       "clientId": "2a0e5c37-010c-446c-ad75-f1982da72948",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "These are just a small selection of what can go wrong during a deployment, or rather, things that we should plan for. Regardless of what happens, our deployment system should&nbsp;<strong>never</strong>&nbsp;leave our software in a broken state. We should also always know (or be easily able to find out) what state a deployment is in.",
+      "dropCap": false
+     },
+     "clientId": "4b988fae-a8b8-4f6f-bb4c-0c03daa5e0b7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Another important rule to remember when it comes to deployments (and CI in general) is: \"Silent failures are&nbsp;<strong>very</strong>&nbsp;bad!\"",
+      "dropCap": false
+     },
+     "clientId": "fa886592-e3d3-416c-911d-6bdcab93c6fb",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This doesn't mean that failures need to be shown to the users of the software, it means we need to be aware if anything goes wrong. If we are aware of a problem, we can fix it. If the deployment system doesn't give any errors but fails, we may end up in a state where we believe we have fixed a critical bug but the deployment failed, leaving the bug in our production environment and us unaware of the situation.",
+      "dropCap": false
+     },
+     "clientId": "3ea57b17-9f69-43a7-8fef-d3b407d01322",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What does a good deployment system do?",
+      "level": 3
+     },
+     "clientId": "e24643b1-b258-458d-8c98-57c693609f80",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Defining definitive rules or requirements for a deployment system is difficult, let's try anyway:",
+      "dropCap": false
+     },
+     "clientId": "620a6a8e-3417-45d3-a737-2a8fd94188e7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "6a738bb6-b508-4c91-a70b-8567ee5e4127",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Our deployment system should be able to fail gracefully at <strong>any</strong> step of the deployment."
+       },
+       "clientId": "c9c9e36e-1a39-4ed1-b5e3-72619826946a",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Our deployment system should <strong>never</strong> leave our software in a broken state."
+       },
+       "clientId": "3e527bb5-2824-45f6-9f72-c17ef27aa462",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Our deployment system should let us know when a failure has happened. It's more important to notify about failure than about success."
+       },
+       "clientId": "4554abdd-9551-46ca-98b9-4e8c90ece11f",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Our deployment system should allow us to roll back to a previous deployment"
+       },
+       "clientId": "be8dcbc6-2351-48d4-b1b5-955b615b1fc0",
+       "innerBlocks": [
+        {
+         "attributes": {
+          "ordered": false,
+          "values": ""
+         },
+         "clientId": "95c450b3-fc51-4c2b-8c91-11382fee6be8",
+         "innerBlocks": [
+          {
+           "attributes": {
+            "content": "Preferably this rollback should be easier to do and less prone to failure than a full deployment"
+           },
+           "clientId": "c92d02f5-ac89-4320-bcc8-327a46a67aaf",
+           "innerBlocks": [],
+           "isValid": true,
+           "name": "core/list-item"
+          },
+          {
+           "attributes": {
+            "content": "Of course, the best option would be an automatic rollback in case of deployment failures"
+           },
+           "clientId": "4f0441e7-0851-41e1-bfbc-717ce00f100c",
+           "innerBlocks": [],
+           "isValid": true,
+           "name": "core/list-item"
+          }
+         ],
+         "isValid": true,
+         "name": "core/list"
+        }
+       ],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Our deployment system should handle the situation where a user makes an HTTP request just before/during a deployment."
+       },
+       "clientId": "6038637b-cf7d-4ddb-ab97-ba26e265fc7d",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Our deployment system should make sure that the software we are deploying meets the requirements we have set for this (e.g. don't deploy if tests haven't been run)."
+       },
+       "clientId": "68be4ea2-3d82-40b0-9370-46e11c747e6f",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Let's define some things we&nbsp;<strong>want</strong>&nbsp;in this hypothetical deployment system too:",
+      "dropCap": false
+     },
+     "clientId": "79465831-d0b2-4766-9d2b-750b4e01e4ec",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "9ef7fe86-9b36-4a18-a16a-5403ca14d861",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "We would like it to be fast"
+       },
+       "clientId": "ee13aeaf-acf5-4b21-b31f-b67c5d52ecb5",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "We'd like to have no downtime during the deployment (this is distinct from the requirement we have for handling user requests just before/during the deployment)."
+       },
+       "clientId": "be2c9c80-ad50-498f-adf8-dfd8aebf006a",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Next we will have two sets of exercises for automating the deployment with GitHub Actions, one for <a href=\"https://fly.io/\" target=\"_blank\" rel=\"noreferrer noopener\">Fly.io</a>, another one for <a href=\"https://render.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Render</a>. The process of deployment is always specific to the particular cloud provider, so you can also do both the exercise sets if you want to see the differences on how these services work with respect to deployments.",
+      "dropCap": false
+     },
+     "clientId": "ab7ad02e-8a0b-4c48-ae7e-96bf517c950b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Has the app been deployed?",
+      "level": 3
+     },
+     "clientId": "cb453667-4eb8-424e-a6d6-13b41502711d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Since we are not making any real changes to the app, it might be a bit hard to see if the app deployment really works. Let us create a dummy endpoint in the app that makes it possible to do some code changes and to ensure that the deployed version has really changed:",
+      "dropCap": false
+     },
+     "clientId": "2d8cd92a-e58a-41f0-a2df-0550ee3c40ed",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app.get('/version', (req, res) =&gt; {\n  res.send('1') // change this string to ensure a new version deployed\n})"
+     },
+     "clientId": "d7da26ac-fc4b-4c15-a6bb-299feb954113",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Note that this endpoint works only in product build, if you start app with <code>npm start</code> the Express app is not used at all, so the endpoint does not exist!",
+      "dropCap": false
+     },
+     "clientId": "911787e9-1d94-400b-a284-364033350150",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Exercises 10.-12. (Fly.io)",
+      "level": 3
+     },
+     "clientId": "48fd7678-ff9e-4666-95c5-b0a4acb0fff5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "If you rather want to use other hosting options, there is an alternative set of exercises for&nbsp;<a href=\"https://fullstackopen.com/en/part11/deployment#exercises-11-10-11-12-render\" target=\"_blank\" rel=\"noreferrer noopener\">Render</a>.",
+      "dropCap": false
+     },
+     "clientId": "5f92678d-098b-46b2-b92c-47df11578e83",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "10. Deploying your application to Fly.io",
+      "level": 4
+     },
+     "clientId": "90fa408c-29e4-496d-a44b-e92b268a40e6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Setup your application in&nbsp;<a href=\"https://fly.io/\" target=\"_blank\" rel=\"noreferrer noopener\">Fly.io</a>&nbsp;hosting service like the one we did in&nbsp;<a href=\"https://fullstackopen.com/en/part3/deploying_app_to_internet#application-to-the-internet\" target=\"_blank\" rel=\"noreferrer noopener\">part 3</a>.",
+      "dropCap": false
+     },
+     "clientId": "5775d43e-d6c7-4996-b803-2a6da096aeeb",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In contrast to part 3, in this part we&nbsp;<em>do not deploy the code</em>&nbsp;to Fly.io ourselves (with the command&nbsp;<em>flyctl deploy</em>), we let the GitHub Actions workflow do that for us.",
+      "dropCap": false
+     },
+     "clientId": "6c833591-3d80-449c-b003-f0dcb412c5a1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Before going to the automated deployment, we shall ensure in this exercise that the app can be deployed manually.",
+      "dropCap": false
+     },
+     "clientId": "56748b74-c90e-49a2-82a2-6265cac09979",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "So, create a new app in Fly.io. After that generate a Fly.io API token with the command",
+      "dropCap": false
+     },
+     "clientId": "6b74894b-0a19-4284-841f-464f7091f87e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "fly tokens create deploy"
+     },
+     "clientId": "b819e0e8-6742-4178-b4c4-3794dc86368e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "You'll need the token soon for your deployment workflow so save it somewhere (but do not commit that to GitHub)!",
+      "dropCap": false
+     },
+     "clientId": "b197739d-c3d7-4df6-83ad-16f9061c11db",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "As said, before setting up the deployment pipeline in the next exercise we will now ensure that a manual deployment with the command&nbsp;<em>flyctl deploy</em>&nbsp;works.",
+      "dropCap": false
+     },
+     "clientId": "50bbdb1a-9573-4279-84a9-da1f1201ce8c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "A couple of changes are needed.",
+      "dropCap": false
+     },
+     "clientId": "93f6c0e7-206f-4e11-98d0-e357ee5486d9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The configuration file&nbsp;<em>fly.toml</em>&nbsp;should be modified to include the following:",
+      "dropCap": false
+     },
+     "clientId": "f7b1546e-faad-406b-b07a-70a288e26900",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app = 'fs-pdex'\nprimary_region = 'arn'\n\n[build]\n\n// BEGIN HIGHLIGHT \n[env]\n  PORT=\"5001\"\n\n[processes]\n  app = \"node app.js\"\n// END HIGHLIGHT \n\n[http_service]\n// BEGIN HIGHLIGHT \n  internal_port = 5001 # ensure that this is same as above!\n// END HIGHLIGHT \n  force_https = true\n  auto_stop_machines = 'stop'\n  auto_start_machines = true\n  min_machines_running = 0\n  processes = ['app']\n\n[[vm]]\n  memory = '1gb'\n  cpus = 1\n  memory_mb = 1024"
+     },
+     "clientId": "40a55690-74e5-4492-a65d-c64048388e61",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "In <a href=\"https://fly.io/docs/reference/configuration/#the-processes-section\" target=\"_blank\" rel=\"noreferrer noopener\">processes</a> we define the command that starts the application. Without this change, Fly.io just starts the React dev server and that causes it to shut down since the app itself does not start up. We will also set up the PORT to be passed to the app as an environment variable.",
+      "dropCap": false
+     },
+     "clientId": "51e06c1e-e5fe-4afb-8112-9f83646a4498",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Deployment should now work&nbsp;<em>if</em>&nbsp;the production build exists in the local machine, that is, the command&nbsp;<em>npm build</em>&nbsp;is run.",
+      "dropCap": false
+     },
+     "clientId": "1cfb4a46-df65-4295-9e0b-f57d8e995e7d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Before moving to the next exercise, make sure that the manual deployment with the command&nbsp;<em>flyctl deploy</em>&nbsp;works!",
+      "dropCap": false
+     },
+     "clientId": "5b446334-24c2-480a-9cad-64761d8a5d1b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "11. Automatic deployments to Fly.io",
+      "level": 4
+     },
+     "clientId": "8c174035-767a-4e75-899c-10cc75852bf4",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Extend the workflow with a step to deploy your application to Fly.io by following the advice given here. Check the most recent version of the <em>setup-flyctl</em> action from <a href=\"https://github.com/superfly/flyctl-actions\" data-type=\"link\" data-id=\"https://github.com/superfly/flyctl-actions\">here</a>.",
+      "dropCap": false
+     },
+     "clientId": "1746380d-edd0-4c0e-ad89-7f44dffa3426",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Note that the GitHub Action should create the production build (with&nbsp;<em>npm run build</em>) before the deployment step!",
+      "dropCap": false
+     },
+     "clientId": "35612875-62fe-4212-81f2-c4ba8aed032a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "You need the authorization token that you just created for the deployment. The proper way to pass it's value to GitHub Actions is to use <em>Repository secrets</em>:",
+      "dropCap": false
+     },
+     "clientId": "e59a5dbc-2bb1-4d6b-9e95-c73164328850",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Dpabd7ePJKOrmbNG9UFsnjd6wjo1V4.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Dpabd7ePJKOrmbNG9UFsnjd6wjo1V4.png"
+     },
+     "clientId": "94535ee3-fe47-467b-b77c-50425af19e99",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "Now the workflow can access the token value as follows:",
+      "dropCap": false
+     },
+     "clientId": "459e7d64-02eb-49af-847f-063f84fc7f8d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "${{secrets.FLY_API_TOKEN}}"
+     },
+     "clientId": "b17f8907-c2f5-479f-927d-d7235c0fbcdb",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "If all goes well, your workflow log should look like this:",
+      "dropCap": false
+     },
+     "clientId": "c567f87d-bdcb-4bb4-8cd2-fb7609cfa43d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/SqPXEAEqyoB9nU3IpjstumbYmtNn4X.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/SqPXEAEqyoB9nU3IpjstumbYmtNn4X.png"
+     },
+     "clientId": "dce598e8-3129-4f27-8c7b-4642bff31af7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "<strong>Remember</strong>&nbsp;that it is always essential to keep an eye on what is happening in server logs when playing around with product deployments, so use&nbsp;<code>flyctl logs</code>&nbsp;early and use it often. No, use it all the time!",
+      "dropCap": false
+     },
+     "clientId": "928f0fcc-d91d-4768-aed0-ede54818d312",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "12. Health check in Fly.io",
+      "level": 4
+     },
+     "clientId": "4e0ea939-d54b-467d-a0f8-964ee856ff73",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Let us assume that we accidentally break the app by staring it to a wrong port:",
+      "dropCap": false
+     },
+     "clientId": "2801d84e-d044-42ff-b1b5-f528cc83d5cc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "const start = async () =&gt; {",
+      "dropCap": false
+     },
+     "clientId": "1a11e9fb-374c-4138-b2de-eb7c075a01f0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "const start = async () => {<br>  await app.listen(PORT+1) // HIGHLIGHT LINE<br>  console.log(`server started on port ${PORT}`)<br>}"
+     },
+     "clientId": "4b814382-3b8a-4ce1-a6ce-346cfb275393",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Our tests do not notice this breaking change (since the e2e-tests are run in development mode), and the app will be deployed in a non-functional state. How could we prevent this?",
+      "dropCap": false
+     },
+     "clientId": "aa534049-93fe-4a41-bdfe-e60d1c0620da",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Fortunately, Fly.io has several configuration options that ensure a new application version is deployed to users only if it is in a <em>healthy state</em>.",
+      "dropCap": false
+     },
+     "clientId": "6ad5f022-7f48-462e-867f-276433e89987",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "One way to prevent broken deployments is to use an HTTP-level check defined in the <a href=\"https://fly.io/docs/reference/configuration/#http_service-checks\" target=\"_blank\" rel=\"noreferrer noopener\">http_service.http_checks</a> section of the <em>fly.toml </em>configuration file. This type of check can be used to ensure that the app is in a functional state.",
+      "dropCap": false
+     },
+     "clientId": "7a324e25-9106-4cfa-b84e-263750b2872c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Add a simple endpoint for doing an application health check to the backend. You may, e.g., copy this code:",
+      "dropCap": false
+     },
+     "clientId": "59f78412-d6dc-4592-889d-7bf93f6d9c80",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app.get('/health', (req, res) =&gt; {\n  res.send('ok')\n})"
+     },
+     "clientId": "33a424bd-7d31-4af3-921e-344ac1360851",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Configure <span style=\"margin: 0px; padding: 0px;\">an <a href=\"https://fly.io/docs/reference/configuration/#http_service-checks\" target=\"_blank\">HTTP check</a> to ensure deployment health by making an</span> HTTP request to the defined health check endpoint.",
+      "dropCap": false
+     },
+     "clientId": "db2c7043-445a-4e52-8fd8-2d1b890f7833",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "You also need to set the <a href=\"https://fly.io/docs/reference/configuration/#picking-a-deployment-strategy\" target=\"_blank\" rel=\"noreferrer noopener\">deployment strategy</a> (in the file <em>fly.toml</em>) of the app to be <em>canary</em>. This strategy ensures that only an app with a healthy state gets deployed.",
+      "dropCap": false
+     },
+     "clientId": "0c5c56ff-aab8-4250-abac-629119638717",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Ensure that GitHub Actions notices if a deployment breaks your application:",
+      "dropCap": false
+     },
+     "clientId": "85fb7049-5135-4283-9596-7dabf674e5b3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/eox7OBR8Sobgy5gdLbi7Jcw2KopLg6.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/eox7OBR8Sobgy5gdLbi7Jcw2KopLg6.png"
+     },
+     "clientId": "061c8d17-c55d-4e2d-8b9a-fcdca4dba1f3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "You may simulate this e.g. as follows:",
+      "dropCap": false
+     },
+     "clientId": "ec8a8b89-9be1-4246-81aa-f9678d58e567",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app.get('/health', (req, res) => {\n  // BEGIN HIGHLIGHT\n  // eslint-disable-next-line no-constant-condition\n  if (true) throw('error...  ')\n// END HIGHLIGHT\n  res.send('ok')\n})"
+     },
+     "clientId": "8dafa6b8-8f0f-4069-bcbe-edb33bd62fd9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Exercises 10.-12. (Render)",
+      "level": 3
+     },
+     "clientId": "e869e94d-b272-42d9-a3e5-510e73fe39cf",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "If you rather want to use other hosting options, there is an alternative set of exercises for <a href=\"https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-continuous-integration/chapter-4\" target=\"_blank\" rel=\"noreferrer noopener\">Fly.io</a>.",
+      "dropCap": false
+     },
+     "clientId": "f9d23a85-ef9b-4b4b-a479-f133e6ac7394",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "10. Deploying your application to Render",
+      "level": 4
+     },
+     "clientId": "11e25a07-e60c-46de-8b49-d2fd6a37b5ff",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Set up your application in <a href=\"https://render.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Render</a>. The setup is now not quite as straightforward as in <a href=\"https://fullstackopen.com/en/part3/deploying_app_to_internet#application-to-the-internet\" target=\"_blank\" rel=\"noreferrer noopener\">part 3</a>. You have to carefully think about what should go to these settings:",
+      "dropCap": false
+     },
+     "clientId": "4370844a-e34d-4210-9316-e96e2f7b2871",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Bj06HeP3AHKk0dte2u2nhXi6xIx5Rk.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Bj06HeP3AHKk0dte2u2nhXi6xIx5Rk.png"
+     },
+     "clientId": "a821ae27-7722-4137-979a-a9b60ef5068a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "If you need to run several commands in the build or start command, you may use a simple shell script for that.",
+      "dropCap": false
+     },
+     "clientId": "0b524fa1-113a-455f-8d53-e2116c1e297e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Create eg. a file&nbsp;<em>build_step.sh</em>&nbsp;with the following content:",
+      "dropCap": false
+     },
+     "clientId": "eb6e974f-2511-44bd-8d9d-5fba6d5a0a3e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "<strong>#!/bin/bash</strong>\n\necho \"Build script\"\n\n# add the commands here"
+     },
+     "clientId": "488a44c0-426e-4393-8ba8-63c10d8d419c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Give it execution permissions (Google or see e.g.&nbsp;<a href=\"https://www.guru99.com/file-permissions.html\" target=\"_blank\" rel=\"noreferrer noopener\">this</a>&nbsp;to find out how) and ensure that you can run it from the command line:",
+      "dropCap": false
+     },
+     "clientId": "cddfdcc1-2c3f-49bc-ba23-c820742e28f5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "$ ./build_step.sh\nBuild script"
+     },
+     "clientId": "9611228e-46bd-4768-9d03-277b3d3138a0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Other option is to use a&nbsp;<a href=\"https://docs.render.com/deploys#deploy-steps\" target=\"_blank\" rel=\"noreferrer noopener\">Pre deploy command</a>, with that you may run one additional command before the deployment starts.",
+      "dropCap": false
+     },
+     "clientId": "de0badea-7690-45dc-8487-8901ca2d9d35",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "You also need to open the <em>Advanced settings</em> and turn the auto-deploy off since we want to control the deployment in the GitHub Actions:",
+      "dropCap": false
+     },
+     "clientId": "aea2bb86-2744-4249-b90a-7849b716bb63",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Rfg8wAP8eWF8HEkMiQhAZySJ32dB9p.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/Rfg8wAP8eWF8HEkMiQhAZySJ32dB9p.png"
+     },
+     "clientId": "56eb79fe-c056-4dd5-8108-642ac7ef7e20",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "Ensure now that you get the app up and running. Use the&nbsp;<em>Manual deploy</em>.",
+      "dropCap": false
+     },
+     "clientId": "7b58a591-1c7a-49b9-aa04-f8ca94cd27ce",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Most likely things will fail at the start, so remember to keep the&nbsp;<em>Logs</em>&nbsp;open all the time.",
+      "dropCap": false
+     },
+     "clientId": "d41f1974-5ba8-4599-bc70-ed0be0a6977b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "11. Automatic deployments to Render",
+      "level": 4
+     },
+     "clientId": "97c39d1e-5bbd-4a9b-b29a-e6a709e0a457",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The next step is to automate the deployment. ",
+      "dropCap": false
+     },
+     "clientId": "b68d7011-70ea-4ae1-bc25-0fd4d64a3f7c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are some ready-made third-party Actions for Render deployment, but a more reliable option is to use <a href=\"https://render.com/docs/deploy-hooks\" target=\"_blank\" rel=\"noreferrer noopener\">Render Deploy Hook</a>, which is a private URL to trigger the deployment. You can get it from your app settings:",
+      "dropCap": false
+     },
+     "clientId": "74c1e331-88cb-4729-9690-93c89be171e6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/RUGQkaDEIRhZzStZtZiPRiZqZV92Zs.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/RUGQkaDEIRhZzStZtZiPRiZqZV92Zs.png"
+     },
+     "clientId": "dc5f3958-4184-48b9-b033-5e62b60b8ccc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "DON'T USE the plain URL in your pipeline. Instead, create a GitHub secret for it:",
+      "dropCap": false
+     },
+     "clientId": "11e904e4-6830-4a8b-892e-5ae3c46030c0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/qn0ig2feR3XXVgojBEcUy4MctZERFi.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/qn0ig2feR3XXVgojBEcUy4MctZERFi.png"
+     },
+     "clientId": "abd9cdcb-6e90-4ff7-bcb6-79719c7be05c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": " Then you can use them like this:",
+      "dropCap": false
+     },
+     "clientId": "6ae75913-c06b-42c3-bc0f-66a0f9525605",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "- name: Trigger deployment\n  run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}"
+     },
+     "clientId": "81e5510d-3c2a-4d27-abd2-0fc5800f84b5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "The deployment takes some time. See the events tab of the Render dashboard to see when the new deployment is ready:",
+      "dropCap": false
+     },
+     "clientId": "07630912-3b84-4f3d-a856-6fba8560ebbf",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/vjq0UCAqCn1YZ5ZxK5pEHJi2vruw06.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/vjq0UCAqCn1YZ5ZxK5pEHJi2vruw06.png"
+     },
+     "clientId": "72ab822a-a3be-4b01-9f71-10f6ffc978dd",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "12. Health check in Render",
+      "level": 4
+     },
+     "clientId": "6030ab98-76b1-4374-b25e-9a8968be0b98",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "All tests pass and the new version of the app gets automatically deployed to Render so everything seems to be in order. But does the app really work? Besides the checks done in the deployment pipeline, it is extremely beneficial to have also some \"application level\" health checks ensuring that the app for real is in a functional state.",
+      "dropCap": false
+     },
+     "clientId": "58e00e2d-350b-4f39-8a6b-3d6a86203ed6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The <a href=\"https://docs.render.com/deploys#zero-downtime-deploys\" target=\"_blank\" rel=\"noreferrer noopener\">zero downtime deploys</a> in Render should ensure that your app stays functional all the time! ",
+      "dropCap": false
+     },
+     "clientId": "6a21a66d-2787-4246-9320-7eb43e2f5c58",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Add a simple endpoint for doing an application health check to the backend. You may e.g. copy this code:",
+      "dropCap": false
+     },
+     "clientId": "f675f018-343a-4319-acac-27359937a479",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app.get('/health', (req, res) =&gt; {\n  res.send('ok')\n})"
+     },
+     "clientId": "e8d9a942-206d-47f5-b07f-0172be5533fc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Commit the code and push it to GitHub. Ensure that you can access the health check endpoint of your app.",
+      "dropCap": false
+     },
+     "clientId": "298b3e39-0a31-4304-98df-3f8efc83d6ea",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Configure now a&nbsp;<em>Health Check Path</em>&nbsp;to your app. The configuration is done in the settings tab of the Render dashboard.",
+      "dropCap": false
+     },
+     "clientId": "8703c15a-17c8-4867-a5c0-059b02aad456",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Make a change in your code, push it to GitHub, and ensure that the deployment succeeds.",
+      "dropCap": false
+     },
+     "clientId": "0e967d4e-bc03-4874-b926-da1b4f33e8ca",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Note that you can see the log of deployment by clicking the most recent deployment in the events tab.",
+      "dropCap": false
+     },
+     "clientId": "883cca20-7680-41f1-8d51-baaf1cbb5cc7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "When you have set up the health check, simulate a broken deployment by changing the code as follows:",
+      "dropCap": false
+     },
+     "clientId": "0d370c90-77bc-44dd-81bc-c14007305420",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "app.get('/health', (req, res) => {\n// BEGIN HIGHLIGHT\n  // eslint-disable-next-line no-constant-condition\n  if (true) throw('error...  ')\n// END HIGHLIGHT\n  res.send('ok')\n})"
+     },
+     "clientId": "f6768fa7-ad10-4c78-9c60-20b916b72ff4",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Push the code to GitHub and ensure that a broken version does not get deployed and the previous version of the app keeps running.",
+      "dropCap": false
+     },
+     "clientId": "86a16bb8-a657-4cdd-9b3c-c26125c4eef2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Before moving on, fix your deployment and ensure that the application works again as intended.",
+      "dropCap": false
+     },
+     "clientId": "48824ada-943f-43bb-ba24-0e88cb8c50cc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It might be a good idea to change the Render deployment policy to <em>override</em>, as described <a href=\"https://render.com/docs/deploys#managing-deploys\" data-type=\"link\" data-id=\"https://render.com/docs/deploys#managing-deploys\">here</a>. Otherwise, the new deployment has to wait up to 15 minutes until Render cancels the current, broken deployment.",
+      "dropCap": false
+     },
+     "clientId": "9bf131ca-a460-49a3-b4be-06480fb08494",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "dc6f8a13-ce63-4f24-9e8f-3d8d653cca4a"
+     },
+     "clientId": "99e47255-83b6-49a8-ad48-63f3e6fcee79",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "4568afe5-737e-4b76-9cf8-5a4ae6a240d5"
+     },
+     "clientId": "fe0a2940-1181-4e4e-a0a7-5e256c334b69",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "",
+      "dropCap": false
+     },
+     "clientId": "8c548170-48a6-45e0-aeb3-cbc7bd57ddda",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "2a5ee207-dfa2-43b7-830b-c8e6e3b5c38f"
+     },
+     "clientId": "dd7502d6-d928-4ad6-aa59-fd091d1be826",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "3975930d-01dd-45d0-bf0f-5b7d62faa15c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  },
+  {
+   "chapter": 5,
+   "chapterName": "Keeping green",
+   "urlPath": "/chapter-5",
+   "title": "Keeping green",
+   "id": "4f9f5a65-a3b2-451d-af51-f067690d3e25",
+   "size": 28112,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#ae6bc5",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Keeping green"
+     },
+     "clientId": "0227170f-daa2-40c5-83a3-afa884419b73",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "74c31a0a-01e0-469a-bf3b-a3bfe5cc480a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "Keeping green",
+      "level": 1
+     },
+     "clientId": "5668d736-ef6b-4a1e-a6ba-0762dc40113a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Your main branch of the code should always remain&nbsp;<em>green</em>. Being green means that all the steps of your build pipeline should complete successfully: the project should build successfully, tests should run without errors, and the linter shouldn't have anything to complain about, etc.",
+      "dropCap": false
+     },
+     "clientId": "7bcfb3b9-9a95-4372-9de8-545f077c73e8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Why is this important? You will likely deploy your code to production specifically from your main branch. Any failures in the main branch would mean that new features cannot be deployed to production until the issue is sorted out. Sometimes you will discover a nasty bug in production that was not caught by the CI/CD pipeline. In these cases, you want to be able to roll the production environment back to a previous commit in a safe manner.",
+      "dropCap": false
+     },
+     "clientId": "9353481c-f191-46a5-9ae9-b89b16d53117",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "How do you keep your main branch green then? Avoid committing any changes directly to the main branch. Instead, commit your code on a branch based on the freshest possible version of the main branch. Once you think the branch is ready to be merged into the main you create a GitHub Pull Request (also referred to as&nbsp;PR).",
+      "dropCap": false
+     },
+     "clientId": "579740e0-60b9-4092-8075-2b40d766c4d5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Working with Pull Requests",
+      "level": 3
+     },
+     "clientId": "fc1f5443-99eb-4fb8-8b1a-b8d16a1793f5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Pull requests are a core part of the collaboration process when working on any software project with at least two contributors. When making changes to a project you checkout a new branch locally, make and commit your changes, push the branch to the remote repository (in our case to GitHub) and create a pull request for someone to review your changes before those can be merged into the main branch.",
+      "dropCap": false
+     },
+     "clientId": "4103f444-5269-4fe6-b243-42e478393820",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are several reasons why using pull requests and getting your code reviewed by at least one other person is always a good idea.",
+      "dropCap": false
+     },
+     "clientId": "eb2fafe4-6235-436e-a429-f7da30a87829",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "bf5ea8be-97ba-41b1-a82a-6151c96f991c",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Even a seasoned developer can often overlook some issues in their code: we all know of the tunnel vision effect."
+       },
+       "clientId": "f9d98643-3d19-4308-a35e-006078d4d2bd",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "A reviewer can have a different perspective and offer a different point of view."
+       },
+       "clientId": "8aef2594-c29c-4283-93d0-dcd0ef0c5770",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "After reading through your changes, at least one other developer will be familiar with the changes you've made."
+       },
+       "clientId": "60dc18e4-dbfc-4f9a-8bd0-cddf63912934",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests."
+       },
+       "clientId": "cfe8fa1a-2b15-4588-842e-ec66922674b9",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "You can even configure your GitHub repository in such a way that pull requests cannot be merged until they are approved.",
+      "dropCap": false
+     },
+     "clientId": "401b119e-d9cf-42e5-95d1-6c1e2a7535f6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "To open a new pull request, open your branch in GitHub and click on the green \"Compare &amp; pull request\" button at the top. You will be presented with a form where you can fill in the pull request description.",
+      "dropCap": false
+     },
+     "clientId": "78177c02-d2f7-4d71-b295-2c9cec6dcf10",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/yNl7JFdwCvKiPZoDIBV2J3SAJYNRyW.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/yNl7JFdwCvKiPZoDIBV2J3SAJYNRyW.png"
+     },
+     "clientId": "f20f9bce-8a2d-479d-ab06-7665e0bab30d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "GitHub's pull request interface presents a description and the discussion interface. At the bottom, it displays all the CI checks (in our case each of our Github Actions) that are configured to run for each PR and the statuses of these checks. A green board is what you aim for! You can click on Details of each check to view details and run logs.",
+      "dropCap": false
+     },
+     "clientId": "226f146a-034b-41d9-87a5-033b088714ff",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "All the workflows we looked at so far were triggered by commits to the main branch. To make the workflow run for each pull request we would have to update the trigger part of the workflow. We use the \"pull_request\" trigger for branch \"main\" (our main branch) and limit the trigger to events \"opened\" and \"synchronize\". Basically, this means, that the workflow will run when a PR into the main branch is opened or updated.",
+      "dropCap": false
+     },
+     "clientId": "cd2c8e53-8e4e-4246-98d0-05a437a09708",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "So let us change events that&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows\" target=\"_blank\" rel=\"noreferrer noopener\">trigger</a>&nbsp;of the workflow as follows:",
+      "dropCap": false
+     },
+     "clientId": "8d941ed9-2c1b-4cde-96d8-d70fd972a444",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "on:\n  push:\n    branches:\n      - main\n// BEGIN HIGHLIGHT\n  pull_request:\n    branches: [main]\n    types: [opened, synchronize]\n// END HIGHLIGHT"
+     },
+     "clientId": "670c0c2b-7e97-4a37-ad56-d312c03e07d7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "We shall soon make it impossible to push the code directly to the main branch, but in the meantime, let us still run the workflow also for all the possible direct pushes to the main branch.",
+      "dropCap": false
+     },
+     "clientId": "e5365d0f-0f54-40c3-93b6-c29bbb5ae591",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "e0ca34ab-1104-4155-a244-603040488dd2"
+     },
+     "clientId": "3359b316-68f1-4ac1-a406-c99b2bcf6e67",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "c323fb6a-1b26-4d62-95ee-64408a1f76b7"
+     },
+     "clientId": "d9be872a-f333-4d1c-85fc-2d142451f9aa",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "Versioning",
+      "level": 3
+     },
+     "clientId": "c16ede56-73a0-45c4-8298-25a46b38e4a3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The most important purpose of versioning is to uniquely identify the software we're running and the code associated with it.",
+      "dropCap": false
+     },
+     "clientId": "57799229-8696-4a72-977a-711c0c83a15c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The ordering of versions is also an important piece of information. For example, if the current release has broken critical functionality and we need to identify the&nbsp;<em>previous version</em>&nbsp;of the software so that we can roll back the release back to a stable state.",
+      "dropCap": false
+     },
+     "clientId": "de05390a-c54f-4148-a3a1-6eba7c412dd2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Semantic Versioning and Hash Versioning",
+      "level": 4
+     },
+     "clientId": "98ffcfa5-417e-4b42-b05b-7b957cea1369",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "How an application is versioned is sometimes called a versioning strategy. We'll look at and compare two such strategies.",
+      "dropCap": false
+     },
+     "clientId": "66aabcf3-09de-468e-a09f-0aaddac9775e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The first one is <a href=\"https://semver.org/\" target=\"_blank\" rel=\"noreferrer noopener\">semantic versioning</a>, where a version is in the form <em>{major}.{minor}.{patch}</em>. For example, if the version is <em>1.2.3</em>, it has <em>1</em> as the major version, <em>2</em> is the minor version, and <em>3</em> is the patch version.",
+      "dropCap": false
+     },
+     "clientId": "8772c06f-4b69-4543-8a60-85726f0b7ae3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In general, changes that fix the functionality without changing how the application works from the outside are <em>patch</em> changes, changes that make small changes to functionality (as viewed from the outside) are <em>minor</em> changes, and changes that completely change the application (or major functionality changes) are <em>major</em> changes. The definitions of each of these terms can vary from project to project.",
+      "dropCap": false
+     },
+     "clientId": "b8468458-b05d-4705-be16-311e8892276d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "For example, npm-libraries are following the semantic versioning. At the time of writing this text (14th March 2026), the most recent version of <a href=\"https://react.dev/versions\" data-type=\"link\" data-id=\"https://react.dev/versions\">React is 19.2.0</a>, so the major version is 19, and the minor version is 2.",
+      "dropCap": false
+     },
+     "clientId": "fe120ec4-be52-4e5c-8b9f-6f0f4aaa81d2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "<em>Hash versioning</em>&nbsp;(also sometimes known as SHA versioning) is quite different. The version \"number\" in hash versioning is a hash (that looks like a random string) derived from the contents of the repository and the changes introduced in the commit that created the version. In Git, this is already done for you as the commit hash that is unique for any change set.",
+      "dropCap": false
+     },
+     "clientId": "91809ef2-3dc2-4498-9f95-34f797d09b9c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Hash versioning is almost always used in conjunction with automation. It's a pain (and error-prone) to copy 32 character long version numbers around to make sure that everything is correctly deployed.",
+      "dropCap": false
+     },
+     "clientId": "12998ffc-26fc-49a9-add6-627e85198750",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "But what does the version point to?",
+      "level": 4
+     },
+     "clientId": "23bc0287-fd9d-431a-a22a-790b40a991b3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Determining what code belongs to a given version is important and the way this is achieved is again quite different between semantic and hash versioning. In hash versioning (at least in Git) it's as simple as looking up the commit based on the hash. This will let us know exactly what code is deployed with a specific version.",
+      "dropCap": false
+     },
+     "clientId": "dfbadc18-df32-4f93-964f-7180be874ea6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It's a little more complicated when using semantic versioning and there are several ways to approach the problem. These boil down to three possible approaches: something in the code itself, something in the repo or repo metadata, something completely outside the repo.",
+      "dropCap": false
+     },
+     "clientId": "53131a8a-5d2c-4212-8490-db073499088b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "While we won't cover the last option on the list (since that's a rabbit hole all on its own), it's worth mentioning that this can be as simple as a spreadsheet that lists the Semantic Version and the commit it points to.",
+      "dropCap": false
+     },
+     "clientId": "3c7d1bea-0fc0-48c1-9d30-88d686ba06fe",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "For the two repository based approaches, the approach with something in the code usually boils down to a version number in a file and the repo/metadata approach usually relies on&nbsp;<a href=\"https://www.atlassian.com/git/tutorials/inspecting-a-repository/git-tag\" target=\"_blank\" rel=\"noreferrer noopener\">tags</a>&nbsp;or (in the case of GitHub) releases. In the case of tags or releases, this is relatively simple, the tag or release points to a commit, the code in that commit is the code in the release.",
+      "dropCap": false
+     },
+     "clientId": "226d7cb1-7254-4b57-a4be-550e2529c8a0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Version order",
+      "level": 4
+     },
+     "clientId": "fb0f64f3-99d2-4378-990b-20e5c1a998c1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In semantic versioning, even if we have version bumps of different types (major, minor, or patch) it's still quite easy to put the releases in order: 1.3.7 comes before 2.0.0 which itself comes before 2.1.5 which comes before 2.2.0. A list of releases (conveniently provided by a package manager or GitHub) is still needed to know what the last version is but it's easier to look at that list and discuss it: It's easier to say \"We need to roll back to 3.2.4\" than to try communicate a hash in person.",
+      "dropCap": false
+     },
+     "clientId": "e1b5dc97-9f59-498c-92f4-392658417eb1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "That's not to say that hashes are inconvenient: if you know which commit caused the particular problem, it's easy enough to look back through a Git history and get the hash of the previous commit. But if you have two hashes, say <em>d052aa41edfb4a7671c974c5901f4abe1c2db071</em> and <em>12c6f6738a18154cb1cef7cf0607a681f72eaff3</em>, you really can not say which came earlier in history. You need something more, such as the Git log that reveals the ordering.",
+      "dropCap": false
+     },
+     "clientId": "d48ddd59-e4bb-4da2-93e6-2d1e7f520693",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Comparing the Two",
+      "level": 4
+     },
+     "clientId": "8ab9b881-4854-4ae1-b9dc-74adce80b6dc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "We've already touched on some of the advantages and disadvantages of the two versioning methods discussed above but it's perhaps useful to address where they'd each likely be used.",
+      "dropCap": false
+     },
+     "clientId": "0cf15c1e-83cb-4826-beea-e636e84e71ca",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Semantic Versioning works well when deploying services where the version number could be of significance or might actually be looked at. As an example, think of the JavaScript libraries that you're using. If you're using version 3.4.6 of a particular library, and there's an update available to 3.4.8, if the library uses semantic versioning, you could (hopefully) safely assume that you're ok to upgrade without breaking anything. If the version jumps to 4.0.1 then maybe it's not such a safe upgrade.",
+      "dropCap": false
+     },
+     "clientId": "e5e93558-d2a6-4046-a05c-37b8c6257d1b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Hash versioning is very useful where most commits are being built into artifacts (e.g. runnable binaries or Docker images) that are themselves uploaded or stored. As an example, if your testing requires building your package into an artifact, uploading it to a server, and running tests against it, it would be convenient to have hash versioning as it would prevent accidents.",
+      "dropCap": false
+     },
+     "clientId": "f1c90d6a-fa5b-47e4-ab51-4f579345a473",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Imagine you're working on version 3.2.2 of your project. You find a failing test, fix it, and push a new commit. Since you're still on your feature branch, you <em>don’t</em> bump the version number yet. If your build system doesn’t include a commit hash in the artifact name, then every build you produce on that branch will generate an artifact with the same name. That creates a problem: if the artifact upload fails for some reason, the next test run might accidentally pick up an older artifact with the same name. That means your tests could run against outdated code, giving you misleading results.",
+      "dropCap": false
+     },
+     "clientId": "b1fdcaa5-7b70-4169-b599-6696cff5a5c3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "When you include the commit hash in the artifact version, the artifact name changes every time you commit. So if the upload fails, the tests won’t find an artifact with the expected name, and the system will throw an error instead of silently using an old one. This makes failures obvious and prevents tests from running against stale builds.",
+      "dropCap": false
+     },
+     "clientId": "a5a052a4-8f52-4fe5-a1f8-397febcbc626",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Having an error trigger when something goes wrong is almost always preferable to having a problem silently ignored in CI.",
+      "dropCap": false
+     },
+     "clientId": "69358d17-5bf8-477d-a4c6-d3fe23f751d5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Best of Both Worlds",
+      "level": 4
+     },
+     "clientId": "225c8c15-7d12-468f-b76f-1aa8aef35611",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "When you look at the two approaches, it becomes clear that semantic versioning is ideal for official software releases, while hash‑based versioning (or artifact naming) works best during development. These two systems don’t actually conflict—they serve different purposes.",
+      "dropCap": false
+     },
+     "clientId": "d64af281-64ab-4dd9-9240-738a0b5c264b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "At its core, versioning is simply a way to label a specific commit. You might decide, “This commit will be version 3.5.5,” and tag it accordingly. That doesn’t stop you from also referring to the same commit by its hash.",
+      "dropCap": false
+     },
+     "clientId": "2f6562d6-7862-4b17-8196-a31b260c0fb1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "However, there <em>is</em> a subtle challenge. We emphasized earlier that you must always know exactly what code you’re working with—especially to ensure that the code you release has been tested. Using two parallel naming schemes can make that harder unless the process is well‑designed.",
+      "dropCap": false
+     },
+     "clientId": "2b9190b8-8251-476b-ab42-5bf67e9c8921",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In a typical setup, development builds use hash‑based artifact names. This allows every build, lint, and test run to be tied directly to a specific commit. Developers don’t need to think about this; the CI system handles it automatically. When code is merged into the main branch, CI runs the full build and test pipeline again and then assigns a semantic version number. It tags the commit with that version.",
+      "dropCap": false
+     },
+     "clientId": "f68f7efd-5d84-470e-bb55-87a69b76dc23",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In this workflow, the released software is always tested because the CI system tests the exact code it tags. From the outside, it’s perfectly reasonable to say the project uses semantic versioning and ignore the hash‑based naming used internally. The only version that matters to users—the released one—is the semantic version.",
+      "dropCap": false
+     },
+     "clientId": "c251fba9-3d15-4741-9e07-9511623c30d7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "d252bca5-a738-42e2-872e-9df20fdabcaa"
+     },
+     "clientId": "b3bc589a-2c60-4044-babf-c5661dd14b3f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "2f44ee1c-6385-42e2-bff7-026213660e76"
+     },
+     "clientId": "8464c249-4c2e-4873-9cf5-e13b67e225c7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "A note about using third-party actions",
+      "level": 3
+     },
+     "clientId": "dcb4fad4-6ac8-400b-a6f9-7634f462cc51",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "When using a third-party action, such as github-tag-action it might be a good idea to specify the used version with a hash instead of using a version number. The reason for this is that the version number, which is implemented with a Git tag, can in principle be moved. So today's version 1.75.0 might be a different code than the one that is at next week's version 1.75.0!",
+      "dropCap": false
+     },
+     "clientId": "79670b74-d00d-4922-a76d-cb97d038f5bc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "However, the code in a commit with a particular hash does not change in any circumstances, so if we want to be 100% sure about the code we use, it is safest to use the hash.",
+      "dropCap": false
+     },
+     "clientId": "43e0214a-37ab-4929-8bff-8d58d90964b1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Version <a href=\"https://github.com/anothrNick/github-tag-action/releases/tag/1.75.0\" target=\"_blank\" rel=\"noreferrer noopener\">1.75.0</a> of the action corresponds to a commit with hash <em>4ed44965e0db8dab2b466a16da04aec3cc312fd8</em>, so we might want to change our configuration as follows:",
+      "dropCap": false
+     },
+     "clientId": "b497ca99-62f6-4c75-8394-b1e065dae44e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "    - name: Bump version and push tag\n      uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8      \n      env:\n        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+     },
+     "clientId": "863d3d03-e171-4227-a7c2-b0db6385d5ad",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "When we use actions provided by GitHub we trust them not to mess with version tags and to thoroughly test their code.",
+      "dropCap": false
+     },
+     "clientId": "1bc53a11-0d03-42f0-8934-a23e5cff99ce",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In the case of third-party actions, the code might end up being buggy or even malicious. Even when the author of the open-source code does not have the intention of doing something bad, they might end up leaving their credentials on a post-it note in a cafe, and then who knows what might happen.",
+      "dropCap": false
+     },
+     "clientId": "b5e30a7d-860e-4c4c-904b-9a8cfa0a6ea3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "By pointing to the hash of a specific commit, we can be sure that the code we use when running the workflow will not change because changing the underlying commit and its contents would also change the hash.",
+      "dropCap": false
+     },
+     "clientId": "abef082d-f110-4d0c-9a87-946eb4e50b7f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Keep the main branch protected",
+      "level": 3
+     },
+     "clientId": "138e1678-b844-4eea-8f98-74df53ef0427",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "GitHub allows you to set up protected branches. It is a good idea to protect your most important branch that should never be broken: the main. In repository settings, you can choose between several levels of protection. We will not go over all of the protection options, you can learn more about them in the GitHub <a href=\"https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches\" data-type=\"link\" data-id=\"https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches\">documentation</a>. Requiring pull request approval when merging into the main branch is one of the options we mentioned earlier.",
+      "dropCap": false
+     },
+     "clientId": "35594581-1272-4e87-b975-948c3166ce6f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "From the CI point of view, the most important protection is requiring status checks to pass before a PR can be merged into the main branch. This means that if you have set up GitHub Actions to run, e.g., linting and testing tasks, then until all the lint errors are fixed and all the tests pass, the PR cannot be merged. ",
+      "dropCap": false
+     },
+     "clientId": "099d594c-64f9-4bca-a4c3-70fc4729312b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/O5JDbfB37MLbmGji7apAC1X0kkVLui.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/O5JDbfB37MLbmGji7apAC1X0kkVLui.png"
+     },
+     "clientId": "b76945f1-93e0-417e-9157-c1f7b1a985d5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "To set up protection for your main branch, navigate to the repository \"Settings\" from the top menu inside the repository. In the left-side menu, select \"Branches\". Click \"Add branch ruleset\". Select the default branch as branch target criteria (that is, the main if not set otherwise). Remember also to set the enforcement status as active!",
+      "dropCap": false
+     },
+     "clientId": "58cfd7e5-5eec-445a-a0ec-cacc41053088",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "At least \"Require status checks to pass before merging\" is necessary for you to fully utilize the power of GitHub Actions. Also, requiring \"Require branches to be up to date before merging\" is a good idea. Then you just need to add the required checks:",
+      "dropCap": false
+     },
+     "clientId": "f5c042d5-4c2b-407e-8103-65b39b281629",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "href": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/sCIeJH7KbnXZt75VsQjUuV7bltKqNg.png",
+      "linkDestination": "media",
+      "sizeSlug": "full",
+      "url": "https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/sCIeJH7KbnXZt75VsQjUuV7bltKqNg.png"
+     },
+     "clientId": "e319da91-7b5a-4b71-93d5-88b2060cdf0f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "Note that the <em>checks</em> equal to the names of the jobs in your workflow, so mine is defined as follows:",
+      "dropCap": false
+     },
+     "clientId": "68eecdc4-8369-4613-8dc9-fc3db192a958",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "jobs:<br>  deployment_pipeline: // HIGHLIGHT LINE<br>    runs-on: ubuntu-latest<br>    steps:<br>      - uses: actions/checkout@v6<br>    # ...."
+     },
+     "clientId": "95f92bcc-d457-446b-9152-c717f5bb394f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "id": "4ec6f66c-53f5-4a64-a262-42b53dd39aac"
+     },
+     "clientId": "4ae88531-268c-441a-86ba-bad1a7af2c8f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "54f3d595-628a-4c39-be69-d7de2b0b98b7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  },
+  {
+   "chapter": 6,
+   "chapterName": "Expanding further",
+   "urlPath": "/chapter-6",
+   "title": "Expanding Further",
+   "id": "629c80f4-06aa-4b11-a41e-431ab6117d3d",
+   "size": 10055,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#9a4fb7",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Expanding Further"
+     },
+     "clientId": "4c8333f3-e2ca-41e7-a670-f0f8807296c5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "f7dc9fd6-cf19-45aa-94ac-6bce70274c13",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "This part focuses on building a simple, effective, and robust CI system that helps developers to work together, maintain code quality, and deploy safely. What more could one possibly want? In the real world, there are more fingers in the pie than just developers and users. Even if that weren't true, even for developers, there's a lot more value to be gained from CI systems than just the things above.",
+      "dropCap": false
+     },
+     "clientId": "f31167b7-405e-4ab8-81a8-16b30630dac2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Visibility and Understanding",
+      "level": 3
+     },
+     "clientId": "a3a407a1-a7eb-409e-ba16-db97326aea93",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In all but the smallest companies, decisions on what to develop are not made exclusively by developers. The term 'stakeholder' is often used to refer to people, both inside and outside the development team, who may have some interest in keeping an eye on the progress of the development. To this end, there are often integrations between Git and whatever project management/bug tracking software the team is using.",
+      "dropCap": false
+     },
+     "clientId": "b5b6917f-d74c-4015-abe9-d131d08fbc5c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "A common use of this is to have some reference to the tracking system in Git pull requests or commits. This way, for example, when you're working on issue number 123, you might name your pull request <em>BUG-123: Fix user copy issue,</em> and the bug tracking system would notice the first part of the PR name and automatically move the issue to <em>Done</em> when the PR is merged.",
+      "dropCap": false
+     },
+     "clientId": "1d362f5c-9521-4402-acff-bea7545f9540",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Notifications",
+      "level": 3
+     },
+     "clientId": "49e694ce-bd7b-41af-b74e-2ecfa02e3c5e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "When the CI process finishes quickly, it can be convenient to just watch it execute and wait for the result. As projects become more complex, so too does the process of building and testing the code. This can quickly lead to a situation where it takes long enough to generate the build result that a developer may want to begin working on another task. This in turn leads to a forgotten build.",
+      "dropCap": false
+     },
+     "clientId": "9b23f4f3-340c-456a-81e2-1bfce7d57467",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This is especially problematic if we're talking about merging PRs that may affect another developer's work, either causing problems or delays for them. This can also lead to a situation where you think you've deployed something but haven't actually finished a deployment, this can lead to miscommunication with teammates and customers (e.g. \"Go ahead and try that again, the bug should be fixed\").",
+      "dropCap": false
+     },
+     "clientId": "9af04a69-a9b2-4fa6-97fb-437765afb23f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are several solutions to this problem ranging from simple notifications to more complicated processes that simply merge passing code if certain conditions are met. We're going to discuss notifications as a simple solution since it's the one that interferes with the team workflow the least.",
+      "dropCap": false
+     },
+     "clientId": "024b72f2-b99b-4ede-8fd5-1c5e3db09666",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "By default, GitHub Actions sends an email on a build failure. This can be changed to send notifications regardless of build status and can also be configured to alert you on the GitHub web interface. Great. But what if we want more. What if for whatever reason this doesn't work for our use case.",
+      "dropCap": false
+     },
+     "clientId": "ec274abf-424f-4085-a936-c4fa4edecf7b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are integrations for example to various messaging applications such as&nbsp;<a href=\"https://slack.com/intl/en-fi/\" target=\"_blank\" rel=\"noreferrer noopener\">Slack</a>&nbsp;or&nbsp;<a href=\"https://discord.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Discord</a>, to send notifications. These integrations still decide what to send and when to send it based on logic from GitHub.",
+      "dropCap": false
+     },
+     "clientId": "608433aa-0889-49d5-b455-8fb2868d85dc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "d8378f2d-3274-449e-9145-8e33c87f69e0"
+     },
+     "clientId": "b3715449-dbc2-4ca7-bee6-5c0e268ec987",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "Metrics",
+      "level": 3
+     },
+     "clientId": "80b2c5b9-4995-4ae1-9e4f-ba8339769e14",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In the previous section, we mentioned that as projects get more complicated, so too, do their builds, and the duration of the builds increases. That's obviously not ideal: The longer the feedback loop, the slower the development.",
+      "dropCap": false
+     },
+     "clientId": "2214e64c-f056-4a0f-ac14-2a539a794e7e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "While there are things that can be done about this increase in build times, it's useful to have a better view of the overall picture. It's useful to know how long a build took a few months ago versus how long it takes now. Was the progression linear or did it suddenly jump? Knowing what caused the increase in build time can be very useful in helping to solve it. If the build time increased linearly from 5 minutes to 10 minutes over the last year, maybe we can expect it to take another few months to get to 15 minutes and we have an idea of how much value there is in spending time speeding up the CI process.",
+      "dropCap": false
+     },
+     "clientId": "1fb7479a-1a7d-4728-a4fb-47fa652a91e8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Metrics can either be self-reported (also called 'push' metrics, where each build reports how long it took) or the data can be fetched from the API afterward (sometimes called 'pull' metrics). The risk with self-reporting is that the self-reporting itself takes time and may have a significant impact on \"total time taken for all builds\".",
+      "dropCap": false
+     },
+     "clientId": "1c0d4f57-26f9-4569-84fa-08694e9e307a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This data can be sent to a time-series database or to an archive of another type. There are plenty of cloud services where you can easily aggregate the metrics, one good option is&nbsp;<a href=\"https://www.datadoghq.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Datadog</a>.",
+      "dropCap": false
+     },
+     "clientId": "aca72f68-2f8a-4f24-ace2-01c822b932c1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "c3b570fc-f511-4058-a564-623a97f2784d"
+     },
+     "clientId": "d6ef4c81-b0ad-48f7-8c8a-e9e7c8a38d85",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "Periodic tasks",
+      "level": 3
+     },
+     "clientId": "9a0fbcb6-d6ab-4283-88c3-852b4e1a2d56",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "There are often periodic tasks that need to be done in a software development team. Some of these can be automated with commonly available tools and some you will need to automate yourself.",
+      "dropCap": false
+     },
+     "clientId": "9ca0720f-6a9e-45fd-ac13-6a72c09e7216",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The former category includes things like checking packages for security vulnerabilities. Several tools can already do this for you. Some of these tools would even be free for certain types (e.g. open source) projects. GitHub provides one such tool,&nbsp;<a href=\"https://dependabot.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Dependabot</a>.",
+      "dropCap": false
+     },
+     "clientId": "9a55b188-959c-494f-8e76-c9e26de3a943",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Words of advice to consider: If your budget allows it, it's almost always better to use a tool that already does the job than to roll your own solution. If security isn't the industry you're aiming for, for example, use Dependabot to check for security vulnerabilities instead of making your own tool.",
+      "dropCap": false
+     },
+     "clientId": "5d3dad37-0cf0-42a7-adea-c69e3dc6fba6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What about the tasks that don't have a tool? You can automate these yourself with GitHub Actions too. GitHub Actions provides a scheduled trigger that can be used to execute a task at a particular time.",
+      "dropCap": false
+     },
+     "clientId": "40e8df13-5956-49d3-b1c0-ae5197b5a78b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "4bf0532b-903b-4dc2-81a3-a78de6ac04fa"
+     },
+     "clientId": "472420b1-66fd-4323-bd52-fa7de1ca6380",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "430bfd09-022e-417d-b5e9-ceb334b026c4"
+     },
+     "clientId": "3db45299-0e20-4d00-aae4-4b45d851fbb0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "d6bc57d4-847c-4957-b83b-505eae491687"
+     },
+     "clientId": "421acfcf-f4da-41b0-8a2e-6183ba4c0ae3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "114829c1-280e-4657-a9d2-1615d50956eb"
+     },
+     "clientId": "af3da479-e7b9-4936-895b-2a41f452faa8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "e1e86477-1744-4ac9-82c0-7fcd5a0e1ad3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  },
+  {
+   "chapter": 2,
+   "chapterName": "Introduction to CI/CD",
+   "urlPath": "/chapter-2",
+   "title": "Introduction to CI/CD",
+   "id": "24d6c6f0-d3e4-4c23-a09b-c4ec3f148423",
+   "size": 38864,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#e5c9ed",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Introduction to CI/CD"
+     },
+     "clientId": "5a1767ab-e2c4-4243-98e8-9830c01d0fdb",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "ffff9dc4-59ce-46d6-a27a-12a89c84ea4d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "Getting software to production",
+      "level": 3
+     },
+     "clientId": "9e4fd09a-9d7a-43e6-b277-e3bef195826d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Writing code is just the start. Software only matters once it’s in production and delivering value to real users. After launch, the work shifts to what truly sustains a product: dependable operations, continuous releases, and effective collaboration to grow and refine the system over time.",
+      "dropCap": false
+     },
+     "clientId": "72b28c56-af2c-439a-a38b-3cb842815aab",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "We've already used GitHub to store our source code, but what happens when we work within a team with more developers?",
+      "dropCap": false
+     },
+     "clientId": "cf26d93f-7d6e-43c5-99f6-504a3f5e6368",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Many problems may arise when several developers are involved. The software might work just fine on&nbsp;<em>my computer</em>, but maybe some of the other developers are using a different operating system or different library versions. It is not uncommon that a code works just fine in one developer's machine but another developer can not even get it started. This is often called the \"works on my machine\" problem.",
+      "dropCap": false
+     },
+     "clientId": "e981558f-4637-431a-9c5b-e04ae292017d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are also more involved problems. If two developers are both working on changes and they haven't decided on a way to deploy to production, whose changes get deployed? How would it be possible to prevent one developer's changes from overwriting another's?",
+      "dropCap": false
+     },
+     "clientId": "eee9e14f-0287-4cea-8c8d-03d7033ed42e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In this part, we'll cover ways to work together and build and deploy software in a strictly defined way so that it's clear&nbsp;<em>exactly</em>&nbsp;what will happen under any given circumstance.",
+      "dropCap": false
+     },
+     "clientId": "5ddb75b3-6a1f-4d6d-9d29-3a90c4f3abf5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Some useful terms",
+      "level": 3
+     },
+     "clientId": "e466bf37-0226-4689-ac19-314435957921",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In this part we'll be using some terms you may not be familiar with or you may not have a good understanding of. We'll discuss some of these terms here. Even if you are familiar with the terms, give this section a read so when we use the terms in this part, we're on the same page.",
+      "dropCap": false
+     },
+     "clientId": "70857561-0e27-4150-9a44-162e086689d7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Branches",
+      "level": 4
+     },
+     "clientId": "75f27a1e-87a2-4006-8354-86276587758c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Git allows multiple copies, streams, or versions of the code to co-exist without overwriting each other. When you first create a repository, you will be looking at the main branch (usually in Git, we call this&nbsp;<em>main</em>&nbsp;or&nbsp;<em>master</em>, but that does vary in older projects). This is fine if there's only one developer for a project and that developer only works on one feature at a time.",
+      "dropCap": false
+     },
+     "clientId": "7d566222-1aa9-4804-b7f6-04839787a13a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Branches are useful when this environment becomes more complex. In this context, each developer can have one or more branches. Each branch is effectively a copy of the main branch with some changes that make it diverge from it. Once the feature or change in the branch is ready it can be&nbsp;<em>merged</em>&nbsp;back into the main branch, effectively making that feature or change part of the main software. In this way, each developer can work on their own set of changes and not affect any other developer until the changes are ready.",
+      "dropCap": false
+     },
+     "clientId": "97e3b0ab-a2be-4dbe-82d2-3b0263aab4f4",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "But once one developer has merged their changes into the main branch, what happens to the other developers' branches? They are now diverging from an older copy of the main branch. How will the developer on the later branch know if their changes are compatible with the current state of the main branch? That is one of the fundamental questions we will be trying to answer in this part.",
+      "dropCap": false
+     },
+     "clientId": "ffb115a1-b005-4e94-a2e8-a3d0b3de14e2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "You can read more about branches e.g. from&nbsp;<a href=\"https://www.atlassian.com/git/tutorials/using-branches\" target=\"_blank\" rel=\"noreferrer noopener\">here</a>.",
+      "dropCap": false
+     },
+     "clientId": "18ef16e6-ad4a-47d3-bd89-0d75f6126d99",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Pull request",
+      "level": 4
+     },
+     "clientId": "698c49a6-60cf-4808-a5ed-4a96ba71d5ff",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In GitHub merging a branch back to the main branch of software is quite often happening using a mechanism called&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/about-pull-requests\" target=\"_blank\" rel=\"noreferrer noopener\">pull request</a>, where the developer who has done some changes is requesting the changes to be merged to the main branch. Once the pull request, or PR as it's often called, is made or&nbsp;<em>opened</em>, another developer checks that all is ok and&nbsp;<em>merges</em>&nbsp;the PR.",
+      "dropCap": false
+     },
+     "clientId": "9fd1c336-5ebc-4d1f-971f-244678c6d9a4",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Build",
+      "level": 4
+     },
+     "clientId": "91115c7e-4cbc-41f2-a42e-86cc2bdcf3fd",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The term \"build\" has different meanings in different languages. In some interpreted languages such as Python or Ruby, there is actually no need for a build step at all.",
+      "dropCap": false
+     },
+     "clientId": "8a5b2ff5-6f86-4346-a8af-d32e06dad9a8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In general when we talk about building we mean preparing software to run on the platform where it's intended to run. This might mean, for example, that if you've written your application in TypeScript, and you intend to run it on Node, then the build step might be transpiling the TypeScript into JavaScript.",
+      "dropCap": false
+     },
+     "clientId": "1968bd92-0f5d-4380-8f1a-205c51354e72",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This step is much more complicated (and required) in compiled languages such as C and Rust where the code needs to be compiled into an executable.",
+      "dropCap": false
+     },
+     "clientId": "3dac2f49-2b51-47de-ab78-c1e0a6d741d0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In <a href=\"https://fullstackopen.com/en/part7/webpack\" target=\"_blank\" rel=\"noreferrer noopener\">part 7</a> we had a look at <a href=\"https://esbuild.github.io/\" target=\"_blank\" rel=\"noreferrer noopener\">ESBuild</a>, which is one of the most commonly used tools for building a production version of a React or any other frontend JavaScript or TypeScript codebase.",
+      "dropCap": false
+     },
+     "clientId": "f990fb72-1185-46c6-a631-dcfd19f424f3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Deploy",
+      "level": 4
+     },
+     "clientId": "1d3a95ce-7c97-4286-8bc1-ad44fff4f343",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Deployment refers to putting the software where it needs to be for the end-user to use it. In the case of libraries, this may simply mean pushing an npm package to a package archive (such as&nbsp;<a href=\"https://www.npmjs.com/\" target=\"_blank\" rel=\"noreferrer noopener\">npmjs.com</a>) where other users can find it and include it in their software.",
+      "dropCap": false
+     },
+     "clientId": "85eb8636-4d82-43ac-8d64-fc152601e45a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Deploying a service (such as a web app) can vary in complexity. In&nbsp;<a href=\"https://fullstackopen.com/en/part3/deploying_app_to_internet\" target=\"_blank\" rel=\"noreferrer noopener\">part 3</a>&nbsp;our deployment workflow involved running some scripts manually and pushing the repository code to&nbsp;<a href=\"https://fly.io/\" target=\"_blank\" rel=\"noreferrer noopener\">Fly.io</a>&nbsp;or&nbsp;<a href=\"https://render.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Render</a>&nbsp;hosting service.",
+      "dropCap": false
+     },
+     "clientId": "cca72344-31e9-4721-87e0-47168769b88a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In this part, we'll develop a simple \"deployment pipeline\" that deploys each commit of your code automatically to Fly.io or Render&nbsp;<em>if</em>&nbsp;the committed code does not break anything.",
+      "dropCap": false
+     },
+     "clientId": "ec9974b4-d5e7-47a6-806a-11e6414fe0a0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Deployments can be significantly more complex, especially if we add requirements such as \"the software must be available at all times during the deployment\" (zero downtime deployments) or if we have to take things like <a href=\"https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-4\" target=\"_blank\" rel=\"noreferrer noopener\">database migrations</a> into account. We won't cover complex deployments like those in this part but it's important to know that they exist.",
+      "dropCap": false
+     },
+     "clientId": "be9babc9-f642-4361-82e9-6b9df501b10b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What is CI?",
+      "level": 3
+     },
+     "clientId": "966a5021-8e69-4d29-a041-d1f2899541b0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The strict definition of CI (Continuous Integration) and the way the term is used in the industry may sometimes be different. One influential but quite early (written already in 2006) discussion of the topic is in&nbsp;<a href=\"https://www.martinfowler.com/articles/continuousIntegration.html\" target=\"_blank\" rel=\"noreferrer noopener\">Martin Fowler's blog</a>.",
+      "dropCap": false
+     },
+     "clientId": "aa6301dd-e94e-49f9-874e-f4138931b683",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Strictly speaking, CI refers to&nbsp;<a href=\"https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment\" target=\"_blank\" rel=\"noreferrer noopener\">merging developer changes to the main branch</a>&nbsp;often, Wikipedia even helpfully suggests: \"several times a day\". This is usually true but when we refer to CI in industry, we're quite often talking about what happens after the actual merge happens.",
+      "dropCap": false
+     },
+     "clientId": "4e2ee640-5900-4f34-9cea-1a2be7ec67e0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "We'd likely want to do some of these steps:",
+      "dropCap": false
+     },
+     "clientId": "550e988c-83e9-4d6b-8506-9a7de9cf2eb7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "01b1b268-91d9-44da-81be-302c495d37b1",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Lint: Keep our code clean, maintainable, and merge compatible"
+       },
+       "clientId": "07e9a211-5e5a-4cc7-84eb-7a4d10459d40",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Build: Put all of our code together into runnable software bundle"
+       },
+       "clientId": "bc2af08e-5ec7-4842-89b3-410619f3beea",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Test: Ensure we don't break existing features"
+       },
+       "clientId": "60878b59-05fa-49b1-89f7-9458383fb5c5",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Package: Put it all together in an easily movable batch"
+       },
+       "clientId": "0d6dc265-70fe-48e1-b5c0-b40d5ff36e6b",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Deploy: Make it available to the world"
+       },
+       "clientId": "625f6454-5d15-490f-982d-f7410a2c2028",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "We'll discuss each of these steps (and when they're suitable) in more detail later. What is important to remember is that this process should be strictly defined.",
+      "dropCap": false
+     },
+     "clientId": "4b8d1c0a-cc7f-435d-90c3-c42faaccd53a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Usually, strict definitions act as a constraint on creativity/development speed. This, however, should usually not be true for CI. This strictness should be set up in such a way as to allow for easier development and working together. Using a good CI system (such as GitHub Actions that we'll cover in this part) will allow us to do this all automagically.",
+      "dropCap": false
+     },
+     "clientId": "27b62a5d-42dc-4c55-ad34-0f38052e262f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Packaging and Deployment as a part of CI",
+      "level": 3
+     },
+     "clientId": "3df6b9cc-f9e8-42f5-b61a-a521f8e8398e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "It may be worthwhile to note that packaging and especially deployment are sometimes not considered to fall under the umbrella of CI. We'll add them in here because in the real world it makes sense to lump it all together. This is partly because they make sense in the context of the flow and pipeline (I want to get my code to users) and partially because these are in fact the most likely point of failure.",
+      "dropCap": false
+     },
+     "clientId": "1284b9a2-3156-469f-84b2-187f0940d8e0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The packaging is often an area where issues crop up in CI as this isn't something that's usually tested locally. It makes sense to test the packaging of a project during the CI workflow even if we don't do anything with the resulting package. With some workflows, we may even be testing the already built packages. This assures us that we have tested the code in the same form as what will be deployed to production.",
+      "dropCap": false
+     },
+     "clientId": "42a6caa7-05cc-4024-94d7-977e8cea3576",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What about deployment then? We'll talk about consistency and repeatability at length in the coming sections but we'll mention here that we want a process that always looks the same, whether we're running tests on a development branch or the main branch. In fact, the process may&nbsp;<em>literally</em>&nbsp;be the same with only a check at the end to determine if we are on the main branch and need to do a deployment. In this context, it makes sense to include deployment in the CI process since we'll be maintaining it at the same time we work on CI.",
+      "dropCap": false
+     },
+     "clientId": "4b72d45a-d439-4c6a-8e60-5abd0aa05a56",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Is this CD thing related?",
+      "level": 4
+     },
+     "clientId": "8d6d93ba-57e1-4b59-ae2f-1c5d15bba6d0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The terms&nbsp;<em>Continuous Delivery</em>&nbsp;and&nbsp;<em>Continuous Deployment</em>&nbsp;(both of which have the acronym CD) are often used when one talks about CI that also takes care of deployments. We won't bore you with the exact definition (you can use e.g.&nbsp;<a href=\"https://en.wikipedia.org/wiki/Continuous_delivery\" target=\"_blank\" rel=\"noreferrer noopener\">Wikipedia</a>&nbsp;or&nbsp;<a href=\"https://martinfowler.com/bliki/ContinuousDelivery.html\" target=\"_blank\" rel=\"noreferrer noopener\">another Martin Fowler blog post</a>) but in general, we refer to CD as the practice where the main branch is kept deployable at all times. In general, this is also frequently coupled with automated deployments triggered from merges into the main branch.",
+      "dropCap": false
+     },
+     "clientId": "86326dd6-1845-4a1d-bd95-0e41cb5a3e2a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What about the murky area between CI and CD? If we, for example, have tests that must be run before any new code can be merged to the main branch, is this CI because we're making frequent merges to the main branch, or is it CD because we're making sure that the main branch is always deployable?",
+      "dropCap": false
+     },
+     "clientId": "0c0c3f0a-91ec-4c72-b1e0-a22876ec65f7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "So, some concepts frequently cross the line between CI and CD and, as we discussed above, deployment sometimes makes sense to consider CD as part of CI. This is why you'll often see references to CI/CD to describe the entire process. We'll use the terms \"CI\" and \"CI/CD\" interchangeably in this part.",
+      "dropCap": false
+     },
+     "clientId": "62ba897b-705a-4a56-8972-0960db029948",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Why is it important?",
+      "level": 3
+     },
+     "clientId": "3a6a687a-635a-4b39-bba0-accba15ec2b9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Above we talked about the \"works on my machine\" problem and the deployment of multiple changes, but what about other issues. What if Alice committed directly to the main branch? What if Bob used a branch but didn't bother to run tests before merging? What if Charlie tries to build the software for production but does so with the wrong parameters?",
+      "dropCap": false
+     },
+     "clientId": "f1540da6-9e66-4c3e-a91b-101d31a0216f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "With the use of continuous integration and systematic ways of working, we can avoid these.",
+      "dropCap": false
+     },
+     "clientId": "017c897a-b990-4325-886e-f7011628e651",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "0ca72501-3e0e-445d-b891-e56de1e4e29e",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "We can disallow commits directly to the main branch"
+       },
+       "clientId": "7c78b3e6-60b3-415c-a908-cd7d8c2cb9d9",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "We can have our CI process run on all Pull Requests (PRs) against the main branch and allow merges only when our desired conditions are met e.g. tests pass"
+       },
+       "clientId": "9360e816-753d-4e1e-aabc-b80205ccf9eb",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "We can build our packages for production in the known environment of the CI system"
+       },
+       "clientId": "daf3ffb4-a861-494f-9baf-3586a8def691",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "There are other advantages to extending this setup:",
+      "dropCap": false
+     },
+     "clientId": "c6106934-8a1d-41da-b277-5209f271d116",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "fd0b68db-de92-4448-80b7-2871ab54d2db",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "If we use CI/CD with deployment every time there is a merge to the main branch, then we know that the code will always work in production"
+       },
+       "clientId": "aca10f87-d24e-4869-b1c6-e6da834dd0bf",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "If we only allow merges when the branch is up to date with the main branch, then we can be sure that different developers don't overwrite each other's changes"
+       },
+       "clientId": "98c3e720-fe8b-4982-b923-f4b2ce4b4cf8",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Note that in this part we are assuming that the&nbsp;<em>main</em>&nbsp;branch contains the code that is running in production. There are numerous different&nbsp;<a href=\"https://www.atlassian.com/git/tutorials/comparing-workflows\" target=\"_blank\" rel=\"noreferrer noopener\">workflows</a>&nbsp;one can use with Git, e.g. in some cases, it may be a specific&nbsp;<em>release branch</em>&nbsp;that contains the code that is running in production.",
+      "dropCap": false
+     },
+     "clientId": "e3fa9bad-d403-43af-8bdf-ab7bcaea5617",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Important principles",
+      "level": 3
+     },
+     "clientId": "0a22ddad-11aa-46bf-bdfc-8358ca41f498",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "It's important to remember that CI/CD is not the goal. The goal is better, faster software development with fewer preventable bugs and better team cooperation.",
+      "dropCap": false
+     },
+     "clientId": "ae663100-b0d4-4fbf-86ec-546b9b472ef8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "To that end, CI should always be configured to the task at hand and the project itself. The end goal should be kept in mind at all times. You can think of CI as the answer to these questions:",
+      "dropCap": false
+     },
+     "clientId": "701ac251-7064-44dc-9115-c917bd94f645",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "bd5d621f-d29f-4f8c-b3e9-2aaf4891df81",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "How to make sure that tests run on all code that will be deployed?"
+       },
+       "clientId": "2b1f4999-f707-45ae-9550-b491eca757ec",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "How to make sure that the main branch is deployable at all times?"
+       },
+       "clientId": "91162d27-90e9-467b-a50a-7ef589fb84d1",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "How to ensure that builds will be consistent and will always work on the platform it'd be deploying to?"
+       },
+       "clientId": "5a65ddbf-d3d5-4030-bb9a-992eae7a4c7e",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "How to make sure that the changes don't overwrite each other?"
+       },
+       "clientId": "886c37bf-fffd-4000-809a-4aa3e6acd445",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "How to make deployments happen at the click of a button or automatically when one merges to the main branch?"
+       },
+       "clientId": "256c7474-4b92-46d1-88ca-d401fef5323c",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "There even exists scientific evidence on the numerous benefits the usage of CI/CD has. According to a large study reported in the book&nbsp;<a href=\"https://itrevolution.com/product/accelerate/\" target=\"_blank\" rel=\"noreferrer noopener\">Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations</a>, the use of CI/CD correlate heavily with organizational success (e.g. improves profitability and product quality, increases market share, shortens the time to market). CI/CD even makes developers happier by reducing their burnout rate. The results summarized in the book are also reported in scientific articles such as&nbsp;<a href=\"https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909\" target=\"_blank\" rel=\"noreferrer noopener\">this</a>.",
+      "dropCap": false
+     },
+     "clientId": "ab910f0c-bc2b-4c97-9cfd-568e714e6d5e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Documented behavior",
+      "level": 4
+     },
+     "clientId": "8eb56d57-1c1b-4fdc-8704-3b8f16a0c847",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "There's an old joke that a bug is just an \"undocumented feature\". We'd like to avoid that. We'd like to avoid any situations where we don't know the exact outcome. For example, if we depend on a label on a PR to define whether something is a \"major\", \"minor\" or \"patch\" release (we'll cover the meanings of those terms later), then it's important that we know what happens if a developer forgets to put a label on their PR. What if they put a label on after the build/test process has started? What happens if the developer changes the label mid-way through, which one is the one that actually releases?",
+      "dropCap": false
+     },
+     "clientId": "5122c884-d964-4dc1-a99a-76ddd18447e8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It's possible to cover all cases you can think of and still have gaps where the developer will do something \"creative\" that you didn't think of, so it's important to have the process fail safely in this case.",
+      "dropCap": false
+     },
+     "clientId": "9a6024b2-2806-4975-b87e-c00285d66490",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "For example, if we have the case mentioned above where the label changes midway through the build. If we didn't think of this beforehand, it might be best to fail the build and alert the user if something we weren't expecting happened. The alternative, where we deploy the wrong type of version anyway, could result in bigger problems, so failing and notifying the developer is the safest way out of this situation.",
+      "dropCap": false
+     },
+     "clientId": "676bbc34-9487-44c5-9e05-1795a76a3c73",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Know the same thing happens every time",
+      "level": 4
+     },
+     "clientId": "57bded60-73be-458f-a9b1-67001b9481d9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "We might have the best tests imaginable for our software, tests that catch every possible issue. That's great, but they're useless if we don't run them on the code before it's deployed.",
+      "dropCap": false
+     },
+     "clientId": "bc014a35-14de-4349-8466-47a1fae7bd11",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "We need to guarantee that the tests will run and we need to be sure that they run against the code that will actually be deployed. For example, it's no use if the tests are&nbsp;<em>only</em>&nbsp;run against Alice's branch if they would fail after merging to the main branch. We're deploying from the main branch so we need to make sure that the tests are run against a copy of the main branch with Alice's changes merged in.",
+      "dropCap": false
+     },
+     "clientId": "7973e7a6-e156-41a5-8aff-9a0421de05b5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This brings us to a critical concept. We need to make sure that the same thing happens every time. Or rather that the required tasks are all performed and in the right order.",
+      "dropCap": false
+     },
+     "clientId": "62ff3997-3495-4513-86f0-7b116ed06978",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Code always kept deployable",
+      "level": 4
+     },
+     "clientId": "43dbb076-cfb6-4022-8518-aec7be868514",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Having code that's always deployable makes life easier. This is especially true when the main branch contains the code running in the production environment. For example, if a bug is found and it needs to be fixed, you can pull a copy of the main branch (knowing it is the code running in production), fix the bug, and make a pull request back to the main branch. This is relatively straight forward.",
+      "dropCap": false
+     },
+     "clientId": "b8f4d4a5-86a7-4959-bbdb-71056223e3a7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "If, on the other hand, the main branch and production are very different and the main branch is not deployable, then you would have to find out what code&nbsp;<em>is</em>&nbsp;running in production, pull a copy of that, fix the bug, figure out a way to push it back, then work out how to deploy that specific commit. That's not great and would have to be a completely different workflow from a normal deployment.",
+      "dropCap": false
+     },
+     "clientId": "13db1828-d0f5-4843-a9fd-5c49c25dd405",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Knowing what code is deployed (sha sum/version)",
+      "level": 4
+     },
+     "clientId": "9c38084f-c68a-41bd-b0be-cf31adfdfcbc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "It's often important to know what is actually running in production. Ideally, as we discussed above, we'd have the main branch running in production. This is not always possible. Sometimes we intend to have the main branch in production but a build fails, sometimes we batch together several changes and want to have them all deployed at once.",
+      "dropCap": false
+     },
+     "clientId": "fdc155d4-60c3-4afb-a3a9-3cca54567250",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "What we need in these cases (and is a good idea in general) is to know exactly <em>what code is running in production</em>. Sometimes this can be done with a version number, sometimes it's useful to have the commit SHA sum (uniquely identifying hash of that particular commit in git) attached to the code. We will discuss versioning further <a href=\"https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-continuous-integration/chapter-5\" target=\"_blank\" rel=\"noreferrer noopener\">a bit later in this part</a>.",
+      "dropCap": false
+     },
+     "clientId": "f306fee9-735e-4025-9ea1-db378f48439e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It is even more useful if we combine the version information with a history of all releases. If, for example, we found out that a particular commit has introduced a bug, we can find out exactly when that was released and how many users were affected. This is especially useful when that bug has written bad data to the database. We'd now be able to track where that bad data went based on the time.",
+      "dropCap": false
+     },
+     "clientId": "e3a6c06b-e768-4aac-85f2-963e63b1f368",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Types of CI setup",
+      "level": 3
+     },
+     "clientId": "06951db1-7cc3-4976-9abc-82f5bc49b769",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "To meet some of the requirements listed above, we want to dedicate a separate server for running the tasks in continuous integration. Having a separate server for the purpose minimizes the risk that something else interferes with the CI/CD process and causes it to be unpredictable.",
+      "dropCap": false
+     },
+     "clientId": "403daee4-f691-45dd-9c2a-1f444d189be2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "There are two options: host our own server or use a cloud service.",
+      "dropCap": false
+     },
+     "clientId": "d5f43059-7b4c-44b0-a095-5297f5a68084",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Jenkins (and other self-hosted setups)",
+      "level": 4
+     },
+     "clientId": "ab4e70f9-4646-4266-8d85-7939e94c2ff3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Among the self-hosted options,&nbsp;<a href=\"https://www.jenkins.io/\" target=\"_blank\" rel=\"noreferrer noopener\">Jenkins</a>&nbsp;is the most popular. It's extremely flexible and there are plugins for almost anything (except that one thing you want to do). This is a great option for many applications, using a self-hosted setup means that the entire environment is under your control, the number of resources can be controlled, secrets (we'll elaborate a little more on security in later sections of this part) are never exposed to anyone else and you can do anything you want on the hardware.",
+      "dropCap": false
+     },
+     "clientId": "47e11a5d-8f53-4ce1-8568-f7f2fdd92970",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Unfortunately, there is also a downside. Jenkins is quite complicated to set up. It's very flexible but that means that there's often quite a bit of boilerplate/template code involved to get builds working. With Jenkins specifically, it also means that CI/CD must be set up with Jenkins' own domain-specific language. There are also the risks of hardware failures which can be an issue if the setup sees heavy use.",
+      "dropCap": false
+     },
+     "clientId": "4aaff7c8-48ec-4b63-92ea-06018ed4418b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "With self-hosted options, the billing is usually based on the hardware. You pay for the server. What you do on the server doesn't change the billing.",
+      "dropCap": false
+     },
+     "clientId": "1bedcf2e-ce2a-47ff-bc3c-7b388a8ea976",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "GitHub Actions and other cloud-based solutions",
+      "level": 4
+     },
+     "clientId": "69cb7486-e2ff-4106-be2e-2035d3ade35b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In a cloud-hosted setup, the setup of the environment is not something you need to worry about. It's there, all you need to do is tell it what to do. Doing that usually involves putting a file in your repository and then telling the CI system to read the file (or to check your repository for that particular file).",
+      "dropCap": false
+     },
+     "clientId": "22db2627-bd7b-4950-a4b7-18fb8f89fb8c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The actual CI config for the cloud-based options is often a little simpler, at least if you stay within what is considered \"normal\" usage. If you want to do something a little bit more special, then cloud-based options may become more limited, or you may find it difficult to do that one specific task for which the cloud platform just isn't built for.",
+      "dropCap": false
+     },
+     "clientId": "668fc3eb-d68c-4911-9f4b-fd45d7e8277c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "In this part, we'll look at a fairly normal use case. The more complicated setups might, for example, make use of specific hardware resources, e.g. a GPU.",
+      "dropCap": false
+     },
+     "clientId": "c61e46ae-dac3-4191-aa70-de87fb9b4061",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Aside from the configuration issue mentioned above, there are often resource limitations on cloud-based platforms. In a self-hosted setup, if a build is slow, you can just get a bigger server and throw more resources at it. In cloud-based options, this may not be possible. For example, in the free tier of <a href=\"https://github.com/features/actions\" target=\"_blank\" rel=\"noreferrer noopener\">GitHub Actions</a>, the nodes your builds will run on have 4 vCPUs and 16GB of RAM.",
+      "dropCap": false
+     },
+     "clientId": "3e7e044a-abd1-4a60-bb28-72eca3adda54",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Cloud-based options are also usually billed by build time which is something to consider.",
+      "dropCap": false
+     },
+     "clientId": "8130e716-ebe3-471c-a50e-7f065c1876d6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Why pick one over the other",
+      "level": 4
+     },
+     "clientId": "9fc96f3d-86cc-41d2-8291-76d413eef6f4",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In general, if you have a small to medium software project that doesn't have any special requirements (e.g. a need for a graphics card to run tests), a cloud-based solution is probably best. The configuration is simple and you don't need to go through the hassle or expense of setting up your own system. For smaller projects especially, this should be cheaper.",
+      "dropCap": false
+     },
+     "clientId": "a88b9f44-03e4-45ce-abf2-a6562341a6bc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "For larger projects where more resources are needed or in larger companies where there are multiple teams and projects to take advantage of it, a self-hosted CI setup is probably the way to go.",
+      "dropCap": false
+     },
+     "clientId": "35882198-c0b8-47ca-8bce-05f218a6d2be",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Privacy has become a much more prominent factor in CI decisions. Many cloud CI providers now integrate AI‑driven features that analyze build logs, test output, and repository metadata. While vendors offer opt‑outs and contractual protections, some organizations are uncomfortable with any third‑party access to internal code or build artifacts.",
+      "dropCap": false
+     },
+     "clientId": "1fa18e39-3e5d-4341-b53a-4b47f8edab2b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Self‑hosted CI avoids this entirely by keeping all logs, artifacts, and pipeline data inside your own infrastructure. For companies with strict data‑residency rules, sensitive IP, or regulatory obligations, this level of control is often a decisive advantage, even when cloud CI would otherwise be more convenient.",
+      "dropCap": false
+     },
+     "clientId": "cb6122e7-dc8f-4b42-81b4-a1f81516cdce",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Why use GitHub Actions for this course",
+      "level": 4
+     },
+     "clientId": "ec568d64-0c4c-4e9c-9205-30683a96de67",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "For this course, we'll use&nbsp;<a href=\"https://github.com/features/actions\" target=\"_blank\" rel=\"noreferrer noopener\">GitHub Actions</a>. It is an obvious choice since we're using GitHub anyway. We can get a robust CI solution working immediately without any hassle of setting up a server or configuring a third-party cloud-based service.",
+      "dropCap": false
+     },
+     "clientId": "48c621f5-a994-4742-84fc-e9abee2ee8d7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Besides being easy to take into use, GitHub Actions is a good choice in other respects. It might be the best cloud-based solution at the moment. It has gained lots of popularity since its initial release in November 2019.",
+      "dropCap": false
+     },
+     "clientId": "efda414a-2846-4390-b3b3-63e8e23c1c2d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "57c147d8-b400-4582-b68b-f12b576f38a9"
+     },
+     "clientId": "4be1c35a-21d4-492b-a913-908e1744afc8",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "94ea6b0f-7693-4f38-a1e8-ae15af926a0a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  },
+  {
+   "chapter": 1,
+   "chapterName": "Getting started",
+   "urlPath": "/chapter-1",
+   "title": "Getting started",
+   "id": "03f44ce3-0d33-4c31-988c-ac39bbe33105",
+   "size": 17773,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#F5F6F7",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Getting started"
+     },
+     "clientId": "ec5f2a2d-26f8-46f6-a34e-65930d92f681",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "a0a6adca-24a3-435a-a9de-4dd8a2ab935d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "So you have a fresh feature ready to be shipped. What happens next? Do you upload files to a server manually? How do you manage the version of your product running in the wild? How do you make sure it works, and roll back to a safe version if it doesn’t?",
+      "dropCap": false
+     },
+     "clientId": "c24d38e8-5a83-4ba9-9df4-381e3b4267f9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Doing all the above manually is a pain and doesn’t scale well for a larger team. That’s why we have Continuous Integration / Continuous Delivery systems, in short CI/CD systems. In this part, you will gain an understanding of why you should use a CI/CD system, what can one do for you, and how to get started with GitHub Actions which is available to all GitHub users by default.",
+      "dropCap": false
+     },
+     "clientId": "b6ceb059-61e6-4e1b-8f9e-dcf790326f18",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "During this part, you will build a robust deployment pipeline to a ready-made example project starting in Exercise 2. You will fork the example project, and that will create a personal copy of the repository. At the end of this part, you will build another deployment pipeline for some of <a href=\"https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-continuous-integration/chapter-6#430bfd09-022e-417d-b5e9-ceb334b026c4\" data-type=\"link\" data-id=\"https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-continuous-integration/chapter-6#430bfd09-022e-417d-b5e9-ceb334b026c4\">your own</a> previously created apps!",
+      "dropCap": false
+     },
+     "clientId": "2e917238-4968-45bd-8ab5-06e18861a2a7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Prerequisites",
+      "level": 3
+     },
+     "clientId": "1597a821-ca3c-487a-a825-74fcbf1fac83",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "This part will rely on many concepts covered in the previous parts of the course. It is recommended that you finish at least parts 0 to 5 before starting this part.",
+      "dropCap": false
+     },
+     "clientId": "3e1148d8-a653-444b-a7a5-321234c8ed44",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Unlike the other parts of this course, you do not write many lines of code in this part, it is much more about configuration. Debugging code might be hard, but debugging configurations is way harder, so in this part, you need lots of patience and discipline!",
+      "dropCap": false
+     },
+     "clientId": "b4f10a64-232b-47b5-81b6-37be1533ebd0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Enrollment",
+      "level": 3
+     },
+     "clientId": "66ec3f3c-0688-40d9-aa72-4903ebd19344",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "You do not need to enroll to study in the course. You can enroll only after you have completed the course, see the&nbsp;<em>Getting ECTS credits and the certificate</em>&nbsp;below.",
+      "dropCap": false
+     },
+     "clientId": "dca6e936-f6ec-419d-ab40-04549a703afa",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Help with exercises or course practicalities",
+      "level": 3
+     },
+     "clientId": "917e6150-9543-417e-adf6-a443b4b0eea7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "This course has a Discord group where we discuss everything about the course. Support is available almost 24/7, with the discussion being in both English and Finnish.",
+      "dropCap": false
+     },
+     "clientId": "0402274a-345b-4ae8-827a-901057cd282f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Join our Full stack open Discord channel: <a href=\"https://study.cs.helsinki.fi/discord/join/fullstack\">https://study.cs.helsinki.fi/discord/join/fullstack</a>",
+      "dropCap": false
+     },
+     "clientId": "2c475b5e-b56f-41fa-9b00-83c3c6abb57d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "<em><strong>All</strong>&nbsp;inappropriate, degrading, or discriminatory comments on the channel are prohibited and will lead to action taken against the commenter.</em>",
+      "dropCap": false
+     },
+     "clientId": "edbbff17-fa02-44af-896d-f907d92988e1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Submitting exercises",
+      "level": 3
+     },
+     "clientId": "d00a109e-2897-4d41-a804-fc4a8425da29",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "This course part contains 24 exercises, and all of them must be completed in order to receive a grade.",
+      "dropCap": false
+     },
+     "clientId": "9b675dd7-b4ee-48b8-9a8e-011127cdae17",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The exercises are to be submitted to <em>a single GitHub repository,</em> which will include all of the source code and the configurations that you do during this part. If you are using a private repository, add the GitHub user <em>mluukkai</em> as a collaborator.",
+      "dropCap": false
+     },
+     "clientId": "8a0c8f2a-24ab-4dfe-a6b9-636144c50cc2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "<strong>Your exercises are reviewed after you submit the last exercise, and if everything is more or less ok, you will be graded, and the certificate and university credits will be available to you.</strong>",
+      "dropCap": false
+     },
+     "clientId": "fae09447-04cf-4483-ac0b-5c18b3580018",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "citation": "",
+      "value": ""
+     },
+     "clientId": "3a99de89-b1bc-4daa-926d-2fabca52ae86",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Remember not to cheat in exercises! If, for example, multiple students are submitting the same code, the issue is handled according to the <a href=\"https://studies.helsinki.fi/instructions/article/what-cheating-and-plagiarism\" target=\"_blank\" rel=\"noreferrer noopener\">policy on plagiarism</a> of the University of Helsinki.",
+        "dropCap": false
+       },
+       "clientId": "7ff9841a-25a2-44d9-bac9-4a18f6e9b609",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/paragraph"
+      }
+     ],
+     "isValid": true,
+     "name": "core/quote"
+    },
+    {
+     "attributes": {
+      "content": "Locking a chapter",
+      "level": 3
+     },
+     "clientId": "857dd78c-0e0f-4a33-8478-784785f74b06",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Once you have finished all exercises in a chapter, you must lock the chapter before continuing to the next one. Keep in mind that after locking a chapter, you won’t be able to submit any further exercises for it, so only lock it when everything is done.",
+      "dropCap": false
+     },
+     "clientId": "19542b93-aa5a-46e4-828a-2c6d3d40bfd3",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "linkDestination": "media",
+      "url": "https://courses.mooc.fi/api/v0/files/course/99e12118-87d6-4620-b278-8deb041d81ca/images/EtAeelSUYdNTJWrOY1pv2DiEJsMr9q.png"
+     },
+     "clientId": "35b98a1f-e491-4a3b-b70b-89aa6938cd16",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "Getting ECTS credits and the certificate",
+      "level": 3
+     },
+     "clientId": "a74da8ba-2f77-4ff9-b903-4b22ac7da45a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "After you have completed the exercises and those are graded, you can get the ECTS credits as follows",
+      "dropCap": false
+     },
+     "clientId": "709e1362-eddd-4166-8e01-1182e180b7ce",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "University of Helsinki degree students and exchange students",
+      "level": 4
+     },
+     "clientId": "975d673a-6af5-4f18-b1b1-c58850d8c79a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "ordered": true,
+      "values": ""
+     },
+     "clientId": "db008caa-d809-4b4d-af0e-b93f87585550",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Enroll directly through your Sisu account (Sisu: Structure of studies)."
+       },
+       "clientId": "03cbca1f-cb60-4dc7-bf3e-96379d4f456d",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Complete all required exercises."
+       },
+       "clientId": "685274bd-e903-4760-b8c2-4cb3a70ab628",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Others",
+      "level": 4
+     },
+     "clientId": "9abdd51d-574e-4eed-be21-0379273543c5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "ordered": true,
+      "start": 1,
+      "values": ""
+     },
+     "clientId": "5496daf6-12a6-4cf6-a0bf-1434226e671c",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Complete all required exercises."
+       },
+       "clientId": "9e4b5736-75bc-49f0-9779-f41423f14129",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Go to the course front page.  "
+       },
+       "clientId": "54b52fba-59f8-4cdb-a7b9-d4facbd40137",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Scroll down until you see an element that says <em>Congratulations</em>!  "
+       },
+       "clientId": "ef72115f-4d40-4452-9d71-f3bafc368810",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Click the <em>REGISTER</em><em> </em> button.  "
+       },
+       "clientId": "474183b3-0b81-47ba-bb3b-92e07919a3ac",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Fill in the open university (University of Helsinki) enrolment form. Use the same email address that you used to complete the course."
+       },
+       "clientId": "51c299e9-82e9-497a-90a9-4145b841aed9",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "The credits are usually registered in the University of Helsinki’s study register within two days of enrolment.  "
+       },
+       "clientId": "caf5f41d-2104-4d64-bd6a-76fab417ddbf",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Registering the credits takes usually two days.",
+      "dropCap": false
+     },
+     "clientId": "f143bb2b-7fcd-4aad-a2da-c2ebc66323de",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "The course certificate is available also at the course front page.",
+      "dropCap": false
+     },
+     "clientId": "e0317921-084f-44fd-b332-a991e28a08ae",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Improvements and feedback to the course material",
+      "level": 3
+     },
+     "clientId": "a2103b4e-72fd-4803-8b1c-a311f136cace",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "We welcome contributions to the course material from students and other members of the DevOps community! If you notice any mistakes, typos, or errors in the material, please consider submitting a correction or clarification request by pressing the&nbsp;<em>Give feedback&nbsp;</em>button, which gives you two choices",
+      "dropCap": false
+     },
+     "clientId": "b4b232a0-7623-414e-892e-10759d739428",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "alt": "Add alt",
+      "blurDataUrl": "",
+      "caption": "",
+      "linkDestination": "media",
+      "url": "https://courses.mooc.fi/api/v0/files/course/789089e5-7425-4a5d-9c40-6ae915de7ee5/images/DPXe3SFeStGBmVSLraxQBTH0MLFN4k.png"
+     },
+     "clientId": "c66c7801-9522-4817-b676-77184fd35405",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/image"
+    },
+    {
+     "attributes": {
+      "content": "In case of e.g., typos, it is preferable to select the&nbsp;<em>Improve Material</em>&nbsp;that makes the material \"editable\", and you may send the improvement suggestions for approval.",
+      "dropCap": false
+     },
+     "clientId": "74d65474-4985-4f1d-8555-7af3b100f97f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Using LLM:s",
+      "level": 3
+     },
+     "clientId": "68705ba4-c8e7-4853-a2df-a569fd1c598a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Large language models have become powerful tools in software development, and coding agents push those capabilities even further. They can make a course like this feel almost effortless—but relying on them too heavily comes at a cost. To use AI effectively, you still need a solid command of the fundamentals. That’s why I suggest using agents in moderation, especially for explanations and debugging, so you build real understanding rather than outsourcing the learning.",
+      "dropCap": false
+     },
+     "clientId": "91871e5f-22c4-447e-b4d0-c1ff3a64bb4d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "A practical, learning-first approach to using AI on this course:",
+      "dropCap": false
+     },
+     "clientId": "c272c883-1318-4152-a2c3-72caf5712609",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Before using AI",
+      "dropCap": false
+     },
+     "clientId": "c714a2a1-68bd-403f-a399-5bb6cf43dd40",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "3d49be38-e126-4ba4-b552-78716d0047f0",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Try on your own first: write a solution or at least sketch your approach."
+       },
+       "clientId": "d7e9271d-f45e-4e73-90ef-306f9e5c2a06",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Pinpoint the problem: identify the exact error message, unclear concept, or design trade-off you’re stuck on."
+       },
+       "clientId": "1a74a176-527a-4c48-a11d-bb9eb7431fc1",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "How to use AI wisely",
+      "dropCap": false
+     },
+     "clientId": "1f1478dc-89cf-479e-9967-86327a7ff165",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "67854e03-5ac9-47aa-84a9-cb684030ec47",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Explanations: ask for clear explanations of concepts or code (why something works, not just how)."
+       },
+       "clientId": "7f1fb29a-4bc4-47f5-a83b-bdfdd403adf8",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Debugging: share the error, the relevant code, and what you’ve already tried; ask for hypotheses and possible fixes."
+       },
+       "clientId": "bfdac70b-56a0-4187-bdb4-e440c0d0b99d",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Peer review: request feedback on your solution, edge cases, complexity, and alternatives."
+       },
+       "clientId": "0295c44a-46bc-42ad-9aeb-f985e2b436b9",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Design support: ask to break the problem into parts, propose test cases, and define success metrics."
+       },
+       "clientId": "c53ee352-3758-47da-9d59-699f93689f83",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "What to avoid",
+      "dropCap": false
+     },
+     "clientId": "8f9f9051-db79-4431-b91e-6378ff0f8ad9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "f599e26e-9ef9-4bc8-bd26-515cb8b648ef",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Copying complete solutions without understanding them."
+       },
+       "clientId": "b7b069fc-d82e-458e-9b5c-ade548cd8205",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Overly broad requests (“write the entire assignment”) that short-circuit your learning."
+       },
+       "clientId": "d417b5a9-aee2-4a21-9b42-3a452b8fb743",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Relying on a single answer without verification or tests."
+       },
+       "clientId": "957661cd-151f-4553-afd8-6e19275e5b82",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Bottom line: let AI be your explainer, reviewer, and debugging partner—not your substitute for thinking and practice.",
+      "dropCap": false
+     },
+     "clientId": "77de0477-e152-4262-8df9-a99e78ba6221",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "About the material",
+      "level": 3
+     },
+     "clientId": "4d71e602-6174-446b-90ab-23db635c6ce0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "This part was created by the Engineering Team at Smartly.io. At Smartly.io, we automate every step of social advertising to unlock greater performance and creativity. We make every day of advertising easy, effective, and enjoyable for more than 650 brands worldwide, including eBay, Uber, and Zalando. We are one of the early adopters of GitHub Actions in wide-scale production use. ",
+      "dropCap": false
+     },
+     "clientId": "f1da3f92-ea01-4709-b398-700d485d36b0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Contributors: Anna Osipova, Anton Rautio, Mircea Halmagiu, Tomi Hiltunen.",
+      "dropCap": false
+     },
+     "clientId": "ef30dcc9-e1be-4ab1-819a-e34126a6fcfc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This material is licensed under&nbsp;<a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en\">Creative Commons BY-NC-SA 4.0</a>&nbsp;-licence, so you can freely use and distribute the material, as long as the original creators are credited. If you make changes to the material and you want to distribute the altered version, it must be licensed under the same license. Usage of the material for commercial use is prohibited without permission.",
+      "dropCap": false
+     },
+     "clientId": "c24a640d-00c3-4b80-b39d-0e80b0b7647f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "7f15e0ba-9e6e-4151-9f6c-2d452b525ab7"
+     },
+     "clientId": "6c583ecd-dbd1-4267-923b-1c720cee5341",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "7d3d4756-6f1d-4af1-9f4a-a0133de80d5b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  },
+  {
+   "chapter": 3,
+   "chapterName": "Getting started with GitHub Actions",
+   "urlPath": "/chapter-3",
+   "title": "Getting started with GitHub Actions",
+   "id": "60514e93-004c-412f-8d38-0fd29503d83a",
+   "size": 23552,
+   "content": [
+    {
+     "attributes": {
+      "backgroundColor": "#ddb8e7",
+      "fontColor": "#1A2333",
+      "subtitle": "",
+      "title": "Getting started with GitHub Actions"
+     },
+     "clientId": "cf919a48-3d38-4248-aab0-c33c8b1f92c7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/hero-section"
+    },
+    {
+     "attributes": {},
+     "clientId": "d7d3ed50-d368-4768-9d9c-cc646f9f27bb",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercises-in-chapter"
+    },
+    {
+     "attributes": {
+      "content": "Before we start playing with GitHub Actions, let's have a look at what they are and how do they work.",
+      "dropCap": false
+     },
+     "clientId": "d3be53c7-4c6d-43e4-8550-c5bf5b10b09b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "GitHub Actions operate on&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#workflows\" target=\"_blank\" rel=\"noreferrer noopener\">workflows</a>. A workflow is a series of&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#jobs\" target=\"_blank\" rel=\"noreferrer noopener\">jobs</a>&nbsp;that run when a specific&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#events\" target=\"_blank\" rel=\"noreferrer noopener\">event</a>&nbsp;triggers them. Each job contains its own set of instructions that tell GitHub Actions what to do.",
+      "dropCap": false
+     },
+     "clientId": "62d79298-187a-438c-9406-f8ab9641fc1c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "A typical execution of a workflow looks like this:",
+      "dropCap": false
+     },
+     "clientId": "954315c7-77ca-4a94-90f8-a18e345f3a38",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "e9e375b5-0938-491c-b7e0-de16a34aea39",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Triggering event happens (for example, there is a push to the main branch)."
+       },
+       "clientId": "adae2b11-26af-4ce8-a4b4-81ec1331d03d",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "The workflow with that trigger is executed."
+       },
+       "clientId": "15a94ea5-1f31-4c4e-b9d4-e557d847138a",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Cleanup"
+       },
+       "clientId": "625c4c64-e26e-468f-83fa-eb3866eee783",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Basic needs",
+      "level": 3
+     },
+     "clientId": "315b43d2-3034-4321-8d8c-c158d5bc1cce",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "In general, to have CI operate on a repository, we need a few things:",
+      "dropCap": false
+     },
+     "clientId": "e9462770-1ab2-4793-9a6b-4847a2ff4f4a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "39bd9b6e-a973-47e6-a092-8f5e3cbb2e38",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "A repository (obviously)"
+       },
+       "clientId": "1b636954-5e2c-418a-a4f3-114205bbafb6",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Some definition of what the CI needs to do: This can be in the form of a specific file inside the repository or it can be defined in the CI system"
+       },
+       "clientId": "81c39b51-e527-436d-8f03-d42fc0e942be",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "The CI needs to be aware that the repository (and the configuration file within it) exist"
+       },
+       "clientId": "d608eb7a-5efc-4472-a05a-8127bbed82b1",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "The CI needs to be able to access the repository"
+       },
+       "clientId": "7ca3baae-ec80-4f6c-a049-525568d08fac",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "The CI needs permissions to perform the actions it is supposed to be able to do: For example, if the CI needs to be able to deploy to a production environment, it needs <em>credentials</em> for that environment."
+       },
+       "clientId": "5a83801d-84b5-4579-bb1c-42f40403cd0c",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "That's the traditional model at least, we'll see in a minute how GitHub Actions short-circuit some of these steps or rather make it such that you don't have to worry about them!",
+      "dropCap": false
+     },
+     "clientId": "02e00fb3-9d50-47e9-bac2-2e63e8464277",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "GitHub Actions have a great advantage over self-hosted solutions: the repository is hosted with the CI provider. In other words, GitHub provides both the repository and the CI platform. This means that if we've enabled actions for a repository, GitHub is already aware of the fact that we have workflows defined and what those definitions look like.",
+      "dropCap": false
+     },
+     "clientId": "0e8120d4-1f32-4b59-8d4f-c8133503c52c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "3ef2abfc-78a1-4f51-bfcd-fb4df5e68baa"
+     },
+     "clientId": "e3f365f8-6952-4c64-94cd-e6304cb34f46",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": "Getting started with workflows",
+      "level": 3
+     },
+     "clientId": "7f61567a-7791-4a7a-94d2-cfa02d29cdff",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "The core component of creating CI/CD pipelines with GitHub Actions is something called a&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#workflows\" target=\"_blank\" rel=\"noreferrer noopener\">Workflow</a>. Workflows are process flows that you can set up in your repository to run automated tasks such as building, testing, linting, releasing, and deploying to name a few! The hierarchy of a workflow looks as follows:",
+      "dropCap": false
+     },
+     "clientId": "70c52a20-9e23-4466-bf8b-0624dacbc35c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Workflow",
+      "dropCap": false
+     },
+     "clientId": "39247609-994d-47a6-a46e-010a0aaafbd0",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "6ee467bd-7e15-4f2b-ad54-05d175a7877d",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "Job"
+       },
+       "clientId": "45bc73d2-c192-4f3f-b91f-549a914493e2",
+       "innerBlocks": [
+        {
+         "attributes": {
+          "ordered": false,
+          "values": ""
+         },
+         "clientId": "2fab0353-88bd-4e71-931a-1f4cb4e51ffb",
+         "innerBlocks": [
+          {
+           "attributes": {
+            "content": "Step"
+           },
+           "clientId": "fcc44c60-a1b7-442d-a458-8915277c19b5",
+           "innerBlocks": [],
+           "isValid": true,
+           "name": "core/list-item"
+          },
+          {
+           "attributes": {
+            "content": "Step"
+           },
+           "clientId": "611867d9-c0ed-4e33-8ed9-10a1c8804e4e",
+           "innerBlocks": [],
+           "isValid": true,
+           "name": "core/list-item"
+          }
+         ],
+         "isValid": true,
+         "name": "core/list"
+        }
+       ],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "Job"
+       },
+       "clientId": "267beb8b-5928-4fb0-bfdb-2f1f68f34d27",
+       "innerBlocks": [
+        {
+         "attributes": {
+          "ordered": false,
+          "values": ""
+         },
+         "clientId": "e3af3066-ef3e-40b7-b644-b575fe3d1883",
+         "innerBlocks": [
+          {
+           "attributes": {
+            "content": "Step"
+           },
+           "clientId": "9c66189e-3b4d-4485-8d14-aa1529360696",
+           "innerBlocks": [],
+           "isValid": true,
+           "name": "core/list-item"
+          }
+         ],
+         "isValid": true,
+         "name": "core/list"
+        }
+       ],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "Each workflow must specify at least one&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#jobs\" target=\"_blank\" rel=\"noreferrer noopener\">Job</a>, which contains a set of&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions#steps\" target=\"_blank\" rel=\"noreferrer noopener\">Steps</a>&nbsp;to perform individual tasks. The jobs will be run in parallel and the steps in each job will be executed sequentially.",
+      "dropCap": false
+     },
+     "clientId": "fe0cf9fc-3eeb-4a18-815b-a28bcc4a026e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Steps can vary from running a custom command to using pre-defined actions, thus the name GitHub Actions. You can create&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/creating-actions\" target=\"_blank\" rel=\"noreferrer noopener\">customized actions</a>&nbsp;or use any actions published by the community, which are plenty, but let's get back to that later!",
+      "dropCap": false
+     },
+     "clientId": "ee2214d5-45a0-41f3-8ab2-74a77cea8fad",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "For GitHub to recognize your workflows, they must be specified in <em>.github/workflows</em> folder in your repository. Each Workflow is its own separate file, which needs to be configured using the <a href=\"https://yaml.org/\" data-type=\"link\" data-id=\"https://yaml.org/\">YAML</a> data-serialization language.",
+      "dropCap": false
+     },
+     "clientId": "795c29e9-bdd3-47a4-8e9a-cbae86a091a5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "YAML is a recursive acronym for \"YAML Ain't Markup Language\". As the name might hint, its goal is to be human-readable, and it is commonly used for configuration files.",
+      "dropCap": false
+     },
+     "clientId": "4295a848-84a5-4074-b8a6-86e7e54e2d90",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Notice that indentations are important in YAML. You can learn more about the syntax&nbsp;<a href=\"https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html\" target=\"_blank\" rel=\"noreferrer noopener\">here</a>.",
+      "dropCap": false
+     },
+     "clientId": "4e062a71-227a-44a4-9410-ef8db56b01d7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "A basic workflow contains three elements in a YAML document. These three elements are:",
+      "dropCap": false
+     },
+     "clientId": "c207397d-ff5f-4fae-a5a2-a915050b986b",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "5475130b-7113-4860-b74d-e3e275b5cb8a",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "name: Yep, you guessed it, the name of the workflow"
+       },
+       "clientId": "7af6c656-481f-4384-be9e-80f6969dfd36",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "(on) triggers: The events that trigger the workflow to be executed"
+       },
+       "clientId": "972fffee-5963-4005-8947-f2338cd16fa2",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "jobs: The separate jobs that the workflow will execute (a basic workflow might contain only one job)."
+       },
+       "clientId": "77ca61d8-f88d-4a02-b3ae-d1a0e81ab4e3",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "A simple workflow definition looks like this:",
+      "dropCap": false
+     },
+     "clientId": "69012434-5194-49be-99c2-766fbf16de5d",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "name: Hello World!\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  hello_world_job:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Say hello\n        run: |\n          echo \"Hello World!\""
+     },
+     "clientId": "a802aae0-0014-4b30-9778-02c73cb9fdbc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "There is one job named <em>hello_world_job</em>, it will be run in a virtual environment with Ubuntu 24.04. The job has just one step named \"Say hello\", which will run the <code>echo \"Hello World!\"</code> command in the shell.",
+      "dropCap": false
+     },
+     "clientId": "ead03f71-708e-43f5-8221-cde55a1e40f6",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "So you may ask, when does GitHub trigger a workflow to be started? There are plenty of&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows\" target=\"_blank\" rel=\"noreferrer noopener\">options</a>&nbsp;to choose from, but generally speaking, you can configure a workflow to start once:",
+      "dropCap": false
+     },
+     "clientId": "32e77665-4f17-47c8-87dd-e7adfbcb7aad",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "ordered": false,
+      "values": ""
+     },
+     "clientId": "8b172500-b8a0-4138-9560-e838613283a5",
+     "innerBlocks": [
+      {
+       "attributes": {
+        "content": "An <em>event on GitHub</em> occurs such as when someone pushes a commit to a repository or when an issue or pull request is created"
+       },
+       "clientId": "10bacfa6-0cd8-4a85-a9df-63982e5126eb",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "A <em>scheduled event</em>, that is specified using the <a href=\"https://en.wikipedia.org/wiki/Cron\" target=\"_blank\" rel=\"noreferrer noopener\">cron</a>-syntax, happens"
+       },
+       "clientId": "33ab30e4-bf06-4500-809a-d81fbe220c86",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      },
+      {
+       "attributes": {
+        "content": "An <em>external event</em> occurs, for example, a command is performed in an external application such as <a href=\"https://slack.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Slack</a> or <a href=\"https://discord.com/\" target=\"_blank\" rel=\"noreferrer noopener\">Discord</a> messaging app"
+       },
+       "clientId": "67ade647-ed9d-419a-b27b-bda113d67f3f",
+       "innerBlocks": [],
+       "isValid": true,
+       "name": "core/list-item"
+      }
+     ],
+     "isValid": true,
+     "name": "core/list"
+    },
+    {
+     "attributes": {
+      "content": "To learn more about which events can be used to trigger workflows, please refer to GitHub Action's&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows\" target=\"_blank\" rel=\"noreferrer noopener\">documentation</a>.",
+      "dropCap": false
+     },
+     "clientId": "d3812b6d-05a4-493e-9fca-c3884f1ddb78",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "464d304e-1af1-4b78-a82e-5fdd1ea2f075"
+     },
+     "clientId": "984b5ca9-87ae-4538-b3d1-f954f951a0ec",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "fe9cdb9f-4207-489b-be06-f18b95c56bbc"
+     },
+     "clientId": "356e854b-c4f2-4dbb-a9b2-3be9fd347b2e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "content": " Setting up lint, test and build steps",
+      "level": 3
+     },
+     "clientId": "77f86263-9667-4a74-9eb5-830408241062",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "After completing the first exercises, you should have a simple but pretty useless workflow set up. Let's make our workflow do something useful.",
+      "dropCap": false
+     },
+     "clientId": "e6e435b4-f240-4d86-925f-4ce2b7c838d2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Let's implement a GitHub Action that will lint the code. If the checks don't pass, GitHub Actions will show a red status.",
+      "dropCap": false
+     },
+     "clientId": "ca4ba800-4184-4520-8d27-d0c6d6963e6f",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "At the start, the workflow that we will save to file <em>pipeline.yml</em> looks like this:",
+      "dropCap": false
+     },
+     "clientId": "424b5234-471b-4d74-b0b4-4378eaea72f1",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "name: Deployment pipeline\n\non:\n  push:\n    branches:\n      - main\n\njobs:"
+     },
+     "clientId": "1183caa0-9002-4c41-990c-462c4e13c5c9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Before we can run a command to lint the code, we have to perform a couple of actions to set up the environment of the job.",
+      "dropCap": false
+     },
+     "clientId": "ed85485b-083a-4fe6-ae01-429a343d6881",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Setting up the environment",
+      "level": 4
+     },
+     "clientId": "f2d5d003-97df-4d48-b594-877b53969e66",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "Setting up the environment is an important task while configuring a pipeline. We're going to use an <em>ubuntu-latest</em> virtual environment because this is the same as the version of Ubuntu (namely 24.04) we're going to be running in production.",
+      "dropCap": false
+     },
+     "clientId": "353a3547-0cfd-4a25-95ab-1c17e9bc0d57",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "It is important to replicate the same environment in CI as in production as closely as possible to avoid situations where the same code works differently in CI and in production, which would effectively defeat the purpose of using CI.",
+      "dropCap": false
+     },
+     "clientId": "117a3cce-d136-475d-9ca8-fc8fe53b7aa9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Next, we list the steps in the \"build\" job that the CI would need to perform. As we noticed in the last exercise, by default the virtual environment does not have any code in it, so we need to&nbsp;<em>checkout the code</em>&nbsp;from the repository.",
+      "dropCap": false
+     },
+     "clientId": "6c2fa137-4b03-4833-aa57-94d8ee2205ee",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "This is an easy step:",
+      "dropCap": false
+     },
+     "clientId": "3ffaf554-895d-47d3-a5f5-aac8bc93e09e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "name: Deployment pipeline\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n// BEGIN HIGHLIGHT \n  simple_deployment_pipeline:    \n    runs-on: ubuntu-latest    \n      steps:      \n      - uses: actions/checkout@v6\n// END HIGHLIGHT "
+     },
+     "clientId": "e92c6db2-78cd-4b22-975f-50ebcef9377e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "The&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsuses\" target=\"_blank\" rel=\"noreferrer noopener\">uses</a>&nbsp;keyword tells the workflow to run a specific&nbsp;<em>action</em>. An action is a reusable piece of code, like a function. Actions can be defined in your repository in a separate file or you can use the ones available in public repositories.",
+      "dropCap": false
+     },
+     "clientId": "7b852899-193e-4802-ac50-13f709bf26c5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Here we're using a public action <a href=\"https://github.com/actions/checkout\" target=\"_blank\" rel=\"noreferrer noopener\">actions/checkout</a>, and we specify a version (@v6) to avoid potential breaking changes if the action gets updated. The <em>checkout</em> action does what the name implies: it checks out the project source code from Git.",
+      "dropCap": false
+     },
+     "clientId": "583538c5-12b6-4f2f-ab3f-9e714c581217",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Secondly, as the application is written in JavaScript, Node.js must be set up to be able to utilize the commands that are specified in <em>package.json</em>. To set up Node.js, <a href=\"https://github.com/actions/setup-node\" target=\"_blank\" rel=\"noreferrer noopener\">actions/setup-node</a> action can be used. Node version 24 is selected because it is the version the application is using in the production environment.",
+      "dropCap": false
+     },
+     "clientId": "004d6278-0c4c-406c-8d69-89afcf94d42c",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "# name and trigger not shown anymore...\n\njobs:\n  simple_deployment_pipeline:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v6\n// BEGIN HIGHLIGHT \n      - uses: actions/setup-node@v6        \n        with:          \n          node-version: '24'\n// END HIGHLIGHT "
+     },
+     "clientId": "0f887dc0-3014-4544-9c95-ac2fe1d5d09e",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "As we can see, the&nbsp;<a href=\"https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith\" target=\"_blank\" rel=\"noreferrer noopener\">with</a>&nbsp;keyword is used to give a \"parameter\" to the action. Here the parameter specifies the version of Node.js we want to use.",
+      "dropCap": false
+     },
+     "clientId": "7a3c19c7-6ee1-4d02-abad-144f3f5a84b7",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Lastly, the dependencies of the application must be installed. Just like on your own machine, we execute <code>npm install</code>. The steps in the job should now look like this:",
+      "dropCap": false
+     },
+     "clientId": "46277981-5d39-4399-9218-3a30ac74b254",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "jobs:\n  simple_deployment_pipeline:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v6\n      - uses: actions/setup-node@v6\n        with:\n          node-version: '24'\n// BEGIN HIGHLIGHT \n      - name: Install dependencies        \n        run: npm install\n// END HIGHLIGHT "
+     },
+     "clientId": "2e58d982-2696-4263-be6a-7b1758d0bff9",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Now the environment should be completely ready for the job to run important tasks.",
+      "dropCap": false
+     },
+     "clientId": "1049254e-d100-49b6-80d1-506a4153a81a",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "Lint",
+      "level": 4
+     },
+     "clientId": "912a05dd-bdba-4af1-8e78-55a5f752f2e5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/heading"
+    },
+    {
+     "attributes": {
+      "content": "After the environment has been set up, we can run all the scripts from package.json like we would on our own machine. To lint the code, all you have to do is add a step to run the <code>npm run eslint</code> command.",
+      "dropCap": false
+     },
+     "clientId": "01016334-8cd2-4208-93e2-18fb56b80fe5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "jobs:\n  simple_deployment_pipeline:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v6\n      - uses: actions/setup-node@v6\n        with:\n          node-version: '24'\n      - name: Install dependencies \n        run: npm install  \n// BEGIN HIGHLIGHT \n      - name: Check style        \n        run: npm run eslint\n// END HIGHLIGHT "
+     },
+     "clientId": "da3bcab0-48c6-40d0-bd96-cc77a11b75ba",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "Note that the&nbsp;<em>name</em>&nbsp;of a step is optional, if you define a step as follows",
+      "dropCap": false
+     },
+     "clientId": "7bd2ce14-10dc-4268-83e3-24e88c9ca6c5",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "content": "- run: npm run eslint"
+     },
+     "clientId": "90eab361-407e-49db-8dfd-24899017fd20",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/code"
+    },
+    {
+     "attributes": {
+      "content": "the command that is run is used as the default name.",
+      "dropCap": false
+     },
+     "clientId": "6e479673-a25c-4656-bfcb-ca93703ff7e2",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "core/paragraph"
+    },
+    {
+     "attributes": {
+      "id": "b2f0beb4-ea89-4fd5-aa19-750081368670"
+     },
+     "clientId": "30e60210-b106-4ac1-a452-094007986ddc",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "09eaffc0-008e-4d90-ba9f-e160d7eaabe1"
+     },
+     "clientId": "120c2ae6-3f7a-4856-b80d-660a983f2741",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "374e1d3a-4a7f-4943-8a76-07062eda415a"
+     },
+     "clientId": "56e7e9bb-4600-462a-a172-f3475ddc7f13",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "ff3bb8a2-a97d-4252-8715-a08ece565295"
+     },
+     "clientId": "518a55ee-4e73-4568-a7ff-7e6b74973a94",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {
+      "id": "7b641d21-ad47-45a5-bdc2-233f6e67f376"
+     },
+     "clientId": "ca81ab03-e36c-4815-a0ed-9ef8d9229daf",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/exercise"
+    },
+    {
+     "attributes": {},
+     "clientId": "e0806a80-8686-482a-83c3-347e22719166",
+     "innerBlocks": [],
+     "isValid": true,
+     "name": "moocfi/lock-chapter"
+    }
+   ]
+  }
+ ]
+}

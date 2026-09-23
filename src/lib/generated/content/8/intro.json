@@ -1,0 +1,1 @@
+{"part":8,"letter":null,"file":"intro.md","title":"GraphQL","slug":null,"mainImage":"/images/part-8.svg","headings":[],"html":"<div class=\"intro\">\n<p>GraphQL بديل حديث لواجهات REST. في هذا الجزء نبني خادم GraphQL بـApollo Server، ونربطه بتطبيق React، ثم نضيف قاعدة بيانات وإدارة مستخدمين ومصادقة، ونتعرّف على تحديث الذاكرة المؤقتة وFragments والاشتراكات.</p>\n</div>\n"}

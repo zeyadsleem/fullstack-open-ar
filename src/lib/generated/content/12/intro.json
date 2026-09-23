@@ -1,0 +1,1 @@
+{"part":12,"letter":null,"file":"intro.md","title":"الحاويات","slug":null,"mainImage":"/images/part-12.svg","headings":[],"html":"<div class=\"intro\">\n<p>الحاويات غيّرت طريقة بناء البرمجيات ونشرها. في هذا الجزء نتعرّف على Docker، ونبني بيئات تشغيل قابلة للتكرار، وننظّم تطبيقات متعددة الحاويات باستخدام Docker Compose، ثم نتعرّف على أساسيات تنسيق الحاويات.</p>\n</div>\n"}
