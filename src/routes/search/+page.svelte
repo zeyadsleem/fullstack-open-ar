@@ -4,6 +4,11 @@
 
   let query = $state('');
 
+  /**
+   * @typedef {{ part: number, letter: string, title: string, slug: string, partTitle: string, text: string }} SearchChapter
+   */
+
+  /** @param {string} text */
   const normalize = (text) =>
     text
       .replace(/[\u064B-\u065F\u0670]/g, '')
@@ -15,9 +20,12 @@
     if (q.length < 2) return [];
 
     const terms = q.split(/\s+/).filter(Boolean);
+    /** @type {{ chapter: SearchChapter, score: number }[]} */
     const scored = [];
 
-    for (const chapter of searchIndex.chapters) {
+    /** @type {SearchChapter[]} */
+    const chapters = searchIndex.chapters;
+    for (const chapter of chapters) {
       const haystack = `${normalize(chapter.title)} ${chapter.text}`;
       let score = 0;
       for (const term of terms) {
@@ -37,6 +45,7 @@
     return scored.sort((a, b) => b.score - a.score).slice(0, 30);
   });
 
+  /** @param {SearchChapter} chapter */
   const snippet = (chapter) => {
     const q = normalize(query);
     const text = chapter.text;

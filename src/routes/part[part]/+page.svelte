@@ -4,7 +4,7 @@
 
   let { data } = $props();
 
-  const introPromise = loadPartIntro(data.part.part);
+  const introPromise = $derived(loadPartIntro(data.part.part));
 </script>
 
 <svelte:head>

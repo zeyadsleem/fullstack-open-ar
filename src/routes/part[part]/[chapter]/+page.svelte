@@ -8,11 +8,14 @@
 
   let activeId = $state('');
 
+  /** @type {{ id: string, text: string, depth: number }[]} */
+  const headings = $derived(content?.headings || []);
+
   $effect(() => {
-    if (!content?.headings?.length) return;
-    const elements = content.headings
+    if (!headings.length) return;
+    const elements = headings
       .map((h) => document.getElementById(h.id))
-      .filter(Boolean);
+      .filter((el) => el !== null);
 
     const onScroll = () => {
       let current = elements[0]?.id || '';
@@ -40,7 +43,7 @@
     <aside class="toc">
       <p class="toc__title">في هذه الصفحة</p>
       <ul>
-        {#each content?.headings || [] as heading}
+        {#each headings as heading}
           <li class:toc__depth-3={heading.depth === 3}>
             <a
               href={`#${heading.id}`}

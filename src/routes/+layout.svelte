@@ -37,6 +37,7 @@
   };
 
   const currentPath = $derived(page.url.pathname);
+  const searchHref = withBasePath('/search');
 </script>
 
 <svelte:head>
@@ -71,8 +72,8 @@
           >
         {/each}
         <a
-          href={withBasePath('/search')}
-          class:active={currentPath === '/search'}
+          href={searchHref}
+          class:active={currentPath === searchHref}
           onclick={() => (menuOpen = false)}>البحث</a
         >
         <button class="theme-toggle" onclick={toggleTheme} aria-label="تبديل السمة">
