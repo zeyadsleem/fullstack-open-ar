@@ -40,11 +40,12 @@ on:
   push:
     branches:
       - main
-// BEGIN HIGHLIGHT
+
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-// END HIGHLIGHT
+
+
 ```
 
 سنعمل قريباً على جعل دفع الشيفرة مباشرة إلى الفرع الرئيسي مستحيلاً، لكن في غضون ذلك، دعنا نجعل سير العمل يعمل أيضاً مع جميع عمليات الدفع المباشر الممكنة إلى الفرع الرئيسي.
@@ -148,6 +149,7 @@ on:
       uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 ```
 
 عندما نستخدم إجراءات توفّرها GitHub، فإننا نثق بها في ألّا تعبث بوسوم الإصدارات وفي أن تختبر شيفرتها اختباراً دقيقاً.
@@ -173,7 +175,13 @@ on:
 لاحظ أن <em>الفحوصات</em> تطابق أسماء المهام في سير العمل لديك، لذا فإن مهمتي معرّفة كما يلي:
 
 ```
-jobs:<br>  deployment_pipeline: // HIGHLIGHT LINE<br>    runs-on: ubuntu-latest<br>    steps:<br>      - uses: actions/checkout@v6<br>    # ....
+jobs:
+deployment_pipeline:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v6
+# ....
+
 ```
 
 <div class="tasks">

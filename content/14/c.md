@@ -50,6 +50,7 @@ lang: ar
 ```
 DATABASE_URL="postgresql://user:password@host:5432/dbname?sslmode=require"
 
+
 ```
 
 استبدل القيمة بنص الاتصال الفعلي من لوحة تحكم Vercel. يحمّل Next.js ملف&nbsp;<em>.env.local</em>&nbsp;تلقائياً أثناء التطوير، لذا لا حاجة إلى أي إعداد إضافي.
@@ -58,6 +59,7 @@ DATABASE_URL="postgresql://user:password@host:5432/dbname?sslmode=require"
 
 ```
 echo ".env.local" >> .gitignore
+
 ```
 
 ### الوصول إلى قاعدة البيانات باستخدام Drizzle ORM
@@ -71,6 +73,7 @@ echo ".env.local" >> .gitignore
 ```bash
 npm install drizzle-orm @neondatabase/serverless
 npm install -D drizzle-kit
+
 ```
 
 الحزمة&nbsp;<a href="https://www.npmjs.com/package/drizzle-orm">drizzle-orm</a>&nbsp;هي الـ ORM نفسه. والحزمة&nbsp;<a href="https://www.npmjs.com/package/@neondatabase/serverless">@neondatabase/serverless</a>&nbsp;هي مشغّل PostgreSQL المُحسَّن للبيئات بلا خادم مثل Vercel، حيث تعمل قاعدة البيانات على Neon. والحزمة&nbsp;<a href="https://www.npmjs.com/package/drizzle-kit">drizzle-kit</a>&nbsp;أداة سطر أوامر لإدارة ترحيلات قاعدة البيانات.
@@ -85,6 +88,7 @@ export const notes = pgTable("notes", {
   content: text("content").notNull(),
   important: boolean("important").notNull().default(false),
 })
+
 ```
 
 يعرّف هذا جدولاً يُسمّى&nbsp;<em>notes</em>&nbsp;بثلاثة أعمدة:
@@ -101,6 +105,7 @@ import { drizzle } from "drizzle-orm/neon-http"
 import * as schema from "./schema"
 
 export const db = drizzle(process.env.DATABASE_URL!, { schema })
+
 ```
 
 دالة&nbsp;<em>drizzle</em>&nbsp;من&nbsp;<a href="https://orm.drizzle.team/docs/get-started/neon-new">drizzle-orm/neon-http</a>&nbsp;تنشئ اتصالاً بقاعدة البيانات مناسباً للبيئات بلا خادم باستخدام نص الاتصال من متغير البيئة لدينا. ومشغّل&nbsp;<em>neon-http</em>&nbsp;مُحسَّن للبيئات بلا خادم: فهو يتواصل مع قاعدة بيانات Neon عبر HTTP، لذا لا يوجد اتصال دائم يجب إدارته. والنتيجة المُصدَّرة&nbsp;<em>db</em>&nbsp;هي مُنشئ استعلامات منوّع يمكننا استخدامه في كل أنحاء تطبيقنا.
@@ -121,6 +126,7 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
   },
 })
+
 ```
 
 يخبر هذا Drizzle Kit بمكان وجود المخطط، وأين يُخرج ملفات الترحيل، وكيف يتصل بقاعدة البيانات.
@@ -129,6 +135,7 @@ export default defineConfig({
 
 ```bash
 npm install --save-dev dotenv postgres
+
 ```
 
 نحتاج إلى حزمة&nbsp;<em>dotenv</em>&nbsp;لأن أوامر Drizzle Kit CLI تعمل كسكربتات Node.js عادية خارج بيئة تشغيل Next.js. فـNext.js يحمّل ملف&nbsp;<em>.env.local</em>&nbsp;تلقائياً لشيفرة تطبيقك، لكن Drizzle Kit لا يستفيد من ذلك. وباستيراد&nbsp;<em>dotenv</em>&nbsp;واستدعاء&nbsp;<em>dotenv.config({ path: ".env.local" })</em>&nbsp;في أعلى&nbsp;<em>drizzle.config.ts</em>، نجعل المتغير&nbsp;<em>DATABASE_URL</em>&nbsp;متاحاً لـDrizzle Kit عند اتصاله بقاعدة البيانات لتشغيل الترحيلات أو فتح Drizzle Studio.
@@ -140,6 +147,7 @@ npm install --save-dev dotenv postgres
 ```bash
 npx drizzle-kit generate
 npx drizzle-kit migrate
+
 ```
 
 يقرأ الأمر الأول المخطط ويولّد ملفات ترحيل SQL في مجلد&nbsp;<em>drizzle</em>. ويطبّق الأمر الثاني تلك الترحيلات على قاعدة البيانات، فينشئ جدول&nbsp;<em>notes</em>.
@@ -150,6 +158,7 @@ npx drizzle-kit migrate
 
 ```bash
 npx drizzle-kit studio
+
 ```
 
 يفتح هذا&nbsp;<a href="https://orm.drizzle.team/drizzle-studio/overview">Drizzle Studio</a>، وهو متصفح مرئي لقاعدة البيانات على العنوان&nbsp;<a href="https://local.drizzle.studio/">https://local.drizzle.studio</a>&nbsp;حيث يمكننا رؤية جدول&nbsp;<em>notes</em>&nbsp;وأعمدته.
@@ -172,12 +181,14 @@ export const getNotes = async () => {
 }
 
 <em>// ...</em>
+
 ```
 
 تستخدم الدالة&nbsp;<em>getNotes</em>&nbsp;<a href="https://orm.drizzle.team/docs/rqb">واجهة الاستعلامات العلائقية</a>&nbsp;في Drizzle عبر&nbsp;<em>db.query</em>. ويقرأ الاستدعاء&nbsp;<em>db.query.notes.findMany()</em>&nbsp;كل الصفوف من جدول&nbsp;<em>notes</em>. وهو يقابل استعلام SQL التالي:
 
 ```sql
 SELECT id, content, important FROM notes;
+
 ```
 
 لاحظ أن الدالة أصبحت&nbsp;<em>async</em>&nbsp;لأن استعلام قاعدة البيانات يعيد promise. ويستنتج Drizzle نوع الإرجاع تلقائياً من المخطط، لذا يعرف TypeScript أن النتيجة مصفوفة من الكائنات فيها&nbsp;<em>id</em>&nbsp;(عدد) و&nbsp;<em>content</em>&nbsp;(نص) و&nbsp;<em>important</em>&nbsp;(قيمة منطقية).
@@ -188,14 +199,14 @@ SELECT id, content, important FROM notes;
 import Link from "next/link"
 import { getNotes } from "../services/notes"
 
-const Notes = async ({ // HIGHLIGHT LINE
+const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
   const { important } = await searchParams
   const showImportant = important === "true"
-  const allNotes = await getNotes() // HIGHLIGHT LINE
+  const allNotes = await getNotes()
   const notes = showImportant
     ? allNotes.filter((note) => note.important)
     : allNotes
@@ -204,6 +215,7 @@ const Notes = async ({ // HIGHLIGHT LINE
     <em>// ...</em>
   )
 }
+
 ```
 
 الآن تجلب صفحة الملاحظات بياناتها من قاعدة البيانات:
@@ -218,12 +230,14 @@ export const getNoteById = async (id: number) => {
     where: eq(notes.id, id),
   })
 }
+
 ```
 
 تستخدم الدالة&nbsp;<em>getNoteById</em>&nbsp;الطريقة&nbsp;<a href="https://orm.drizzle.team/docs/rqb#find-first">findFirst</a>. وهي تعيد أول صف مطابق، أو&nbsp;<em>undefined</em>&nbsp;إذا لم يطابق أي صف. وتستخدم جملة&nbsp;<em>where</em>&nbsp;المساعد&nbsp;<a href="https://orm.drizzle.team/docs/operators#eq">eq</a>&nbsp;من&nbsp;<em>drizzle-orm</em>&nbsp;لإنشاء شرط مساواة. و SQL المقابل هو:
 
 ```sql
 SELECT id, content, important FROM notes WHERE id = 1;
+
 ```
 
 ويصبح إنشاء ملاحظة جديدة:
@@ -232,12 +246,14 @@ SELECT id, content, important FROM notes WHERE id = 1;
 export const addNote = async (content: string, important: boolean) => {
   await db.insert(notes).values({ content, important })
 }
+
 ```
 
 تستخدم الدالة&nbsp;<em>addNote</em>&nbsp;مُنشئ الاستعلامات&nbsp;<a href="https://orm.drizzle.team/docs/insert">insert</a>&nbsp;في Drizzle. ويدرج الاستدعاء&nbsp;<em>db.insert(notes).values(...)</em>&nbsp;صفاً جديداً في جدول&nbsp;<em>notes</em>. و SQL المقابل هو:
 
 ```sql
 INSERT INTO notes (content, important) VALUES ('some content', true);
+
 ```
 
 لا حاجة إلى تقديم&nbsp;<em>id</em>&nbsp;لأن العمود معرّف كـ&nbsp;<em>serial</em>، فتولّده قاعدة البيانات تلقائياً.
@@ -252,43 +268,47 @@ export const toggleImportance = async (id: number) => {
       .where(eq(notes.id, id))
   }
 }
+
 ```
 
 تجلب الدالة&nbsp;<em>toggleImportance</em>&nbsp;الملاحظة أولاً لقراءة قيمة&nbsp;<em>important</em>&nbsp;الحالية لها، ثم تستخدم مُنشئ الاستعلامات&nbsp;<a href="https://orm.drizzle.team/docs/update">update</a>&nbsp;في Drizzle لقلبها. ويحدّث الاستدعاء&nbsp;<em>db.update(notes).set(...).where(...)</em>&nbsp;الصفوف المطابقة. و SQL المقابل هو:
 
 ```sql
 UPDATE notes SET important = NOT important WHERE id = 1;
+
 ```
 
 بما أن كل الدوال في&nbsp;<em>services/notes.ts</em>&nbsp;أصبحت async، نحتاج إلى إجراء تغييرات مقابلة في بضعة ملفات. فـ&nbsp;<em>app/notes/[id]</em>&nbsp;يحتاج إلى&nbsp;<em>await</em>
 
 ```ts
-const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
+const NotePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const note = await getNoteById(Number(id)) // HIGHLIGHT LINE
+  const note = await getNoteById(Number(id))
 
   <em>// ...</em>
 }
+
 ```
 
 كما تحتاج إجراءات الخادم إلى المعالجة نفسها:
 
 ```js
-export const createNote = async (formData: FormData) => { // HIGHLIGHT LINE
+export const createNote = async (formData: FormData) => {
   const content = formData.get("content") as string
   const important = formData.get("important") === "on"
-  await addNote(content, important) // HIGHLIGHT LINE
+  await addNote(content, important)
 
   revalidatePath("/notes")
   redirect("/notes")
 }
 
-export const toggleNoteImportance = async (formData: FormData) => { // HIGHLIGHT LINE
+export const toggleNoteImportance = async (formData: FormData) => {
   const id = Number(formData.get("id"))
-  await toggleImportance(id) // HIGHLIGHT LINE
+  await toggleImportance(id)
   revalidatePath(`/notes/${id}`)
   revalidatePath("/notes")
 }
+
 ```
 
 هناك أمر آخر يجب ملاحظته قبل أن نكمل. يجلب المكوّن&nbsp;<em>Notes</em>&nbsp;دائماً كل الملاحظات من قاعدة البيانات، وتُجرى التصفية المحتملة للملاحظات المهمة في JavaScript بعد الاستعلام:
@@ -297,21 +317,22 @@ export const toggleNoteImportance = async (formData: FormData) => { // HIGHLIGHT
 const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
   const { important } = await searchParams
   const showImportant = important === "true"
-  // BEGIN HIGHLIGHT
+
   const allNotes = await getNotes()
   const notes = showImportant
     ? allNotes.filter((note) => note.important)
     : allNotes
-  // END HIGHLIGHT
+
 
   return (
     <em>// ...</em>
   )
 }
+
 ```
 
 بالنسبة لمجموعة بيانات صغيرة، هذا مقبول تماماً، لكن مع عدد كبير من الملاحظات سيكون أكثر كفاءة أن ندع قاعدة البيانات تتولى التصفية بإضافة جملة&nbsp;<em>WHERE</em>&nbsp;إلى استعلام SQL. يمكننا تعديل&nbsp;<em>getNotes</em>&nbsp;ليقبل معاملاً يتحكم في التصفية:
@@ -326,12 +347,14 @@ export const getNotes = async (importantOnly: boolean) => {
 
   return db.query.notes.findMany()
 }
+
 ```
 
 عندما تكون&nbsp;<em>importantOnly</em>&nbsp;قيمتها&nbsp;<em>true</em>، يُنفَّذ الاستعلام مع جملة&nbsp;<em>where(eq(notes.important, true))</em>&nbsp;التي تقابل SQL:
 
 ```sql
 SELECT id, content, important FROM notes WHERE important = true;
+
 ```
 
 وعندما تكون&nbsp;<em>importantOnly</em>&nbsp;قيمتها&nbsp;<em>false</em>، تعيد الدالة كل الملاحظات دون أي تصفية، كما كان الحال سابقاً.
@@ -342,16 +365,17 @@ SELECT id, content, important FROM notes WHERE important = true;
 const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
   const { important } = await searchParams
   const showImportant = important === "true"
-  const notes = await getNotes(showImportant) // HIGHLIGHT LINE
+  const notes = await getNotes(showImportant)
 
   return (
     <em>// ....</em>
   )
 }
+
 ```
 
 هذا أنظف وأكثر كفاءة: فبدلاً من جلب كل الصفوف والتخلص من بعضها في JavaScript، ندع قاعدة البيانات تعيد الصفوف التي نحتاجها فقط.
@@ -373,6 +397,7 @@ const Notes = async ({
 ```bash
 npx drizzle-kit generate
 npx drizzle-kit migrate
+
 ```
 
 الأمر الأول،&nbsp;<a href="https://orm.drizzle.team/docs/drizzle-kit-generate">drizzle-kit generate</a>، يقارن مخطط TypeScript الحالي (في&nbsp;<em>db/schema.ts</em>) بالترحيلات المولّدة سابقاً وينتج ملف ترحيل SQL جديداً في مجلد&nbsp;<em>drizzle</em>. وإذا نظرنا إلى ذلك المجلد، سنجد شيئاً مثل:
@@ -383,6 +408,7 @@ drizzle/
 └── meta/
     ├── _journal.json
     └── 0000_snapshot.json
+
 ```
 
 يحتوي الملف&nbsp;<em>0000_neat_captain_america.sql</em>&nbsp;على SQL الفعلي الذي وُلّد من مخططنا:
@@ -393,6 +419,7 @@ CREATE TABLE "notes" (
 	"content" text NOT NULL,
 	"important" boolean DEFAULT false NOT NULL
 );
+
 ```
 
 يحتوي مجلد&nbsp;<em>meta</em>&nbsp;على بيانات وصفية يستخدمها Drizzle Kit لتتبع الترحيلات التي وُلّدت وكيف كان شكل المخطط عند كل نقطة.
@@ -431,6 +458,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   name: text("name").notNull(),
 })
+
 ```
 
 لعمود&nbsp;<em>username</em>&nbsp;قيد إضافي هو&nbsp;<a href="https://orm.drizzle.team/docs/indexes-constraints#unique">unique</a>، ما يعني أنه لا يمكن أن يكون لمستخدمين اثنين اسم المستخدم نفسه. وبمصطلحات SQL، سيولّد Drizzle قيد&nbsp;<em>UNIQUE</em>&nbsp;على هذا العمود، وسترفض قاعدة البيانات أي إدراج ينشئ تكراراً.
@@ -442,10 +470,11 @@ export const notes = pgTable("notes", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
   important: boolean("important").notNull().default(false),
-  // BEGIN HIGHLIGHT
+
   userId: integer("user_id").references(() => users.id),
-  // END HIGHLIGHT
+
 })
+
 ```
 
 عمود&nbsp;<em>userId</em>&nbsp;من النوع&nbsp;<a href="https://orm.drizzle.team/docs/column-types/pg#integer">integer</a>&nbsp;ويستخدم الدالة&nbsp;<a href="https://orm.drizzle.team/docs/indexes-constraints#foreign-key">references</a>&nbsp;لإنشاء قيد&nbsp;<a href="https://en.wikipedia.org/wiki/Foreign_key">مفتاح أجنبي</a>&nbsp;يشير إلى عمود&nbsp;<em>id</em>&nbsp;في جدول&nbsp;<em>users</em>. ويخبر هذا قاعدة البيانات بأن كل قيمة في&nbsp;<em>user_id</em>&nbsp;يجب أن تقابل صفاً موجوداً في جدول&nbsp;<em>users</em>. وإذا حاول أحدهم إدراج ملاحظة بقيمة&nbsp;<em>user_id</em>&nbsp;غير موجودة في&nbsp;<em>users</em>، فسترفضها قاعدة البيانات. ويعني المفتاح الأجنبي أيضاً أنه لا يمكن حذف مستخدم لا تزال له ملاحظات تشير إليه.
@@ -457,6 +486,7 @@ export const notes = pgTable("notes", {
 ```bash
 npx drizzle-kit generate
 npx drizzle-kit migrate
+
 ```
 
 إذا فحصنا ملف الترحيل المولّد، سنرى شيئاً مثل:
@@ -471,6 +501,7 @@ CREATE TABLE "users" (
 
 ALTER TABLE "notes" ADD COLUMN "user_id" integer;<em>--> statement-breakpoint</em>
 ALTER TABLE "notes" ADD CONSTRAINT "notes_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+
 ```
 
 ينشئ الترحيل جدول&nbsp;<em>users</em>&nbsp;ويضيف عمود&nbsp;<em>user_id</em>&nbsp;مع قيد المفتاح الأجنبي الخاص به إلى جدول&nbsp;<em>notes</em>&nbsp;الموجود. لاحظ أن Drizzle لا يعيد إنشاء جدول&nbsp;<em>notes</em>&nbsp;من الصفر. بل يقارن المخطط الجديد بلقطة الترحيل السابقة ويولّد فقط عبارات&nbsp;<em>ALTER TABLE</em>&nbsp;اللازمة لجعل قاعدة البيانات متوافقة.
@@ -486,20 +517,23 @@ export const notes = pgTable("notes", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
   important: boolean("important").notNull().default(false),
-  userId: integer("user_id").notNull().references(() => users.id), // HIGHLIGHT LINE
+  userId: integer("user_id").notNull().references(() => users.id),
 })
+
 ```
 
 مرة أخرى، نولّد الترحيل:
 
 ```bash
 npx drizzle-kit generate
+
 ```
 
 عند فحص SQL المولّد في الترحيل، نرى عبارة واحدة:
 
 ```sql
 ALTER TABLE "notes" ALTER COLUMN "user_id" SET NOT NULL;
+
 ```
 
 هذا بالضبط ما توقعناه: العمود موجود بالفعل، لذا يحتاج Drizzle فقط إلى إضافة قيد&nbsp;<em>NOT NULL</em>. وبما أننا ربطنا بالفعل كل الملاحظات الموجودة بمستخدم في Drizzle Studio، فلا يوجد أي صف بقيمة&nbsp;<em>user_id</em>&nbsp;فارغة، وسينجح الترحيل. ولو كانت أي ملاحظات لا تزال بقيمة&nbsp;<em>user_id</em>&nbsp;فارغة، لرفضت قاعدة البيانات عبارة&nbsp;<em>ALTER TABLE</em>&nbsp;بخطأ.
@@ -508,6 +542,7 @@ ALTER TABLE "notes" ALTER COLUMN "user_id" SET NOT NULL;
 
 ```bash
 npx drizzle-kit migrate
+
 ```
 
 ### ملاحظات المستخدمين
@@ -522,18 +557,19 @@ const Users = async () => {
   const users = await getUsers()
 
   return (
-    &lt;div>
-      &lt;h2>Users&lt;/h2>
-      &lt;ul>
+    <div>
+      <h2>Users</h2>
+      <ul>
         {users.map((user) => (
-          &lt;li key={user.id}>
-            &lt;Link href={`/users/${user.id}`}>{user.name}&lt;/Link>
-          &lt;/li>
+          <li key={user.id}>
+            <Link href={`/users/${user.id}`}>{user.name}</Link>
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 اسم المستخدم رابط إلى صفحة المستخدم الفردية التي سننفّذها قريباً.
@@ -547,6 +583,7 @@ import { users } from "../../db/schema"
 export const getUsers = async () => {
   return db.query.users.findMany()
 }
+
 ```
 
 يُضاف الرابط إلى صفحة المستخدمين أيضاً إلى&nbsp;<em>app/layout.tsx</em>. والنتيجة النهائية تبدو هكذا:
@@ -562,7 +599,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getUserById } from "../../services/users"
 
-const UserPage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
+const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
   const user = await getUserById(Number(id))
 
@@ -571,21 +608,22 @@ const UserPage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
   }
 
   return (
-    &lt;div>
-      &lt;h2>{user.name}&lt;/h2>
-      &lt;p>Username: {user.username}&lt;/p>
-      &lt;h3>Notes&lt;/h3>
-      &lt;ul>
+    <div>
+      <h2>{user.name}</h2>
+      <p>Username: {user.username}</p>
+      <h3>Notes</h3>
+      <ul>
         {user.notes.map((note) => (
-          &lt;li key={note.id}>
-            &lt;Link href={`/notes/${note.id}`}>{note.content}&lt;/Link>
-            {note.important &amp;&amp; &lt;strong> (important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>{note.content}</Link>
+            {note.important && <strong> (important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 تبدو الدوال في&nbsp;<em>services/users.ts</em>&nbsp;كما يلي:
@@ -602,6 +640,7 @@ export const getNotesByUserId = async (userId: number) => {
     where: eq(notes.userId, userId),
   })
 }
+
 ```
 
 تبدو صفحة المستخدم هكذا:
@@ -620,6 +659,7 @@ export const getNotesByUserId = async (userId: number) => {
 SELECT users.*, notes.* FROM users
 LEFT JOIN notes ON notes.user_id = users.id
 WHERE users.id = 1;
+
 ```
 
 يقدّم Drizzle ميزة تُسمّى&nbsp;<a href="https://orm.drizzle.team/docs/relations">العلاقات (relations)</a>&nbsp;تتيح لنا تعريف العلاقات بين الجداول على مستوى التطبيق. ولا تُخزَّن تعريفات العلاقات هذه في قاعدة البيانات، ولا تولّد أي قيود SQL أو ترحيلات. بل توجد فقط لتخبر Drizzle كيف تتصل الجداول ببعضها، حتى تستطيع&nbsp;<a href="https://orm.drizzle.team/docs/rqb">واجهة الاستعلامات العلائقية</a>&nbsp;في Drizzle ربط البيانات المرتبطة تلقائياً نيابةً عنا.
@@ -638,7 +678,7 @@ export const notes = pgTable("notes", {
   <em>// ...</em>
 })
 
-// BEGIN HIGHLIGHT
+
 export const usersRelations = relations(users, ({ many }) => ({
   notes: many(notes),
 }))
@@ -649,7 +689,8 @@ export const notesRelations = relations(notes, ({ one }) => ({
     references: [users.id],
   }),
 }))
-// END HIGHLIGHT
+
+
 ```
 
 تُستخدم دالة&nbsp;<a href="https://orm.drizzle.team/docs/relations">relations</a>&nbsp;من&nbsp;<em>drizzle-orm</em>&nbsp;للإعلان عن كيفية ارتباط الجداول ببعضها. والوسيط الأول هو الجدول، والثاني دالة رد نداء تستقبل دوال مساعدة (<em>many</em>&nbsp;و&nbsp;<em>one</em>) وتعيد كائناً يصف الجداول المرتبطة.
@@ -671,6 +712,7 @@ export const getUserWithNotes = async (id: number) => {
     with: { notes: true },
   })
 }
+
 ```
 
 الإضافة الجوهرية إلى ما رأيناه سابقاً هي&nbsp;<a href="https://orm.drizzle.team/docs/rqb#include-relations">with: { notes: true }</a>&nbsp;التي تخبر Drizzle بأن يجلب أيضاً كل الملاحظات المرتبطة بذلك المستخدم في العملية نفسها.
@@ -687,6 +729,7 @@ export const getUserWithNotes = async (id: number) => {
     { id: 2, content: "next.js is built on top of React", important: true, userId: 1 },
   ]
 }
+
 ```
 
 يحل هذا محل الدالتين المنفصلتين&nbsp;<em>getUserById</em>&nbsp;و&nbsp;<em>getNotesByUserId</em>&nbsp;بدالة واحدة تجلب كل شيء دفعة واحدة.
@@ -698,26 +741,27 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getUserWithNotes } from "../../services/users"
 
-const UserPage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
+const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const user = await getUserWithNotes(Number(id))  // HIGHLIGHT LINE
+  const user = await getUserWithNotes(Number(id))
 
   return (
-    &lt;div>
-      &lt;h2>{user.name}&lt;/h2>
-      &lt;p>Username: {user.username}&lt;/p>
-      &lt;h3>Notes&lt;/h3>
-      &lt;ul>
-        {user.notes.map((note) => ( // HIGHLIGHT LINE
-          &lt;li key={note.id}>
-            &lt;Link href={`/notes/${note.id}`}>{note.content}&lt;/Link>
-            {note.important &amp;&amp; &lt;strong> (important)&lt;/strong>}
-          &lt;/li>
+    <div>
+      <h2>{user.name}</h2>
+      <p>Username: {user.username}</p>
+      <h3>Notes</h3>
+      <ul>
+        {user.notes.map((note) => (
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>{note.content}</Link>
+            {note.important && <strong> (important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 أصبح المكوّن أبسط الآن: فبدلاً من استدعاء دالتين ودمج النتيجتين يدوياً، يستدعي&nbsp;<em>getUserWithNotes</em>&nbsp;مرة واحدة ويحصل على كائن مستخدم يحتوي أصلاً على مصفوفة الملاحظات. و&nbsp;<em>user.notes.map(...)</em>&nbsp;يمر على الملاحظات المضمّنة مباشرةً، دون حاجة إلى استعلام منفصل.
@@ -730,9 +774,10 @@ export const notes = pgTable("notes", {
   content: text("content").notNull(),
   important: boolean("important").notNull().default(false),
   userId: integer("user_id")
-    .notNull() // HIGHLIGHT LINE
+    .notNull()
     .references(() => users.id),
 })
+
 ```
 
 بما أن التطبيق لا يدعم تسجيل دخول المستخدمين بعد، لا يمكننا معرفة من ينشئ الملاحظة. وكحل مؤقت، لنربط كل ملاحظة جديدة بمستخدم عشوائي من قاعدة البيانات. نغيّر دالة&nbsp;<em>addNote</em>&nbsp;في&nbsp;<em>services/notes.ts</em>:
@@ -745,6 +790,7 @@ export const addNote = async (content: string, important: boolean) => {
 
   await db.insert(notes).values({ content, important, userId: user.id })
 }
+
 ```
 
 تستخدم الدالة&nbsp;<em>findFirst</em>&nbsp;مع&nbsp;<em>orderBy: sql`RANDOM()`</em>&nbsp;لاختيار مستخدم عشوائي من قاعدة البيانات. ويتيح لنا وسم القالب&nbsp;<a href="https://orm.drizzle.team/docs/sql">sql</a>&nbsp;من&nbsp;<em>drizzle-orm</em>&nbsp;كتابة أجزاء SQL خام عندما لا يملك Drizzle دالة مساعدة مدمجة لشيء ما. ثم تُدرج الملاحظة بمعرّف ذلك المستخدم&nbsp;<em>id</em>&nbsp;كرقم&nbsp;<em>userId</em>. وسنستبدل هذا الحل المؤقت بمصادقة مستخدمين مناسبة قريباً.
@@ -761,8 +807,9 @@ import * as schema from "./schema"
 
 export const db = drizzle(process.env.DATABASE_URL!, {
   schema,
-  logger: true, // HIGHLIGHT LINE
+  logger: true,
 })
+
 
 ```
 
@@ -770,6 +817,7 @@ export const db = drizzle(process.env.DATABASE_URL!, {
 
 ```
 Query: select "id", "content", "important", "user_id" from "notes" where "notes"."important" = $1 -- params: [true]
+
 
 ```
 
@@ -789,6 +837,7 @@ Query: select "id", "content", "important", "user_id" from "notes" where "notes"
 DROP TABLE IF EXISTS drizzle.__drizzle_migrations CASCADE;
 DROP TABLE IF EXISTS notes CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+
 ```
 
 يمكنك تنفيذ عبارات SQL هذه في Drizzle Studio أو مباشرةً في طرفية Neon على لوحة تحكم Vercel.
@@ -797,6 +846,7 @@ DROP TABLE IF EXISTS users CASCADE;
 
 ```bash
 npx drizzle-kit drop
+
 ```
 
 يتيح لك الأمر&nbsp;<a href="https://orm.drizzle.team/docs/drizzle-kit-drop">drizzle-kit drop</a>&nbsp;اختيار إدخالات الترحيل التي تريد إزالتها من السجل المحلي. وبعد إسقاطها، يمكنك إعادة توليد كل شيء وتطبيقه من جديد بشكل نظيف:
@@ -804,6 +854,7 @@ npx drizzle-kit drop
 ```bash
 npx drizzle-kit generate
 npx drizzle-kit migrate
+
 ```
 
 يمنحك هذا بداية جديدة: فملفات الترحيل تُولَّد مجدداً من المخطط الحالي، وجداول قاعدة البيانات تُنشأ من الصفر.

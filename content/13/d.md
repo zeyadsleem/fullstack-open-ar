@@ -29,6 +29,7 @@ syncModels()
 module.exports = {
   Note, User
 }
+
 ```
 
 لكن هذا الأسلوب لا معنى له على المدى الطويل. لنحذف الأسطر التي تقوم بالمزامنة وننتقل إلى استخدام طريقة أكثر متانة بكثير، وهي <a href="https://sequelize.org/master/manual/migrations.html" target="_blank" rel="noreferrer noopener">الترحيلات (migrations)</a> التي توفّرها Sequelize (وكذلك مكتبات أخرى كثيرة).
@@ -87,6 +88,7 @@ module.exports = {
     await queryInterface.dropTable('users')
   },
 }
+
 ```
 
 يعرّف ملف الترحيل&nbsp;<a href="https://sequelize.org/master/manual/migrations.html#migration-skeleton" target="_blank" rel="noreferrer noopener">الدالتين</a>&nbsp;<em>up</em>&nbsp;و&nbsp;<em>down</em>، والأولى منهما تحدد كيف ينبغي تعديل قاعدة البيانات عند تنفيذ الترحيل. أما الدالة&nbsp;<em>down</em>&nbsp;فتبيّن كيفية التراجع عن الترحيل إذا دعت الحاجة إلى ذلك.
@@ -103,6 +105,7 @@ module.exports = {
 
 ```bash
 npm install umzug
+
 ```
 
 لنغيّر الملف <em>util/db.js</em> الذي يتعامل مع الاتصال بقاعدة البيانات كما يلي:
@@ -151,6 +154,7 @@ const connectToDatabase = async () => {
 }
 
 module.exports = { connectToDatabase, sequelize }
+
 ```
 
 تُنفَّذ الآن دالة&nbsp;<em>runMigrations</em>&nbsp;التي تجري الترحيلات في كل مرة يفتح فيها التطبيق اتصالاً بقاعدة البيانات عند بدء تشغيله. وتتتبّع Sequelize أي الترحيلات أُكملت بالفعل، لذا إذا لم تكن هناك ترحيلات جديدة، فإن تنفيذ دالة&nbsp;<em>runMigrations</em>&nbsp;لا يفعل شيئاً.
@@ -158,10 +162,11 @@ module.exports = { connectToDatabase, sequelize }
 لنبدأ الآن من صفحة بيضاء ونحذف جميع جداول قاعدة البيانات الموجودة من التطبيق:
 
 ```
-username =&gt; drop table notes;
-username =&gt; drop table users;
-username =&gt; \d
+username => drop table notes;
+username => drop table users;
+username => \d
 Did not find any relations.
+
 ```
 
 لنشغّل التطبيق. وستُطبع رسالة عن حالة الترحيلات في السجل
@@ -170,6 +175,7 @@ Did not find any relations.
 INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
 Migrations up to date { files: [ '20260211_00_initialize_notes_and_users.js' ] }
 database connected
+
 ```
 
 وإذا أعدنا تشغيل التطبيق، يُظهر السجل أيضاً أن الترحيل لم يُعَد.
@@ -186,15 +192,17 @@ defaultdb=> \d
  public | notes_id_seq | sequence | username
  public | users        | table    | username
  public | users_id_seq | sequence | username
+
 ```
 
 إذن أنشأت Sequelize جدولاً باسم&nbsp;<em>migrations</em>&nbsp;يتيح لها تتبّع الترحيلات التي نُفّذت. ومحتويات الجدول كما يلي:
 
 ```
-<code>defaultdb=> select * from migrations;
+defaultdb=> select * from migrations;
                    name
 -------------------------------------------
-  20260211_00_initialize_notes_and_users.j<span style="font-family: inherit; text-align: initial;">s</span></code>
+  20260211_00_initialize_notes_and_users.j<span style="font-family: inherit; text-align: initial;">s</span>
+
 ```
 
 لننشئ بعض المستخدمين في قاعدة البيانات، وكذلك مجموعة من الملاحظات، وبعد ذلك نكون مستعدين لتوسيع التطبيق.
@@ -213,7 +221,7 @@ defaultdb=> \d
 const { DataTypes } = require('sequelize')
 
 module.exports = {
-  up: async ({ context: queryInterface }) =&gt; {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('users', 'admin', {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -223,11 +231,12 @@ module.exports = {
       defaultValue: false
     })
   },
-  down: async ({ context: queryInterface }) =&gt; {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('users', 'admin')
     await queryInterface.removeColumn('users', 'disabled')
   },
 }
+
 ```
 
 أجرِ التغييرات المقابلة على النموذج المقابل لجدول&nbsp;<em>users</em>:
@@ -262,12 +271,13 @@ User.init({
   timestamps: false,
   modelName: 'user'
 })
+
 ```
 
 وعند تنفيذ الترحيل الجديد عند إعادة تشغيل الشيفرة، يتغيّر المخطط كما هو مطلوب:
 
 ```
-username-&gt; \d users
+username-> \d users
                                      Table "public.users"
   Column  |          Type          | Collation | Nullable |              Default
 ----------+------------------------+-----------+----------+-----------------------------------
@@ -281,6 +291,7 @@ Indexes:
     "users_username_key" UNIQUE CONSTRAINT, btree (username)
 Referenced by:
     TABLE "notes" CONSTRAINT "notes_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+
 ```
 
 لنوسّع الآن المتحكمات كما يلي. نمنع تسجيل الدخول إذا كانت قيمة الحقل&nbsp;<em>disabled</em>&nbsp;في المستخدم مضبوطة على&nbsp;<em>true</em>:
@@ -297,7 +308,7 @@ router.post('/', async (request, response) => {
 
   const passwordCorrect = body.password === 'secret'
 
-  if (!(user &amp;&amp; passwordCorrect)) {
+  if (!(user && passwordCorrect)) {
     return response.status(401).json({
       error: 'invalid username or password'
     })
@@ -320,6 +331,7 @@ router.post('/', async (request, response) => {
     .status(200)
     .send({ token, username: user.username, name: user.name })
 })
+
 ```
 
 لنعطّل المستخدم&nbsp;<em>jakousa</em>&nbsp;باستخدام معرّفه:
@@ -333,6 +345,7 @@ username => select * from users;
   2 | mluukkai | Matti Luukkainen                | f     | f
   4 | jakousa  | Jami Kousa (The Docker Captain) | f     | t
   3 | ousa     | Outi Savolainen                 | t     | f
+
 ```
 
 وتأكد من أن تسجيل الدخول لم يعد ممكناً
@@ -342,7 +355,7 @@ username => select * from users;
 لننشئ مساراً (في الملف controllers/users.js) يتيح للمشرف تغيير حالة حساب مستخدم:
 
 ```js
-const isAdmin = async (req, res, next) =&gt; {
+const isAdmin = async (req, res, next) => {
   const user = await User.findByPk(req.decodedToken.id)
   if (!user.admin) {
     return res.status(401).json({ error: 'operation not allowed' })
@@ -350,7 +363,7 @@ const isAdmin = async (req, res, next) =&gt; {
   next()
 }
 
-router.put('/:username', tokenExtractor, isAdmin, async (req, res) =&gt; {
+router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
   const user = await User.findOne({
     where: {
       username: req.params.username
@@ -365,6 +378,7 @@ router.put('/:username', tokenExtractor, isAdmin, async (req, res) =&gt; {
     res.status(404).end()
   }
 })
+
 ```
 
 يُستخدم وسيطان هنا؛ الوسيط الأول المسمى&nbsp;<em>tokenExtractor</em>&nbsp;هو نفسه المستخدم في مسار إنشاء الملاحظات، أي أنه يضع الرمز المفكوك الترميز في حقل&nbsp;<em>decodedToken</em>&nbsp;من كائن الطلب. أما الوسيط الثاني&nbsp;<em>isAdmin</em>&nbsp;فيتحقق مما إذا كان المستخدم مشرفاً، وإن لم يكن كذلك تُضبط حالة الطلب على 401 وتُعاد رسالة خطأ مناسبة.
@@ -377,9 +391,9 @@ router.put('/:username', tokenExtractor, isAdmin, async (req, res) =&gt; {
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('./config.js')
 
-const tokenExtractor = (req, res, next) =&gt; {
+const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization')
-  if (authorization &amp;&amp; authorization.toLowerCase().startsWith('bearer ')) {
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
     } catch{
@@ -392,6 +406,7 @@ const tokenExtractor = (req, res, next) =&gt; {
 }
 
 module.exports = { tokenExtractor }
+
 ```
 
 وربما من الجيد أيضاً نقل الوسيط <em>isAdmin</em> إلى الملف نفسه.
@@ -402,6 +417,7 @@ module.exports = { tokenExtractor }
 {
     "disabled": false
 }
+
 ```
 
 كما أشرنا في&nbsp;<a href="/part4/token_authentication#problems-of-token-based-authentication" target="_blank" rel="noreferrer noopener">نهاية الجزء الرابع</a>، فإن طريقة تنفيذنا لتعطيل المستخدمين هنا إشكالية. إذ لا يُتحقق مما إذا كان المستخدم معطّلاً إلا عند&nbsp;<em>تسجيل الدخول</em>؛ فإذا كان لدى المستخدم رمز مميز في وقت تعطيله، فقد يواصل استخدام الرمز نفسه، لأنه لم تُحدَّد مدة صلاحية للرمز ولا يُتحقق من حالة تعطيل المستخدم عند إنشاء الملاحظات.
@@ -458,6 +474,7 @@ const rollbackMigration = async () => {
 }
 
 module.exports = { connectToDatabase, sequelize, rollbackMigration }
+
 ```
 
 لننشئ ملفاً هو&nbsp;<em>util/rollback.js</em>&nbsp;يتيح لسكربت npm تنفيذ دالة التراجع عن الترحيل المحددة:
@@ -466,6 +483,7 @@ module.exports = { connectToDatabase, sequelize, rollbackMigration }
 const { rollbackMigration } = require('./db')
 
 rollbackMigration()
+
 ```
 
 والسكربت في الملف <em>package.json</em>:
@@ -477,6 +495,7 @@ rollbackMigration()
     "migration:down": "node util/rollback.js"
   },
 }
+
 ```
 
 إذن يمكننا الآن التراجع عن الترحيل السابق بتنفيذ&nbsp;<em>npm run migration:down</em>&nbsp;من سطر الأوامر.
@@ -509,7 +528,7 @@ rollbackMigration()
 const { DataTypes } = require('sequelize')
 
 module.exports = {
-  up: async ({ context: queryInterface }) =&gt; {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('teams', {
       id: {
         type: DataTypes.INTEGER,
@@ -540,11 +559,12 @@ module.exports = {
       },
     })
   },
-  down: async ({ context: queryInterface }) =&gt; {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('memberships')
     await queryInterface.dropTable('teams')
   },
 }
+
 ```
 
 تحتوي النماذج على الشيفرة نفسها تقريباً الموجودة في الترحيل. نموذج الفريق في&nbsp;<em>models/team.js</em>:
@@ -575,6 +595,7 @@ Team.init({
 })
 
 module.exports = Team
+
 ```
 
 نموذج جدول الربط في <em>models/membership.js</em>:
@@ -610,6 +631,7 @@ Membership.init({
 })
 
 module.exports = Membership
+
 ```
 
 إذن أعطينا جدول الربط اسماً يصفه جيداً، وهو&nbsp;<em>membership</em>. ولا يوجد دائماً اسم مناسب لجدول الربط، وفي هذه الحالة يمكن أن يكون اسم جدول الربط مزيجاً من أسماء الجداول المربوطة، فمثلاً قد يناسب <em>user_teams</em> حالتنا.
@@ -631,6 +653,7 @@ Team.belongsToMany(User, { through: Membership })
 module.exports = {
   Note, User, Team, Membership
 }
+
 ```
 
 لاحظ الفرق بين ترحيل جدول الربط والنموذج عند تعريف حقول المفاتيح الأجنبية. أثناء الترحيل، تُعرَّف الحقول بصيغة snake case:
@@ -649,6 +672,7 @@ await queryInterface.createTable('memberships', {
     references: { model: 'teams', key: 'id' },
   }
 })
+
 ```
 
 وفي النموذج، تُعرَّف الحقول نفسها بصيغة camel case:
@@ -668,6 +692,7 @@ Membership.init({
   },
   // ...
 })
+
 ```
 
 لننشئ الآن فريقين من طرفية psql، وكذلك بعض العضويات:
@@ -679,6 +704,7 @@ insert into memberships (user_id, team_id) values (1, 1);
 insert into memberships (user_id, team_id) values (1, 2);
 insert into memberships (user_id, team_id) values (2, 1);
 insert into memberships (user_id, team_id) values (3, 2);
+
 ```
 
 ثم تُضاف معلومات فرق المستخدمين إلى المسار الخاص بجلب جميع المستخدمين
@@ -699,6 +725,7 @@ router.get('/', async (req, res) => {
   })
   res.json(users)
 })
+
 ```
 
 سيلاحظ الأكثر انتباهاً أن الاستعلام المطبوع في الطرفية يجمع الآن ثلاثة جداول.
@@ -728,6 +755,7 @@ router.get('/', async (req, res) => {
   })
   res.json(users)
 })
+
 ```
 
 الشيفرة الحالية للتطبيق موجودة بالكامل على <a href="https://github.com/fullstack-hy2020/fs-psql/tree/step8" target="_blank" rel="noreferrer noopener">GitHub</a>، الفرع<em> step8</em>.
@@ -741,6 +769,7 @@ Note.belongsTo(User)
 
 User.belongsToMany(Team, { through: Membership })
 Team.belongsToMany(User, { through: Membership })
+
 ```
 
 تتيح هذه الأسطر لـSequelize إجراء استعلامات تجلب، مثلاً، جميع ملاحظات المستخدمين أو جميع أعضاء فريق.
@@ -754,9 +783,10 @@ const user = await User.findByPk(1, {
   }
 })
 
-user.notes.forEach(note =&gt; {
+user.notes.forEach(note => {
   console.log(note.content)
 })
+
 ```
 
 وهكذا يُرفق تعريف&nbsp;<em>User.hasMany(Note)</em>&nbsp;خاصية&nbsp;<em>notes</em>&nbsp;بكائن&nbsp;<em>user</em>، ما يتيح الوصول إلى الملاحظات التي أنشأها المستخدم. وبالمثل، يُرفق تعريف&nbsp;<em>User.belongsToMany(Team, { through: Membership }))</em>&nbsp;خاصية&nbsp;<em>teams</em>&nbsp;بكائن&nbsp;<em>user</em>، ويمكن استخدامها أيضاً في الشيفرة:
@@ -771,6 +801,7 @@ const user = await User.findByPk(1, {
 user.teams.forEach(team => {
   console.log(team.name)
 })
+
 ```
 
 لنفترض أننا نريد إعادة كائن JSON من مسار مستخدم واحد يحتوي على اسم المستخدم واسم الدخول وعدد الملاحظات المنشأة. يمكننا أن نجرّب ما يلي:
@@ -792,6 +823,7 @@ router.get('/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
 ```
 
 إذن حاولنا إضافة الحقل&nbsp;<em>noteCount</em>&nbsp;إلى الكائن الذي تعيده Sequelize وحذف الحقل&nbsp;<em>notes</em>&nbsp;منه. غير أن هذا الأسلوب لا يعمل لأن الكائنات التي تعيدها Sequelize ليست كائنات عادية يمكننا إضافة حقول جديدة إليها كما نشاء.
@@ -817,6 +849,7 @@ router.get('/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
 ```
 
 ### إعادة النظر في علاقات متعدد إلى متعدد
@@ -829,7 +862,7 @@ router.get('/:id', async (req, res) => {
 const { DataTypes } = require('sequelize')
 
 module.exports = {
-  up: async ({ context: queryInterface }) =&gt; {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('user_notes', {
       id: {
         type: DataTypes.INTEGER,
@@ -848,10 +881,11 @@ module.exports = {
       },
     })
   },
-  down: async ({ context: queryInterface }) =&gt; {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('user_notes')
   },
 }
+
 ```
 
 كما لا يوجد شيء خاص في النموذج:
@@ -887,6 +921,7 @@ UserNotes.init({
 })
 
 module.exports = UserNotes
+
 ```
 
 أما الملف&nbsp;<em>models/index.js</em>&nbsp;فيأتي بتغيير طفيف عما رأيناه سابقاً:
@@ -910,6 +945,7 @@ Note.belongsToMany(User, { through: UserNotes, as: 'users_marked' })
 module.exports = {
   Note, User, Team, Membership, UserNotes
 }
+
 ```
 
 مرة أخرى، تُستخدم&nbsp;<em>belongsToMany</em>&nbsp;لربط المستخدم بملاحظاته. ويتم الربط عبر جدول الربط المقابل للنموذج UserNotes. غير أننا هذه المرة نعطي&nbsp;<em>اسماً مستعاراً</em>&nbsp;للخاصية المتكوّنة باستخدام الكلمة المفتاحية as. فالاسم الافتراضي&nbsp;<em>user.notes</em>&nbsp;كان سيتداخل مع معناه السابق، أي الملاحظات التي أنشأها المستخدم.
@@ -917,7 +953,7 @@ module.exports = {
 نوسّع مسار المستخدم الفردي ليعيد فرق المستخدم وملاحظاته الخاصة والملاحظات الأخرى التي علّمها المستخدم:
 
 ```js
-router.get('/:id', async (req, res) =&gt; {
+router.get('/:id', async (req, res) => {
   const user = await User.findByPk(req.params.id, {
     attributes: { exclude: [''] } ,
     include:[{
@@ -948,6 +984,7 @@ router.get('/:id', async (req, res) =&gt; {
     res.status(404).end()
   }
 })
+
 ```
 
 وفي سياق include، يجب الآن استخدام الاسم المستعار&nbsp;<em>marked_notes</em>&nbsp;الذي عرّفناه للتو بالخاصية&nbsp;<em>as</em>.
@@ -957,6 +994,7 @@ router.get('/:id', async (req, res) =&gt; {
 ```sql
 insert into user_notes (user_id, note_id) values (3, 1);
 insert into user_notes (user_id, note_id) values (3, 3);
+
 ```
 
 تبدو النتيجة النهائية جيدة:
@@ -1001,6 +1039,7 @@ router.get('/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
 ```
 
 وأخيراً نحصل على ما نريد:
@@ -1053,6 +1092,7 @@ User.findOne({
     model: note
   }
 })
+
 ```
 
 يتسبب هذا في <a href="https://sequelize.org/master/manual/assocs.html#basics-of-queries-involving-associations" target="_blank" rel="noreferrer noopener">جلب متلهف (eager)</a>، أي أن جميع صفوف الجداول المرتبطة بالمستخدم عبر استعلام الربط، وفي المثال الملاحظات التي أنشأها المستخدم، تُجلب من قاعدة البيانات في الوقت نفسه. وهذا غالباً ما نريده، لكن هناك أيضاً حالات تريد فيها إجراء&nbsp;<em>جلب كسول (lazy)</em>، أي البحث عن الفرق المرتبطة بالمستخدم فقط عند الحاجة إليها.
@@ -1095,6 +1135,7 @@ router.get('/:id', async (req, res) => {
   }
   res.json({ ...user.toJSON(), teams })
 })
+
 ```
 
 إذن الآن، لا يجلب استعلام&nbsp;<em>User.findByPk</em>&nbsp;الفرق، بل تُجلب عند الحاجة بواسطة دالة&nbsp;<em>user</em>&nbsp;المسماة&nbsp;<em>getTeams</em>&nbsp;التي تولّدها Sequelize تلقائياً لكائن النموذج. وتُولَّد تلقائياً دوال مشابهة تبدأ بـ&nbsp;<em>get</em>&nbsp;وغيرها من الدوال المفيدة&nbsp;<a href="https://sequelize.org/master/manual/assocs.html#special-methodsmixins-added-to-instances" target="_blank" rel="noreferrer noopener">عند تعريف ارتباطات الجداول</a>&nbsp;على مستوى Sequelize.
@@ -1121,12 +1162,14 @@ User.init({
 })
 
 module.exports = User
+
 ```
 
 الآن أصبح الاستعلام الناتج عن استدعاء الدالة&nbsp;<em>User.findAll()</em>&nbsp;يتضمن شرط WHERE التالي:
 
 ```
 WHERE "user". "disabled" = false;
+
 ```
 
 وبالنسبة للنماذج، يمكن تعريف نطاقات أخرى أيضاً:
@@ -1166,6 +1209,7 @@ User.init({
     },
   }
 })
+
 ```
 
 تُستخدم النطاقات كما يلي:
@@ -1179,6 +1223,7 @@ const disabledUsers = await User.scope('disabled').findAll()
 
 // المستخدمون الذين يحتوي اسمهم على النص jami
 const jamiUsers = await User.scope({ method: ['name', '%jami%'] }).findAll()
+
 ```
 
 ومن الممكن أيضاً تسلسل النطاقات:
@@ -1186,6 +1231,7 @@ const jamiUsers = await User.scope({ method: ['name', '%jami%'] }).findAll()
 ```js
 // مشرفون يحتوي اسمهم على النص jami
 const jamiUsers = await User.scope('admin', { method: ['name', '%jami%'] }).findAll()
+
 ```
 
 بما أن نماذج Sequelize هي أصناف <a href="https://sequelize.org/master/manual/model-basics.html#taking-advantage-of-models-being-classes" target="_blank" rel="noreferrer noopener">JavaScript</a> عادية، فمن الممكن إضافة دوال جديدة إليها.
@@ -1226,6 +1272,7 @@ User.init({
 })
 
 module.exports = User
+
 ```
 
 الدالة الأولى&nbsp;<em>numberOfNotes</em>&nbsp;هي&nbsp;<em>دالة نسخة (instance method)</em>، أي أنها تُستدعى على نسخ النموذج:
@@ -1234,6 +1281,7 @@ module.exports = User
 const jami = await User.findOne({ name: 'Jami Kousa'})
 const cnt = await jami.numberOfNotes()
 console.log(`Jami has created ${cnt} notes`)
+
 ```
 
 وهكذا تشير الكلمة المفتاحية&nbsp;<em>this</em>&nbsp;داخل دالة النسخة إلى النسخة نفسها:
@@ -1242,6 +1290,7 @@ console.log(`Jami has created ${cnt} notes`)
 async numberOfNotes() {
   return (await this.getNotes()).length
 }
+
 ```
 
 أما الدالة الثانية <em>withNotes</em> فتعيد المستخدمين الذين لديهم على الأقل العدد المحدد من الملاحظات. وهي <em>دالة صنف (class method)</em>، أي أنها تُستدعى مباشرة على النموذج:
@@ -1252,6 +1301,7 @@ console.log(JSON.stringify(users, null, 2))
 users.forEach(u => {
   console.log(u.name)
 })
+
 ```
 
 #### تكرار الشيفرة في النماذج والترحيلات
@@ -1280,6 +1330,7 @@ Team.init({
 })
 
 module.exports = Team
+
 ```
 
 والترحيل يحتويان على الكثير من الشيفرة نفسها
@@ -1288,7 +1339,7 @@ module.exports = Team
 const { DataTypes } = require('sequelize')
 
 module.exports = {
-  up: async ({ context: queryInterface }) =&gt; {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('teams', {
       id: {
         type: DataTypes.INTEGER,
@@ -1302,10 +1353,11 @@ module.exports = {
       },
     })
   },
-  down: async ({ context: queryInterface }) =&gt; {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('teams')
   },
 }
+
 ```
 
 ألا يمكننا تحسين الشيفرة بحيث يصدّر النموذج مثلاً الأجزاء المشتركة اللازمة للترحيل؟
@@ -1316,6 +1368,7 @@ module.exports = {
 
 ```bash
 npx sequelize-cli model:generate --name User --attributes name:string,username:string,admin:boolean
+
 ```
 
 ومن سطر الأوامر، يمكنك أيضاً تنفيذ عمليات التراجع، أي إلغاء الترحيلات. لكن توثيق سطر الأوامر ناقص للأسف، وقد قررنا في هذا المقرر إجراء النماذج والترحيلات يدوياً. وقد يكون هذا الحل حكيماً أو لا يكون.

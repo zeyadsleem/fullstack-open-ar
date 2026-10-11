@@ -35,6 +35,7 @@ lang: ar
 
 ```bash
 npx create-expo-app rate-repository-app --template blank@sdk-55
+
 ```
 
 > لاحظ أن <code>@sdk-55</code> يضبط <em>إصدار Expo SDK للمشروع على 5</em>5. ينبغي أن تستخدم هذا الإصدار بالتحديد أثناء متابعة هذه المادة.
@@ -43,6 +44,7 @@ npx create-expo-app rate-repository-app --template blank@sdk-55
 
 ```bash
 npx expo install react-native-web react-dom @expo/metro-runtime
+
 ```
 
 الآن بعد أن هُيّئ تطبيقنا، افتح مجلد <em>rate-repository-app</em> المنشأ باستخدام محرّر مثل <a href="https://code.visualstudio.com/" target="_blank" rel="noreferrer noopener">Visual Studio Code</a>. وينبغي أن تكون البنية على النحو التالي تقريباً:
@@ -64,6 +66,7 @@ npx expo install react-native-web react-dom @expo/metro-runtime
   },
   // ...
 }
+
 ```
 
 لنشغّل الآن السكربت <code>npm start</code>
@@ -104,6 +107,7 @@ npx expo install react-native-web react-dom @expo/metro-runtime
 
 ```bash
 npx expo start --tunnel
+
 ```
 
 في هذا الوضع، لا تحتاج أجهزتك إلى أن تكون على الشبكة المحلية نفسها، بل يُوجَّه الاتصال عبر الإنترنت بدلاً من ذلك. وقد يساعد ذلك في تجاوز مشكلات متنوعة متعلقة بجدار الحماية وإعدادات الشبكة. غير أن Expo Go قد يعمل ببطء أكبر لأن الشيفرة والحزم تُجلب الآن عبر النفق.
@@ -120,6 +124,7 @@ npx expo start --tunnel
 
 ```bash
 npx expo lint
+
 ```
 
 سيثبّت الأمر الاعتماديات اللازمة وينشئ ملف <em>eslint.config.js</em> في جذر المشروع. كما يضيف تلقائياً سكربت <code>lint</code> إلى ملف <em>package.json</em>:
@@ -130,7 +135,8 @@ npx expo lint
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"  }, // HIGHLIGHT LINE
+    "lint": "expo lint"  },
+
 ```
 
 يبدو ملف&nbsp;<em>eslint.config.js</em>&nbsp;كما يلي:
@@ -146,6 +152,7 @@ module.exports = defineConfig([
     ignores: ["dist/*"],
   }
 ]);
+
 ```
 
 الملف قصير، لكنه يتضمن أهم قواعد ESLint لمشروع React Native. و<em>eslint-config-expo/flat</em> إعداد مسبق شامل يوفّر تلقائياً قواعد ESLint الأساسية وقواعد React وقواعد React Native وأفضل الممارسات الخاصة بـ Expo.
@@ -154,6 +161,7 @@ module.exports = defineConfig([
 
 ```bash
 npm run lint
+
 ```
 
 يمكنك أيضاً دمج ESLint مع محرّرك. وفي Visual Studio Code، يمكنك فعل ذلك بالانتقال إلى قسم الإضافات والتأكد من أن إضافة ESLint مثبّتة ومفعّلة:

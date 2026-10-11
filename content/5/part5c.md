@@ -15,6 +15,7 @@ lang: ar
 
 ```
 npm install --save-dev vitest jsdom
+
 ```
 
 بالإضافة إلى Vitest، نحتاج أيضاً إلى مكتبة اختبار أخرى تساعدنا على عرض المكوّنات لأغراض الاختبار. الخيار الأفضل حالياً لذلك هو [react-testing-library](https://github.com/testing-library/react-testing-library) الذي شهد نمواً سريعاً في الشعبية في الآونة الأخيرة. يجدر أيضاً توسيع القدرة التعبيرية للاختبارات بمكتبة [jest-dom](https://github.com/testing-library/jest-dom).
@@ -23,6 +24,7 @@ npm install --save-dev vitest jsdom
 
 ```js
 npm install --save-dev @testing-library/react @testing-library/jest-dom
+
 ```
 
 قبل أن نتمكن من إجراء الاختبار الأول، نحتاج إلى بعض الإعدادات.
@@ -37,6 +39,7 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom
   }
   // ...
 }
+
 ```
 
 لننشئ ملف _testSetup.js_ في جذر المشروع بالمحتوى التالي
@@ -49,6 +52,7 @@ import '@testing-library/jest-dom/vitest'
 afterEach(() => {
   cleanup()
 })
+
 ```
 
 الآن، بعد كل اختبار، تُنفَّذ الدالة _cleanup_ لإعادة ضبط jsdom الذي يحاكي المتصفح.
@@ -64,6 +68,7 @@ export default defineConfig({
     setupFiles: './testSetup.js', 
   }
 })
+
 ```
 
 مع _globals: true_، لا حاجة لاستيراد كلمات مفتاحية مثل _describe_ و _test_ و _expect_ في الاختبارات.
@@ -77,12 +82,13 @@ const Note = ({ note, toggleImportance }) => {
     : 'make important'
 
   return (
-    <li className='note'> // highlight-line
+    <li className='note'>
       {note.content}
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
 }
+
 ```
 
 لاحظ أن عنصر <i>li</i> يحمل القيمة <i>note</i> للخاصية className الخاصة بـ [CSS](https://react.dev/learn#adding-styles)، والتي يمكن استخدامها للوصول إلى المكوّن في اختباراتنا.
@@ -108,12 +114,14 @@ test('renders content', () => {
   const element = screen.getByText('Component testing is done with react-testing-library')
   expect(element).toBeDefined()
 })
+
 ```
 
 بعد الإعداد الأولي، يعرض الاختبار المكوّن باستخدام دالة [render](https://testing-library.com/docs/react-testing-library/api#render) التي توفّرها react-testing-library:
 
 ```js
 render(<Note note={note} />)
+
 ```
 
 عادةً تُعرض مكوّنات React في [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model). دالة render التي استخدمناها تعرض المكوّنات بصيغة مناسبة للاختبارات دون عرضها في DOM.
@@ -123,6 +131,7 @@ render(<Note note={note} />)
 ```js
   const element = screen.getByText('Component testing is done with react-testing-library')
   expect(element).toBeDefined()
+
 ```
 
 يُفحص وجود عنصر باستخدام أمر [expect](https://vitest.dev/api/expect.html#expect) الخاص بـ Vitest. يولّد expect تأكيداً (assertion) لوسيطه، ويمكن اختبار صحته باستخدام دوال شرطية مختلفة. استخدمنا الآن [toBeDefined](https://vitest.dev/api/expect.html#tobedefined) الذي يختبر ما إذا كان وسيط expect المسمى _element_ موجوداً.
@@ -145,6 +154,7 @@ $ npm test
       Tests  1 passed (1)
    Start at  14:31:54
    Duration  874ms (transform 51ms, setup 169ms, collect 19ms, tests 19ms, environment 454ms, prepare 87ms)
+
 ```
 
 يشتكي Eslint من الكلمتين المفتاحيتين _test_ و _expect_ في الاختبارات. يمكن حل المشكلة بإضافة الإعداد التالي إلى ملف <i>eslint.config.js</i>:
@@ -165,6 +175,7 @@ export default [
   }
   // highlight-end
 ]
+
 ```
 
 هكذا يُبلَّغ ESLint بأن كلمات Vitest المفتاحية متاحة عالمياً في ملفات الاختبار.
@@ -195,8 +206,9 @@ test('renders content', () => {
 
   const element = screen.getByText('Component testing is done with react-testing-library')
 
-  expect(element).toBeDefined() // highlight-line
+  expect(element).toBeDefined()
 })
+
 ```
 
 يفشل الاختبار إذا لم يجد _getByText_ العنصر الذي يبحث عنه.
@@ -210,13 +222,14 @@ const Note = ({ note, toggleImportance }) => {
 
   return (
     <li className='note'>
-      Your awesome note: {note.content} // highlight-line
+      Your awesome note: {note.content}
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
 }
 
 export default Note
+
 ```
 
 دالة _getByText_ التي يستخدمها الاختبار <i>لا</i> تجد العنصر:
@@ -234,6 +247,7 @@ test('renders content', () => {
 
   expect(element).toBeDefined()
 })
+
 ```
 
 إذا أردنا البحث عن عنصر <i>يحتوي</i> على النص، يمكننا استخدام خيار إضافي:
@@ -242,12 +256,14 @@ test('renders content', () => {
 const element = screen.getByText(
   'Does not work anymore :(', { exact: false }
 )
+
 ```
 
 أو يمكننا استخدام الدالة _findByText_:
 
 ```js
 const element = await screen.findByText('Does not work anymore :(')
+
 ```
 
 من المهم ملاحظة أن _findByText_، بخلاف دوال _ByText_ الأخرى، تُعيد promise!
@@ -268,6 +284,7 @@ test('does not render this', () => {
   const element = screen.queryByText('do not want this thing to be rendered')
   expect(element).toBeNull()
 })
+
 ```
 
 توجد دوال أخرى أيضاً، مثل [getByTestId](https://testing-library.com/docs/queries/bytestid/)، التي تبحث عن العناصر بناءً على حقول id مُنشأة خصيصاً لأغراض الاختبار.
@@ -284,7 +301,7 @@ test('renders content', () => {
     important: true
   }
 
-  const { container } = render(<Note note={note} />) // highlight-line
+  const { container } = render(<Note note={note} />)
 
 // highlight-start
   const div = container.querySelector('.note')
@@ -293,6 +310,7 @@ test('renders content', () => {
   )
   // highlight-end
 })
+
 ```
 
 يُوصى مع ذلك بالبحث عن العناصر أساساً باستخدام دوال غير كائن <i>container</i> ومحدّدات CSS. فغالباً ما يمكن تغيير خصائص CSS دون التأثير على وظائف التطبيق، ولا يكون المستخدمون على دراية بها. الأفضل البحث عن العناصر بناءً على خصائص مرئية للمستخدم، مثلاً باستخدام الدالة _getByText_. بهذه الطريقة، تحاكي الاختبارات الطبيعة الفعلية للمكوّن وكيف سيجد المستخدم العنصر على الشاشة بشكل أفضل.
@@ -315,11 +333,12 @@ test('renders content', () => {
 
   render(<Note note={note} />)
 
-  screen.debug() // highlight-line
+  screen.debug()
 
   // ...
 
 })
+
 ```
 
 يُطبع HTML في وحدة التحكم:
@@ -338,6 +357,7 @@ console.log
       </li>
     </div>
   </body>
+
 ```
 
 من الممكن أيضاً استخدام الدالة نفسها لطباعة عنصر مرغوب في وحدة التحكم:
@@ -356,10 +376,11 @@ test('renders content', () => {
 
   const element = screen.getByText('Component testing is done with react-testing-library')
 
-  screen.debug(element)  // highlight-line
+  screen.debug(element)
 
   expect(element).toBeDefined()
 })
+
 ```
 
 الآن يُطبع HTML الخاص بالعنصر المرغوب:
@@ -373,6 +394,7 @@ test('renders content', () => {
       make not important
     </button>
   </li>
+
 ```
 
 ### النقر على الأزرار في الاختبارات
@@ -383,13 +405,14 @@ test('renders content', () => {
 
 ```bash
 npm install --save-dev @testing-library/user-event
+
 ```
 
 يمكن اختبار هذه الوظيفة هكذا:
 
 ```js
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event' // highlight-line
+import userEvent from '@testing-library/user-event'
 import Note from './Note'
 
 // ...
@@ -400,30 +423,33 @@ test('clicking the button calls event handler once', async () => {
     important: true
   }
   
-  const mockHandler = vi.fn()  // highlight-line
+  const mockHandler = vi.fn()
 
   render(
-    <Note note={note} toggleImportance={mockHandler} />  // highlight-line
+    <Note note={note} toggleImportance={mockHandler} />
   )
 
-  const user = userEvent.setup()  // highlight-line
-  const button = screen.getByText('make not important')  // highlight-line
-  await user.click(button)  // highlight-line
+  const user = userEvent.setup()
+  const button = screen.getByText('make not important')
+  await user.click(button)
 
-  expect(mockHandler.mock.calls).toHaveLength(1)  // highlight-line
+  expect(mockHandler.mock.calls).toHaveLength(1)
 })
+
 ```
 
 هناك بضعة أمور مثيرة للاهتمام تتعلق بهذا الاختبار. معالج الحدث هو دالة [mock](https://vitest.dev/api/mock) مُعرَّفة بـ Vitest:
 
 ```js
 const mockHandler = vi.fn()
+
 ```
 
 تُبدأ [جلسة](https://testing-library.com/docs/user-event/setup/) للتفاعل مع المكوّن المعروض:
 
 ```js
 const user = userEvent.setup()
+
 ```
 
 يجد الاختبار الزر <i>بناءً على النص</i> من المكوّن المعروض وينقر العنصر:
@@ -431,6 +457,7 @@ const user = userEvent.setup()
 ```js
 const button = screen.getByText('make not important')
 await user.click(button)
+
 ```
 
 يحدث النقر بالدالة [click](https://testing-library.com/docs/user-event/convenience/#click) الخاصة بمكتبة userEvent.
@@ -439,6 +466,7 @@ await user.click(button)
 
 ```js
 expect(mockHandler.mock.calls).toHaveLength(1)
+
 ```
 
 تُحفظ الاستدعاءات إلى دالة mock في المصفوفة [mock.calls](https://vitest.dev/api/mock#mock-calls) داخل كائن دالة mock.
@@ -483,6 +511,7 @@ describe('<Togglable />', () => {
     expect(element).toBeVisible()
   })
 })
+
 ```
 
 تُستدعى الدالة _beforeEach_ قبل كل اختبار، فتعرض مكوّن <i>Togglable</i>.
@@ -493,6 +522,7 @@ describe('<Togglable />', () => {
 <div>
   togglable content
 </div>
+
 ```
 
 تستخدم الاختبارات المتبقية الدالة _toBeVisible_ للتحقق من أن المكوّن الفرعي لمكوّن <i>Togglable</i> غير مرئي في البداية، أي أن نمط عنصر <i>div</i> يحتوي على _{ display: 'none' }_. ويتحقق اختبار آخر من أنه عند الضغط على الزر يصبح المكوّن مرئياً، أي أن نمط إخفائه <i>لم يعد</i> مُسنَداً إلى المكوّن.
@@ -516,6 +546,7 @@ describe('<Togglable />', () => {
     expect(element).not.toBeVisible()
   })
 })
+
 ```
 
 ### اختبار النماذج
@@ -526,6 +557,7 @@ describe('<Togglable />', () => {
 const user = userEvent.setup()
 const button = screen.getByText('show...')
 await user.click(button)
+
 ```
 
 يمكننا أيضاً محاكاة إدخال النص باستخدام <i>userEvent</i>.
@@ -564,6 +596,7 @@ const NoteForm = ({ createNote }) => {
 }
 
 export default NoteForm
+
 ```
 
 يعمل النموذج باستدعاء الدالة المستلمة كـ props المسماة _createNote_، مع تفاصيل الملاحظة الجديدة.
@@ -590,6 +623,7 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
   expect(createNote.mock.calls).toHaveLength(1)
   expect(createNote.mock.calls[0][0].content).toBe('testing a form...')
 })
+
 ```
 
 تصل الاختبارات إلى حقل الإدخال باستخدام الدالة [getByRole](https://testing-library.com/docs/queries/byrole).
@@ -614,14 +648,16 @@ test('<NoteForm /> updates parent state and calls onSubmit', async() => {
   await user.type(input, 'testing a form...')
   await user.click(sendButton)
 
-  console.log(createNote.mock.calls) // highlight-line
+  console.log(createNote.mock.calls)
 })
+
 ```
 
 في منتصف تشغيل الاختبارات، يُطبع ما يلي في وحدة التحكم:
 
 ```
 [ [ { content: 'testing a form...', important: true } ] ]
+
 ```
 
 ### حول العثور على العناصر
@@ -652,12 +688,14 @@ const NoteForm = ({ createNote }) => {
     </div>
   )
 }
+
 ```
 
 الآن النهج الذي يستخدمه اختبارنا للعثور على حقل الإدخال
 
 ```js
 const input = screen.getByRole('textbox')
+
 ```
 
 سيسبب خطأ:
@@ -670,6 +708,7 @@ const input = screen.getByRole('textbox')
 const inputs = screen.getAllByRole('textbox')
 
 await user.type(inputs[0], 'testing a form...')
+
 ```
 
 تُعيد الدالة <i>getAllByRole</i> الآن مصفوفة، وحقل الإدخال الصحيح هو العنصر الأول في المصفوفة. لكن هذا النهج مريب قليلاً لأنه يعتمد على ترتيب حقول الإدخال.
@@ -678,14 +717,15 @@ await user.type(inputs[0], 'testing a form...')
 
 ```js
   // ...
-  <label> // highlight-line
-    content // highlight-line
+  <label>
+    content
     <input
       value={newNote}
       onChange={event => setNewNote(event.target.value)}
     />
-  </label> // highlight-line
+  </label>
   // ...
+
 ```
 
 يمكن للاختبار تحديد حقل الإدخال كما يلي:
@@ -697,7 +737,7 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
 
   render(<NoteForm createNote={createNote} />) 
 
-  const input = screen.getByLabelText('content') // highlight-line
+  const input = screen.getByLabelText('content')
   const sendButton = screen.getByText('save')
 
   await user.type(input, 'testing a form...')
@@ -706,6 +746,7 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
   expect(createNote.mock.calls).toHaveLength(1)
   expect(createNote.mock.calls[0][0].content).toBe('testing a form...')
 })
+
 ```
 
 غالباً ما تحتوي حقول الإدخال على نص <i>placeholder</i> يلمّح للمستخدم إلى نوع الإدخال المتوقع. لنضف placeholder إلى نموذجنا:
@@ -722,7 +763,7 @@ const NoteForm = ({ createNote }) => {
         <input
           value={newNote}
           onChange={event => setNewNote(event.target.value)}
-          placeholder='write note content here' // highlight-line 
+          placeholder='write note content here'
         />
         <input
           value={...}
@@ -733,6 +774,7 @@ const NoteForm = ({ createNote }) => {
     </div>
   )
 }
+
 ```
 
 الآن العثور على حقل الإدخال الصحيح سهل باستخدام الدالة [getByPlaceholderText](https://testing-library.com/docs/queries/byplaceholdertext):
@@ -744,7 +786,7 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
 
   render(<NoteForm createNote={createNote} />) 
 
-  const input = screen.getByPlaceholderText('write note content here') // highlight-line 
+  const input = screen.getByPlaceholderText('write note content here')
   const sendButton = screen.getByText('save')
 
   await user.type(input, 'testing a form...')
@@ -753,6 +795,7 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
   expect(createNote.mock.calls).toHaveLength(1)
   expect(createNote.mock.calls[0][0].content).toBe('testing a form...')
 })
+
 ```
 
 أحياناً قد يكون العثور على العنصر الصحيح باستخدام الدوال الموصوفة أعلاه صعباً. في مثل هذه الحالات، البديل هو الدالة <i>querySelector</i> الخاصة بالكائن _container_، الذي تُعيده _render_، كما ذُكر [سابقاً في هذا الجزء](/part5/testing_react_apps#searching-for-content-in-a-component). يمكن استخدام أي محدّد CSS مع هذه الدالة للبحث عن العناصر في الاختبارات.
@@ -771,7 +814,7 @@ const NoteForm = ({ createNote }) => {
         <input
           value={newNote}
           onChange={event => setNewNote(event.target.value)}
-          id='note-input' // highlight-line 
+          id='note-input'
         />
         <input
           value={...}
@@ -782,6 +825,7 @@ const NoteForm = ({ createNote }) => {
     </div>
   )
 }
+
 ```
 
 يمكن الآن العثور على عنصر الإدخال في الاختبار كما يلي:
@@ -790,6 +834,7 @@ const NoteForm = ({ createNote }) => {
 const { container } = render(<NoteForm createNote={createNote} />)
 
 const input = container.querySelector('#note-input')
+
 ```
 
 مع ذلك، سنلتزم بنهج استخدام _getByPlaceholderText_ في الاختبار.
@@ -800,6 +845,7 @@ const input = container.querySelector('#note-input')
 
 ```js
 npm test -- --coverage
+
 ```
 
 في المرة الأولى التي تشغّل فيها الأمر، سيسألك Vitest إذا كنت تريد تثبيت المكتبة المطلوبة _@vitest/coverage-v8_. ثبّتها، ثم شغّل الأمر مجدداً:
@@ -817,6 +863,7 @@ npm test -- --coverage
 //...
 
 coverage/
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part5-8</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-8).

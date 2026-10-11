@@ -20,6 +20,7 @@ app.post('/api/notes', (request, response) => {
 
   // ...
 })
+
 ```
 
 إذا لم تمتلك الملاحظة خاصية <i>content</i>، نستجيب للطلب برمز الحالة <i>400 bad request</i>.
@@ -39,6 +40,7 @@ const noteSchema = new mongoose.Schema({
   // highlight-end
   important: Boolean
 })
+
 ```
 
 أصبح حقل <i>content</i> الآن مطلوباً أن يكون طوله خمسة أحرف على الأقل، وقد ضُبط كحقل مطلوب، أي أنه لا يمكن أن يكون مفقوداً. لم نضف أي قيود على حقل <i>important</i>، لذا لم يتغير تعريفه في المخطط.
@@ -48,7 +50,7 @@ const noteSchema = new mongoose.Schema({
 إذا حاولنا تخزين كائن في قاعدة البيانات يخالف أحد القيود، فسترمي العملية استثناءً. لنغيّر معالج إنشاء ملاحظة جديدة بحيث يمرّر أي استثناءات محتملة إلى الوسيط معالج الأخطاء:
 
 ```js
-app.post('/api/notes', (request, response, next) => { // highlight-line
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -60,8 +62,9 @@ app.post('/api/notes', (request, response, next) => { // highlight-line
     .then(savedNote => {
       response.json(savedNote)
     })
-    .catch(error => next(error)) // highlight-line
+    .catch(error => next(error))
 })
+
 ```
 
 لنوسّع معالج الأخطاء ليتعامل مع أخطاء التحقق هذه:
@@ -72,12 +75,13 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') { // highlight-line
-    return response.status(400).json({ error: error.message }) // highlight-line
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
 }
+
 ```
 
 عندما يفشل التحقق من كائن، نعيد رسالة الخطأ الافتراضية التالية من Mongoose:
@@ -96,6 +100,7 @@ const errorHandler = (error, request, response, next) => {
 
 ```bash
 fly secrets set MONGODB_URI='mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&w=majority'
+
 ```
 
 أثناء تطوير التطبيق، من المرجح جداً أن يفشل شيء ما. مثلاً، عندما نشرت تطبيقي لأول مرة مع قاعدة البيانات، لم تظهر أي ملاحظة على الإطلاق:
@@ -148,6 +153,7 @@ personService
       // هذه هي طريقة الوصول إلى رسالة الخطأ
       console.log(error.response.data.error)
     })
+
 ```
 
 يمكنك عرض رسالة الخطأ الافتراضية التي تعيدها Mongoose، حتى وإن لم تكن مقروءة كما ينبغي:
@@ -197,6 +203,7 @@ personService
 
 ```bash
 npm install eslint @eslint/js --save-dev
+
 ```
 
 سيتغير محتوى ملف package.json كما يلي:
@@ -209,11 +216,12 @@ npm install eslint @eslint/js --save-dev
     "express": "^5.1.0",
     "mongoose": "^8.11.0"
   },
-  "devDependencies": { // highlight-line
-    "@eslint/js": "^9.22.0", // highlight-line
-    "eslint": "^9.22.0" // highlight-line
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0"
   }
 }
+
 ```
 
 أضاف الأمر قسم <i>devDependencies</i> إلى الملف وضمّن الحزمتين <i>eslint</i> و<i>@eslint/js</i>، وثبّت المكتبات المطلوبة في مجلد <i>node_modules</i>.
@@ -222,6 +230,7 @@ npm install eslint @eslint/js --save-dev
 
 ```bash
 npx eslint --init
+
 ```
 
 سنجيب عن جميع الأسئلة:
@@ -247,6 +256,7 @@ export default [
     },
   },
 ]
+
 ```
 
 حتى الآن، يعرّف ملف إعداد ESLint لدينا خيار _files_ بالقيمة _["\*\*/\*.js"]_، ما يخبر ESLint بالنظر في جميع ملفات JavaScript في مجلد مشروعنا. تحدد خاصية _languageOptions_ خيارات متعلقة بميزات اللغة التي ينبغي أن يتوقعها ESLint، وقد عرّفنا فيها خيار _sourceType_ بالقيمة "commonjs". يشير هذا إلى أن شيفرة JavaScript في مشروعنا تستخدم نظام وحدات CommonJS، ما يسمح لـ ESLint بتحليل الشيفرة وفقاً لذلك.  
@@ -259,15 +269,16 @@ export default [
 
 ```js
 import globals from 'globals'
-import js from '@eslint/js' // highlight-line
+import js from '@eslint/js'
 // ...
 
 export default [
-  js.configs.recommended, // highlight-line
+  js.configs.recommended,
   {
     // ...
   },
 ]
+
 ```
 
 أضفنا _js.configs.recommended_ إلى أعلى مصفوفة الإعداد، وهذا يضمن تطبيق إعدادات ESLint الموصى بها أولاً قبل خياراتنا المخصصة.
@@ -276,6 +287,7 @@ export default [
 
 ```bash
 npm install --save-dev @stylistic/eslint-plugin
+
 ```
 
 استورد الإضافة وفعّلها، وأضف قواعد أسلوب الشيفرة الأربع هذه:
@@ -283,7 +295,7 @@ npm install --save-dev @stylistic/eslint-plugin
 ```js
 import globals from 'globals'
 import js from '@eslint/js'
-import stylisticJs from '@stylistic/eslint-plugin' // highlight-line
+import stylisticJs from '@stylistic/eslint-plugin'
 
 export default [
   {
@@ -301,6 +313,7 @@ export default [
     // highlight-end
   },
 ]
+
 ```
 
 توفر خاصية [plugins](https://eslint.org/docs/latest/use/configure/plugins) طريقة لتوسيع وظائف ESLint عبر إضافة قواعد وإعدادات وقدرات أخرى مخصصة غير متاحة في مكتبة ESLint الأساسية. ثبّتنا وفعّلنا _@stylistic/eslint-plugin_، الذي يضيف قواعد أسلوبية لـ JavaScript إلى ESLint. بالإضافة إلى ذلك، أُضيفت قواعد للإزاحة وفواصل الأسطر والعلامات التنصيصية والفواصل المنقوطة. جميع هذه القواعد الأربع معرّفة في [إضافة أنماط ESLint](https://eslint.style/packages/js).
@@ -313,6 +326,7 @@ export default [
 
 ```bash
 npx eslint index.js
+
 ```
 
 يُوصى بإنشاء _سكربت npm_ منفصل لعملية lint:
@@ -324,11 +338,12 @@ npx eslint index.js
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ." // highlight-line
+    "lint": "eslint ."
     // ...
   },
   // ...
 }
+
 ```
 
 الآن سيفحص الأمر _npm run lint_ كل ملف في المشروع.
@@ -349,6 +364,7 @@ export default [
   },
   // highlight-end
 ]
+
 ```
 
 يؤدي هذا إلى عدم فحص مجلد <em>dist</em> بأكمله بواسطة ESLint.
@@ -376,10 +392,11 @@ export default [
   // ...
   rules: {
     // ...
-   eqeqeq: 'error', // highlight-line
+   eqeqeq: 'error',
   },
   // ...
 ]
+
 ```
 
 وبينما نحن في هذا السياق، لنجرِ بعض التغييرات الأخرى على القواعد.
@@ -399,6 +416,7 @@ export default [
     // highlight-end
   },
 ]
+
 ```
 
 يأخذ إعدادنا الافتراضي مجموعة من القواعد المعرّفة مسبقاً من:
@@ -410,6 +428,7 @@ export default [
   js.configs.recommended,
   // ...
 ]
+
 ```
 
 يتضمن هذا قاعدة تحذر بشأن أوامر <em>console.log</em> التي لا نريد استخدامها. يمكن تعطيل قاعدة بتعريف "قيمتها" على أنها 0 أو _off_ في ملف الإعداد. لنفعل هذا بقاعدة _no-console_ في الوقت الحالي.
@@ -424,10 +443,11 @@ export default [
       'no-trailing-spaces': 'error',
       'object-curly-spacing': ['error', 'always'],
       'arrow-spacing': ['error', { before: true, after: true }],
-      'no-console': 'off', // highlight-line
+      'no-console': 'off',
     },
   },
 ]
+
 ```
 
 سيسمح لنا تعطيل قاعدة no-console باستخدام عبارات console.log دون أن يشير إليها ESLint كمشكلات. يمكن أن يكون هذا مفيداً بشكل خاص أثناء التطوير عندما تحتاج إلى تصحيح أخطاء شيفرتك. إليك ملف الإعداد الكامل مع جميع التغييرات التي أجريناها حتى الآن:
@@ -465,6 +485,7 @@ export default [
     ignores: ['dist/**'],
   },
 ]
+
 ```
 
 **ملاحظة** عندما تجري تغييرات على ملف _eslint.config.mjs_، يُوصى بتشغيل أداة lint من سطر الأوامر. سيتحقق هذا من أن ملف الإعداد منسّق بشكل صحيح:

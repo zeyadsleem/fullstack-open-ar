@@ -73,6 +73,7 @@ jobs:
       - name: Say hello
         run: |
           echo "Hello World!"
+
 ```
 
 توجد مهمة واحدة باسم <em>hello_world_job</em>، وستُشغَّل في بيئة افتراضية بنظام Ubuntu 24.04. للمهمة خطوة واحدة فقط باسم "Say hello"، وستنفّذ الأمر <code>echo "Hello World!"</code> في صدفة النظام.
@@ -113,6 +114,7 @@ on:
       - main
 
 jobs:
+
 ```
 
 قبل أن نتمكن من تشغيل أمر لفحص الشيفرة، علينا تنفيذ بضعة إجراءات لتهيئة بيئة المهمة.
@@ -136,12 +138,13 @@ on:
       - main
 
 jobs:
-// BEGIN HIGHLIGHT
+
   simple_deployment_pipeline:
     runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v6
-// END HIGHLIGHT
+
+
 ```
 
 تُخبر الكلمة المفتاحية&nbsp;<a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsuses" target="_blank" rel="noreferrer noopener">uses</a>&nbsp;سير العمل بتشغيل&nbsp;<em>إجراء</em> معيّن. والإجراء قطعة شيفرة قابلة لإعادة الاستخدام، مثل دالة. يمكن تعريف الإجراءات في مستودعك في ملف منفصل، أو يمكنك استخدام الإجراءات المتاحة في المستودعات العامة.
@@ -158,11 +161,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-// BEGIN HIGHLIGHT
+
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-// END HIGHLIGHT
+
+
 ```
 
 كما نرى، تُستخدم الكلمة المفتاحية&nbsp;<a href="https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith" target="_blank" rel="noreferrer noopener">with</a>&nbsp;لإعطاء "معامل" للإجراء. وهنا يحدد المعامل إصدار Node.js الذي نريد استخدامه.
@@ -178,10 +182,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-// BEGIN HIGHLIGHT
+
       - name: Install dependencies
         run: npm install
-// END HIGHLIGHT
+
+
 ```
 
 الآن ينبغي أن تكون البيئة جاهزة بالكامل كي تنفّذ المهمة مهامها المهمة.
@@ -201,16 +206,18 @@ jobs:
           node-version: '24'
       - name: Install dependencies
         run: npm install
-// BEGIN HIGHLIGHT
+
       - name: Check style
         run: npm run eslint
-// END HIGHLIGHT
+
+
 ```
 
 لاحظ أن&nbsp;<em>name</em>&nbsp;الخطوة اختياري؛ فإذا عرّفت خطوة كما يلي
 
 ```
 - run: npm run eslint
+
 ```
 
 يُستخدم الأمر الذي يُشغَّل كاسم افتراضي.

@@ -20,6 +20,7 @@ lang: ar
 
 ```bash
 npm create vite@latest my-app-name -- --template react-ts
+
 ```
 
 بعد تنفيذ الأمر، سيكون لديك تطبيق React أساسي كامل يستخدم TypeScript. يمكنك تشغيل التطبيق بتنفيذ <code>npm run dev</code> في جذر التطبيق.
@@ -58,6 +59,7 @@ npm create vite@latest my-app-name -- --template react-ts
   "include": ["src"]
 }
 
+
 ```
 
 تشمل <em>compilerOptions</em> الآن المفتاح <em>lib</em> مع <em>DOM</em>، وهو ما يضيف تعريفات أنواع لواجهات بيئة المتصفح مثل <em>document</em>. ومعظم الإعدادات الأخرى واضحة إلى حد ما أو مألوفة لنا بالفعل.
@@ -73,10 +75,11 @@ import App from './App.tsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  &lt;React.StrictMode&gt;
-    &lt;App /&gt;
-  &lt;/React.StrictMode&gt;,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 )
+
 ```
 
 السبب في ذلك أن العبارة قد تُعيد القيمة null، لكن&nbsp;<em>ReactDOM.createRoot</em>&nbsp;لا يقبل null كوسيط. وباستخدام&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-" target="_blank" rel="noreferrer noopener">معامل !</a>، يمكن تأكيد لمترجم TypeScript أن القيمة ليست null.
@@ -91,12 +94,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 import ReactDOM from 'react-dom/client'
 
 const Welcome = props => {
-  return &lt;h1>Hello, {props.name}&lt;/h1>;
+  return <h1>Hello, {props.name}</h1>;
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  &lt;Welcome name="Sarah" />
+  <Welcome name="Sarah" />
 )
+
 ```
 
 في هذا المثال، لدينا مكوّن يُسمى <em>Welcome</em> نمرّر إليه <em>name</em> كـ prop. ثم يعرض الاسم على الشاشة. نحن نعلم أن <em>name</em> ينبغي أن يكون نصاً. وفي React، لا توجد طريقة لضمان استخدام المكوّن استخداماً صحيحاً.
@@ -112,27 +116,30 @@ interface WelcomeProps {
   name: string;
 }
 
-const Welcome = (props: WelcomeProps): JSX.Element =&gt; {
-  return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+const Welcome = (props: WelcomeProps): JSX.Element => {
+  return <h1>Hello, {props.name}</h1>;
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  &lt;Welcome name="Sarah" /&gt;
+  <Welcome name="Sarah" />
 )
+
 ```
 
 عرّفنا نوعاً جديداً هو&nbsp;<em>WelcomeProps</em>، ومرّرناه إلى أنواع وسائط الدالة.
 
 ```js
-const Welcome = (props: WelcomeProps): JSX.Element =&gt; {
+const Welcome = (props: WelcomeProps): JSX.Element => {
+
 ```
 
 يمكنك كتابة الشيء نفسه باستخدام صياغة أكثر إسهاباً:
 
 ```ts
-const Welcome = ({ name }: { name: string }): JSX.Element =&gt; (
-  &lt;h1&gt;Hello, {name}&lt;/h1&gt;
+const Welcome = ({ name }: { name: string }): JSX.Element => (
+  <h1>Hello, {name}</h1>
 );
+
 ```
 
 الآن يعرف محرّرنا أن prop الـ&nbsp;<em>name</em>&nbsp;نص.
@@ -144,13 +151,14 @@ interface WelcomeProps {
   name: string;
 }
 
-const Welcome = (props: WelcomeProps) => {  // HIGHLIGHT LINE
-   return &lt;h1>Hello, {props.name}&lt;/h1>;
+const Welcome = (props: WelcomeProps) => {
+   return <h1>Hello, {props.name}</h1>;
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  &lt;Welcome name="Sarah" />
+  <Welcome name="Sarah" />
 )
+
 ```
 
 <div class="tasks">
@@ -187,6 +195,7 @@ const courseParts = [
     backgroundMaterial: "https://type-level-typescript.com/template-literal-types"
   },
 ];
+
 ```
 
 في المثال أعلاه، أضفنا بعض الخصائص الإضافية إلى كل جزء من أجزاء الدورة. لكل جزء خاصيتا&nbsp;<em>name</em>&nbsp;و<em>exerciseCount</em>، لكن الجزء الأول والثالث والرابع لها أيضاً خاصية تُسمى&nbsp;<em>description</em>. كما أن الجزأين الثاني والرابع لهما بعض الخصائص الإضافية المميّزة.
@@ -219,6 +228,7 @@ interface CoursePartBackground {
   backgroundMaterial: string;
   kind: "background"
 }
+
 ```
 
 إلى جانب الخصائص الموجودة في أجزاء الدورة المختلفة، أدخلنا الآن خاصية إضافية تُسمى&nbsp;<em>kind</em>&nbsp;لها نوع&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types" target="_blank" rel="noreferrer noopener">حرفي</a>&nbsp;(literal)، فهي نص «مُضمَّن مباشرة» مميّز لكل جزء من أجزاء الدورة. وسنرى قريباً أين تُستخدم خاصية kind!
@@ -227,6 +237,7 @@ interface CoursePartBackground {
 
 ```ts
 type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+
 ```
 
 الآن يمكننا ضبط نوع المتغير&nbsp;<em>courseParts</em>:
@@ -239,31 +250,32 @@ const App = () => {
       name: "Fundamentals",
       exerciseCount: 10,
       description: "This is an awesome course part",
-      kind: "basic"    // HIGHLIGHT LINE
+      kind: "basic"
     },
     {
       name: "Using props to pass data",
       exerciseCount: 7,
       groupProjectCount: 3,
-      kind: "group"    // HIGHLIGHT LINE
+      kind: "group"
     },
     {
       name: "Basics of type Narrowing",
       exerciseCount: 7,
       description: "How to go from unknown to string",
-      kind: "basic"    // HIGHLIGHT LINE
+      kind: "basic"
     },
     {
       name: "Deeper type usage",
       exerciseCount: 14,
       description: "Confusing description",
       backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
-      kind: "background"    // HIGHLIGHT LINE
+      kind: "background"
     },
   ]
 
   // ...
 }
+
 ```
 
 لاحظ أننا أضفنا الآن الخاصية&nbsp;<em>kind</em>&nbsp;بقيمة مناسبة إلى كل عنصر من عناصر المصفوفة.
@@ -276,6 +288,7 @@ const App = () => {
   exerciseCount: 10,
   kind: "basic",
 },
+
 ```
 
 فسنرى فوراً خطأً في المحرّر:
@@ -309,6 +322,7 @@ interface CoursePartBackground extends CoursePartBase {
 }
 
 type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+
 ```
 
 ### المزيد من تضييق الأنواع
@@ -352,13 +366,14 @@ type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
 لاحظ أن التضييق يمكن بطبيعة الحال أن يجري أيضاً باستخدام جملة&nbsp;<em>if</em>. فيمكننا مثلاً فعل ما يلي:
 
 ```
-  courseParts.forEach(part =&gt; {
+  courseParts.forEach(part => {
     if (part.kind === 'background') {
       console.log('see the following:', part.backgroundMaterial)
     }
 
     // لا يمكن الإشارة إلى part.backgroundMaterial هنا!
   });
+
 ```
 
 ماذا عن إضافة أنواع جديدة؟ لو أردنا إضافة جزء دورة جديد، ألن يكون من الجيد أن نعرف ما إذا كنا قد نفّذنا بالفعل التعامل مع ذلك النوع في شيفرتنا؟ في المثال أعلاه، سيذهب النوع الجديد إلى كتلة&nbsp;<em>default</em>&nbsp;ولن يُطبع أي شيء للنوع الجديد. هذا مقبول تماماً أحياناً. فمثلاً، إذا أردت التعامل مع حالات محددة فقط (وليست كلها) من اتحاد أنواع، فوجود default أمر لا بأس به. ومع ذلك، يُوصى في معظم الحالات بالتعامل مع كل التباينات بشكل منفصل.
@@ -371,11 +386,12 @@ type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
 /**
  * دالة مساعدة للفحص الشامل للأنواع
  */
-const assertNever = (value: never): never =&gt; {
+const assertNever = (value: never): never => {
   throw new Error(
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
 };
+
 ```
 
 إذا استبدلنا الآن محتوى كتلة&nbsp;<em>default</em>&nbsp;لدينا بما يلي:
@@ -383,6 +399,7 @@ const assertNever = (value: never): never =&gt; {
 ```js
 default:
   return assertNever(part);
+
 ```
 
 وأزلنا الحالة التي تتعامل مع النوع <em>CoursePartBackground</em>، فسنرى الخطأ التالي:
@@ -393,6 +410,7 @@ default:
 
 ```
 'CoursePartBackground' is not assignable to parameter of type 'never'.
+
 ```
 
 وهو ما يخبرنا بأننا نستخدم متغيراً في موضع لا ينبغي أن يُستخدم فيه أبداً. وهذا يخبرنا بأن هناك شيئاً يحتاج إلى إصلاح.
@@ -412,12 +430,13 @@ default:
 ```js
 import { useState } from 'react';
 
-const App = () =&gt; {
+const App = () => {
   const [newNote, setNewNote] = useState('');
   const [notes, setNotes] = useState([]);
 
   return null
 }
+
 ```
 
 عندما نمرّر مؤشر الفأرة فوق استدعاءات&nbsp;<em>useState</em>&nbsp;في المحرّر، نلاحظ أمرين مثيرين للاهتمام.
@@ -425,26 +444,30 @@ const App = () =&gt; {
 يبدو نوع الاستدعاء الأول&nbsp;<em>useState('')</em>&nbsp;هكذا:
 
 ```ts
-useState&lt;string&gt;(initialState: string | (() =&gt; string)):
-  [string, React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;]
+useState<string>(initialState: string | (() => string)):
+  [string, React.Dispatch<React.SetStateAction<string>>]
+
 ```
 
 النوع صعب الفكّ إلى حد ما. وله «الشكل» التالي:
 
 ```
 functionName(parameters): return_value
+
 ```
 
 إذن نلاحظ أن مترجم TypeScript استنتج أن الحالة الأولية إما نص أو دالة تُعيد نصاً:
 
 ```ts
-initialState: string | (() =&gt; string))
+initialState: string | (() => string))
+
 ```
 
 ونوع المصفوفة المُعادة هو التالي:
 
 ```
-[string, React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;]
+[string, React.Dispatch<React.SetStateAction<string>>]
+
 ```
 
 إذن العنصر الأول، المُسنَد إلى&nbsp;<em>newNote</em>، هو نص، والعنصر الثاني الذي أسنَدناه إلى&nbsp;<em>setNewNote</em>&nbsp;له نوع أكثر تعقيداً قليلاً. نلاحظ أن هناك ذكراً لنص ما، لذا نعرف أنه لا بد أن يكون نوع دالة تضبط بيانات ذات قيمة. انظر&nbsp;<a href="https://codewithstyle.info/Using-React-useState-hook-with-TypeScript/" target="_blank" rel="noreferrer noopener">هنا</a>&nbsp;إذا أردت معرفة المزيد عن أنواع دالة useState.
@@ -454,8 +477,9 @@ initialState: string | (() =&gt; string))
 وعندما ننظر إلى useState الثاني الذي له القيمة الأولية&nbsp;<em>[]</em>&nbsp;، يبدو النوع مختلفاً تماماً
 
 ```
-useState&lt;never[]&gt;(initialState: never[] | (() =&gt; never[])):
-  [never[], React.Dispatch&lt;React.SetStateAction&lt;never[]&gt;&gt;]
+useState<never[]>(initialState: never[] | (() => never[])):
+  [never[], React.Dispatch<React.SetStateAction<never[]>>]
+
 ```
 
 تستطيع TypeScript فقط استنتاج أن الحالة من النوع&nbsp;<em>never[]</em>، فهي مصفوفة لكن ليس لديها أي فكرة عن العناصر المخزَّنة فيها، لذا من الواضح أننا نحتاج إلى مساعدة المترجم وتقديم النوع صراحةً.
@@ -469,19 +493,22 @@ interface Note {
   id: string,
   content: string
 }
+
 ```
 
 الحل الآن بسيط:
 
 ```js
-const [notes, setNotes] = useState&lt;Note[]&gt;([]);
+const [notes, setNotes] = useState<Note[]>([]);
+
 ```
 
 وبالفعل، ضُبط النوع بشكل صحيح:
 
 ```
-useState&lt;Note[]&gt;(initialState: Note[] | (() =&gt; Note[])):
-  [Note[], React.Dispatch&lt;React.SetStateAction&lt;Note[]&gt;&gt;]
+useState<Note[]>(initialState: Note[] | (() => Note[])):
+  [Note[], React.Dispatch<React.SetStateAction<Note[]>>]
+
 ```
 
 إذن، بمصطلحات تقنية، useState هي&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#working-with-generic-type-variables" target="_blank" rel="noreferrer noopener">دالة عامة</a>&nbsp;(generic function)، حيث يجب تحديد النوع كـ<em>وسيط نوع</em>&nbsp;في الحالات التي لا يستطيع فيها المترجم استنتاج النوع.
@@ -497,53 +524,55 @@ interface Note {
 import { useState } from "react";
 
 const App = () => {
-  const [notes, setNotes] = useState&lt;Note[]>([
-    { id: '1', content: 'testing' } // HIGHLIGHT LINE
+  const [notes, setNotes] = useState<Note[]>([
+    { id: '1', content: 'testing' }
   ]);
   const [newNote, setNewNote] = useState('');
 
   return (
-    &lt;div>
-      &lt;ul>
-// BEGIN HIGHLIGHT
+    <div>
+      <ul>
+
         {notes.map(note =>
-          &lt;li key={note.id}>{note.content}&lt;/li>
+          <li key={note.id}>{note.content}</li>
         )}
-// END HIGHLIGHT
-      &lt;/ul>
-    &lt;/div>
+
+      </ul>
+    </div>
   )
 }
+
 ```
 
 المهمة التالية هي إضافة نموذج يتيح إنشاء ملاحظات جديدة:
 
 ```js
 const App = () => {
-  const [notes, setNotes] = useState&lt;Note[]>([
+  const [notes, setNotes] = useState<Note[]>([
     { id: 1, content: 'testing' }
   ]);
   const [newNote, setNewNote] = useState('');
 
   return (
-    &lt;div>
-// BEGIN HIGHLIGHT
-      &lt;form>
-        &lt;input
+    <div>
+
+      <form>
+        <input
           value={newNote}
           onChange={(event) => setNewNote(event.target.value)}
          />
-        &lt;button type='submit'>add&lt;/button>
-      &lt;/form>
-// END HIGHLIGHT
-      &lt;ul>
+        <button type='submit'>add</button>
+      </form>
+
+      <ul>
         {notes.map(note =>
-          &lt;li key={note.id}>{note.content}&lt;/li>
+          <li key={note.id}>{note.content}</li>
         )}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 إنها تعمل ببساطة، ولا توجد أي شكاوى بشأن الأنواع! وعندما نمرّر مؤشر الفأرة فوق <em>event.target.value</em>، نرى أنه نص بالفعل، وهو بالضبط ما هو متوقع لوسيط <em>setNewNote</em>:
@@ -562,18 +591,19 @@ const App = () => {
   };
 
   return (
-    &lt;div>
-      &lt;form onSubmit={noteCreation}> // HIGHLIGHT LINE
-        &lt;input
+    <div>
+      <form onSubmit={noteCreation}>
+        <input
           value={newNote}
           onChange={(event) => setNewNote(event.target.value)}
         />
-        &lt;button type='submit'>add&lt;/button>
-      &lt;/form>
+        <button type='submit'>add</button>
+      </form>
       // ...
-    &lt;/div>
+    </div>
   )
 }
+
 ```
 
 إنها لا تعمل تماماً، فهناك خطأ من ESLint يشكو من any ضمني:
@@ -591,10 +621,10 @@ interface Note {
 }
 
 const App = () => {
-  const [notes, setNotes] = useState&lt;Note[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState('');
 
-// BEGIN HIGHLIGHT
+
   const noteCreation = (event: React.SyntheticEvent) => {
     event.preventDefault()
     const noteToAdd = {
@@ -604,22 +634,23 @@ const App = () => {
     setNotes(notes.concat(noteToAdd));
     setNewNote('')
   };
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>
-      &lt;form onSubmit={noteCreation}>
-        &lt;input value={newNote} onChange={(event) => setNewNote(event.target.value)} />
-        &lt;button type='submit'>add&lt;/button>
-      &lt;/form>
-      &lt;ul>
+    <div>
+      <form onSubmit={noteCreation}>
+        <input value={newNote} onChange={(event) => setNewNote(event.target.value)} />
+        <button type='submit'>add</button>
+      </form>
+      <ul>
         {notes.map(note =>
-          &lt;li key={note.id}>{note.content}&lt;/li>
+          <li key={note.id}>{note.content}</li>
         )}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 وهذا كل شيء، تطبيقنا جاهز ومُنمّط بإتقان!
@@ -646,6 +677,7 @@ const App = () => {
   }, [])
   // ...
 }
+
 ```
 
 عندما نمرّر مؤشر الفأرة فوق <em>response.data</em> نرى أن نوعه <em>any</em>
@@ -658,10 +690,11 @@ const App = () => {
 
 ```
   useEffect(() => {
-    axios.get&lt;Note[]>('http://localhost:3001/notes').then(response => {
+    axios.get<Note[]>('http://localhost:3001/notes').then(response => {
       console.log(response.data);
     })
   }, [])
+
 ```
 
 عندما نمرّر مؤشر الفأرة فوق response.data نرى أن نوعه صحيح:
@@ -672,10 +705,11 @@ const App = () => {
 
 ```
   useEffect(() => {
-    axios.get&lt;Note[]>('http://localhost:3001/notes').then(response => {
+    axios.get<Note[]>('http://localhost:3001/notes').then(response => {
       setNotes(response.data)
     })
   }, [])
+
 ```
 
 إذن، تماماً كما في حالة&nbsp;<em>useState</em>، أعطينا وسيط نوع إلى&nbsp;<em>axios.get</em>&nbsp;لنوجّهه إلى كيفية إجراء التنميط. وتماماً مثل&nbsp;<em>useState</em>، فإن&nbsp;<em>axios.get</em>&nbsp;أيضاً&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#working-with-generic-type-variables" target="_blank" rel="noreferrer noopener">دالة عامة</a>. وعلى عكس بعض الدوال العامة، فإن وسيط النوع في&nbsp;<em>axios.get</em>&nbsp;له قيمة افتراضية هي&nbsp;<em>any</em>&nbsp;، لذا إذا استُخدمت الدالة دون تعريف وسيط النوع، فسيكون نوع بيانات الاستجابة any.
@@ -691,6 +725,7 @@ const App = () => {
       setNotes(response.data as Note[])
     })
   }, [])
+
 ```
 
 بما أن أنواع TypeScript لا وجود لها حتى وقت التشغيل، فشيفرتنا لا تمنحنا أي أمان ضد الحالات التي يحتوي فيها جسم الطلب على بيانات بشكل خاطئ.
@@ -702,14 +737,15 @@ const App = () => {
 ```js
   const noteCreation = (event: React.SyntheticEvent) => {
     event.preventDefault()
-// BEGIN HIGHLIGHT
-    axios.post&lt;Note>('http://localhost:3001/notes', { content: newNote })
+
+    axios.post<Note>('http://localhost:3001/notes', { content: newNote })
       .then(response => {
         setNotes(notes.concat(response.data))
       })
-// END HIGHLIGHT
+
     setNewNote('')
   };
+
 ```
 
 نمنح&nbsp;<em>axios.post</em>&nbsp;مرة أخرى وسيط نوع. نحن نعلم أن استجابة الخادم هي الملاحظة المضافة، لذا فوسيط النوع المناسب هو&nbsp;<em>Note</em>.
@@ -722,7 +758,8 @@ export interface Note {
   content: string
 }
 
-export type NewNote = Omit&lt;Note, 'id'&gt;
+export type NewNote = Omit<Note, 'id'>
+
 ```
 
 أضفنا نوعاً جديداً لـ<em>ملاحظة جديدة</em>، وهي ملاحظة لم يُسنَد إليها حقل <em>id</em> بعد.
@@ -737,17 +774,18 @@ const baseUrl = 'http://localhost:3001/notes'
 
 const getAll = () => {
   return axios
-    .get&lt;Note[]>(baseUrl)
+    .get<Note[]>(baseUrl)
     .then(response => response.data)
 }
 
 const create = (object: NewNote) => {
   return axios
-    .post&lt;Note>(baseUrl, object)
+    .post<Note>(baseUrl, object)
     .then(response => response.data)
 }
 
 export default { getAll, create }
+
 
 ```
 
@@ -759,7 +797,7 @@ import type { Note } from './types'
 import noteService from './noteService'
 
 const App = () => {
-  const [notes, setNotes] = useState&lt;Note[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState('');
 
   useEffect(() => {
@@ -784,6 +822,7 @@ const App = () => {
 
 export default App
 
+
 ```
 
 أصبح التطبيق الآن مُنمّطاً بشكل جيد وجاهزاً لمزيد من التطوير!
@@ -802,6 +841,7 @@ interface DiaryEntry {
   visibility: Visibility;
   comment?: string;
 }
+
 ```
 
 وفي جزء الدورة في هذا القسم
@@ -811,6 +851,7 @@ interface CoursePartBase {
   name: string;
   exerciseCount: number;
 }
+
 ```
 
 كان يمكننا فعلاً تحقيق الأثر نفسه باستخدام&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases" target="_blank" rel="noreferrer noopener">اسم مستعار للنوع</a>&nbsp;(type alias)
@@ -823,6 +864,7 @@ type DiaryEntry = {
   visibility: Visibility;
   comment?: string;
 }
+
 ```
 
 في معظم الحالات، يمكنك استخدام <em>type</em> أو <em>interface</em>، أيّهما شئت من الصياغتين. غير أن هناك بعض الأمور التي ينبغي وضعها في الاعتبار. فمثلاً، إذا عرّفت عدة واجهات (interfaces) بالاسم نفسه، فستؤدي إلى واجهة مدموجة، بينما إذا حاولت تعريف عدة أنواع بالاسم نفسه، فسيؤدي ذلك إلى خطأ يفيد بأن نوعاً بالاسم نفسه مُعلَن بالفعل.

@@ -45,6 +45,7 @@ const addNote = event => {
     })
 // highlight-end
 }
+
 ```
 
 ننشئ كائناً جديداً للملاحظة لكننا نحذف خاصية <i>id</i> لأن من الأفضل أن نترك للخادم توليد المعرّفات لمواردنا.
@@ -92,6 +93,7 @@ const addNote = event => {
       // highlight-end
     })
 }
+
 ```
 
 تُضاف الملاحظة الجديدة التي أعادها الخادم الخلفي إلى قائمة الملاحظات في حالة تطبيقنا بالطريقة المعتادة باستخدام الدالة <em>setNotes</em> ثم إعادة ضبط نموذج إنشاء الملاحظة. ومن [التفاصيل المهمة](/part1/a_more_complex_state_debugging_react_apps#handling-arrays) التي ينبغي تذكّرها أن طريقة <em>concat</em> لا تغيّر الحالة الأصلية للمكوّن، بل تنشئ نسخة جديدة من القائمة.
@@ -126,6 +128,7 @@ const Note = ({ note, toggleImportance }) => {
     </li>
   )
 }
+
 ```
 
 نضيف زراً إلى المكوّن ونسند إليه معالج الحدث وهو الدالة <em>toggleImportance</em> الممرَّرة في props الخاصة بالمكوّن.
@@ -161,7 +164,7 @@ const App = () => {
           <Note
             key={note.id}
             note={note} 
-            toggleImportance={() => toggleImportanceOf(note.id)} // highlight-line
+            toggleImportance={() => toggleImportanceOf(note.id)}
           />
         )}
       </ul>
@@ -169,6 +172,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 لاحظ كيف تتلقى كل ملاحظة دالة معالج حدث <i>فريدة</i> خاصة بها بما أن <i>id</i> كل ملاحظة فريد.
@@ -177,18 +181,21 @@ const App = () => {
 
 ```js
 () => { console.log('importance of 3 needs to be toggled') }
+
 ```
 
 تذكير قصير هنا. النص الذي يطبعه معالج الحدث معرَّف بأسلوب شبيه بـJava عبر جمع النصوص:
 
 ```js
 console.log('importance of ' + id + ' needs to be toggled')
+
 ```
 
 يمكن استخدام صياغة [سلاسل القوالب](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) المضافة في ES6 لكتابة نصوص مشابهة بطريقة أجمل بكثير:
 
 ```js
 console.log(`importance of ${id} needs to be toggled`)
+
 ```
 
 يمكننا الآن استخدام صياغة «علامة الدولار بين قوسين» لإضافة أجزاء إلى النص تُقيّم تعبيرات JavaScript، مثل قيمة متغير. لاحظ أننا نستخدم علامات الاقتباس الخلفية (backticks) في سلاسل القوالب بدلاً من علامات الاقتباس المستخدمة في نصوص JavaScript العادية.
@@ -207,6 +214,7 @@ const toggleImportanceOf = id => {
     setNotes(notes.map(note => note.id === id ? response.data : note))
   })
 }
+
 ```
 
 تحتوي كل سطر تقريباً من الشيفرة في جسم الدالة على تفاصيل مهمة. يعرّف السطر الأول عنوان URL الفريد لكل مورد ملاحظة بناءً على معرّفه.
@@ -219,6 +227,7 @@ const toggleImportanceOf = id => {
 
 ```js
 const changedNote = { ...note, important: !note.important }
+
 ```
 
 عملياً، ينشئ <em>{ ...note }</em> كائناً جديداً يحتوي على نسخ من جميع خصائص كائن _note_. وعندما نضيف خصائص داخل الأقواس المعقوصة بعد كائن النشر، مثل <em>{ ...note, important: true }</em>، فستكون قيمة خاصية _important_ في الكائن الجديد هي _true_. وفي مثالنا، تحصل خاصية <em>important</em> على نفي قيمتها السابقة في الكائن الأصلي.
@@ -231,6 +240,7 @@ note.important = !note.important
 
 axios.put(url, note).then(response => {
   // ...
+
 ```
 
 هذا غير مُوصى به لأن المتغير <em>note</em> مرجع إلى عنصر في مصفوفة <em>notes</em> الموجودة في حالة المكوّن، وكما نتذكر يجب [ألا نغيّر الحالة مباشرة أبداً](https://react.dev/learn/updating-objects-in-state#why-is-mutating-state-not-recommended-in-react) في React.
@@ -245,12 +255,14 @@ axios.put(url, note).then(response => {
 axios.put(url, changedNote).then(response => {
   setNotes(notes.map(note => note.id === id ? response.data : note))
 })
+
 ```
 
 ويتحقق هذا بطريقة <em>map</em>:
 
 ```js
 notes.map(note => note.id === id ? response.data : note)
+
 ```
 
 تنشئ طريقة map مصفوفة جديدة بتحويل كل عنصر من المصفوفة القديمة إلى عنصر في المصفوفة الجديدة. وفي مثالنا، تُنشأ المصفوفة الجديدة شرطياً بحيث إذا كانت <em>note.id === id</em> صحيحة، يُضاف كائن الملاحظة الذي أعاده الخادم إلى المصفوفة. وإذا كان الشرط خاطئاً، فحينها ننسخ العنصر ببساطة من المصفوفة القديمة إلى المصفوفة الجديدة بدلاً من ذلك.
@@ -284,6 +296,7 @@ export default {
   create: create, 
   update: update 
 }
+
 ```
 
 تعيد الوحدة كائناً له ثلاث دوال (<i>getAll</i> و<i>create</i> و<i>update</i>) كخصائص تتعامل مع الملاحظات. وتعيد الدوال مباشرةً الـpromises التي تعيدها طرق axios.
@@ -291,9 +304,10 @@ export default {
 يستخدم مكوّن <i>App</i> العبارة <em>import</em> للوصول إلى الوحدة:
 
 ```js
-import noteService from './services/notes' // highlight-line
+import noteService from './services/notes'
 
 const App = () => {
+
 ```
 
 يمكن استخدام دوال الوحدة مباشرةً عبر المتغير المستورد _noteService_ كما يلي:
@@ -346,6 +360,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 يمكننا أن نخطو بتنفيذنا خطوة إضافية. عندما يستخدم مكوّن <i>App</i> الدوال، فإنه يتلقى كائناً يحتوي على كامل استجابة طلب HTTP:
@@ -356,6 +371,7 @@ noteService
   .then(response => {
     setNotes(response.data)
   })
+
 ```
 
 لا يستخدم مكوّن <i>App</i> سوى خاصية <i>response.data</i> من كائن الاستجابة.
@@ -368,6 +384,7 @@ noteService
   .then(initialNotes => {
     setNotes(initialNotes)
   })
+
 ```
 
 يمكننا تحقيق ذلك بتغيير الشيفرة في الوحدة كما يلي (تحتوي الشيفرة الحالية على بعض النسخ واللصق، لكننا سنتحمل ذلك في الوقت الحالي):
@@ -396,6 +413,7 @@ export default {
   create: create, 
   update: update 
 }
+
 ```
 
 لم نعد نعيد الـpromise الذي يعيده axios مباشرةً. بل نسند الـpromise إلى المتغير <em>request</em> ونستدعي طريقته <em>then</em>:
@@ -405,6 +423,7 @@ const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
+
 ```
 
 السطر الأخير في الدالة هو ببساطة تعبير أكثر إيجازاً عن الشيفرة نفسها كما هو موضح أدناه:
@@ -418,6 +437,7 @@ const getAll = () => {
   })
   // highlight-end
 }
+
 ```
 
 تظل دالة <em>getAll</em> المعدَّلة تعيد promise، لأن طريقة <em>then</em> الخاصة بالـpromise [تعيد بدورها promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then).
@@ -472,6 +492,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 هذا كله معقّد بعض الشيء، ومحاولة شرحه قد تزيده صعوبة في الفهم فحسب. والإنترنت مليء بالمواد التي تناقش الموضوع، مثل [هذه المادة](https://javascript.info/promise-chaining).
@@ -510,6 +531,7 @@ export default {
   create: create, 
   update: update 
 }
+
 ```
 
 تصدّر الوحدة الكائن التالي الذي يبدو غريباً بعض الشيء:
@@ -520,6 +542,7 @@ export default {
   create: create, 
   update: update 
 }
+
 ```
 
 التسميات إلى يسار النقطتين في تعريف الكائن هي <i>مفاتيح</i> الكائن، أما التسميات إلى يمينها فهي <i>متغيرات</i> معرَّفة داخل الوحدة.
@@ -532,6 +555,7 @@ export default {
   create, 
   update 
 }
+
 ```
 
 ونتيجة لذلك، يُبسَّط تعريف الوحدة إلى الشكل التالي:
@@ -555,7 +579,8 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update } // highlight-line
+export default { getAll, create, update }
+
 ```
 
 في تعريف الكائن بهذه الصياغة الأقصر، نستفيد من [ميزة جديدة](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Property_definitions) أُدخلت إلى JavaScript عبر ES6، وتتيح طريقة أكثر إيجازاً قليلاً لتعريف الكائنات باستخدام المتغيرات.
@@ -565,6 +590,7 @@ export default { getAll, create, update } // highlight-line
 ```js
 const name = 'Leevi'
 const age = 0
+
 ```
 
 في الإصدارات الأقدم من JavaScript كان علينا تعريف الكائن هكذا:
@@ -574,12 +600,14 @@ const person = {
   name: name,
   age: age
 }
+
 ```
 
 لكن بما أن حقول الخصائص وأسماء المتغيرات في الكائن متطابقة، يكفي ببساطة كتابة ما يلي في JavaScript ES6:
 
 ```js
 const person = { name, age }
+
 ```
 
 النتيجة متطابقة في كلا التعبيرين. فكلاهما ينشئ كائناً له خاصية <i>name</i> بالقيمة <i>Leevi</i> وخاصية <i>age</i> بالقيمة <i>0</i>.
@@ -600,6 +628,7 @@ const getAll = () => {
   }
   return request.then(response => response.data.concat(nonExisting))
 }
+
 ```
 
 عندما نحاول تغيير أهمية الملاحظة المضمّنة في الشيفرة، نرى رسالة الخطأ التالية في وحدة التحكم. تقول الرسالة إن الخادم الخلفي استجاب لطلب HTTP PUT برمز الحالة 404 <i>not found</i>.
@@ -625,6 +654,7 @@ axios
   .catch(error => {
     console.log('fail')
   })
+
 ```
 
 إذا فشل الطلب، يُستدعى معالج الحدث المسجَّل بواسطة طريقة <em>catch</em>.
@@ -640,6 +670,7 @@ axios
   .then(data => {
     // ...
   })
+
 ```
 
 يمكن استخدام طريقة <em>catch</em> لتعريف دالة معالج في نهاية سلسلة promises، تُستدعى بمجرد أن يطرح أي promise في السلسلة خطأً ويصبح الـpromise <i>مرفوضاً</i>.
@@ -654,6 +685,7 @@ axios
   .catch(error => {
     console.log('fail')
   })
+
 ```
 
 لنستفد من هذه الميزة. سنضع معالج الأخطاء الخاص بتطبيقنا في مكوّن <i>App</i>:
@@ -676,6 +708,7 @@ const toggleImportanceOf = id => {
     })
     // highlight-end
 }
+
 ```
 
 تُعرض رسالة الخطأ للمستخدم عبر نافذة الحوار [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert) القديمة الموثوقة، وتُستبعد الملاحظة المحذوفة من الحالة.
@@ -684,6 +717,7 @@ const toggleImportanceOf = id => {
 
 ```js
 notes.filter(n => n.id !== id)
+
 ```
 
 ربما ليست فكرة جيدة استخدام alert في تطبيقات React الأكثر جدية. وسنتعلم قريباً طريقة أكثر تقدماً لعرض الرسائل والإشعارات للمستخدمين. غير أن هناك حالات يمكن فيها لطريقة بسيطة ومجرَّبة مثل <em>alert</em> أن تعمل كنقطة انطلاق. ويمكن دائماً إضافة طريقة أكثر تقدماً لاحقاً، إذا توفر الوقت والطاقة لذلك.
@@ -741,6 +775,7 @@ notes.filter(n => n.id !== id)
 const delete = (id) => {
   // ...
 }
+
 ```
 
 <h4>2.15*: دفتر الهاتف، الخطوة 10</h4>

@@ -29,6 +29,7 @@ lang: ar
 
 ```bash
 npm install jsonwebtoken
+
 ```
 
 تذهب شيفرة وظيفة تسجيل الدخول إلى الملف <i>controllers/login.js</i>.
@@ -66,12 +67,14 @@ loginRouter.post('/', async (request, response) => {
 })
 
 module.exports = loginRouter
+
 ```
 
 تبدأ الشيفرة بالبحث عن المستخدم في قاعدة البيانات بواسطة <i>username</i> المرفق بالطلب.
 
 ```js
 const user = await User.findOne({ username })
+
 ```
 
 ثم تتحقق من <i>password</i> المرفقة هي أيضاً بالطلب.
@@ -80,12 +83,14 @@ const user = await User.findOne({ username })
 const passwordCorrect = user === null
   ? false
   : await bcrypt.compare(password, user.passwordHash)
+
 ```
 
 ولأن كلمات المرور نفسها لا تُحفظ في قاعدة البيانات، بل <i>تجزئات</i> (hashes) محسوبة منها، تُستخدم الدالة _bcrypt.compare_ للتحقق من صحة كلمة المرور:
 
 ```js
 await bcrypt.compare(password, user.passwordHash)
+
 ```
 
 إذا لم يُعثر على المستخدم، أو كانت كلمة المرور غير صحيحة، تُستجاب الطلب برمز الحالة [401 unauthorized](https://www.rfc-editor.org/rfc/rfc9110.html#name-401-unauthorized). ويُشرح سبب الفشل في جسم الاستجابة.
@@ -96,6 +101,7 @@ if (!(user && passwordCorrect)) {
     error: 'invalid username or password'
   })
 }
+
 ```
 
 إذا كانت كلمة المرور صحيحة، يُنشأ رمز بالدالة _jwt.sign_. يحتوي الرمز على اسم المستخدم ومعرّف المستخدم بصيغة موقَّعة رقمياً.
@@ -107,6 +113,7 @@ const userForToken = {
 }
 
 const token = jwt.sign(userForToken, process.env.SECRET)
+
 ```
 
 وُقِّع الرمز رقمياً باستخدام نص من متغير البيئة <i>SECRET</i> بوصفه <i>السر</i>.
@@ -119,6 +126,7 @@ const token = jwt.sign(userForToken, process.env.SECRET)
 response
   .status(200)
   .send({ token, username: user.username, name: user.name })
+
 ```
 
 يبقى الآن أن تُضاف شيفرة تسجيل الدخول إلى التطبيق بإدراج الموجّه الجديد في <i>app.js</i>.
@@ -129,6 +137,7 @@ const loginRouter = require('./controllers/login')
 //...
 
 app.use('/api/login', loginRouter)
+
 ```
 
 لنجرّب تسجيل الدخول باستخدام عميل REST في VS Code:
@@ -142,6 +151,7 @@ app.use('/api/login', loginRouter)
     at Object.module.exports [as sign] (/Users/mluukkai/opetus/_2019fullstack-koodit/osa3/notes-backend/node_modules/jsonwebtoken/sign.js:101:20)
     at loginRouter.post (/Users/mluukkai/opetus/_2019fullstack-koodit/osa3/notes-backend/controllers/login.js:26:21)
 (node:32911) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+
 ```
 
 يفشل الأمر _jwt.sign(userForToken, process.env.SECRET)_. نسينا ضبط قيمة لمتغير البيئة <i>SECRET</i>. ويمكن أن يكون أي نص. وعندما نضبط القيمة في ملف <i>.env</i> (ونعيد تشغيل الخادم)، يعمل تسجيل الدخول.
@@ -167,12 +177,13 @@ app.use('/api/login', loginRouter)
 
 ```
 Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
+
 ```
 
 سيتغيّر إنشاء الملاحظات الجديدة على النحو التالي (<i>controllers/notes.js</i>):
 
 ```js
-const jwt = require('jsonwebtoken') //highlight-line
+const jwt = require('jsonwebtoken')
 
 // ...
   //highlight-start
@@ -212,12 +223,14 @@ notesRouter.post('/', async (request, response) => {
 
   response.status(201).json(savedNote)
 })
+
 ```
 
 تعزل الدالة المساعدة _getTokenFrom_ الرمز من ترويسة <i>authorization</i>. ويُتحقق من صلاحية الرمز بالدالة _jwt.verify_. كما تفك هذه الدالة ترميز الرمز، أي تعيد الكائن الذي بُني عليه الرمز.
 
 ```js
 const decodedToken = jwt.verify(token, process.env.SECRET)
+
 ```
 
 إذا كان الرمز مفقوداً أو غير صالح، يُطلق الاستثناء <i>JsonWebTokenError</i>. نحتاج إلى توسيع وسيط معالجة الأخطاء ليتعامل مع هذه الحالة تحديداً:
@@ -230,12 +243,13 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ error: error.message })
   } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
     return response.status(400).json({ error: 'expected `username` to be unique' })
-  } else if (error.name ===  'JsonWebTokenError') { // highlight-line
-    return response.status(401).json({ error: 'token invalid' }) // highlight-line
+  } else if (error.name ===  'JsonWebTokenError') {
+    return response.status(401).json({ error: 'token invalid' })
   }
 
   next(error)
 }
+
 ```
 
 يحتوي الكائن المفكوك من الرمز على الحقلين <i>username</i> و<i>id</i>، وهما يخبران الخادم بمن أجرى الطلب.
@@ -248,6 +262,7 @@ if (!decodedToken.id) {
     error: 'token invalid'
   })
 }
+
 ```
 
 وعندما تُحدَّد هوية مُجري الطلب، يستمر التنفيذ كما كان سابقاً.
@@ -305,6 +320,7 @@ loginRouter.post('/', async (request, response) => {
     .status(200)
     .send({ token, username: user.username, name: user.name })
 })
+
 ```
 
 بمجرد انتهاء صلاحية الرمز، يحتاج تطبيق العميل إلى الحصول على رمز جديد. ويحدث هذا عادةً بإجبار المستخدم على إعادة تسجيل الدخول إلى التطبيق.
@@ -337,6 +353,7 @@ const errorHandler = (error, request, response, next) => {
 
   next(error)
 }
+
 ```
 
 كلما قصرت مدة الانتهاء، كان الحل أكثر أماناً. فإذا وقع الرمز في أيدٍ غير أمينة أو لزم سحب وصول المستخدم إلى النظام، فلا يكون الرمز قابلاً للاستخدام إلا لمدة محدودة. غير أن مدة الانتهاء القصيرة قد تكون مصدر إزعاج للمستخدم، لأنها تتطلب منه تسجيل الدخول بتكرار أكبر.
@@ -375,6 +392,7 @@ const errorHandler = (error, request, response, next) => {
 
 ```bash
 npm uninstall bcrypt 
+
 ```
 
 وثبّت [bcryptjs](https://www.npmjs.com/package/bcryptjs) بدلاً منها.
@@ -430,6 +448,7 @@ npm uninstall bcrypt
 
 ```js
 app.use(middleware.tokenExtractor)
+
 ```
 
 يمكن للمسارات الوصول إلى الرمز عبر _request.token_:
@@ -440,6 +459,7 @@ blogsRouter.post('/', async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   // ..
 })
+
 ```
 
 تذكّر أن [دالة الوسيط](/part3/node_js_and_express#middleware) العادية دالة بثلاثة معاملات، تستدعي في النهاية المعامل الأخير <i>next</i> لنقل التحكم إلى الوسيط التالي:
@@ -450,6 +470,7 @@ const tokenExtractor = (request, response, next) => {
 
   next()
 }
+
 ```
 
 #### 4.21*: توسيع قائمة المدونات، الخطوة 9
@@ -462,12 +483,14 @@ const tokenExtractor = (request, response, next) => {
 
 ```js
 const blog = await Blog.findById(...)
+
 ```
 
 فإن الحقل <i>blog.user</i> لا يحتوي نصاً، بل كائناً. لذا إذا أردت مقارنة معرّف الكائن المجلوب من قاعدة البيانات بمعرّف نصي، فلن تنجح عملية مقارنة عادية. ويجب أولاً تحويل المعرّف المجلوب من قاعدة البيانات إلى نص.
 
 ```js
 if ( blog.user.toString() === userid.toString() ) ...
+
 ```
 
 #### 4.22*: توسيع قائمة المدونات، الخطوة 10
@@ -488,26 +511,29 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const user = request.user
   // ..
 })
+
 ```
 
 لاحظ أن وسيط userExtractor سُجِّل في هذه الحالة مع مسارات فردية، لذا لا يُنفَّذ إلا في حالات معينة. فبدلاً من استخدام _userExtractor_ مع جميع المسارات،
 
 ```js
 // استخدم الوسيط في جميع المسارات
-app.use(middleware.userExtractor) // highlight-line
+app.use(middleware.userExtractor)
 
 app.use('/api/blogs', blogsRouter)  
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+
 ```
 
 يمكننا تسجيله بحيث لا يُنفَّذ إلا مع مسارات <i>/api/blogs</i>:
 
 ```js
 // استخدم الوسيط فقط في مسارات /api/blogs
-app.use('/api/blogs', middleware.userExtractor, blogsRouter) // highlight-line
+app.use('/api/blogs', middleware.userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+
 ```
 
 ويُفعل هذا بربط دوال وسيط متعددة كمعاملات للدالة <i>use</i>. وبالطريقة نفسها، يمكن أيضاً تسجيل الوسيط لمسارات فردية فقط:
@@ -516,6 +542,7 @@ app.use('/api/login', loginRouter)
 router.post('/', userExtractor, async (request, response) => {
   // ...
 })
+
 ```
 
 تأكد من أن جلب جميع المدونات بطلب GET ما يزال يعمل دون رمز.

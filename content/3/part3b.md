@@ -13,7 +13,7 @@ lang: ar
 
 ```js
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/notes' //highlight-line
+const baseUrl = 'http://localhost:3001/api/notes'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -23,6 +23,7 @@ const getAll = () => {
 // ...
 
 export default { getAll, create, update }
+
 ```
 
 الآن طلب GET من الواجهة الأمامية إلى <http://localhost:3001/api/notes> لا يعمل لسبب ما:
@@ -41,6 +42,7 @@ http://example.com:80/index.html
 protocol: http
 host: example.com
 port: 80
+
 ```
 
 عندما تزور موقعاً إلكترونياً (مثل <http://example.com>)، يُرسل المتصفح طلباً إلى الخادم الذي يُستضاف عليه الموقع (example.com). الاستجابة التي يرسلها الخادم هي ملف HTML قد يحتوي على مرجع واحد أو أكثر إلى أصول أو موارد خارجية مستضافة إما على الخادم نفسه الذي يُستضاف عليه <i>example.com</i> أو على موقع آخر. عندما يرى المتصفح مرجعاً أو مراجع إلى عنوان URL في HTML المصدر، يُرسل طلباً. إذا أُرسل الطلب باستخدام عنوان URL نفسه الذي جُلب منه HTML المصدر، فسيعالج المتصفح الاستجابة دون أي مشاكل. أما إذا جُلب المورد باستخدام عنوان URL لا يشارك الأصل نفسه (المخطط، المضيف، المنفذ) مع HTML المصدر، فسيتعين على المتصفح فحص ترويسة الاستجابة _Access-Control-Allow-origin_. وإذا احتوت على _*_ أو على عنوان URL الخاص بـ HTML المصدر، فسيعالج المتصفح الاستجابة، وإلا فسيرفض معالجتها ويرمي خطأً.
@@ -61,6 +63,7 @@ port: 80
 
 ```bash
 npm install cors
+
 ```
 
 خُذ الوسيط لاستخدامه واسمح بالطلبات من جميع الأصول:
@@ -69,6 +72,7 @@ npm install cors
 const cors = require('cors')
 
 app.use(cors())
+
 ```
 
 **ملاحظة:** عند تمكين cors، ينبغي أن تفكر في كيفية إعداده. في حالة تطبيقنا، وبما أنه لا يُتوقع أن تكون الواجهة الخلفية مرئية للعامة في بيئة الإنتاج، فقد يكون من المنطقي أكثر تمكين cors من أصل محدد فقط (مثل الواجهة الأمامية).
@@ -106,10 +110,11 @@ app.use(cors())
 بالنسبة لكل من Fly.io وRender، علينا تغيير تعريف المنفذ الذي يستخدمه تطبيقنا في أسفل ملف <i>index.js</i> في الواجهة الخلفية كما يلي:
 
 ```js
-const PORT = process.env.PORT || 3001  // highlight-line
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 نستخدم الآن المنفذ المعرّف في [متغير البيئة](https://en.wikipedia.org/wiki/Environment_variable) _PORT_ أو المنفذ 3001 إذا كان متغير البيئة _PORT_ غير معرّف. من الممكن إعداد منفذ التطبيق بناءً على متغير البيئة في كل من Fly.io وRender.
@@ -124,6 +129,7 @@ app.listen(PORT, () => {
 
 ```bash
 fly auth login
+
 ```
 
 لاحظ أنه إذا لم يعمل الأمر _fly_ على جهازك، يمكنك تجربة الصيغة الأطول _flyctl_. مثلاً على MacOS، تعمل كلتا صيغتَي الأمر.
@@ -134,6 +140,7 @@ fly auth login
 
 ```bash
 fly launch --no-deploy
+
 ```
 
 أعطِ التطبيق اسماً أو دع Fly.io تولّد واحداً تلقائياً. اختر منطقة سيُشغَّل فيها التطبيق. لا تُنشئ قاعدة بيانات Postgres للتطبيق ولا تُنشئ قاعدة بيانات Upstash Redis، لأنها غير مطلوبة.
@@ -153,6 +160,7 @@ fly launch --no-deploy
   auto_start_machines = true
   min_machines_running = 0
   processes = ["app"]
+
 ```
 
 لقد عرّفنا الآن في القسم [env] أن متغير البيئة PORT سيحصل على المنفذ الصحيح (المعرّف في القسم [http_service]) الذي ينبغي أن ينشئ التطبيق الخادم عليه.
@@ -161,12 +169,14 @@ fly launch --no-deploy
 
 ```bash
 fly deploy
+
 ```
 
 إذا سار كل شيء على ما يرام، ينبغي أن يكون التطبيق الآن يعمل. يمكنك فتحه في المتصفح بالأمر
 
 ```bash
 fly apps open
+
 ```
 
 من الأوامر المهمة بشكل خاص _fly logs_. يمكن استخدام هذا الأمر لعرض سجلات الخادم. من الأفضل إبقاء السجلات ظاهرة دائماً!
@@ -177,6 +187,7 @@ fly apps open
 
 ```bash
 flyctl ping -o personal
+
 ```
 
 فلن يتمكن حاسوبك لسبب ما من الاتصال بـ Fly.io. إذا حدث لك هذا، [هذا الرابط](https://github.com/fullstack-hy2020/misc/blob/master/fly_io_problem.md) يصف طريقة ممكنة للمتابعة.
@@ -189,6 +200,7 @@ $ flyctl ping -o personal
 35 bytes from fdaa:0:8a3d::3 (gateway), seq=1 time=28.5ms
 35 bytes from fdaa:0:8a3d::3 (gateway), seq=2 time=29.3ms
 ...
+
 ```
 
 فلا توجد مشاكل في الاتصال!
@@ -197,6 +209,7 @@ $ flyctl ping -o personal
 
 ```bash
 fly deploy
+
 ```
 
 #### Render
@@ -236,10 +249,11 @@ fly deploy
 نلاحظ الآن من السجلات أن التطبيق بدأ على المنفذ 10000. تحصل شيفرة التطبيق على المنفذ الصحيح عبر متغير البيئة PORT، لذا من الضروري أن يكون ملف <i>index.js</i> قد حُدِّث في الواجهة الخلفية كما يلي:
 
 ```js
-const PORT = process.env.PORT || 3001  // highlight-line
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 ### بناء الواجهة الأمامية للإنتاج
@@ -258,6 +272,7 @@ app.listen(PORT, () => {
 
 ```js
 !function(e){function r(r){for(var n,f,i=r[0],l=r[1],a=r[2],c=0,s=[];c<i.length;c++)f=i[c],o[f]&&s.push(o[f][0]),o[f]=0;for(n in l)Object.prototype.hasOwnProperty.call(l,n)&&(e[n]=l[n]);for(p&&p(r);s.length;)s.shift()();return u.push.apply(u,a||[]),t()}function t(){for(var e,r=0;r<u.length;r++){for(var t=u[r],n=!0,i=1;i<t.length;i++){var l=t[i];0!==o[l]&&(n=!1)}n&&(u.splice(r--,1),e=f(f.s=t[0]))}return e}var n={},o={2:0},u=[];function f(r){if(n[r])return n[r].exports;var t=n[r]={i:r,l:!1,exports:{}};return e[r].call(t.exports,t,t.exports,f),t.l=!0,t.exports}f.m=e,f.c=n,f.d=function(e,r,t){f.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},f.r=function(e){"undefined"!==typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"})
+
 ```
 
 ### تقديم الملفات الثابتة من الواجهة الخلفية
@@ -268,6 +283,7 @@ app.listen(PORT, () => {
 
 ```bash
 cp -r dist ../backend
+
 ```
 
 إذا كنت تستخدم حاسوباً يعمل بـ Windows، فيمكنك استخدام الأمر [copy](https://www.windows-commandline.com/windows-copy-command-syntax-examples/) أو [xcopy](https://www.windows-commandline.com/xcopy-command-syntax-examples/) بدلاً من ذلك. وإلا فانسخ والصق ببساطة.
@@ -282,6 +298,7 @@ cp -r dist ../backend
 
 ```js
 app.use(express.static('dist'))
+
 ```
 
 فكلما تلقى Express طلب HTTP GET سيتحقق أولاً مما إذا كان مجلد <i>dist</i> يحتوي على ملف يقابل عنوان الطلب. وإذا وُجد ملف مطابق، فسيعيده Express.
@@ -292,7 +309,7 @@ app.use(express.static('dist'))
 
 ```js
 import axios from 'axios'
-const baseUrl = '/api/notes' // highlight-line
+const baseUrl = '/api/notes'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -300,6 +317,7 @@ const getAll = () => {
 }
 
 // ...
+
 ```
 
 بعد التغيير، علينا إنشاء بناء إنتاج جديد للواجهة الأمامية ونسخه إلى جذر مجلد الواجهة الخلفية.
@@ -329,6 +347,7 @@ const getAll = () => {
   </body>
 </html>
 
+
 ```
 
 يحتوي الملف على تعليمات لجلب ورقة أنماط CSS تعرّف أنماط التطبيق، وعلى وسم <i>script</i> واحد يوجّه المتصفح لجلب شيفرة JavaScript الخاصة بالتطبيق - أي تطبيق React الفعلي.
@@ -351,6 +370,7 @@ const getAll = () => {
 
 ```bash
 fly deploy
+
 ```
 <strong>ملاحظة:</strong> يسرد ملف _.dockerignore_ في مجلد مشروعك الملفات التي لا تُرفع أثناء النشر. قد يكون مجلد dist مضمنًا افتراضياً. إذا كان الأمر كذلك، فأزل الإشارة إليه من ملف .dockerignore، لضمان نشر تطبيقك بشكل صحيح.
 
@@ -392,6 +412,7 @@ fly deploy
     "logs:prod": "fly logs"
   }
 }
+
 ```
 
 يبني السكربت _npm run build:ui_ الواجهة الأمامية وينسخ نسخة الإنتاج إلى مستودع الواجهة الخلفية. ويطلق السكربت _npm run deploy_ الواجهة الخلفية الحالية إلى Fly.io.
@@ -408,6 +429,7 @@ fly deploy
 
 ```json
 "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../frontend && npm run build && @powershell Copy-Item dist -Recurse ../backend",
+
 ```
   
 إذا لم يعمل السكربت على Windows، فتأكد من أنك تستخدم Powershell وليس Command Prompt. وإذا كنت قد ثبّت Git Bash أو طرفية أخرى شبيهة بـ Linux، فقد تتمكن من تشغيل أوامر شبيهة بأوامر Linux على Windows أيضاً.
@@ -426,6 +448,7 @@ fly deploy
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   }
 }
+
 ```
 
 يبني السكربت _npm run build:ui_ الواجهة الأمامية وينسخ نسخة الإنتاج إلى مستودع الواجهة الخلفية. ويحتوي _npm run deploy:full_ أيضاً على أوامر <i>git</i> اللازمة لتحديث مستودع الواجهة الخلفية.
@@ -436,6 +459,7 @@ fly deploy
 
 ```md
 npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
+
 ```
 
 خيار آخر هو استخدام [shx](https://www.npmjs.com/package/shx).
@@ -450,6 +474,7 @@ npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
 
 ```js
 const baseUrl = '/api/notes'
+
 ```
 
 لأن الواجهة الأمامية في وضع التطوير على العنوان <i>localhost:5173</i>، تذهب الطلبات إلى الواجهة الخلفية إلى العنوان الخاطئ <i>localhost:5173/api/notes</i>. بينما الواجهة الخلفية على <i>localhost:3001</i>.
@@ -475,6 +500,7 @@ export default defineConfig({
   // highlight-end
 })
 
+
 ```
 
 بعد إعادة التشغيل، ستعمل بيئة تطوير React [كوكيل](https://vitejs.dev/config/server-options.html#server-proxy). إذا أرسلت شيفرة React طلب HTTP إلى مسار يبدأ بـ <i>http://localhost:5173/api</i>، فسيُمرَّر الطلب إلى الخادم على <i>http://localhost:3001</i>. أما الطلبات إلى مسارات أخرى فسيتولاها خادم التطوير بشكل طبيعي.
@@ -483,6 +509,7 @@ export default defineConfig({
 
 ```bash
 npm remove cors
+
 ```
 
 لقد نجحنا الآن في نشر التطبيق كاملاً على الإنترنت. هناك طرق أخرى عديدة لتنفيذ النشر. مثلاً، قد يكون نشر شيفرة الواجهة الأمامية كتطبيق خاص بها منطقياً في بعض الحالات، لأنه يسهّل تنفيذ [خط أنابيب نشر](https://martinfowler.com/bliki/DeploymentPipeline.html) آلي. يشير خط أنابيب النشر إلى طريقة آلية ومنضبطة لنقل الشيفرة من جهاز المطور عبر اختبارات ومراحل ضبط جودة متنوعة إلى بيئة الإنتاج. يُغطّى هذا الموضوع في [الجزء 11](/part11) من الدورة.

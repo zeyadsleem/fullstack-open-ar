@@ -39,6 +39,7 @@ lang: ar
 
 ```bash
 npm install zustand
+
 ```
 
 النسخة الأولى، التي تعمل فيها زيادة العدّاد فقط، هي كما يلي:
@@ -46,27 +47,28 @@ npm install zustand
 ```js
 import { create } from 'zustand'
 
-const useCounterStore = create(set =&gt; ({
+const useCounterStore = create(set => ({
   counter: 0,
-  increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
+  increment: () => set(state => ({ counter: state.counter + 1 })),
 }))
 
-const App = () =&gt; {
-  const counter = useCounterStore(state =&gt; state.counter)
-  const increment = useCounterStore(state =&gt; state.increment)
+const App = () => {
+  const counter = useCounterStore(state => state.counter)
+  const increment = useCounterStore(state => state.increment)
 
   return (
-    &lt;div&gt;
-      &lt;div&gt;{counter}&lt;/div&gt;
-      &lt;div&gt;
-        &lt;button onClick={increment}&gt;plus&lt;/button&gt;
-        &lt;button&gt;minus&lt;/button&gt;
-        &lt;button&gt;zero&lt;/button&gt;
-      &lt;/div&gt;
+    <div>
+      <div>{counter}</div>
+      <div>
+        <button onClick={increment}>plus</button>
+        <button>minus</button>
+        <button>zero</button>
+      </div>
 
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 يبدأ التطبيق بإنشاء&nbsp;<em>store</em>، أي الحالة العامة، باستخدام دالة&nbsp;<a href="https://zustand.docs.pmnd.rs/reference/apis/create" target="_blank" rel="noopener">create</a>&nbsp;في Zustand:
@@ -74,19 +76,21 @@ const App = () =&gt; {
 ```js
 import { create } from 'zustand'
 
-const useCounterStore = create(set =&gt; ({
+const useCounterStore = create(set => ({
   counter: 0,
-  increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
+  increment: () => set(state => ({ counter: state.counter + 1 })),
 }))
+
 ```
 
 تستقبل الدالة كمعامل&nbsp;<em>دالة</em>&nbsp;تُعيد الحالة المطلوب تعريفها للتطبيق. إذن المعامل هو كما يلي:
 
 ```
-set =&gt; ({
+set => ({
   counter: 0,
-  increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
+  increment: () => set(state => ({ counter: state.counter + 1 })),
 })
+
 ```
 
 وهكذا تحتوي الحالة على&nbsp;<em>counter</em>&nbsp;بقيمة صفر، و<em>increment</em>&nbsp;وهي دالة.
@@ -96,33 +100,35 @@ set =&gt; ({
 ```js
 const App = () => {
   // استخدام selector لاختيار الجزء الصحيح من حالة store
-// BEGIN HIGHLIGHT
+
   const counter = useCounterStore(state => state.counter)
   const increment = useCounterStore(state => state.increment)
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>
-// BEGIN HIGHLIGHT
-      &lt;div>{counter}&lt;/div>
-// END HIGHLIGHT
-      &lt;div>
-// BEGIN HIGHLIGHT
-        &lt;button onClick={increment}>plus&lt;/button>
-// END HIGHLIGHT
-        &lt;button>minus&lt;/button>
-        &lt;button>zero&lt;/button>
-      &lt;/div>
+    <div>
 
-    &lt;/div>
+      <div>{counter}</div>
+
+      <div>
+
+        <button onClick={increment}>plus</button>
+
+        <button>minus</button>
+        <button>zero</button>
+      </div>
+
+    </div>
   )
 }
+
 ```
 
 تخزّن الشيفرة قيمة counter الخاصة بـ store في متغير كما يلي:
 
 ```js
-const counter = useCounterStore(state =&gt; state.counter)
+const counter = useCounterStore(state => state.counter)
+
 ```
 
 تُستخدم دالة محدّد&nbsp;<em>state =&gt; state.counter</em>&nbsp;، وهي تحدد ما يُعاد من محتويات store. وبالطريقة نفسها، تُسترجع الدالة المخزّنة في store إلى المتغير&nbsp;<em>increment</em>.
@@ -132,30 +138,34 @@ const counter = useCounterStore(state =&gt; state.counter)
 ```js
 const useCounterStore = create(set => ({
   counter: 0,
-// BEGIN HIGHLIGHT
+
   increment: () => set(state => ({ counter: state.counter + 1 })),
-// END HIGHLIGHT
+
 }))
+
 ```
 
 لننظر إلى تعريف الدالة بشكل منفصل:
 
 ```
-() =&gt; set(state =&gt; ({ counter: state.counter + 1 }))
+() => set(state => ({ counter: state.counter + 1 }))
+
 ```
 
 هذه دالة تستدعي دالة&nbsp;<a href="https://zustand.docs.pmnd.rs/learn/guides/updating-state" target="_blank" rel="noopener">set</a>&nbsp;وتمرّر لها دالة أخرى كمعامل. وهذه الدالة الممرَّرة كمعامل تحدد كيف تتغير الحالة:
 
 ```
-state =&gt; ({ counter: state.counter + 1 })
+state => ({ counter: state.counter + 1 })
+
 ```
 
 وهي صيغة مختصرة لـ:
 
 ```js
-state =&gt; {
+state => {
   return { counter: state.counter + 1 }
 }
+
 ```
 
 تُعيد الدالة حالة جديدة تحسبها بناءً على الحالة القديمة التي يمكنها الوصول إليها عبر المعامل&nbsp;<em>state</em>. فإذا كانت الحالة القديمة، على سبيل المثال:
@@ -165,6 +175,7 @@ state =&gt; {
   counter: 1,
   increment: // تعريف الدالة
 }
+
 ```
 
 تصبح الحالة الجديدة:
@@ -174,6 +185,7 @@ state =&gt; {
   counter: 2,
   increment: // تعريف الدالة
 }
+
 ```
 
 تحتوي الحالة دائماً أيضاً على الدالة&nbsp;<em>increment</em>&nbsp;التي تغيّر الحالة.
@@ -181,7 +193,8 @@ state =&gt; {
 دالة انتقال الحالة
 
 ```
-state =&gt; ({ counter: state.counter + 1 })
+state => ({ counter: state.counter + 1 })
+
 ```
 
 تؤثر فقط على قيمة&nbsp;<em>counter</em>&nbsp;في الحالة.
@@ -189,12 +202,13 @@ state =&gt; ({ counter: state.counter + 1 })
 لا شيء يمنع تغيير الدالة الموجودة في الحالة داخل دالة انتقال الحالة؛ فمثلاً لو عرّفناها كما يلي:
 
 ```js
-state =&gt; {
+state => {
   return {
     counter: state.counter + 1 ,
     increment: console.log('increment broken')
   }
 }
+
 ```
 
 فلن يعمل زر الزيادة إلا في المرة الأولى؛ وبعدها لن يؤدي الضغط على الزر إلا إلى الطباعة في الطرفية.
@@ -202,13 +216,15 @@ state =&gt; {
 عندما تُضبط الحالة الجديدة كما يلي:
 
 ```
-state =&gt; ({ counter: state.counter + 1 })
+state => ({ counter: state.counter + 1 })
+
 ```
 
 لا تُحدَّث إلا قيمة المفتاح&nbsp;<em>counter</em>&nbsp;في الحالة؛ إذ تُحصل على الحالة الجديدة بدمج الحالة القديمة مع القيمة التي تُعيدها دالة تغيير الحالة. ولهذا فإن دالة انتقال الحالة التالية:
 
 ```
-state =&gt; ({})
+state => ({})
+
 ```
 
 لا تؤثر على الحالة إطلاقاً.
@@ -216,31 +232,32 @@ state =&gt; ({})
 لنكمل التطبيق لبقية الأزرار أيضاً:
 
 ```js
-const useCounterStore = create(set =&gt; ({
+const useCounterStore = create(set => ({
   counter: 0,
-  increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
-  decrement: () =&gt; set(state =&gt; ({ counter: state.counter - 1 })),
-  zero: () =&gt; set(() =&gt; ({ counter: 0 })),
+  increment: () => set(state => ({ counter: state.counter + 1 })),
+  decrement: () => set(state => ({ counter: state.counter - 1 })),
+  zero: () => set(() => ({ counter: 0 })),
 }))
 
-const App = () =&gt; {
-  const counter = useCounterStore(state =&gt; state.counter)
-  const increment = useCounterStore(state =&gt; state.increment)
-  const decrement = useCounterStore(state =&gt; state.decrement)
-  const zero = useCounterStore(state =&gt; state.zero)
+const App = () => {
+  const counter = useCounterStore(state => state.counter)
+  const increment = useCounterStore(state => state.increment)
+  const decrement = useCounterStore(state => state.decrement)
+  const zero = useCounterStore(state => state.zero)
 
   return (
-    &lt;div&gt;
-      &lt;div&gt;{counter}&lt;/div&gt;
-      &lt;div&gt;
-        &lt;button onClick={increment}&gt;plus&lt;/button&gt;
-        &lt;button onClick={decrement}&gt;minus&lt;/button&gt;
-        &lt;button onClick={zero}&gt;zero&lt;/button&gt;
-      &lt;/div&gt;
+    <div>
+      <div>{counter}</div>
+      <div>
+        <button onClick={increment}>plus</button>
+        <button onClick={decrement}>minus</button>
+        <button onClick={zero}>zero</button>
+      </div>
 
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 > من أين يأتي set و state؟
@@ -256,12 +273,13 @@ const App = () =&gt; {
 محتويات&nbsp;<em>store.js</em>&nbsp;بسيطة ومباشرة:
 
 ```js
-export const useCounterStore = create(set =&gt; ({
+export const useCounterStore = create(set => ({
   counter: 0,
-  increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
-  decrement: () =&gt; set(state =&gt; ({ counter: state.counter - 1 })),
-  zero: () =&gt; set(() =&gt; ({ counter: 0 })),
+  increment: () => set(state => ({ counter: state.counter + 1 })),
+  decrement: () => set(state => ({ counter: state.counter - 1 })),
+  zero: () => set(() => ({ counter: 0 })),
 }))
+
 ```
 
 يُبسَّط مكوّن&nbsp;<em>App</em>&nbsp;كما يلي:
@@ -270,16 +288,17 @@ export const useCounterStore = create(set =&gt; ({
 import Display from './Display'
 import Controls from './Controls'
 
-const App = () =&gt; {
+const App = () => {
   return (
-    &lt;div&gt;
-      &lt;Display /&gt;
-      &lt;Controls /&gt;
-    &lt;/div&gt;
+    <div>
+      <Display />
+      <Controls />
+    </div>
   )
 }
 
 export default App
+
 ```
 
 الجدير بالملاحظة هنا أن مكوّن&nbsp;<em>App</em>&nbsp;لم يعد يمرّر الحالة إلى مكوّناته الفرعية. بل إن المكوّن لا يلمس الحالة بأي شكل؛ فقد فُصل تعريف store بالكامل خارج المكوّن.
@@ -289,15 +308,16 @@ export default App
 ```js
 import { useCounterStore } from './store'
 
-const Display = () =&gt; {
-  const counter = useCounterStore(state =&gt; state.counter)
+const Display = () => {
+  const counter = useCounterStore(state => state.counter)
 
   return (
-    &lt;div&gt;{counter}&lt;/div&gt;
+    <div>{counter}</div>
   )
 }
 
 export default Display
+
 ```
 
 يصل المكوّن إلى قيمة العدّاد عبر دالة&nbsp;<em>useCounterStore</em>&nbsp;التي تعرّف store. وهذا مريح من نواحٍ عديدة، فمثلاً لا حاجة لتمرير الحالة إلى المكوّن عبر props.
@@ -307,27 +327,29 @@ export default Display
 ```js
 import { useCounterStore } from './store'
 
-const Controls = () =&gt; {
-  const increment = useCounterStore(state =&gt; state.increment)
-  const decrement = useCounterStore(state =&gt; state.decrement)
-  const zero = useCounterStore(state =&gt; state.zero)
+const Controls = () => {
+  const increment = useCounterStore(state => state.increment)
+  const decrement = useCounterStore(state => state.decrement)
+  const zero = useCounterStore(state => state.zero)
 
   return (
-    &lt;div&gt;
-      &lt;button onClick={increment}&gt;plus&lt;/button&gt;
-      &lt;button onClick={decrement}&gt;minus&lt;/button&gt;
-      &lt;button onClick={zero}&gt;zero&lt;/button&gt;
-    &lt;/div&gt;
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
 
 export default Controls
+
 ```
 
 تأخذ دالة&nbsp;<em>useCounterStore</em>&nbsp;دالة محدّد (selector) كمعامل لها، وهي تحدد أي جزء من الحالة سيُستخدم. على سبيل المثال:
 
 ```js
-  const increment = useCounterStore(state =&gt; state.increment)
+  const increment = useCounterStore(state => state.increment)
+
 ```
 
 هنا تنتقي دالة المحدّد <em>state => state.increment</em> قيمة المفتاح <em>increment</em> من الحالة، أي الدالة التي تزيد العدّاد، وتخزّنها في المتغير <em>increment</em>.
@@ -336,7 +358,8 @@ export default Controls
 
 ```js
   const state = useCounterStore()
-  // يفعل الشيء نفسه مثل useCounterStore(state =&gt; state)، أي يختار الحالة بأكملها
+  // يفعل الشيء نفسه مثل useCounterStore(state => state)، أي يختار الحالة بأكملها
+
 ```
 
 يمكننا حينها الإشارة إلى قيمة العدّاد والدوال باستخدام الترميز النقطي (dot notation)، أي&nbsp;<em>state.counter</em>&nbsp;و<em>state.increment</em>.
@@ -347,19 +370,20 @@ export default Controls
 import { useCounterStore } from './store'
 
 const Controls = () => {
-// BEGIN HIGHLIGHT
+
   const { increment, decrement, zero } = useCounterStore()
-// END HIGHLIGHT
+
   return (
-    &lt;div>
-      &lt;button onClick={increment}>plus&lt;/button>
-      &lt;button onClick={decrement}>minus&lt;/button>
-      &lt;button onClick={zero}>zero&lt;/button>
-    &lt;/div>
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
 
 export default Controls
+
 ```
 
 الحل يعمل، لكن له عيب كبير. يؤدي التفكيك إلى إعادة عرض مكوّن&nbsp;<em>Controls</em>&nbsp;في كل مرة تتغير فيها قيمة العدّاد، مع أن المكوّن يعرض الأزرار فقط ولا يعرض القيمة نفسها.
@@ -370,6 +394,7 @@ export default Controls
 const increment = useCounterStore(state => state.increment)
 const decrement = useCounterStore(state => state.decrement)
 const zero = useCounterStore(state => state.zero)
+
 ```
 
 فلم يعد المكوّن يتفاعل مع تغيّرات قيمة العدّاد لأنه لم يخترها من الحالة.
@@ -379,14 +404,15 @@ const zero = useCounterStore(state => state.zero)
 يمكننا الوصول إلى حل أنيق تماماً بإعادة تنظيم الحالة كما يلي:
 
 ```js
-export const useCounterStore = create(set =&gt; ({
+export const useCounterStore = create(set => ({
   counter: 0,
   actions: {
-    increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
-    decrement: () =&gt; set(state =&gt; ({ counter: state.counter - 1 })),
-    zero: () =&gt; set(() =&gt; ({ counter: 0 })),
+    increment: () => set(state => ({ counter: state.counter + 1 })),
+    decrement: () => set(state => ({ counter: state.counter - 1 })),
+    zero: () => set(() => ({ counter: 0 })),
   }
 }))
+
 ```
 
 أصبحت دوال تغيير الحالة الآن مجمّعة تحت مفتاحها الخاص&nbsp;<em>actions</em>، ويمكن اختيارها ككتلة واحدة وتفكيكها:
@@ -396,13 +422,14 @@ const Controls = () => {
   const { increment, decrement, zero } = useCounterStore(state => state.actions)
 
   return (
-    &lt;div>
-      &lt;button onClick={increment}>plus&lt;/button>
-      &lt;button onClick={decrement}>minus&lt;/button>
-      &lt;button onClick={zero}>zero&lt;/button>
-    &lt;/div>
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
+
 ```
 
 الآن لا تحدث أي إعادة عرض، لأن الدوال فقط هي التي اختيرت من الحالة، وهي تبقى نفسها طوال عمر store.
@@ -412,56 +439,59 @@ const Controls = () => {
 ```js
 import { create } from 'zustand'
 
-const useCounterStore = create(set =&gt; ({
+const useCounterStore = create(set => ({
   counter: 0,
   actions: {
-    increment: () =&gt; set(state =&gt; ({ counter: state.counter + 1 })),
-    decrement: () =&gt; set(state =&gt; ({ counter: state.counter - 1 })),
-    zero: () =&gt; set(() =&gt; ({ counter: 0 })),
+    increment: () => set(state => ({ counter: state.counter + 1 })),
+    decrement: () => set(state => ({ counter: state.counter - 1 })),
+    zero: () => set(() => ({ counter: 0 })),
   }
 }))
 
 // دوال الخطافات المستخدمة في مواضع أخرى من التطبيق
-export const useCounter = () =&gt; useCounterStore(state =&gt; state.counter)
-export const useCounterControls = () =&gt; useCounterStore(state =&gt; state.actions)
+export const useCounter = () => useCounterStore(state => state.counter)
+export const useCounterControls = () => useCounterStore(state => state.actions)
+
 ```
 
 الآن، خارج الوحدة التي تعرّف الحالة، أصبحت الدالتان <em>useCounter</em>، التي تُعيد قيمة العدّاد عند استدعائها، و<em>useCounterControls</em>، التي تُعيد الدوال التي تعدّل قيمة العدّاد، متاحتين. ويتغير الاستخدام قليلاً:
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useCounter } from './store'
-// END HIGHLIGHT
+
 
 const Display = () => {
-// BEGIN HIGHLIGHT
+
   const counter = useCounter()
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>{counter}&lt;/div>
+    <div>{counter}</div>
   )
 }
+
 ```
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useCounterControls } from './store'
-// END HIGHLIGHT
+
 
 const Controls = () => {
-// BEGIN HIGHLIGHT
+
   const { increment, decrement, zero } = useCounterControls()
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>
-      &lt;button onClick={increment}>plus&lt;/button>
-      &lt;button onClick={decrement}>minus&lt;/button>
-      &lt;button onClick={zero}>zero&lt;/button>
-    &lt;/div>
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
+
 ```
 
 عند استخدام الحالة بهذه الطريقة، لم تعد هناك حاجة لاستخدام دوال المحدّد، إذ أصبح استخدامها مخفياً داخل تعريف الدوال المساعدة الجديدة.
@@ -475,13 +505,43 @@ const Controls = () => {
 افترض أننا نريد أيضاً عدّ عدد المرات التي تغيّرت فيها حالة العدّاد. يمكننا توسيع store كما يلي:
 
 ```js
-const useCounterStore = create(set => ({<br>  counter: 0,<br> // BEGIN HIGHLIGHT<br>  changes: 0,<br> // END HIGHLIGHT<br>  actions: {<br>    increment: () => set(state => ({ <br>      counter: state.counter + 1, <br> // BEGIN HIGHLIGHT<br>      changes: state.changes + 1 <br> // END HIGHLIGHT<br>    })),<br>    decrement: () => set(state => ({ <br>      counter: state.counter - 1, <br> // BEGIN HIGHLIGHT<br>      changes: state.changes + 1 <br> // END HIGHLIGHT<br>    })),<br>    zero: () => set(state => ({ <br>      counter: 0, <br> // BEGIN HIGHLIGHT<br>      changes: state.changes + 1 <br> // END HIGHLIGHT<br>    })),<br>  }  <br>}))
+const useCounterStore = create(set => ({
+counter: 0,
+
+changes: 0,
+
+actions: {
+increment: () => set(state => ({
+counter: state.counter + 1,
+
+changes: state.changes + 1
+
+})),
+decrement: () => set(state => ({
+counter: state.counter - 1,
+
+changes: state.changes + 1
+
+})),
+zero: () => set(state => ({
+counter: 0,
+
+changes: state.changes + 1
+
+})),
+}
+}))
+
 ```
 
 يمكننا حينها أن نحاول كتابة الخطاف الخاص بالوصول إلى القيم كما يلي:
 
 ```js
-export const useValues = () => useCounterStore(state => ({ <br>   counter: state.counter,<br>   changes: state.changes<br>})
+export const useValues = () => useCounterStore(state => ({
+counter: state.counter,
+changes: state.changes
+})
+
 ```
 
 هذا لا يعمل، لأن دالة المحدّد تُعيد <em>كائناً جديداً في كل عرض</em>، حتى عندما لا تكون القيم الأساسية قد تغيرت. يقارن Zustand نتيجة المحدّد السابقة والجديدة بفحص تساوي المراجع (<code>===</code>)، لذا يُرى الكائن الجديد دائماً على أنه "متغيّر". وهذا يؤدي إلى إطلاق إعادة عرض تستدعي المحدّد من جديد، الذي يُعيد كائناً جديداً آخر، وهكذا، في حلقة عرض لا نهائية.
@@ -489,7 +549,15 @@ export const useValues = () => useCounterStore(state => ({ <br>   counter: state
 الحل هو تغليف المحدّد بـ <a href="https://zustand.docs.pmnd.rs/reference/hooks/use-shallow"><code>useShallow</code></a>، وهو يخبر Zustand بمقارنة حقول الكائن المُعاد بفحص تساوٍ سطحي (shallow equality) بدلاً من مقارنة مراجع الكائنات:
 
 ```js
-import { useShallow } from "zustand/react/shallow"<br><br>export const useValues = () => useCounterStore(state => { <br>  useShallow((state) => ({<br>    counter: state.counter,<br>    changes: state.changes,<br>  })),<br>)
+import { useShallow } from "zustand/react/shallow"
+
+export const useValues = () => useCounterStore(state => {
+useShallow((state) => ({
+counter: state.counter,
+changes: state.changes,
+})),
+)
+
 ```
 
 الآن لا يُطلق Zustand إعادة عرض إلا عندما تحصل <em>counter</em> أو <em>changes</em> فعلاً على قيمة جديدة، وليس فقط عند إنشاء كائن جديد.
@@ -515,22 +583,23 @@ import { useShallow } from "zustand/react/shallow"<br><br>export const useValues
 ```js
 import { useNotes } from './store'
 
-const App = () =&gt; {
+const App = () => {
   const notes = useNotes()
 
   return (
-    &lt;div&gt;
-      &lt;ul&gt;
-        {notes.map(note =&gt; (
-          &lt;li key={note.id}&gt;
-            {note.important ? &lt;strong&gt;{note.content}&lt;/strong&gt; : note.content}
-          &lt;/li&gt;
+    <div>
+      <ul>
+        {notes.map(note => (
+          <li key={note.id}>
+            {note.important ? <strong>{note.content}</strong> : note.content}
+          </li>
         ))}
-      &lt;/ul&gt;
-    &lt;/div&gt;
+      </ul>
+    </div>
   )
 }
 export default App
+
 ```
 
 يُعرَّف store في البداية كما يلي:
@@ -538,7 +607,7 @@ export default App
 ```js
 import { create } from 'zustand'
 
-const useNoteStore = create(set =&gt; ({
+const useNoteStore = create(set => ({
   notes: [
     {
       id: 1,
@@ -548,7 +617,8 @@ const useNoteStore = create(set =&gt; ({
   ],
 }))
 
-export const useNotes = () =&gt; useNoteStore(state =&gt; state.notes)
+export const useNotes = () => useNoteStore(state => state.notes)
+
 ```
 
 في الوقت الحالي، لا يملك التطبيق وظيفة إضافة ملاحظات جديدة، ولا يدعمها store بعد. وقد هُيِّئت الحالة بملاحظة واحدة مضافة مسبقاً حتى نتحقق من أن التطبيق قادر على عرض الحالة بنجاح.
@@ -558,12 +628,13 @@ export const useNotes = () =&gt; useNoteStore(state =&gt; state.notes)
 المحاولة الأولى لكتابة action يضيف ملاحظة هي التالية:
 
 ```js
-note =&gt; set(
-          state =&gt; {
+note => set(
+          state => {
             state.notes.push(note)
             return state
           }
         )
+
 ```
 
 تستقبل الدالة ملاحظة كمعامل وتُعيد حالة أُضيفت فيها الملاحظة الجديدة إلى الحالة القديمة <em>state</em>.
@@ -573,11 +644,12 @@ note =&gt; set(
 الطريقة السليمة هي استخدام، على سبيل المثال، دالة&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat" target="_blank" rel="noopener">Array.concat</a>&nbsp;، التي لا تعدّل الحالة الموجودة بل تنشئ نسخة جديدة منها مع إضافة الملاحظة الجديدة:
 
 ```js
-note =&gt; set(
-          state =&gt; {
+note => set(
+          state => {
             return { notes: state.notes.concat(note) }
           }
         )
+
 ```
 
 أصبح تعريف store الآن كما يلي:
@@ -585,17 +657,18 @@ note =&gt; set(
 ```js
 import { create } from 'zustand'
 
-const useNoteStore = create(set =&gt; ({
+const useNoteStore = create(set => ({
   notes: [],
   actions: {
-    add: note =&gt; set(
-      state =&gt; ({ notes: state.notes.concat(note) })
+    add: note => set(
+      state => ({ notes: state.notes.concat(note) })
     )
   }
 }))
 
-export const useNotes = () =&gt; useNoteStore(state =&gt; state.notes)
-export const useNoteActions = () =&gt; useNoteStore(state =&gt; state.actions)
+export const useNotes = () => useNoteStore(state => state.notes)
+export const useNoteActions = () => useNoteStore(state => state.actions)
+
 ```
 
 > صيغة نشر المصفوفة
@@ -620,7 +693,7 @@ import { useNotes, useNoteActions } from './store'
 const App = () => {
   const notes = useNotes()
 
-  // BEGIN HIGHLIGHT
+
   const { add } = useNoteActions()
 
   const generateId = () => Number((Math.random() * 1000000).toFixed(0))
@@ -631,26 +704,27 @@ const App = () => {
     add({ id: generateId(), content, important: false })
     e.target.reset()
   }
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>
-// BEGIN HIGHLIGHT
-      &lt;form onSubmit={addNote}>
-        &lt;input name="note" />
-        &lt;button type="submit">add&lt;/button>
-      &lt;/form>
-// END HIGHLIGHT
-      &lt;ul>
+    <div>
+
+      <form onSubmit={addNote}>
+        <input name="note" />
+        <button type="submit">add</button>
+      </form>
+
+      <ul>
         {notes.map(note => (
-          &lt;li key={note.id}>
-            {note.important ? &lt;strong>{note.content}&lt;/strong> : note.content}
-          &lt;/li>
+          <li key={note.id}>
+            {note.important ? <strong>{note.content}</strong> : note.content}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 التنفيذ مباشر إلى حد كبير. والجدير بالملاحظة عند إضافة ملاحظة جديدة أننا، بخلاف نماذجنا السابقة المنفذة بـ React، <em>لم</em> نربط قيمة حقل النموذج بحالة مكوّن <em>App</em>. ويسمي React مثل هذه النماذج <a href="https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components" target="_blank" rel="noopener">غير المتحكَّم بها (uncontrolled)</a>.
@@ -660,10 +734,11 @@ const App = () => {
 النموذج بسيط جداً:
 
 ```
-&lt;form onSubmit={addNote}&gt;
-  &lt;input name="note" /&gt;
-  &lt;button type="submit"&gt;add&lt;/button&gt;
-&lt;/form&gt;
+<form onSubmit={addNote}>
+  <input name="note" />
+  <button type="submit">add</button>
+</form>
+
 ```
 
 الجدير بالملاحظة في النموذج أن حقل الإدخال له اسم (name). وهذا يتيح لدالة المعالج الوصول إلى قيمة الحقل.
@@ -671,12 +746,13 @@ const App = () => {
 معالج الإضافة مباشر أيضاً:
 
 ```js
-  const addNote = (e) =&gt; {
+  const addNote = (e) => {
     e.preventDefault()
     const content = e.target.note.value
     add({ id: generateId(), content, important: false })
     e.target.reset()
   }
+
 ```
 
 يُسترجع المحتوى من حقل نص النموذج باستخدام&nbsp;<em>e.target.note.value</em>&nbsp;إلى متغير، يُستخدم كمعامل في استدعاء دالة إضافة الملاحظة&nbsp;<em>add</em>.
@@ -692,12 +768,13 @@ const App = () => {
 مكوّن&nbsp;<em>App</em>&nbsp;بعد التغيير بسيط:
 
 ```js
-const App = () =&gt; (
-  &lt;div&gt;
-    &lt;NoteForm /&gt;
-    &lt;NoteList /&gt;
-  &lt;/div&gt;
+const App = () => (
+  <div>
+    <NoteForm />
+    <NoteList />
+  </div>
 )
+
 ```
 
 إنشاء الملاحظة، أي&nbsp;<em>NoteForm</em>، لا يحتوي على شيء مثير، لذا لا نعرض الشيفرة هنا.
@@ -708,27 +785,29 @@ const App = () =&gt; (
 import { useNotes } from './store'
 import Note from './Note'
 
-const NoteList = () =&gt; {
+const NoteList = () => {
   const notes = useNotes()
 
   return (
-    &lt;ul&gt;
-      {notes.map(note =&gt; (
-        &lt;Note key={note.id} note={note} /&gt;
+    <ul>
+      {notes.map(note => (
+        <Note key={note.id} note={note} />
       ))}
-    &lt;/ul&gt;
+    </ul>
   )
 }
+
 ```
 
 يجلب المكوّن قائمة الملاحظات من store وينشئ مكوّن&nbsp;<em>Note</em>&nbsp;مقابلاً لكل ملاحظة، ويمرّر بيانات الملاحظة كـ props:
 
 ```js
-const Note = ({ note }) =&gt; (
-  &lt;li&gt;
-    {note.important ? &lt;strong&gt;{note.content}&lt;/strong&gt; : note.content}
-  &lt;/li&gt;
+const Note = ({ note }) => (
+  <li>
+    {note.important ? <strong>{note.content}</strong> : note.content}
+  </li>
 )
+
 ```
 
 لنضف أيضاً القدرة على تبديل أهمية الملاحظة. المكوّن بعد التغيير هو التالي:
@@ -737,21 +816,22 @@ const Note = ({ note }) =&gt; (
 import { useNoteActions } from './store'
 
 const Note = ({ note }) => {
-// BEGIN HIGHLIGHT
+
   const { toggleImportance } = useNoteActions()
-// END HIGHLIGHT
+
 
   return (
-    &lt;li>
-      {note.important ? &lt;strong>{note.content}&lt;/strong> : note.content}
-// BEGIN HIGHLIGHT
-      &lt;button onClick={() => toggleImportance(note.id)}>
+    <li>
+      {note.important ? <strong>{note.content}</strong> : note.content}
+
+      <button onClick={() => toggleImportance(note.id)}>
         {note.important ? 'make not important' : 'make important'}
-      &lt;/button>
-// END HIGHLIGHT
-   &lt;/li>
+      </button>
+
+   </li>
   )
 }
+
 ```
 
 يفكّك المكوّن دالة تبديل الأهمية من القيمة المُعادة لـ&nbsp;<em>useNoteActions</em>، ويستدعيها عند النقر على زر التبديل.
@@ -767,7 +847,7 @@ const useNoteStore = create(set => ({
     add: note => set(
       state => ({ notes: state.notes.concat(note) })
     ),
-// BEGIN HIGHLIGHT
+
     toggleImportance: id => set(
       state => ({
         notes: state.notes.map(note =>
@@ -775,15 +855,17 @@ const useNoteStore = create(set => ({
         )
       })
     )
-// END HIGHLIGHT
+
   }
 }))
+
 ```
 
 تستقبل الدالة معرّف الملاحظة المطلوب تعديلها كمعامل. وتتكوّن الحالة الجديدة من الحالة القديمة باستخدام دالة&nbsp;<em>map</em>&nbsp;بحيث تُضمَّن كل الملاحظات القديمة، باستثناء الملاحظة المطلوب تعديلها، إذ تُنشأ لها نسخة تُبدَّل فيها أهميتها:
 
 ```
 { ...note, important: !note.important }
+
 ```
 
 الشيفرة الحالية للتطبيق متاحة بالكامل على&nbsp;<a href="https://github.com/fullstack-hy2020/zustand-notes/tree/part6-2" target="_blank" rel="noopener">GitHub</a>، في الفرع&nbsp;<em>part6-2</em>.

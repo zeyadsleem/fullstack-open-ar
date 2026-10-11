@@ -39,6 +39,7 @@ console.log(x, y)   // تُطبع 1 15
 y = 'sometext'
 console.log(x, y)   // تُطبع 1 sometext
 x = 4               // يسبّب خطأً
+
 ```
 
 [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) لا تعرّف متغيرًا بل <i>ثابتًا</i> لا يمكن تغيير قيمته بعد ذلك. في المقابل، [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) تعرّف متغيرًا عاديًا.
@@ -63,6 +64,7 @@ console.log(t[1])     // تُطبع -1
 t.forEach(value => {
   console.log(value)  // تُطبع الأعداد 1، -1، 3، 5، كل واحد في سطر منفصل
 })                    
+
 ```
 
 الملاحظ في هذا المثال أنه على الرغم من أن المتغير المُعرَّف بـ const لا يمكن إعادة إسناده إلى قيمة أخرى، فإن محتويات الكائن الذي يشير إليه يمكن تعديلها. والسبب أن تعريف const يضمن ثبات المرجع نفسه، لا البيانات التي يشير إليها. تخيّل الأمر كتغيير الأثاث داخل منزل، بينما يبقى عنوان المنزل كما هو.
@@ -73,6 +75,7 @@ t.forEach(value => {
 value => {
   console.log(value)
 }
+
 ```
 
 تستدعي forEach الدالة <i>لكل عنصر من عناصر المصفوفة</i>، وتمرّر دائمًا العنصر المفرد كوسيط. ويمكن للدالة بوصفها وسيطًا لـ forEach أن تستقبل أيضًا [وسائط أخرى](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach).
@@ -86,6 +89,7 @@ const t2 = t.concat(5)  // ينشئ مصفوفة جديدة
 
 console.log(t)  // تُطبع [1, -1, 3]
 console.log(t2) // تُطبع [1, -1, 3, 5]
+
 ```
 
 استدعاء الدالة _t.concat(5)_ لا يضيف عنصرًا جديدًا إلى المصفوفة القديمة، بل يعيد مصفوفة جديدة تحتوي، إلى جانب عناصر المصفوفة القديمة، على العنصر الجديد أيضًا.
@@ -97,6 +101,7 @@ const t = [1, 2, 3]
 
 const m1 = t.map(value => value * 2)
 console.log(m1)   // تُطبع [2, 4, 6]
+
 ```
 
 بناءً على المصفوفة القديمة، تنشئ map <i>مصفوفة جديدة</i> تُستخدم الدالة المعطاة كوسيط لإنشاء عناصرها. في حالة هذا المثال، تُضرب القيمة الأصلية في اثنين.
@@ -107,6 +112,7 @@ console.log(m1)   // تُطبع [2, 4, 6]
 const m2 = t.map(value => '<li>' + value + '</li>')
 console.log(m2)  
 // تُطبع [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ]
+
 ```
 
 هنا تُحوَّل مصفوفة مليئة بقيم صحيحة إلى مصفوفة تحتوي نصوص HTML باستخدام الدالة map. في [الجزء 2](/part2) من هذه الدورة، سنرى أن map تُستخدم كثيرًا في React.
@@ -120,6 +126,7 @@ const [first, second, ...rest] = t
 
 console.log(first, second)  // تُطبع 1 2
 console.log(rest)          // تُطبع [3, 4, 5]
+
 ```
 
 في الأعلى، يُسند إلى المتغير _first_ أول عدد صحيح في المصفوفة، ويُسند إلى المتغير _second_ ثاني عدد صحيح في المصفوفة. أما المتغير _rest_ في "يجمع" الأعداد الصحيحة المتبقية في مصفوفة خاصة به.
@@ -149,6 +156,7 @@ const object3 = {
   grades: [2, 3, 5, 3],
   department: 'Stanford University',
 }
+
 ```
 
 يمكن أن تكون قيم الخصائص من أي نوع، مثل الأعداد الصحيحة والنصوص والمصفوفات والكائنات...
@@ -159,6 +167,7 @@ const object3 = {
 console.log(object1.name)         // تُطبع Arto Hellas
 const fieldName = 'age'
 console.log(object1[fieldName])    // تُطبع 35
+
 ```
 
 يمكنك أيضًا إضافة خصائص إلى كائن أثناء العمل باستخدام صيغة النقطة أو الأقواس:
@@ -166,6 +175,7 @@ console.log(object1[fieldName])    // تُطبع 35
 ```js
 object1.address = 'Helsinki'
 object1['secret number'] = 12341
+
 ```
 
 الإضافة الأخيرة يجب أن تتم باستخدام الأقواس، لأنه عند استخدام صيغة النقطة، فإن <i>secret number</i> ليس اسم خاصية صالحًا بسبب المسافة.
@@ -184,6 +194,7 @@ const sum = (p1, p2) => {
   console.log(p2)
   return p1 + p2
 }
+
 ```
 
 وتُستدعى الدالة كما هو متوقع:
@@ -191,6 +202,7 @@ const sum = (p1, p2) => {
 ```js
 const result = sum(1, 5)
 console.log(result)
+
 ```
 
 إذا كان هناك وسيط واحد فقط، يمكننا حذف الأقواس من التعريف:
@@ -200,12 +212,14 @@ const square = p => {
   console.log(p)
   return p * p
 }
+
 ```
 
 إذا كانت الدالة تحتوي على تعبير واحد فقط فلا حاجة إلى الأقواس المعقوصة. في هذه الحالة، تعيد الدالة فقط نتيجة تعبيرها الوحيد. الآن، إذا أزلنا الطباعة في وحدة التحكم، يمكننا تقصير تعريف الدالة أكثر:
 
 ```js
 const square = p => p * p
+
 ```
 
 هذه الصيغة عملية بشكل خاص عند التعامل مع المصفوفات - مثل استخدام الدالة map:
@@ -214,6 +228,7 @@ const square = p => p * p
 const t = [1, 2, 3]
 const tSquared = t.map(p => p * p)
 // tSquared أصبحت الآن [1, 4, 9]
+
 ```
 
 أُضيفت ميزة دوال السهم إلى JavaScript في عام 2015، مع الإصدار [ES6](https://rse.github.io/es6-features/). قبل ذلك، كانت الطريقة الوحيدة لتعريف الدوال هي استخدام الكلمة المفتاحية _function_.
@@ -227,6 +242,7 @@ function product(a, b) {
 
 const result = product(2, 6)
 // result أصبحت الآن 12
+
 ```
 
 الطريقة الأخرى لتعريف الدالة هي استخدام [تعبير دالة](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). في هذه الحالة، لا حاجة لإعطاء الدالة اسمًا، ويمكن أن يوجد التعريف بين بقية الشيفرة:
@@ -238,6 +254,7 @@ const average = function(a, b) {
 
 const result = average(2, 5)
 // result أصبحت الآن 3.5
+
 ```
 
 خلال هذه الدورة، سنعرّف جميع الدوال باستخدام صياغة السهم.
@@ -254,9 +271,10 @@ const result = average(2, 5)
 
 ```js
 const Header = (props) => {
-  console.log(props) // highlight-line
+  console.log(props)
   return <h1>{props.course}</h1>
 }
+
 ```
 
 وإذا واجهت رسالة خطأ، و<i>سوف</i> تواجهها
@@ -291,6 +309,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
   <h4>1.4: معلومات الدورة، الخطوة 4</h4>
@@ -321,6 +340,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 **ملاحظة** في هذه المرحلة <i>يمكنك افتراض وجود ثلاثة عناصر دائمًا</i>، لذا لا حاجة للمرور على المصفوفات باستخدام الحلقات. سنعود إلى موضوع عرض المكوّنات بناءً على عناصر المصفوفات باستكشاف أكثر شمولًا في [الجزء التالي من الدورة](/part2).
@@ -339,6 +359,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
   <h4>1.5: معلومات الدورة، الخطوة 5</h4>
@@ -371,6 +392,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 </div>
@@ -398,6 +420,7 @@ const arto = {
 }
 
 arto.greet()  // تُطبع "hello, my name is Arto Hellas"
+
 ```
 
 يمكن إسناد الدوال إلى الكائنات حتى بعد إنشاء الكائن:
@@ -421,6 +444,7 @@ arto.growOlder = function() {
 console.log(arto.age)   // تُطبع 35
 arto.growOlder()
 console.log(arto.age)   // تُطبع 36
+
 ```
 
 لنعدّل الكائن قليلًا:
@@ -444,6 +468,7 @@ arto.doAddition(1, 4)        // تُطبع 5
 
 const referenceToAddition = arto.doAddition
 referenceToAddition(10, 15)   // تُطبع 25
+
 ```
 
 الآن أصبح للكائن الدالة _doAddition_ التي تحسب مجموع الأعداد المعطاة له كوسائط. وتُستدعى الدالة بالطريقة المعتادة، باستخدام الكائن <em>arto.doAddition(1, 4)</em> أو بتخزين <i>مرجع للدالة</i> في متغير واستدعاء الدالة عبر المتغير: <em>referenceToAddition(10, 15)</em>.
@@ -455,6 +480,7 @@ arto.greet()       // تُطبع "hello, my name is Arto Hellas"
 
 const referenceToGreet = arto.greet
 referenceToGreet() // تُطبع "hello, my name is undefined"
+
 ```
 
 عند استدعاء الدالة عبر مرجع، تفقد الدالة معرفتها بما كان عليه _this_ الأصلي. وخلافًا للغات أخرى، تُعرَّف قيمة [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) في JavaScript بناءً على <i>كيفية استدعاء الدالة</i>. وعند استدعاء الدالة عبر مرجع، تصبح قيمة _this_ ما يُسمى [الكائن العام](https://developer.mozilla.org/en-US/docs/Glossary/Global_object)، وغالبًا ما تكون النتيجة النهائية غير ما قصده مطوّر البرمجيات أصلًا.
@@ -471,7 +497,8 @@ const arto = {
   },
 }
 
-setTimeout(arto.greet, 1000)  // highlight-line
+setTimeout(arto.greet, 1000)
+
 ```
 
 كما ذُكر، تُعرَّف قيمة _this_ في JavaScript بناءً على كيفية استدعاء الدالة. وعندما تستدعي <em>setTimeout</em> الدالة، فإن محرّك JavaScript هو من يستدعي الدالة فعليًا، وعند تلك اللحظة تشير _this_ إلى الكائن العام.
@@ -480,6 +507,7 @@ setTimeout(arto.greet, 1000)  // highlight-line
 
 ```js
 setTimeout(arto.greet.bind(arto), 1000)
+
 ```
 
 استدعاء <em>arto.greet.bind(arto)</em> ينشئ دالة جديدة ترتبط فيها _this_ بالإشارة إلى Arto، بغض النظر عن مكان وكيفية استدعاء الدالة.
@@ -512,6 +540,7 @@ adam.greet()
 
 const janja = new Person('Janja Garnbret', 27)
 janja.greet()
+
 ```
 
 فيما يتعلق بالصياغة، تشبه أصناف JavaScript والنسخ المُنشأة منها كثيرًا طريقة عمل الأصناف والكائنات في Java. وسلوكها أيضًا شبيه جدًا بكائنات Java. لكنها في جوهرها تبقى كائنات JavaScript عادية مبنية على [الوراثة النموذجية](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance). ويظل نوع أي نسخة من هذه الأصناف هو _Object_، لأن JavaScript تعرّف جوهريًا مجموعة محدودة فقط من الأنواع: [Boolean و Null و Undefined و Number و String و Symbol و BigInt و Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures).

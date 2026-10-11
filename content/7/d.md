@@ -25,14 +25,15 @@ class App extends React.Component {
 
   render() {
     return (
-      &lt;div&gt;
-        &lt;h1&gt;anecdote of the day&lt;/h1&gt;
-      &lt;/div&gt;
+      <div>
+        <h1>anecdote of the day</h1>
+      </div>
     )
   }
 }
 
 export default App
+
 ```
 
 أصبح للمكوّن الآن <a href="https://react.dev/reference/react/Component#constructor" target="_blank" rel="noopener">مُنشئ (constructor)</a>، لا يحدث فيه شيء في الوقت الحالي، ويحتوي على الدالة&nbsp;<a href="https://react.dev/reference/react/Component#render" target="_blank" rel="noopener">render</a>. وكما قد يتوقّع المرء، يحدّد render كيف وماذا يُعرض على الشاشة.
@@ -44,34 +45,35 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    // BEGIN HIGHLIGHT
+
     this.state = {
       anecdotes: [],
       current: 0
     }
-    // END HIGHLIGHT
+
   }
 
   render() {
-  // BEGIN HIGHLIGHT
+
     if (this.state.anecdotes.length === 0) {
-      return &lt;div&gt;no anecdotes...&lt;/div&gt;
+      return <div>no anecdotes...</div>
     }
-  // END HIGHLIGHT
+
 
     return (
-      &lt;div&gt;
-        &lt;h1&gt;anecdote of the day&lt;/h1&gt;
-        // BEGIN HIGHLIGHT
-        &lt;div&gt;
+      <div>
+        <h1>anecdote of the day</h1>
+
+        <div>
           {this.state.anecdotes[this.state.current].content}
-        &lt;/div&gt;
-        &lt;button&gt;next&lt;/button&gt;
-        // END HIGHLIGHT
-      &lt;/div&gt;
+        </div>
+        <button>next</button>
+
+      </div>
     )
   }
 }
+
 ```
 
 حالة المكوّن موجودة في متغير النسخة <em>this.state</em>. الحالة كائن له خاصيتان. <em>this.state.anecdotes</em> هي قائمة الطرائف و<em>this.state.current</em> هو فهرس الطريفة المعروضة حالياً.
@@ -93,16 +95,17 @@ class App extends React.Component {
     }
   }
 
-  // BEGIN HIGHLIGHT
-  componentDidMount = () =&gt; {
-    axios.get('http://localhost:3001/anecdotes').then(response =&gt; {
+
+  componentDidMount = () => {
+    axios.get('http://localhost:3001/anecdotes').then(response => {
       this.setState({ anecdotes: response.data })
     })
   }
-  // END HIGHLIGHT
+
 
   // ...
 }
+
 ```
 
 تحدّث الدالة الرديفة لطلب HTTP حالة المكوّن باستخدام الدالة&nbsp;<a href="https://react.dev/reference/react/Component#setstate" target="_blank" rel="noopener">setState</a>. ولا تلمس الدالة إلا المفاتيح المعرَّفة في الكائن الممرَّر إليها كمعامل. وتبقى قيمة المفتاح&nbsp;<em>current</em>&nbsp;دون تغيير.
@@ -122,68 +125,70 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount = () =&gt; {
-    axios.get('http://localhost:3001/anecdotes').then(response =&gt; {
+  componentDidMount = () => {
+    axios.get('http://localhost:3001/anecdotes').then(response => {
       this.setState({ anecdotes: response.data })
     })
   }
 
-  // BEGIN HIGHLIGHT
-  handleClick = () =&gt; {
+
+  handleClick = () => {
     const current = Math.floor(
       Math.random() * this.state.anecdotes.length
     )
     this.setState({ current })
   }
-  // END HIGHLIGHT
+
 
   render() {
     if (this.state.anecdotes.length === 0 ) {
-      return &lt;div&gt;no anecdotes...&lt;/div&gt;
+      return <div>no anecdotes...</div>
     }
 
     return (
-      &lt;div&gt;
-        &lt;h1&gt;anecdote of the day&lt;/h1&gt;
-        &lt;div&gt;{this.state.anecdotes[this.state.current].content}&lt;/div&gt;
-        // BEGIN HIGHLIGHT
-        &lt;button onClick={this.handleClick}&gt;next&lt;/button&gt;
-        // END HIGHLIGHT
-      &lt;/div&gt;
+      <div>
+        <h1>anecdote of the day</h1>
+        <div>{this.state.anecdotes[this.state.current].content}</div>
+
+        <button onClick={this.handleClick}>next</button>
+
+      </div>
     )
   }
 }
+
 ```
 
 للمقارنة، إليك التطبيق نفسه كمكوّن دالي:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const [anecdotes, setAnecdotes] = useState([])
   const [current, setCurrent] = useState(0)
 
-  useEffect(() =&gt;{
-    axios.get('http://localhost:3001/anecdotes').then(response =&gt; {
+  useEffect(() =>{
+    axios.get('http://localhost:3001/anecdotes').then(response => {
       setAnecdotes(response.data)
     })
   },[])
 
-  const handleClick = () =&gt; {
+  const handleClick = () => {
     setCurrent(Math.round(Math.random() * (anecdotes.length - 1)))
   }
 
   if (anecdotes.length === 0) {
-    return &lt;div&gt;no anecdotes...&lt;/div&gt;
+    return <div>no anecdotes...</div>
   }
 
   return (
-    &lt;div&gt;
-      &lt;h1&gt;anecdote of the day&lt;/h1&gt;
-      &lt;div&gt;{anecdotes[current].content}&lt;/div&gt;
-      &lt;button onClick={handleClick}&gt;next&lt;/button&gt;
-    &lt;/div&gt;
+    <div>
+      <h1>anecdote of the day</h1>
+      <div>{anecdotes[current].content}</div>
+      <button onClick={handleClick}>next</button>
+    </div>
   )
 }
+
 ```
 
 في حالة مثالنا، كانت الاختلافات طفيفة. وأكبر فرق بين المكوّنات الدالية ومكوّنات الصف هو أساساً أن حالة مكوّن الصف كائن واحد، وأن الحالة تُحدَّث باستخدام الدالة&nbsp;<em>setState</em>، بينما في المكوّنات الدالية يمكن أن تتكوّن الحالة من عدة متغيرات مختلفة، ولكل منها دالة تحديث خاصة بها.
@@ -216,13 +221,13 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        &lt;div&gt;
-          &lt;h2&gt;Something went wrong.&lt;/h2&gt;
-          &lt;p&gt;{this.state.error.message}&lt;/p&gt;
-          &lt;button onClick={() =&gt; this.setState({ hasError: false, error: null })}&gt;
+        <div>
+          <h2>Something went wrong.</h2>
+          <p>{this.state.error.message}</p>
+          <button onClick={() => this.setState({ hasError: false, error: null })}>
             try again
-          &lt;/button&gt;
-        &lt;/div&gt;
+          </button>
+        </div>
       )
     }
 
@@ -231,6 +236,7 @@ class ErrorBoundary extends React.Component {
 }
 
 export default ErrorBoundary
+
 ```
 
 دالتا دورة الحياة الأساسيتان هما&nbsp;<em>getDerivedStateFromError</em>، التي تحدّث الحالة كي يعرض العرض التالي الواجهة البديلة، و<em>componentDidCatch</em>، وهي مكان جيد لتسجيل الخطأ لدى خدمة الإبلاغ عن الأخطاء.
@@ -238,18 +244,19 @@ export default ErrorBoundary
 يمكنك لفّ أي جزء من شجرة مكوّناتك بحدّ أخطاء لحصر الأعطال في تلك الشجرة الفرعية:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   return (
-    &lt;div&gt;
-      &lt;ErrorBoundary&gt;
-        &lt;Notes /&gt;
-      &lt;/ErrorBoundary&gt;
-      &lt;ErrorBoundary&gt;
-        &lt;Persons /&gt;
-      &lt;/ErrorBoundary&gt;
-    &lt;/div&gt;
+    <div>
+      <ErrorBoundary>
+        <Notes />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <Persons />
+      </ErrorBoundary>
+    </div>
   )
 }
+
 ```
 
 إذا أطلقت <em>Notes</em>&nbsp;خطأً، يُعرض البديل في ذلك القسم فقط. وتستمر <em>Persons</em>&nbsp;في العمل بشكل طبيعي.
@@ -275,6 +282,7 @@ app/
   server/
     package.json      (Express)
     index.js
+
 ```
 
 خادم Express في <em>server/index.js</em>&nbsp;يقدّم الـ API، وفي الإنتاج يقدّم أيضاً الواجهة الأمامية المبنية من مجلد <em>client/dist</em>:
@@ -287,20 +295,21 @@ const app = express()
 
 app.use(express.json())
 
-app.get('/api/ping', (req, res) =&gt; {
+app.get('/api/ping', (req, res) => {
   res.json({ message: 'pong', time: new Date().toISOString() })
 })
 
 // تقديم الواجهة الأمامية المبنية بـ Vite في الإنتاج
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')))
-  app.get('/*splat', (req, res) =&gt; {
+  app.get('/*splat', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'))
   })
 }
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () =&gt; console.log(`server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`server running on port ${PORT}`))
+
 ```
 
 > ماذا عن /*splat
@@ -323,6 +332,7 @@ export default defineConfig({
     },
   },
 })
+
 ```
 
 مع وجود الوسيط (proxy)، يُمرَّر أي جلب من الواجهة الأمامية إلى <em>/api/ping</em>&nbsp;تلقائياً إلى خادم Express أثناء التطوير، فلا تضطر أبداً إلى ترميز عنوان الواجهة الخلفية بشكل ثابت.
@@ -340,6 +350,7 @@ export default defineConfig({
     "concurrently": "^8.0.0"
   }
 }
+
 ```
 
 هناك بضعة أمور مثيرة للاهتمام هنا.
@@ -357,6 +368,7 @@ export default defineConfig({
 ```bash
 npm install axios --prefix client     # إضافة إلى الواجهة الأمامية
 npm install mongoose --prefix server  # إضافة إلى الواجهة الخلفية
+
 ```
 
 بدلاً من ذلك، يمكنك ببساطة تنفيذ <em>cd</em>&nbsp;إلى المجلد وتشغيل <em>npm install</em>&nbsp;من هناك كما تفعل عادةً.
@@ -381,6 +393,7 @@ src/
   stores/
     blogStore.js
     notificationStore.js
+
 ```
 
 هذا التجميع المسطّح القائم على النوع يعمل جيداً مع التطبيقات الصغيرة.
@@ -407,6 +420,7 @@ src/
   stores/
     blogStore.js
     notificationStore.js
+
 ```
 
 مع نمو قاعدة الشيفرة أكثر، قد يظل التغيير في ميزة واحدة يلامس ملفات موزّعة في كل مجلد، وقد يصبح التنقّل في كلٍّ من <em>components</em>&nbsp;و<em>pages</em>&nbsp;صعباً.
@@ -430,6 +444,7 @@ src/
       notificationStore.js
   hooks/
     useField.js
+
 ```
 
 كل ما يتعلق بالمدونات يعيش معاً، لذا فإن إضافة ميزة أو تغييرها يعني العمل في مكان واحد بدلاً من عدة أماكن. ولا توجد طريقة صحيحة وحيدة لتنظيم مشروع أكبر، ويعتمد الخيار الصحيح على حجم التطبيق وطبيعته.
@@ -460,24 +475,28 @@ src/
 
 ```js
 let query = "SELECT * FROM Users WHERE name = '" + userName + "';"
+
 ```
 
 الآن لنفترض أن مستخدماً خبيثاً اسمه&nbsp;<em>Arto Hellas</em>&nbsp;عرّف اسمه على النحو التالي
 
 ```
 Arto Hell-as'; DROP TABLE Users; --
+
 ```
 
 بحيث يحتوي الاسم على علامة اقتباس مفردة&nbsp;<code>'</code>، وهي حرف البداية والنهاية لنص SQL. ونتيجة لذلك، ستُنفَّذ عمليتا SQL، والثانية منهما ستدمّر جدول قاعدة البيانات <em>Users</em>:
 
 ```sql
 SELECT * FROM Users WHERE name = 'Arto Hell-as'; DROP TABLE Users; --'
+
 ```
 
 يُمنع حقن SQL باستخدام&nbsp;<a href="https://security.stackexchange.com/questions/230211/why-are-stored-procedures-and-prepared-statements-the-preferred-modern-methods-f" target="_blank" rel="noopener">الاستعلامات المُعاملة (parameterized queries)</a>. فمعها لا يُخلط إدخال المستخدم مع استعلام SQL، بل تُدرج قاعدة البيانات نفسها قيم الإدخال عند العناصر النائبة في الاستعلام (عادةً&nbsp;<code>?</code>):
 
 ```
 execute("SELECT * FROM Users WHERE name = ?", [userName])
+
 ```
 
 هجمات الحقن ممكنة أيضاً في قواعد بيانات NoSQL. غير أن Mongoose يمنعها عبر <a href="https://zanon.io/posts/nosql-injection-in-mongodb" target="_blank" rel="noopener">تنقية</a> الاستعلامات. ويمكن العثور على المزيد حول الموضوع مثلاً <a href="https://web.archive.org/web/20220901024441/https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html" target="_blank" rel="noopener">هنا</a>.
@@ -485,9 +504,10 @@ execute("SELECT * FROM Users WHERE name = ?", [userName])
 <em>البرمجة عبر المواقع (Cross-site scripting - XSS)</em>&nbsp;هجوم يمكن فيه حقن شيفرة JavaScript خبيثة في تطبيق ويب شرعي. ثم تُنفَّذ الشيفرة الخبيثة في متصفح الضحية. وإذا حاولنا حقن ما يلي مثلاً في تطبيق الملاحظات:
 
 ```
-&lt;script&gt;
+<script>
   alert('Evil XSS attack')
-&lt;/script&gt;
+</script>
+
 ```
 
 لا تُنفَّذ الشيفرة، بل تُعرض فقط كنص على الصفحة:
@@ -502,6 +522,7 @@ execute("SELECT * FROM Users WHERE name = ?", [userName])
 
 ```bash
 npm outdated --depth 0
+
 ```
 
 المشروع الذي عمره سنة والمستخدم في <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-typescript" target="_blank" rel="noopener">الجزء 9</a> من هذا المقرر لديه بالفعل عدد لا بأس به من الاعتماديات القديمة:
@@ -512,6 +533,7 @@ npm outdated --depth 0
 
 ```bash
 npm install -g npm-check-updates
+
 ```
 
 باستخدام هذه الأداة، يُفحص مدى حداثة الاعتماديات بالطريقة التالية:
@@ -527,6 +549,7 @@ Checking ...\my-app\package.json
  vite                          ^5.0.0  →   ^6.0.0
 
 Run ncu -u to upgrade package.json
+
 ```
 
 يُحدَّث الملف <em>package.json</em>&nbsp;بتنفيذ الأمر <em>ncu -u</em>.
@@ -542,6 +565,7 @@ Upgrading ...\my-app\package.json
  vite                          ^5.0.0  →   ^6.0.0
 
 Run npm install to install new versions.
+
 ```
 
 ثم يحين وقت تحديث الاعتماديات بتنفيذ الأمر <em>npm install</em>. غير أن الإصدارات القديمة من الاعتماديات ليست بالضرورة خطراً أمنياً.
@@ -555,7 +579,7 @@ $ patientor npm audit
 
 ... many lines removed ...
 
-url-parse  &lt;1.5.2
+url-parse  <1.5.2
 Severity: moderate
 Open redirect in url-parse - https://github.com/advisories/GHSA-hh27-ffr2-f2jc
 fix available via `npm audit fix`
@@ -576,6 +600,7 @@ To address issues that do not require attention, run:
 
 To address all issues (including breaking changes), run:
   npm audit fix --force
+
 ```
 
 بعد سنة واحدة فقط، أصبحت الشيفرة مليئة بتهديدات أمنية صغيرة. ولحسن الحظ، لا يوجد سوى تهديدين حرجين. لنشغّل <em>npm audit fix</em>&nbsp;كما يقترح التقرير:
@@ -588,6 +613,7 @@ added 19 packages from 8 contributors, removed 8 packages and updated 15 package
 fixed 354 of 416 vulnerabilities in 20047 scanned packages
   1 package update for 62 vulns involved breaking changes
   (use `npm audit fix --force` to install breaking changes; or refer to `npm audit` for steps to fix these manually)
+
 ```
 
 يتبقى 62 تهديداً لأن <em>audit fix</em>&nbsp;لا يحدّث افتراضياً الاعتماديات إذا زاد رقم إصدارها <em>الرئيسي (major)</em>. وتحديث هذه الاعتماديات قد يؤدي إلى انهيار التطبيق بأكمله.
@@ -595,11 +621,12 @@ fixed 354 of 416 vulnerabilities in 20047 scanned packages
 مصدر العلّة الحرجة هي مكتبة <a href="https://github.com/immerjs/immer" target="_blank" rel="noopener">immer</a>
 
 ```
-immer  &lt;9.0.6
+immer  <9.0.6
 Severity: critical
 Prototype Pollution in immer - https://github.com/advisories/GHSA-33f9-j839-rf8h
 fix available via `npm audit fix --force`
 Will install react-scripts@5.0.0, which is a breaking change
+
 ```
 
 تشغيل <em>npm audit fix --force</em>&nbsp;سيُرقّي إصدار المكتبة لكنه سيرقّي أيضاً المكتبة <em>react-scripts</em>&nbsp;وقد يُعطّل ذلك بيئة التطوير. لذا سنترك ترقيات المكتبات لوقت لاحق...

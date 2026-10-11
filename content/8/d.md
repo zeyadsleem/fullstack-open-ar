@@ -52,6 +52,7 @@ const typeDefs = /* GraphQL */ `
 `
 
 module.exports = typeDefs
+
 ```
 
 بعد ذلك، سننقل الشيفرة المسؤولة عن resolvers إلى وحدتها الخاصة&nbsp;<em>resolvers.js</em>:
@@ -85,19 +86,19 @@ let persons = [
 
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: (root, args) =&gt; {
+    personCount: () => persons.length,
+    allPersons: (root, args) => {
       if (!args.phone) {
         return persons
       }
-      const byPhone = (person) =&gt;
+      const byPhone = (person) =>
         args.phone === 'YES' ? person.phone : !person.phone
       return persons.filter(byPhone)
     },
-    findPerson: (root, args) =&gt; persons.find((p) =&gt; p.name === args.name),
+    findPerson: (root, args) => persons.find((p) => p.name === args.name),
   },
   Person: {
-    address: ({ street, city }) =&gt; {
+    address: ({ street, city }) => {
       return {
         street,
         city,
@@ -105,8 +106,8 @@ const resolvers = {
     },
   },
   Mutation: {
-    addPerson: (root, args) =&gt; {
-      if (persons.find((p) =&gt; p.name === args.name)) {
+    addPerson: (root, args) => {
+      if (persons.find((p) => p.name === args.name)) {
         throw new GraphQLError(`Name must be unique: ${args.name}`, {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -119,20 +120,21 @@ const resolvers = {
       persons = persons.concat(person)
       return person
     },
-    editNumber: (root, args) =&gt; {
-      const person = persons.find((p) =&gt; p.name === args.name)
+    editNumber: (root, args) => {
+      const person = persons.find((p) => p.name === args.name)
       if (!person) {
         return null
       }
 
       const updatedPerson = { ...person, phone: args.phone }
-      persons = persons.map((p) =&gt; (p.name === args.name ? updatedPerson : p))
+      persons = persons.map((p) => (p.name === args.name ? updatedPerson : p))
       return updatedPerson
     },
   },
 }
 
 module.exports = resolvers
+
 ```
 
 للتبسيط، وُضعت الآن مصفوفة&nbsp;<em>persons</em>&nbsp;التي تحمل بيانات الأشخاص في الملف نفسه مع الـ resolvers. وستُزال المصفوفة قريباً عندما ننتقل إلى استخدام قاعدة بيانات لتخزين البيانات.
@@ -146,7 +148,7 @@ const { startStandaloneServer } = require('@apollo/server/standalone')
 const resolvers = require('./resolvers')
 const typeDefs = require('./schema')
 
-const startServer = (port) =&gt; {
+const startServer = (port) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -154,12 +156,13 @@ const startServer = (port) =&gt; {
 
   startStandaloneServer(server, {
     listen: { port },
-  }).then(({ url }) =&gt; {
+  }).then(({ url }) => {
     console.log(`Server ready at ${url}`)
   })
 }
 
 module.exports = startServer
+
 ```
 
 أصبح تشغيل خادم Apollo الآن يُعالَج داخل دالة&nbsp;<em>startServer</em>&nbsp;التي عرّفناها بأنفسنا. وهذا يتيح لنا تصدير الدالة وبدء الخادم من خارج الوحدة، من ملف&nbsp;<em>index.js</em>. وتأخذ الدالة كمعامل المنفذ الذي سيستمع عليه Apollo Server.
@@ -168,6 +171,7 @@ module.exports = startServer
 
 ```bash
 npm install dotenv
+
 ```
 
 لم تبقَ سوى كمية صغيرة من الشيفرة في&nbsp;<em>index.js</em>. وبعد إعادة الهيكلة، يكون محتواها كما يلي:
@@ -180,6 +184,7 @@ const startServer = require('./server')
 const PORT = process.env.PORT || 4000
 
 startServer(PORT)
+
 ```
 
 تُقرأ متغيرات البيئة أولاً من ملف&nbsp;<em>.env</em>&nbsp;باستخدام مكتبة&nbsp;<em>dotenv</em>. ويُقرأ المنفذ المستخدم الآن من متغير بيئة، إن كان معرّفاً. وإذا لم يُعثر على متغير البيئة&nbsp;<em>PORT</em>، يُستخدم المنفذ الافتراضي 4000—وهو أيضاً المنفذ الذي تتوقع الواجهة الأمامية حالياً أن يعمل الخادم عليه. وأخيراً، يُبدأ Apollo Server باستدعاء الدالة startServer.
@@ -200,6 +205,7 @@ startServer(PORT)
 
 ```bash
 npm install mongoose
+
 ```
 
 عرّف مخطط person في الملف&nbsp;<em>models/person.js</em>&nbsp;كما يلي:
@@ -230,6 +236,7 @@ const schema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('Person', schema)
+
 ```
 
 أدرجنا أيضاً بعض عمليات التحقق. إن <code>required: true</code>، الذي يضمن وجود قيمة، زائد فعلاً: فنحن نضمن بالفعل وجود الحقول عبر GraphQL. لكن من الجيد أيضاً إبقاء التحقق في قاعدة البيانات.
@@ -239,7 +246,7 @@ module.exports = mongoose.model('Person', schema)
 ```js
 const mongoose = require('mongoose')
 
-const connectToDatabase = async (uri) =&gt; {
+const connectToDatabase = async (uri) => {
   console.log('connecting to database URI:', uri)
 
   try {
@@ -252,6 +259,7 @@ const connectToDatabase = async (uri) =&gt; {
 }
 
 module.exports = connectToDatabase
+
 ```
 
 تعرّف الوحدة الدالة&nbsp;<code>connectToDatabase</code>، التي تستقبل عنوان URI لقاعدة البيانات كمعامل وتتولى الاتصال بقاعدة البيانات.
@@ -261,18 +269,19 @@ module.exports = connectToDatabase
 ```js
 require('dotenv').config()
 
-const connectToDatabase = require('./db') // HIGHLIGHT LINE
+const connectToDatabase = require('./db')
 const startServer = require('./server')
 
-const MONGODB_URI = process.env.MONGODB_URI // HIGHLIGHT LINE
+const MONGODB_URI = process.env.MONGODB_URI
 const PORT = process.env.PORT || 4000
 
-const main = async () =&gt; { // HIGHLIGHT LINE
-  await connectToDatabase(MONGODB_URI) // HIGHLIGHT LINE
+const main = async () => {
+  await connectToDatabase(MONGODB_URI)
   startServer(PORT)
 }
 
 main()
+
 ```
 
 لأن صيغة&nbsp;<em>async/await</em>&nbsp;لا يمكن استخدامها إلا داخل الدوال، نعرّف الآن دالة&nbsp;<em>main</em>&nbsp;بسيطة تتولى بدء التطبيق. وهذا يتيح لنا استدعاء الدالة التي تنشئ اتصال قاعدة البيانات باستخدام الكلمة المفتاحية&nbsp;<em>await</em>.
@@ -287,15 +296,15 @@ const Person = require('./models/person')
 
 const resolvers = {
   Query: {
-    personCount: async () =&gt; Person.collection.countDocuments(),
-    allPersons: async (root, args) =&gt; {
+    personCount: async () => Person.collection.countDocuments(),
+    allPersons: async (root, args) => {
       // الفلاتر مفقودة
       return Person.find({})
     },
-    findPerson: async (root, args) =&gt; Person.findOne({ name: args.name }),
+    findPerson: async (root, args) => Person.findOne({ name: args.name }),
   },
   Person: {
-    address: ({ street, city }) =&gt; {
+    address: ({ street, city }) => {
       return {
         street,
         city,
@@ -303,7 +312,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    addPerson: async (root, args) =&gt; {
+    addPerson: async (root, args) => {
       const nameExists = await Person.exists({ name: args.name })
 
       if (nameExists) {
@@ -318,7 +327,7 @@ const resolvers = {
       const person = new Person({ ...args })
       return person.save()
     },
-    editNumber: async (root, args) =&gt; {
+    editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
 
       if (!person) {
@@ -332,6 +341,7 @@ const resolvers = {
 }
 
 module.exports = resolvers
+
 ```
 
 التغييرات مباشرة تماماً. لكن هناك بضعة أمور جديرة بالملاحظة. كما نتذكر، في Mongo يُسمّى حقل تعريف الكائن&nbsp;<em>_id</em>&nbsp;وكان علينا سابقاً تحويل اسم الحقل إلى&nbsp;<em>id</em>&nbsp;بأنفسنا. أما الآن فيستطيع GraphQL فعل ذلك تلقائياً.
@@ -341,18 +351,20 @@ module.exports = resolvers
 مثلاً، إذا نُفّذت دالة resolver التالية،
 
 ```js
-allPersons: async (root, args) =&gt; {
+allPersons: async (root, args) => {
   return Person.find({})
 },
+
 ```
 
 فإن خادم Apollo ينتظر حلّ الـ promise، ثم يُعيد النتيجة. إذاً يعمل Apollo تقريباً هكذا:
 
 ```js
-allPersons: async (root, args) =&gt; {
+allPersons: async (root, args) => {
   const result = await Person.find({})
   return result
 }
+
 ```
 
 لنكمل resolver الـ<code>allPersons</code> ليأخذ المعامل الاختياري&nbsp;<code>phone</code>&nbsp;في الحسبان:
@@ -360,7 +372,7 @@ allPersons: async (root, args) =&gt; {
 ```js
 Query: {
   // ..
-  allPersons: async (root, args) =&gt; {
+  allPersons: async (root, args) => {
     if (!args.phone) {
       return Person.find({})
     }
@@ -368,18 +380,21 @@ Query: {
     return Person.find({ phone: { $exists: args.phone === 'YES' } })
   },
 },
+
 ```
 
 إذاً إذا لم يُعطَ للاستعلام معامل&nbsp;<code>phone</code>، تُعاد جميع الأشخاص. وإذا كانت قيمة المعامل&nbsp;<em>YES</em>، تُعاد نتيجة الاستعلام
 
 ```
 Person.find({ phone: { $exists: true }})
+
 ```
 
 أي الكائنات التي يمتلك فيها الحقل&nbsp;<code>phone</code>&nbsp;قيمة. وإذا كانت قيمة المعامل&nbsp;<em>NO</em>، يُعيد الاستعلام الكائنات التي لا يمتلك فيها الحقل&nbsp;<code>phone</code>&nbsp;أي قيمة:
 
 ```
 Person.find({ phone: { $exists: false }})
+
 ```
 
 ## التحقق من الصحة
@@ -388,7 +403,7 @@ Person.find({ phone: { $exists: false }})
 
 ```js
 Mutation: {
-  addPerson: async (root, args) =&gt; {
+  addPerson: async (root, args) => {
       const nameExists = await Person.exists({ name: args.name })
 
       if (nameExists) {
@@ -402,7 +417,7 @@ Mutation: {
 
       const person = new Person({ ...args })
 
-// BEGIN HIGHLIGHT
+
       try {
         await person.save()
       } catch (error) {
@@ -416,9 +431,9 @@ Mutation: {
       }
 
       return person
-// END HIGHLIGHT
+
   },
-    editNumber: async (root, args) =&gt; {
+    editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
 
       if (!person) {
@@ -427,7 +442,7 @@ Mutation: {
 
       person.phone = args.phone
 
-// BEGIN HIGHLIGHT
+
       try {
         await person.save()
       } catch (error) {
@@ -441,9 +456,10 @@ Mutation: {
       }
 
       return person
-// END HIGHLIGHT
+
     }
 }
+
 ```
 
 أضفنا أيضاً خطأ Mongoose والبيانات التي تسببت في الخطأ إلى كائن&nbsp;<em>extensions</em>&nbsp;الذي يُستخدم لإيصال مزيد من المعلومات عن سبب الخطأ إلى المستدعي. ويمكن للواجهة الأمامية عندها عرض هذه المعلومات للمستخدم، الذي يمكنه إعادة المحاولة بمدخلات أفضل.
@@ -474,6 +490,7 @@ const schema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('User', schema)
+
 ```
 
 يرتبط كل مستخدم بمجموعة من الأشخاص الآخرين في النظام عبر حقل&nbsp;<code>friends</code>. والفكرة أنه عندما يضيف مستخدم، مثلاً&nbsp;<em>mluukkai</em>، شخصاً، مثلاً&nbsp;<em>Arto Hellas</em>، إلى القائمة، يُضاف الشخص إلى قائمة&nbsp;<code>friends</code>&nbsp;الخاصة به. وبهذه الطريقة، يمكن للمستخدمين المسجّلين دخولهم الحصول على عرض مخصّص خاص بهم في التطبيق.
@@ -503,6 +520,7 @@ type Mutation {
   createUser(username: String!): User
   login(username: String!, password: String!): Token
 }
+
 ```
 
 يُعيد الاستعلام&nbsp;<code>me</code>&nbsp;المستخدم المسجّل دخوله حالياً. ويُنشأ المستخدمون الجدد عبر mutation الـ<code>createUser</code>، ويتم تسجيل الدخول عبر mutation الـ<code>login</code>.
@@ -511,6 +529,7 @@ type Mutation {
 
 ```bash
 npm install jsonwebtoken
+
 ```
 
 تكون resolvers الـ mutations الجديدة كما يلي:
@@ -521,11 +540,11 @@ const User = require('./models/user')
 
 Mutation: {
   // ..
-  createUser: async (root, args) =&gt; {
+  createUser: async (root, args) => {
     const user = new User({ username: args.username })
 
     return user.save()
-      .catch(error =&gt; {
+      .catch(error => {
         throw new GraphQLError(`Creating the user failed: ${error.message}`, {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -535,7 +554,7 @@ Mutation: {
         })
       })
   },
-  login: async (root, args) =&gt; {
+  login: async (root, args) => {
     const user = await User.findOne({ username: args.username })
 
     if ( !user || args.password !== 'secret' ) {
@@ -554,6 +573,7 @@ Mutation: {
     return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
   },
 },
+
 ```
 
 mutation المستخدم الجديدة مباشرة. تتحقق mutation الـ login من صلاحية زوج اسم المستخدم/كلمة المرور. وإذا كان صالحاً بالفعل، تُعيد رمز jwt مألوفاً من <a href="/part4/token_authentication" target="_blank" rel="noreferrer noopener">الجزء 4</a>. لاحظ أنه يجب تعريف <code>JWT_SECRET</code> في ملف <em>.env</em>.
@@ -569,6 +589,7 @@ mutation {
     id
   }
 }
+
 ```
 
 تبدو mutation تسجيل الدخول هكذا:
@@ -582,6 +603,7 @@ mutation {
     value
   }
 }
+
 ```
 
 كما في الحالة السابقة مع REST، الفكرة الآن أن يضيف المستخدم المسجّل دخوله الرمز الذي يحصل عليه عند تسجيل الدخول إلى جميع طلباته. وكما في REST، يُضاف الرمز إلى استعلامات GraphQL باستخدام ترويسة&nbsp;<em>Authorization</em>.
@@ -597,14 +619,14 @@ mutation {
 ```js
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
-const jwt = require('jsonwebtoken') // HIGHLIGHT LINE
+const jwt = require('jsonwebtoken')
 
 const resolvers = require('./resolvers')
 const typeDefs = require('./schema')
-const User = require('./models/user') // HIGHLIGHT LINE
+const User = require('./models/user')
 
-// BEGIN HIGHLIGHT
-const getUserFromAuthHeader = async (auth) =&gt; {
+
+const getUserFromAuthHeader = async (auth) => {
   if (!auth || !auth.startsWith('Bearer ')) {
     return null
   }
@@ -612,9 +634,9 @@ const getUserFromAuthHeader = async (auth) =&gt; {
   const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
   return User.findById(decodedToken.id).populate('friends')
 }
-// END HIGHLIGHT
 
-const startServer = (port) =&gt; {
+
+const startServer = (port) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -622,19 +644,20 @@ const startServer = (port) =&gt; {
 
   startStandaloneServer(server, {
     listen: { port },
-    // BEGIN HIGHLIGHT
-    context: async ({ req }) =&gt; {
+
+    context: async ({ req }) => {
       const auth = req.headers.authorization
       const currentUser = await getUserFromAuthHeader(auth)
       return { currentUser }
     },
-    // END HIGHLIGHT
-  }).then(({ url }) =&gt; {
+
+  }).then(({ url }) => {
     console.log(`Server ready at ${url}`)
   })
 }
 
 module.exports = startServer
+
 ```
 
 إذاً تستخرج الشيفرة التي عرّفناها أولاً الرمز الموجود في ترويسة&nbsp;<code>Authorization</code>&nbsp;الخاصة بالطلب. وتفكّ دالة المساعدة&nbsp;<code>getUserFromAuthHeader</code>&nbsp;ترميز الرمز وتبحث عن المستخدم المقابل في قاعدة البيانات. وإذا لم يكن الرمز صالحاً أو تعذّر العثور على المستخدم، تُعيد الدالة&nbsp;<code>null</code>.
@@ -642,11 +665,12 @@ module.exports = startServer
 وأخيراً، يُضبط حقل context المسمّى&nbsp;<code>currentUser</code>&nbsp;على كائن المستخدم المقابل للطالب، أو على&nbsp;<code>null</code>&nbsp;إذا لم يُعثر على مستخدم:
 
 ```js
-context: async ({ req }) =&gt; {
+context: async ({ req }) => {
   const auth = req.headers.authorization
   const currentUser = await getUserFromAuthHeader(auth)
-  return { currentUser } // HIGHLIGHT LINE
+  return { currentUser }
 },
+
 ```
 
 تُمرَّر قيمة context إلى الـ resolvers كـ&nbsp;<code>المعامل الثالث</code>. وresolver الخاص باستعلام&nbsp;<code>me</code>&nbsp;بسيط جداً: فهو يُعيد فقط المستخدم المسجّل دخوله حالياً، الذي يحصل عليه من معامل resolver المسمّى&nbsp;<code>context</code>، من الحقل&nbsp;<code>currentUser</code>:
@@ -654,10 +678,11 @@ context: async ({ req }) =&gt; {
 ```js
 Query: {
   // ...
-  me: (root, args, context) =&gt; {
+  me: (root, args, context) => {
     return context.currentUser
   }
 },
+
 ```
 
 إذا كانت الترويسة تحتوي على رمز صالح، يُعيد الاستعلام تفاصيل المستخدم الذي يحدده الرمز.
@@ -674,8 +699,8 @@ Query: {
 
 ```js
 Mutation: {
-  // BEGIN HIGHLIGHT
-  addPerson: async (root, args, context) =&gt; {
+
+  addPerson: async (root, args, context) => {
     const currentUser = context.currentUser
 
     if (!currentUser) {
@@ -685,7 +710,7 @@ Mutation: {
         }
       })
     }
-    // END HIGHLIGHT
+
 
     const nameExists = await Person.exists({ name: args.name })
 
@@ -702,8 +727,8 @@ Mutation: {
 
     try {
       await person.save()
-      currentUser.friends = currentUser.friends.concat(person) // HIGHLIGHT LINE
-      await currentUser.save() // HIGHLIGHT LINE
+      currentUser.friends = currentUser.friends.concat(person)
+      await currentUser.save()
     } catch (error) {
       throw new GraphQLError(`Saving person failed: ${error.message}`, {
         extensions: {
@@ -718,6 +743,7 @@ Mutation: {
   },
   //...
 }
+
 ```
 
 إذا تعذّر العثور على مستخدم مسجّل دخوله في context، يُرمى&nbsp;<code>GraphQLError</code>&nbsp;برسالة مناسبة. ويتم الآن إنشاء الأشخاص الجدد بصيغة&nbsp;<code>async/await</code>&nbsp;لأنه إذا نجحت العملية، يُضاف الشخص المنشأ إلى قائمة أصدقاء المستخدم.
@@ -727,23 +753,24 @@ Mutation: {
 ```
 type Mutation {
   // ...
-  addAsFriend(name: String!): User // HIGHLIGHT LINE
+  addAsFriend(name: String!): User
 }
+
 ```
 
 وresolver الخاص بالـ mutation:
 
 ```js
-  addAsFriend: async (root, args, { currentUser }) =&gt; {
+  addAsFriend: async (root, args, { currentUser }) => {
     if (!currentUser) {
       throw new GraphQLError('not authenticated', {
         extensions: { code: 'UNAUTHENTICATED' },
       })
     }
 
-    const nonFriendAlready = (person) =&gt;
+    const nonFriendAlready = (person) =>
       !currentUser.friends
-        .map((f) =&gt; f._id.toString())
+        .map((f) => f._id.toString())
         .includes(person._id.toString())
 
     const person = await Person.findOne({ name: args.name })
@@ -765,19 +792,22 @@ type Mutation {
 
     return currentUser
   },
+
 ```
 
 لاحظ كيف يستخرج resolver المستخدم المسجّل دخوله من context عبر&nbsp;<em>التفكيك</em>. فبدلاً من حفظ&nbsp;<code>currentUser</code>&nbsp;في متغير منفصل داخل دالة
 
 ```js
-addAsFriend: async (root, args, context) =&gt; {
+addAsFriend: async (root, args, context) => {
   const currentUser = context.currentUser
+
 ```
 
 يُستقبل مباشرة في تعريف معاملات الدالة:
 
 ```
-addAsFriend: async (root, args, { currentUser }) =&gt; {
+addAsFriend: async (root, args, { currentUser }) => {
+
 ```
 
 يُعيد الاستعلام التالي الآن قائمة أصدقاء المستخدم:
@@ -792,6 +822,7 @@ query {
     }
   }
 }
+
 ```
 
 يمكن العثور على شيفرة الواجهة الخلفية على&nbsp;<a href="https://github.com/fullstack-hy2020/graphql-phonebook-backend/tree/part8-5" target="_blank" rel="noreferrer noopener">Github</a>&nbsp;الفرع&nbsp;<em>part8-5</em>.

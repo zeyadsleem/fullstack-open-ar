@@ -16,6 +16,7 @@ lang: ar
 ```
 ├── index.js
 └── Dockerfile
+
 ```
 
 داخل ملف Dockerfile سنخبر الصورة بثلاثة أمور:
@@ -35,6 +36,7 @@ WORKDIR /usr/src/app
 COPY ./index.js ./index.js
 
 CMD ["node", "index.js"]
+
 ```
 
 تُخبر تعليمة <a href="https://docs.docker.com/reference/dockerfile/#from" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#from">FROM</a> برنامج Docker بأن أساس الصورة هو node:24. وتنسخ تعليمة <a href="https://docs.docker.com/reference/dockerfile/#copy" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#copy">COPY</a> الملف <em>index.js</em> من الجهاز المضيف إلى ملف بالاسم نفسه داخل الصورة. أما تعليمة <a href="https://docs.docker.com/reference/dockerfile/#cmd" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#cmd">CMD</a> فتحدد الأمر الافتراضي الذي يُنفَّذ عند تشغيل حاوية باستخدام <code>docker run</code>. نحن نستخدم صيغة <a href="https://docs.docker.com/reference/dockerfile/#exec-form" data-type="link" data-id="https://docs.docker.com/reference/dockerfile/#exec-form">exec</a> <code>CMD ["node", "index.js"]</code> التي تنفّذ الملف التنفيذي <em>node</em> مع <em>index.js</em> كوسيط له.
@@ -49,6 +51,7 @@ CMD ["node", "index.js"]
 $ docker build -t fs-hello-world .
 [+] Building 3.9s (8/8) FINISHED
 ...
+
 ```
 
 إذن النتيجة هي
@@ -60,6 +63,7 @@ $ docker build -t fs-hello-world .
 ```
 $ docker run fs-hello-world
 Hello, World
+
 ```
 
 بما أن الصور مجرد ملفات، فيمكن نقلها وتنزيلها وحذفها. يمكنك سرد الصور الموجودة لديك محلياً باستخدام <code>docker image ls</code>، وحذفها باستخدام <code>docker image rm</code>. ولمعرفة الأوامر الأخرى المتاحة لديك استخدم <code>docker image --help</code>.
@@ -71,6 +75,7 @@ $ docker run -it fs-hello-world bash
 root@2932e32dbc09:/usr/src/app# ls
 index.js
 root@2932e32dbc09:/usr/src/app#
+
 ```
 
 ### صورة أكثر فائدة
@@ -86,6 +91,7 @@ $ npx express-generator
 
   run the app:
     $ DEBUG=playground:* npm start
+
 ```
 
 أولاً، لنشغّل التطبيق لنأخذ فكرة عما أنشأناه للتو. لاحظ أن أمر تشغيل التطبيق قد يختلف لديك؛ فمجلدي كان اسمه playground.
@@ -94,6 +100,7 @@ $ npx express-generator
 $ npm install
 $ DEBUG=playground:* npm start
   playground:server Listening on port 3000 +0ms
+
 ```
 
 رائع، يمكننا الآن الانتقال إلى <a href="http://localhost:3000/" target="_blank" rel="noreferrer noopener">http://localhost:3000</a> حيث يعمل التطبيق:
@@ -120,6 +127,7 @@ COPY . .
 ENV DEBUG=playground:*
 
 CMD ["npm", "start"]
+
 ```
 
 يمكننا الآن بناء الصورة من ملف Dockerfile وتشغيلها:
@@ -127,6 +135,7 @@ CMD ["npm", "start"]
 ```bash
 docker build -t express-server .
 docker run -p 3123:3000 express-server
+
 ```
 
 تُخبر العلامة <code>-p</code> في أمر التشغيل برنامج Docker بضرورة فتح منفذ من الجهاز المضيف وتوجيهه إلى منفذ في الحاوية. الصيغة هي <code>-p host-port:application-port</code>.
@@ -142,10 +151,11 @@ docker run -p 3123:3000 express-server
 ```
 $ docker container ls
   CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                       NAMES
-  48096ca3ffec   express-server   "docker-entrypoint.s…"   9 seconds ago   Up 6 seconds   0.0.0.0:3123-&gt;3000/tcp, :::3123-&gt;3000/tcp   infallible_booth
+  48096ca3ffec   express-server   "docker-entrypoint.s…"   9 seconds ago   Up 6 seconds   0.0.0.0:3123->3000/tcp, :::3123->3000/tcp   infallible_booth
 
 $ docker kill 48
   48
+
 ```
 
 في المستقبل، لنستخدم المنفذ نفسه على جانبي <code>-p</code>. حتى لا نضطر إلى تذكر أي منفذ اخترناه.
@@ -165,6 +175,7 @@ $ docker kill 48
 .gitignore
 node_modules
 Dockerfile
+
 ```
 
 في حالتنا، لا يُعد ملف .dockerignore الشيء الوحيد المطلوب. نحتاج أيضاً إلى تثبيت الاعتماديات أثناء خطوة البناء. يتغير ملف <em>Dockerfile</em> إلى:
@@ -176,13 +187,14 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-// BEGIN HIGHLIGHT
+
 RUN npm install
 
 ENV DEBUG=express:*
 
 CMD ["npm", "start"]
-// END HIGHLIGHT
+
+
 ```
 
 قد يكون <code>npm install</code> محفوفاً بالمخاطر. فبدلاً من استخدام npm install، يقدم npm أداة أفضل بكثير لتثبيت الاعتماديات، وهي أمر <a href="https://docs.npmjs.com/cli/v9/commands/npm-ci" data-type="link" data-id="https://docs.npmjs.com/cli/v9/commands/npm-ci">ci</a>.
@@ -204,13 +216,14 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-// BEGIN HIGHLIGHT
+
 RUN npm ci
 
 ENV DEBUG=express:*
 
 CMD ["npm", "start"]
-// END HIGHLIGHT
+
+
 ```
 
 والأفضل من ذلك، يمكننا استخدام <code>npm ci --omit=dev</code> لعدم إضاعة الوقت في تثبيت اعتماديات التطوير.
@@ -238,15 +251,16 @@ FROM node:24
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node . . // HIGHLIGHT LINE
+COPY --chown=node:node . .
 
 RUN npm ci
 
 ENV DEBUG=playground:*
 
-USER node // HIGHLIGHT LINE
+USER node
 
 CMD ["npm", "start"]
+
 ```
 
 <div class="tasks">
@@ -272,6 +286,7 @@ services:
     build: .              # يحدد مكان البناء إذا لم توجد الصورة
     ports:                # يحدد المنافذ التي سيتم نشرها
       - 3000:3000
+
 ```
 
 شُرح معنى كل سطر في تعليق. وإذا أردت رؤية المواصفات الكاملة فراجع <a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="noreferrer noopener">التوثيق</a>.
@@ -286,7 +301,7 @@ services:
 
 <div class="tasks">
 
-**6. Docker compose**
+**6. Docker Compose**
 
 </div>
 
@@ -310,6 +325,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: the_database
+
 ```
 
 شُرح معنى أول متغيري بيئة معرّفين أعلاه في صفحة Docker Hub:
@@ -322,6 +338,7 @@ services:
 
 ```bash
 docker compose -f docker-compose.dev.yml up -d
+
 ```
 
 كما ذُكر سابقاً، <strong>لا</strong> نريد حالياً تشغيل تطبيق Node داخل حاوية. فالتطوير بينما التطبيق نفسه داخل حاوية يمثل تحدياً. سنستكشف ذلك الخيار لاحقاً في هذا الجزء.
@@ -330,6 +347,7 @@ docker compose -f docker-compose.dev.yml up -d
 
 ```
 MONGO_URL=mongodb://localhost:3456/the_database npm run dev
+
 ```
 
 لن يكون هذا كافياً؛ نحتاج إلى إنشاء مستخدم ليُصرَّح له داخل الحاوية. فالرابط&nbsp;<a href="http://localhost:3000/todos" target="_blank" rel="noreferrer noopener">http://localhost:3000/todos</a>&nbsp;يؤدي إلى خطأ في المصادقة:
@@ -348,12 +366,14 @@ MongooseError: Operation `todos.find()` buffering timed out after 10000ms
 GET /todos 500 12.396 ms - 1808
 MongoServerError: Command find requires authentication
     at Connection.sendCommand (/Users/mluukkai/opetus/2026-fs/osa12/tehtavat/todo-app/todo-backend/node_modules/mongodb/lib/cmap/connection.js:320:27)
+
 ```
 
 يمكننا استخدام مستخدم المدير الخارق لمصادقة قاعدة البيانات، بحيث يعمل الأمر التالي
 
 ```
 MONGO_URL=mongodb://root:example@localhost:3456/the_database?authSource=admin npm run dev
+
 ```
 
 لكن ليس من الجيد استخدام حساب مستخدم خارق للوصول العادي إلى قاعدة البيانات، لذا سنختار حلاً أكثر أماناً.
@@ -380,6 +400,7 @@ db.createCollection('todos');
 
 db.todos.insert({ text: 'Write code', done: true });
 db.todos.insert({ text: 'Learn about containers', done: false });
+
 ```
 
 سيهيّئ هذا الملف قاعدة البيانات بمستخدم وبعض المهام (todos). بعد ذلك، نحتاج إلى إدخاله إلى الحاوية عند بدء التشغيل.
@@ -399,8 +420,9 @@ db.todos.insert({ text: 'Learn about containers', done: false });
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: the_database
-    volumes:       // HIGHLIGHT LINE
-    - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js // HIGHLIGHT LINE
+    volumes:
+    - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
 ```
 
 نتيجة الربط هي أن الملف&nbsp;<em>mongo-init.js</em>&nbsp;في مجلد mongo على الجهاز المضيف هو نفسه الملف&nbsp;<em>mongo-init.js</em>&nbsp;في مجلد /docker-entrypoint-initdb.d داخل الحاوية. وأي تغييرات في أحد الملفين ستكون متاحة في الآخر. ولا نحتاج إلى إجراء أي تغييرات أثناء وقت التشغيل. لكن هذا سيكون مفتاح تطوير البرمجيات في الحاويات.
@@ -412,6 +434,7 @@ db.todos.insert({ text: 'Learn about containers', done: false });
 ```
 mongo_database | failed to load: /docker-entrypoint-initdb.d/mongo-init.js
 mongo_database | exiting with code -3
+
 ```
 
 فقد تكون لديك مشكلة في صلاحية القراءة. وهذه ليست غير شائعة عند التعامل مع وحدات التخزين (volumes). في الحالة أعلاه، يمكنك استخدام <code>chmod a+r mongo-init.js</code> الذي سيمنح الجميع صلاحية قراءة ذلك الملف. كن حذراً عند استخدام <em>chmod</em> لأن منح مزيد من الامتيازات قد يمثل مشكلة أمنية. استخدم <em>chmod</em> فقط على ملف mongo-init.js على جهازك.
@@ -420,6 +443,7 @@ mongo_database | exiting with code -3
 
 ```
 MONGO_URL=mongodb://the_username:the_password@localhost:3456/the_database npm run dev
+
 ```
 
 لنتحقق من أن&nbsp;<a href="http://localhost:3000/todos" target="_blank" rel="noreferrer noopener">http://localhost:3000/todos</a>&nbsp;يعيد المهمتين (todos) اللتين أدخلناهما في التهيئة. يمكننا، بل <em>ينبغي</em>، استخدام Postman لاختبار الوظائف الأساسية للتطبيق، مثل إضافة مهمة أو حذفها.
@@ -436,6 +460,7 @@ MONGO_URL=mongodb://the_username:the_password@localhost:3456/the_database npm ru
                    ^
 MongoError: command find requires authentication
     at MessageStream.messageHandler (/Users/mluukkai/dev/fs-ci/repo/todo-app/todo-backend/node_modules/mongodb/lib/cmap/connection.js:272:20)
+
 ```
 
 شغّل هذه الأوامر:
@@ -443,6 +468,7 @@ MongoError: command find requires authentication
 ```bash
 docker compose -f docker-compose.dev.yml down --volumes
 docker image rm mongo
+
 ```
 
 بعد ذلك، حاول تشغيل Mongo مرة أخرى.
@@ -453,25 +479,28 @@ docker image rm mongo
 FROM mongo
 
 COPY ./mongo-init.js /docker-entrypoint-initdb.d/
+
 ```
 
 ابنِه إلى صورة بالأمر:
 
 ```bash
 docker build -t initialized-mongo .
+
 ```
 
 الآن غيّر ملف&nbsp;<em>docker-compose.dev.yml</em>&nbsp;ليستخدم الصورة الجديدة:
 
 ```
   mongo:
-    image: initialized-mongo  // HIGHLIGHT LINE
+    image: initialized-mongo
     ports:
      - 3456:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: the_database
+
 ```
 
 الآن ينبغي أن يعمل التطبيق أخيراً.
@@ -502,7 +531,8 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - ./mongo_data:/data/db // HIGHLIGHT LINE
+      - ./mongo_data:/data/db
+
 ```
 
 سينشئ ما سبق مجلداً باسم&nbsp;<em>mongo_data</em>&nbsp;في نظام ملفاتك المحلي ويربطه في الحاوية باسم&nbsp;<em>/data/db</em>. وهذا يعني أن البيانات في&nbsp;<em>/data/db</em>&nbsp;تُخزَّن خارج الحاوية لكنها تبقى متاحة للحاوية! فقط تذكر إضافة المجلد إلى .gitignore.
@@ -521,10 +551,11 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - mongo_data:/data/db // HIGHLIGHT LINE
+      - mongo_data:/data/db
 
-volumes:   // HIGHLIGHT LINE
-  mongo_data: // HIGHLIGHT LINE
+volumes:
+  mongo_data:
+
 ```
 
 الآن أُنشئت وحدة التخزين وتديرها Docker. بعد تشغيل التطبيق (<code>docker compose -f docker-compose.dev.yml up</code>) يمكنك سرد وحدات التخزين باستخدام <code>docker volume ls</code>، وفحص إحداها باستخدام <code>docker volume inspect</code>، وحتى حذفها باستخدام <code>docker volume rm</code>:
@@ -550,6 +581,7 @@ $ docker volume inspect todo-backend_mongo_data
         "Scope": "local"
     }
 ]
+
 ```
 
 لا تزال وحدة التخزين المسماة مخزنة في نظام ملفاتك المحلي، لكن معرفة <em>مكان</em> تخزينها قد لا يكون بهذه السهولة كما في الخيار السابق.
@@ -582,6 +614,7 @@ $ docker volume inspect todo-backend_mongo_data
 
 ```
 $ docker container run -d nginx
+
 ```
 
 حسناً، الأسئلة الآن هي:
@@ -594,6 +627,7 @@ $ docker container run -d nginx
 $ docker container ls
 CONTAINER ID   IMAGE   COMMAND  CREATED     STATUS    PORTS     NAMES
 3f831a57b7cc   nginx   ...      3 sec ago   Up 2 sec  80/tcp    keen_darwin
+
 ```
 
 أجل! لقد أجبنا عن السؤال الأول أيضاً. يبدو أنه يستمع على المنفذ 80، كما يظهر في المخرجات أعلاه.
@@ -605,6 +639,7 @@ $ docker container stop keen_darwin
 $ docker container rm keen_darwin
 
 $ docker container run -d -p 8080:80 nginx
+
 ```
 
 > <em><strong>ملاحظة المحرر:</strong> أثناء التطوير، من <strong>الضروري</strong> متابعة سجلات الحاوية باستمرار. أنا عادةً لا أشغّل الحاويات في الوضع المنفصل (أي مع <code>-d</code>) لأنه يتطلب جهداً إضافياً بسيطاً لفتح السجلات.</em>
@@ -616,10 +651,11 @@ $ docker container run -d -p 8080:80 nginx
 ```
 $ docker container ls
 CONTAINER ID   IMAGE     COMMAND  PORTS                  NAMES
-7edcb36aff08   nginx     ...      0.0.0.0:8080-&gt;80/tcp   wonderful_ramanujan
+7edcb36aff08   nginx     ...      0.0.0.0:8080->80/tcp   wonderful_ramanujan
 
 $ docker exec -it wonderful_ramanujan bash
 root@7edcb36aff08:/#
+
 ```
 
 بعد أن دخلنا، نحتاج إلى إيجاد الملف المعطوب واستبداله. يخبرنا بحث سريع على Google أن الملف نفسه هو&nbsp;<em>/usr/share/nginx/html/index.html</em>.
@@ -629,19 +665,21 @@ root@7edcb36aff08:/#
 ```
 root@7edcb36aff08:/# cd /usr/share/nginx/html/
 root@7edcb36aff08:/# rm index.html
+
 ```
 
 الآن، إذا ذهبنا إلى&nbsp;<a href="http://localhost:8080/" target="_blank" rel="noreferrer noopener">http://localhost:8080/</a>&nbsp;نعرف أننا حذفنا الملف الصحيح. تعرض الصفحة 404. لنستبدله بملف يحتوي على المحتوى الصحيح:
 
 ```
-root@7edcb36aff08:/# echo "Hello, exec!" &gt; index.html
+root@7edcb36aff08:/# echo "Hello, exec!" > index.html
+
 ```
 
 حدّث الصفحة، وستُعرض رسالتنا! الآن نعرف كيف يمكن استخدام exec للتفاعل مع الحاويات. تذكر أن كل التغييرات تُفقد عند حذف الحاوية. وللحفاظ على التغييرات، عليك استخدام&nbsp;<code>commit</code >&nbsp;تماماً كما فعلنا في&nbsp;<a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-containers/chapter-2" target="_blank" rel="noreferrer noopener">القسم السابق</a>.
 
 <div class="tasks">
 
-**8. Mongo CLI**
+**8. واجهة سطر أوامر MongoDB**
 
 </div>
 
@@ -669,7 +707,7 @@ root@7edcb36aff08:/# echo "Hello, exec!" &gt; index.html
 
 <div class="tasks">
 
-**11. Redis CLI**
+**11. واجهة سطر أوامر Redis**
 
 </div>
 
@@ -684,6 +722,7 @@ services:
     command: ['redis-server', '--appendonly', 'yes'] # الكتابة فوق CMD
     volumes: # التصريح عن وحدة التخزين
       - ./redis_data:/data
+
 ```
 
 ستُحفظ البيانات الآن بشكل دائم في المجلد&nbsp;<em>redis_data</em>&nbsp;على الجهاز المضيف. تذكر إضافة المجلد إلى .gitignore!

@@ -34,6 +34,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ### دوال مساعدة في المكوّن
@@ -54,10 +55,11 @@ const Hello = (props) => {
       <p>
         Hello {props.name}, you are {props.age} years old
       </p>
-      <p>So you were probably born in {bornYear()}</p> // highlight-line
+      <p>So you were probably born in {bornYear()}</p>
     </div>
   )
 }
+
 ```
 
 منطق تخمين سنة الميلاد مُغلَّف داخل دالة خاصة به، تُستدعى عند عرض المكوّن.
@@ -79,6 +81,7 @@ props = {
   name: 'Arto Hellas',
   age: 35,
 }
+
 ```
 
 يمكننا تبسيط مكوّننا بإسناد قيم الخصائص مباشرةً إلى متغيرين هما _name_ و_age_ يمكننا بعدها استخدامهما في شيفرتنا:
@@ -90,15 +93,16 @@ const Hello = (props) => {
   const age = props.age
   // highlight-end
 
-  const bornYear = () => new Date().getFullYear() - age // highlight-line
+  const bornYear = () => new Date().getFullYear() - age
 
   return (
     <div>
-      <p>Hello {name}, you are {age} years old</p> // highlight-line
+      <p>Hello {name}, you are {age} years old</p>
       <p>So you were probably born in {bornYear()}</p>
     </div>
   )
 }
+
 ```
 
 لاحظ أننا استخدمنا أيضاً الصيغة الأكثر إيجازاً لدوال السهم عند تعريف دالة _bornYear_. وكما ذُكر سابقاً، إذا كانت دالة السهم تتكوّن من تعبير واحد، فلا حاجة لكتابة جسم الدالة داخل أقواس معقوفة. في هذه الصيغة الأكثر إيجازاً، تُعيد الدالة ببساطة نتيجة التعبير الواحد.
@@ -111,6 +115,7 @@ const bornYear = () => new Date().getFullYear() - age
 const bornYear = () => {
   return new Date().getFullYear() - age
 }
+
 ```
 
 يجعل التفكيك إسناد المتغيرات أسهل، إذ يمكننا استخدامه لاستخراج قيم خصائص الكائن وجمعها في متغيرات منفصلة:
@@ -129,6 +134,7 @@ const Hello = (props) => {
     </div>
   )
 }
+
 ```
 
 عندما يحتوي الكائن الذي نفكّكه على القيم
@@ -138,6 +144,7 @@ props = {
   name: 'Arto Hellas',
   age: 35,
 }
+
 ```
 
 فإن التعبير <em>const { name, age } = props</em> يُسند القيمة 'Arto Hellas' إلى _name_ و35 إلى _age_.
@@ -145,7 +152,7 @@ props = {
 يمكننا أن نخطو بالتفكيك خطوة إضافية:
 
 ```js
-const Hello = ({ name, age }) => { // highlight-line
+const Hello = ({ name, age }) => {
   const bornYear = () => new Date().getFullYear() - age
 
   return (
@@ -157,6 +164,7 @@ const Hello = ({ name, age }) => { // highlight-line
     </div>
   )
 }
+
 ```
 
 الـ props الممرَّرة إلى المكوّن تُفكَّك الآن مباشرةً إلى المتغيرين _name_ و_age_.
@@ -166,12 +174,14 @@ const Hello = ({ name, age }) => { // highlight-line
 ```js
 const Hello = (props) => {
   const { name, age } = props
+
 ```
 
 نُسند قيم الخصائص مباشرةً إلى المتغيرات عبر تفكيك كائن الـ props الممرَّر إلى دالة المكوّن كوسيط:
 
 ```js
 const Hello = ({ name, age }) => {
+
 ```
 
 ### إعادة عرض الصفحة
@@ -189,6 +199,7 @@ const App = (props) => {
 }
 
 export default App
+
 ```
 
 ويصبح الملف <i>main.jsx</i>:
@@ -203,12 +214,14 @@ let counter = 1
 ReactDOM.createRoot(document.getElementById('root')).render(
   <App counter={counter} />
 )
+
 ```
 
 يُمنح مكوّن App قيمة العدّاد عبر الـ prop المسمى _counter_. ويعرض هذا المكوّن القيمة على الشاشة. ماذا يحدث عندما تتغير قيمة _counter_؟ حتى لو أضفنا ما يلي
 
 ```js
 counter += 1
+
 ```
 
 فلن يُعاد عرض المكوّن. يمكننا جعل المكوّن يُعاد عرضه باستدعاء الدالة _render_ مرة ثانية، مثلاً بالطريقة التالية:
@@ -229,6 +242,7 @@ counter += 1
 refresh()
 counter += 1
 refresh()
+
 ```
 
 لُفّ أمر إعادة العرض داخل الدالة _refresh_ لتقليل كمية الشيفرة المنسوخة.
@@ -242,6 +256,7 @@ setInterval(() => {
   refresh()
   counter += 1
 }, 1000)
+
 ```
 
 تكرار استدعاء الدالة _render_ ليس الطريقة الموصى بها لإعادة عرض المكوّنات. سنقدّم لاحقاً طريقة أفضل لتحقيق هذا الأثر.
@@ -260,15 +275,16 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 ويتغير الملف <i>App.jsx</i> إلى ما يلي:
 
 ```js
-import { useState } from 'react' // highlight-line
+import { useState } from 'react'
 
 const App = () => {
-  const [ counter, setCounter ] = useState(0) // highlight-line
+  const [ counter, setCounter ] = useState(0)
 
 // highlight-start
   setTimeout(
@@ -283,18 +299,21 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 في السطر الأول، يستورد الملف الدالة _useState_:
 
 ```js
 import { useState } from 'react'
+
 ```
 
 يبدأ جسم الدالة الذي يعرّف المكوّن باستدعاء الدالة:
 
 ```js
 const [ counter, setCounter ] = useState(0)
+
 ```
 
 يضيف استدعاء الدالة <i>حالة</i> إلى المكوّن ويعرضه مهيَّأً بالقيمة صفر. وتُعيد الدالة مصفوفة تحتوي على عنصرين. نُسند العنصرين إلى المتغيرين _counter_ و_setCounter_ باستخدام صيغة إسناد التفكيك التي عرضناها سابقاً.
@@ -308,12 +327,14 @@ setTimeout(
   () => setCounter(counter + 1),
   1000
 )
+
 ```
 
 تُستدعى الدالة الممرَّرة كوسيط أول إلى الدالة _setTimeout_ بعد ثانية واحدة من استدعاء الدالة _setTimeout_
 
 ```js
 () => setCounter(counter + 1)
+
 ```
 
 عند استدعاء الدالة المعدِّلة للحالة _setCounter_، <i>يُعيد React عرض المكوّن</i>، ما يعني إعادة تنفيذ جسم دالة المكوّن:
@@ -331,12 +352,14 @@ setTimeout(
     <div>{counter}</div>
   )
 }
+
 ```
 
 في المرة الثانية التي تُنفَّذ فيها دالة المكوّن، تستدعي الدالة _useState_ وتُعيد القيمة الجديدة للحالة: 1. كما أن إعادة تنفيذ جسم الدالة تجري استدعاءً جديداً للدالة _setTimeout_، التي تنفّذ المهلة الزمنية مقدارها ثانية وتزيد حالة _counter_ مرة أخرى. ولأن قيمة المتغير _counter_ هي 1، فإن زيادتها بمقدار 1 تكافئ فعلياً تعبيراً يضبط قيمة _counter_ على 2.
 
 ```js
 () => setCounter(2)
+
 ```
 
 وفي الوقت نفسه، تُعرض على الشاشة القيمة القديمة للمتغير _counter_ — «1».
@@ -354,12 +377,13 @@ const App = () => {
     1000
   )
 
-  console.log('rendering...', counter) // highlight-line
+  console.log('rendering...', counter)
 
   return (
     <div>{counter}</div>
   )
 }
+
 ```
 
 يصبح من السهل متابعة وتتبّع الاستدعاءات التي تجريها دالة العرض الخاصة بمكوّن <i>App</i>:
@@ -399,6 +423,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 نضبط قيمة خاصية <i>onClick</i> للزر على مرجع إلى الدالة _handleClick_ المعرَّفة في الشيفرة.
@@ -414,12 +439,13 @@ const App = () => {
   return (
     <div>
       <div>{counter}</div>
-      <button onClick={() => console.log('clicked')}> // highlight-line
+      <button onClick={() => console.log('clicked')}>
         plus
       </button>
     </div>
   )
 }
+
 ```
 
 بتغيير معالج الحدث إلى الصيغة التالية
@@ -428,6 +454,7 @@ const App = () => {
 <button onClick={() => setCounter(counter + 1)}>
   plus
 </button>
+
 ```
 
 نحقّق السلوك المطلوب، أي تزداد قيمة _counter_ بمقدار واحد <i>و</i>يُعاد عرض المكوّن.
@@ -452,6 +479,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 تطبيقنا جاهز الآن!
@@ -464,6 +492,7 @@ const App = () => {
 <button onClick={() => setCounter(counter + 1)}> 
   plus
 </button>
+
 ```
 
 ماذا لو حاولنا تعريف معالجات الأحداث بصيغة أبسط؟
@@ -472,6 +501,7 @@ const App = () => {
 <button onClick={setCounter(counter + 1)}> 
   plus
 </button>
+
 ```
 
 سيؤدي هذا إلى تعطيل تطبيقنا بالكامل:
@@ -482,6 +512,7 @@ const App = () => {
 
 ```js
 <button onClick={setCounter(counter + 1)}>
+
 ```
 
 فإن معالج الحدث هو في الواقع <i>استدعاء دالة</i>. هذا مقبول في كثير من الحالات، لكنه ليس مقبولاً في هذه الحالة تحديداً. في البداية، قيمة المتغير <i>counter</i> هي 0. وعندما يعرض React المكوّن للمرة الأولى، ينفّذ استدعاء الدالة <em>setCounter(0+1)</em> ويغيّر قيمة حالة المكوّن إلى 1.
@@ -493,6 +524,7 @@ const App = () => {
 <button onClick={() => setCounter(counter + 1)}> 
   plus
 </button>
+
 ```
 
 الآن أصبحت خاصية الزر التي تحدّد ما يحدث عند النقر على الزر — <i>onClick</i> — تحمل القيمة _() => setCounter(counter + 1)_.
@@ -516,15 +548,16 @@ const App = () => {
   return (
     <div>
       <div>{counter}</div>
-      <button onClick={increaseByOne}> // highlight-line
+      <button onClick={increaseByOne}>
         plus
       </button>
-      <button onClick={setToZero}> // highlight-line
+      <button onClick={setToZero}>
         zero
       </button>
     </div>
   )
 }
+
 ```
 
 هنا، عُرّفت معالجات الأحداث بشكل صحيح. قيمة خاصية <i>onClick</i> هي متغير يحتوي على مرجع إلى دالة:
@@ -533,6 +566,7 @@ const App = () => {
 <button onClick={increaseByOne}> 
   plus
 </button>
+
 ```
 
 ### تمرير الحالة إلى المكوّنات الابنة
@@ -553,6 +587,7 @@ const Display = (props) => {
     <div>{props.counter}</div>
   )
 }
+
 ```
 
 استخدام المكوّن مباشر، إذ نحتاج فقط لتمرير حالة _counter_ إليه:
@@ -566,7 +601,7 @@ const App = () => {
 
   return (
     <div>
-      <Display counter={counter}/> // highlight-line
+      <Display counter={counter}/>
       <button onClick={increaseByOne}>
         plus
       </button>
@@ -576,6 +611,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 كل شيء ما زال يعمل. عند النقر على الأزرار وإعادة عرض <i>App</i>، يُعاد أيضاً عرض جميع أبنائه بما في ذلك مكوّن <i>Display</i>.
@@ -590,6 +626,7 @@ const Button = (props) => {
     </button>
   )
 }
+
 ```
 
 أصبح مكوّن <i>App</i> لدينا الآن هكذا:
@@ -624,6 +661,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 وبما أنه أصبح لدينا مكوّن <i>Button</i> سهل إعادة الاستخدام، نفّذنا أيضاً وظيفة جديدة في تطبيقنا بإضافة زر يمكن استخدامه لإنقاص العدّاد.
@@ -652,20 +690,20 @@ const App = () => {
 ```js
 const App = () => {
   const [counter, setCounter] = useState(0)
-  console.log('rendering with counter value', counter) // highlight-line
+  console.log('rendering with counter value', counter)
 
   const increaseByOne = () => {
-    console.log('increasing, value before', counter) // highlight-line
+    console.log('increasing, value before', counter)
     setCounter(counter + 1)
   }
 
   const decreaseByOne = () => { 
-    console.log('decreasing, value before', counter) // highlight-line
+    console.log('decreasing, value before', counter)
     setCounter(counter - 1)
   }
 
   const setToZero = () => {
-    console.log('resetting to zero, value before', counter) // highlight-line
+    console.log('resetting to zero, value before', counter)
     setCounter(0)
   }
 
@@ -678,6 +716,7 @@ const App = () => {
     </div>
   )
 } 
+
 ```
 
 لنرَ الآن ما يُطبع في وحدة التحكم عند الضغط على الأزرار plus وzero وminus:
@@ -696,6 +735,7 @@ const Display = (props) => {
     <div>{props.counter}</div>
   )
 }
+
 ```
 
 يستخدم المكوّن فقط الحقل _counter_ من <i>props</i> الخاصة به.
@@ -707,12 +747,14 @@ const Display = ({ counter }) => {
     <div>{counter}</div>
   )
 }
+
 ```
 
 تحتوي الدالة التي تعرّف المكوّن على عبارة return فقط، لذا يمكننا تعريف الدالة باستخدام الصيغة الأكثر إيجازاً لدوال السهم:
 
 ```js
 const Display = ({ counter }) => <div>{counter}</div>
+
 ```
 
 يمكننا تبسيط مكوّن Button أيضاً.
@@ -725,12 +767,14 @@ const Button = (props) => {
     </button>
   )
 }
+
 ```
 
 يمكننا استخدام التفكيك للحصول على الحقول المطلوبة فقط من <i>props</i>، واستخدام الصيغة الأكثر إيجازاً لدوال السهم:
 
 ```js
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 ```
 
 تنجح هذه الطريقة لأن المكوّن يحتوي على عبارة return واحدة فقط، ما يجعل استخدام صيغة دالة السهم المختصرة ممكناً.

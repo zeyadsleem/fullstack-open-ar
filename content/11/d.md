@@ -53,9 +53,10 @@ lang: ar
 بما أننا لا نجري أي تغييرات حقيقية على التطبيق، فقد يكون من الصعب بعض الشيء رؤية ما إذا كان نشر التطبيق يعمل فعلاً. لننشئ نقطة نهاية وهمية في التطبيق تتيح إجراء بعض تغييرات الشيفرة والتأكد من أن الإصدار المنشور قد تغيّر بالفعل:
 
 ```
-app.get('/version', (req, res) =&gt; {
+app.get('/version', (req, res) => {
   res.send('1') // غيّر هذا النص لضمان نشر إصدار جديد
 })
+
 ```
 
 لاحظ أن نقطة النهاية هذه تعمل فقط في بناء الإنتاج؛ فإذا شغّلت التطبيق باستخدام <code>npm start</code> فلن يُستخدم تطبيق Express إطلاقاً، وبالتالي فإن نقطة النهاية غير موجودة!
@@ -76,6 +77,7 @@ app.get('/version', (req, res) =&gt; {
 
 ```
 fly tokens create deploy
+
 ```
 
 ستحتاج إلى الرمز قريباً في سير عمل النشر لديك، لذا احفظه في مكان ما (لكن لا تُدرجه في commit على GitHub)!
@@ -92,18 +94,18 @@ primary_region = 'arn'
 
 [build]
 
-// BEGIN HIGHLIGHT
+
 [env]
   PORT="5001"
 
 [processes]
   app = "node app.js"
-// END HIGHLIGHT
+
 
 [http_service]
-// BEGIN HIGHLIGHT
+
   internal_port = 5001 # تأكد من أن هذا مطابق لما ورد أعلاه!
-// END HIGHLIGHT
+
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
@@ -114,6 +116,7 @@ primary_region = 'arn'
   memory = '1gb'
   cpus = 1
   memory_mb = 1024
+
 ```
 
 في <a href="https://fly.io/docs/reference/configuration/#the-processes-section" target="_blank" rel="noreferrer noopener">processes</a> نحدد الأمر الذي يبدأ التطبيق. فبدون هذا التغيير، يبدأ Fly.io خادم تطوير React فقط، ما يؤدي إلى توقفه لأن التطبيق نفسه لا يبدأ. سنضبط أيضاً قيمة PORT لتُمرَّر إلى التطبيق كمتغير بيئة.
@@ -136,6 +139,7 @@ primary_region = 'arn'
 
 ```
 ${{secrets.FLY_API_TOKEN}}
+
 ```
 
 إذا سار كل شيء على ما يرام، ينبغي أن تبدو سجلات سير العمل لديك هكذا:
@@ -151,7 +155,11 @@ ${{secrets.FLY_API_TOKEN}}
 const start = async () =&gt; {
 
 ```js
-const start = async () => {<br>  await app.listen(PORT+1) // HIGHLIGHT LINE<br>  console.log(`server started on port ${PORT}`)<br>}
+const start = async () => {
+await app.listen(PORT+1)
+console.log(`server started on port ${PORT}`)
+}
+
 ```
 
 لا تلاحظ اختباراتنا هذا التغيير الكاسر (لأن اختبارات e2e تُشغَّل في وضع التطوير)، وسيُنشَر التطبيق في حالة غير فعّالة. فكيف يمكننا منع ذلك؟
@@ -163,9 +171,10 @@ const start = async () => {<br>  await app.listen(PORT+1) // HIGHLIGHT LINE<br> 
 أضف نقطة نهاية بسيطة لإجراء فحص حالة التطبيق إلى الواجهة الخلفية. يمكنك مثلاً نسخ هذه الشيفرة:
 
 ```
-app.get('/health', (req, res) =&gt; {
+app.get('/health', (req, res) => {
   res.send('ok')
 })
+
 ```
 
 اضبط <span style="margin: 0px; padding: 0px;"><a href="https://fly.io/docs/reference/configuration/#http_service-checks" target="_blank">فحص HTTP</a> للتأكد من سلامة النشر بإرسال</span> طلب HTTP إلى نقطة نهاية فحص الحالة المعرّفة.
@@ -180,12 +189,13 @@ app.get('/health', (req, res) =&gt; {
 
 ```
 app.get('/health', (req, res) => {
-  // BEGIN HIGHLIGHT
+
   // eslint-disable-next-line no-constant-condition
   if (true) throw('error...  ')
-// END HIGHLIGHT
+
   res.send('ok')
 })
+
 ```
 
 ### التمارين 10.-12. (Render)
@@ -208,6 +218,7 @@ app.get('/health', (req, res) => {
 echo "Build script"
 
 # أضف الأوامر هنا
+
 ```
 
 امنحه أذونات التنفيذ (ابحث في Google أو انظر مثلاً&nbsp;<a href="https://www.guru99.com/file-permissions.html" target="_blank" rel="noreferrer noopener">هذا</a>&nbsp;لمعرفة كيفية ذلك) وتأكد من قدرتك على تشغيله من سطر الأوامر:
@@ -215,6 +226,7 @@ echo "Build script"
 ```
 $ ./build_step.sh
 Build script
+
 ```
 
 وهناك خيار آخر هو استخدام <a href="https://docs.render.com/deploys#deploy-steps" target="_blank" rel="noreferrer noopener">أمر ما قبل النشر (Pre deploy command)</a>، والذي يتيح لك تشغيل أمر إضافي واحد قبل بدء النشر.
@@ -244,6 +256,7 @@ Build script
 ```
 - name: Trigger deployment
   run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+
 ```
 
 يستغرق النشر بعض الوقت. انظر إلى تبويب الأحداث (events) في لوحة تحكم Render لمعرفة متى يصبح النشر الجديد جاهزاً:
@@ -259,9 +272,10 @@ Build script
 أضف نقطة نهاية بسيطة لإجراء فحص حالة التطبيق إلى الواجهة الخلفية. يمكنك مثلاً نسخ هذه الشيفرة:
 
 ```
-app.get('/health', (req, res) =&gt; {
+app.get('/health', (req, res) => {
   res.send('ok')
 })
+
 ```
 
 أدرج الشيفرة في commit وادفعها إلى GitHub. تأكد من قدرتك على الوصول إلى نقطة نهاية فحص الحالة في تطبيقك.
@@ -276,12 +290,13 @@ app.get('/health', (req, res) =&gt; {
 
 ```
 app.get('/health', (req, res) => {
-// BEGIN HIGHLIGHT
+
   // eslint-disable-next-line no-constant-condition
   if (true) throw('error...  ')
-// END HIGHLIGHT
+
   res.send('ok')
 })
+
 ```
 
 ادفع الشيفرة إلى GitHub وتأكد من عدم نشر إصدار معطوب ومن استمرار تشغيل الإصدار السابق من التطبيق.

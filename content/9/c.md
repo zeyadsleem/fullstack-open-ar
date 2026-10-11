@@ -17,6 +17,7 @@ lang: ar
 
 ```bash
 npm install --save-dev typescript
+
 ```
 
 لنُعِد أيضاً <em>scripts</em> داخل الملف <em>package.json</em>:
@@ -24,20 +25,22 @@ npm install --save-dev typescript
 ```json
 {
   // ...
-  "type": "module",      // HIGHLIGHT LINE
+  "type": "module",
   "scripts": {
-   "tsc": "tsc --noEmit" // HIGHLIGHT LINE
+   "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
   }
 }
+
 ```
 
 يمكننا الآن استخدام السكربت لفحص أنواع ملف TypeScript:
 
 ```bash
 npm run tsc file.ts
+
 ```
 
 يخبر الخيار --noEmit مترجم TypeScript بألا يولّد مخرجات JavaScript. فهو يشغّل فحص الأنواع فقط، دون توليد ملف مترجم.
@@ -53,6 +56,7 @@ npm run tsc file.ts
     "noEmit": true
   }
 }
+
 ```
 
 يُستخدم ملف <em>tsconfig.json</em> لتحديد كيف ينبغي لمترجم TypeScript أن يفسّر الشيفرة، ومدى صرامة عمل المترجم، والملفات التي يجب مراقبتها أو تجاهلها، <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank" rel="noreferrer noopener">وأمور أخرى كثيرة</a>. في الوقت الحالي، سنعطّل فقط خيار المترجم <a href="https://www.typescriptlang.org/tsconfig#noImplicitAny" target="_blank" rel="noreferrer noopener">noImplicitAny</a>، بحيث لا يُشترط كتابة أنواع لجميع المتغيرات المستخدمة. عرّفنا أيضاً <a href="https://www.typescriptlang.org/tsconfig/#noEmit">"noEmit": true</a> لأننا سنستخدم مترجم TypeScript للفحص فقط.
@@ -60,7 +64,14 @@ npm run tsc file.ts
 يمكننا الآن حذف المعامل <em>--noEmit</em> من سكربت npm:
 
 ```json
-{<br>  // ...<br>  "scripts": {<br>   "tsc": "tsc" // HIGHLIGHT LINE<br>  },<br>  // ...<br>}
+{
+// ...
+"scripts": {
+"tsc": "tsc"
+},
+// ...
+}
+
 ```
 
 > ملاحظة حول أسلوب كتابة الشيفرة
@@ -70,11 +81,12 @@ npm run tsc file.ts
 لنبدأ بإنشاء مضاعِف بسيط في الملف <em>multiplier.ts</em>. يبدو تماماً كما سيكون في JavaScript.
 
 ```js
-const multiplicator = (a, b, printText) =&gt; {
+const multiplicator = (a, b, printText) => {
   console.log(printText,  a * b);
 }
 
 multiplicator(2, 4, 'Multiplied numbers 2 and 4, the result is:');
+
 ```
 
 كما ترى، هذه لا تزال شيفرة JavaScript أساسية عادية دون أي ميزات إضافية من TS. وعندما نستخدم مترجم TypeScript لفحص الأنواع بالأمر <code>npm run tsc multiplier.ts</code> لا تظهر أي شكاوى. لذا نعرف أن الشيفرة آمنة الأنواع، ويمكننا تشغيلها بثقة بالأمر <code>node multiplier.ts</code>.
@@ -86,10 +98,11 @@ multiplicator(2, 4, 'Multiplied numbers 2 and 4, the result is:');
   // ..
   "scripts": {
     "tsc": "tsc",
-    "multiply": "tsc &amp;&amp; <span style="background-color: rgba(30, 30, 30, 0.2); font-family: inherit; text-align: initial;">node multiplier.ts</span>" // HIGHLIGHT LINE
+    "multiply": "tsc && <span style="background-color: rgba(30, 30, 30, 0.2); font-family: inherit; text-align: initial;">node multiplier.ts</span>"
   },
   // ..
 }
+
 ```
 
 فالآن يكفي <code>npm run multiply</code> لفحص الأنواع وتشغيل الشيفرة.
@@ -104,6 +117,7 @@ const multiplicator = (a, b, printText) => {
 }
 
 multiplicator('how about a string?', 4, 'Multiplied a string and 4, the result is:');
+
 ```
 
 الآن عندما نشغّل الشيفرة، يكون الناتج:&nbsp;<em>Multiplied a string and 4, the result is: NaN</em>.
@@ -115,11 +129,12 @@ multiplicator('how about a string?', 4, 'Multiplied a string and 4, the result i
 المعاملان الأولان في دالتنا من النوع number والأخير من النوع string، وكلا النوعين من&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#the-primitives-string-number-and-boolean" target="_blank" rel="noreferrer noopener">الأنواع الأولية</a>:
 
 ```ts
-const multiplicator = (a: number, b: number, printText: string) => { // HIGHLIGHT LINE
+const multiplicator = (a: number, b: number, printText: string) => {
   console.log(printText,  a * b);
 }
 
 multiplicator('how about a string?', 4, 'Multiplied a string and 4, the result is:');
+
 ```
 
 الآن لم تعد الشيفرة صالحة في TypeScript. وعندما نحاول تشغيل الشيفرة، نلاحظ أنها لا تُترجم:
@@ -140,6 +155,7 @@ multiplicator('how about a string?', 4, 'Multiplied a string and 4, the result i
 
 ```ts
 type Operation = 'multiply' | 'add' | 'divide';
+
 ```
 
 الآن لا يقبل نوع <em>Operation</em> سوى ثلاثة أنواع من القيم؛ تحديداً النصوص الثلاثة التي أردناها. وباستخدام المعامل OR وهو | يمكننا تعريف متغير ليقبل قيماً متعددة عبر إنشاء نوع اتحادي. في هذه الحالة، استخدمنا نصوصاً محددة (تُسمى بمصطلحات تقنية أنواع النصوص الحرفية)، لكن مع الأنواع الاتحادية يمكنك أيضاً جعل المترجم يقبل مثلاً النص والعدد معاً: <em>string | number</em>.
@@ -151,7 +167,7 @@ type Operation = 'multiply' | 'add' | 'divide';
 ```ts
 type Operation = 'multiply' | 'add' | 'divide';
 
-const calculator = (a: number, b: number, op: Operation) =&gt; {
+const calculator = (a: number, b: number, op: Operation) => {
   if (op === 'multiply') {
     return a * b;
   } else if (op === 'add') {
@@ -161,6 +177,7 @@ const calculator = (a: number, b: number, op: Operation) =&gt; {
     return a / b;
   }
 }
+
 ```
 
 الآن، عندما نمرّر المؤشر فوق نوع <em>Operation</em> في دالة calculator، يمكننا أن نرى فوراً اقتراحات حول ما يمكن فعله به:
@@ -176,7 +193,7 @@ const calculator = (a: number, b: number, op: Operation) =&gt; {
 ```ts
 type Operation = 'multiply' | 'add' | 'divide';
 
-const calculator = (a: number, b: number, op: Operation): number => { // HIGHLIGHT LINE
+const calculator = (a: number, b: number, op: Operation): number => {
   if (op === 'multiply') {
     return a * b;
   } else if (op === 'add') {
@@ -186,6 +203,7 @@ const calculator = (a: number, b: number, op: Operation): number => { // HIGHLIG
     return a / b;
   }
 }
+
 ```
 
 يشتكي المترجم فوراً لأن الدالة تُعيد نصاً في إحدى الحالات. وهناك بضع طرق لإصلاح ذلك:
@@ -193,9 +211,10 @@ const calculator = (a: number, b: number, op: Operation): number => { // HIGHLIG
 يمكننا توسيع نوع القيمة المُعادة ليسمح بقيم نصية، هكذا:
 
 ```ts
-const calculator = (a: number, b: number, op: Operation): number | string =&gt;  {
+const calculator = (a: number, b: number, op: Operation): number | string =>  {
   // ...
 }
+
 ```
 
 أو يمكننا إنشاء نوع للقيمة المُعادة يشمل كلا النوعين المحتملين، تماماً مثل نوع Operation لدينا:
@@ -203,9 +222,10 @@ const calculator = (a: number, b: number, op: Operation): number | string =&gt; 
 ```ts
 type Result = string | number;
 
-const calculator = (a: number, b: number, op: Operation): Result =&gt;  {
+const calculator = (a: number, b: number, op: Operation): Result =>  {
   // ...
 }
+
 ```
 
 لكن السؤال الآن هو: هل من <em>المقبول حقاً</em> أن تُعيد الدالة نصاً؟
@@ -219,17 +239,17 @@ const calculator = (a: number, b: number, op: Operation): Result =&gt;  {
 ```ts
 type Operation = 'multiply' | 'add' | 'divide';
 
-const calculator = (a: number, b: number, op: Operation) : number => {   // HIGHLIGHT LINE
+const calculator = (a: number, b: number, op: Operation) : number => {
   switch(op) {
     case 'multiply':
       return a * b;
     case 'divide':
-      if (b === 0) throw new Error('Can\'t divide by 0!'); // HIGHLIGHT LINE
+      if (b === 0) throw new Error('Can\'t divide by 0!');
       return a / b;
     case 'add':
       return a + b;
     default:
-      throw new Error('Operation is not multiply, add or divide!'); // HIGHLIGHT LINE
+      throw new Error('Operation is not multiply, add or divide!');
   }
 }
 
@@ -242,6 +262,7 @@ try {
   }
   console.log(errorMessage);
 }
+
 ```
 
 ### تضييق الأنواع
@@ -256,8 +277,9 @@ try {
 try {
   console.log(calculator(1, 5 , 'divide'));
 } catch (error) {
-  console.log('Something went wrong: ' + error.message); // HIGHLIGHT LINE
+  console.log('Something went wrong: ' + error.message);
 }
+
 ```
 
 بما أن النوع الافتراضي للكائن&nbsp;<em>error</em>&nbsp;في TypeScript هو&nbsp;<em>unknown</em>، علينا أن&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noreferrer noopener">نضيّق</a>&nbsp;النوع للوصول إلى الحقل:
@@ -268,16 +290,17 @@ try {
 } catch (error: unknown) {
   let errorMessage = 'Something went wrong: '
   // هنا لا يمكننا استخدام error.message
-// BEGIN HIGHLIGHT
+
   if (error instanceof Error) {
    // تم تضييق النوع ويمكننا الإشارة إلى error.message
-// END HIGHLIGHT
+
     errorMessage += error.message;
 }
-  // هنا لا يمكننا استخدام error.message // HIGHLIGHT LINE
+  // هنا لا يمكننا استخدام error.message
 
   console.log(errorMessage);
 }
+
 ```
 
 هنا، أُجري التضييق باستخدام حارس النوع instanceof، وهو مجرد واحدة من طرق كثيرة لتضييق نوع. وسنرى طرقاً أخرى كثيرة لاحقاً في هذا الجزء.
@@ -294,6 +317,7 @@ try {
 
 ```bash
 npm install --save-dev @types/node
+
 ```
 
 عند تثبيت الحزمة <em>@types/node</em>، لا يشتكي المترجم من المتغير process. لاحظ أنه لا حاجة لاستيراد الأنواع في الشيفرة، فمجرد تثبيت الحزمة كافٍ!
@@ -319,31 +343,35 @@ const multiplicator = (a: number, b: number, printText: string) => {
   console.log(printText,  a * b);
 }
 
-// BEGIN HIGHLIGHT
+
 // تبدأ معاملات سطر الأوامر من process.argv[2]
 const a: number = Number(process.argv[2])
 const b: number = Number(process.argv[3])
 
 multiplicator(a, b, `Multiplied ${a} and ${b}, the result is:`);
-// END HIGHLIGHT
+
+
 ```
 
 ويمكننا تشغيله بـ:
 
 ```bash
 npm run multiply 5 2
+
 ```
 
 إذا شُغّل البرنامج بمعاملات ليست من النوع الصحيح، مثل:
 
 ```bash
 npm run multiply 5 lol
+
 ```
 
 فإنه "يعمل" لكنه يعطينا الجواب:
 
 ```
 Multiplied 5 and NaN, the result is: NaN
+
 ```
 
 والسبب في ذلك أن&nbsp;<em>Number('lol')</em>&nbsp;تُعيد&nbsp;<em>NaN</em>، وهو في الواقع من النوع&nbsp;<em>number</em>، لذا لا تملك TypeScript أي قدرة على إنقاذنا من موقف كهذا.
@@ -359,10 +387,10 @@ interface MultiplyValues {
 }
 
 const parseArguments = (args: string[]): MultiplyValues => {
-  if (args.length &lt; 4) throw new Error('Not enough arguments');
+  if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
-  if (!isNaN(Number(args[2])) &amp;&amp; !isNaN(Number(args[3]))) {
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
     return {
       value1: Number(args[2]),
       value2: Number(args[3])
@@ -386,18 +414,21 @@ try {
   }
   console.log(errorMessage);
 }
+
 ```
 
 عندما نشغّل البرنامج الآن:
 
 ```bash
 npm run multiply 1 lol
+
 ```
 
 نحصل على رسالة خطأ مناسبة:
 
 ```
 Something bad happened. Error: Provided values were not numbers!
+
 ```
 
 هناك الكثير مما يجري في الشيفرة. وأهم إضافة هي الدالة&nbsp;<em>parseArguments</em>&nbsp;التي تضمن أن المعاملات المعطاة إلى&nbsp;<em>multiplicator</em>&nbsp;من النوع الصحيح. وإلا، يُرمى استثناء برسالة خطأ وصفية.
@@ -405,9 +436,10 @@ Something bad happened. Error: Provided values were not numbers!
 في تعريف الدالة بضعة أمور مثيرة للاهتمام:
 
 ```ts
-const parseArguments = (args: string[]): MultiplyValues =&gt; {
+const parseArguments = (args: string[]): MultiplyValues => {
   // ...
 }
+
 ```
 
 أولاً، المعامل&nbsp;<em>args</em>&nbsp;هو&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#arrays" target="_blank" rel="noreferrer noopener">مصفوفة</a>&nbsp;من النصوص.
@@ -419,6 +451,7 @@ interface MultiplyValues {
   value1: number;
   value2: number;
 }
+
 ```
 
 يستخدم التعريف الكلمة المفتاحية&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces" target="_blank" rel="noreferrer noopener">Interface</a>&nbsp;في TypeScript، وهي إحدى طرق تعريف "الشكل" الذي ينبغي أن يكون عليه الكائن. في حالتنا، من الواضح تماماً أن القيمة المُعادة ينبغي أن تكون كائناً بخاصيتين هما&nbsp;<em>value1</em>&nbsp;و<em>value2</em>، وينبغي أن يكون كلاهما من النوع number.
@@ -429,12 +462,14 @@ interface MultiplyValues {
 
 ```ts
 let values: number[];
+
 ```
 
 يمكننا استخدام "صيغة الأنواع العامة" وكتابة
 
 ```js
-let values: Array&lt;number&gt;;
+let values: Array<number>;
+
 ```
 
 في هذا المقرر، سنتبع غالباً الاصطلاح الذي تفرضه قاعدة Eslint المسماة&nbsp;<a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">array-simple</a>&nbsp;التي تقترح كتابة المصفوفات البسيطة بصيغة [] واستخدام صيغة &lt;&gt; للمصفوفات الأكثر تعقيداً، انظر&nbsp;<a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">هنا</a>&nbsp;للأمثلة.
@@ -468,7 +503,7 @@ let values: Array&lt;number&gt;;
   "compilerOptions": {
     "target": "esnext",
     "noEmit": true,
-// BEGIN HIGHLIGHT
+
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -476,9 +511,10 @@ let values: Array&lt;number&gt;;
     "module": "nodenext",
     "esModuleInterop": true,
     "allowImportingTsExtensions": true
-// END HIGHLIGHT
+
   }
 }
+
 ```
 
 لا تقلق كثيراً بعد بشأن <em>compilerOptions</em>، فسيخضع لفحص أدق لاحقاً.
@@ -489,6 +525,7 @@ let values: Array&lt;number&gt;;
 
 ```bash
 npm install express
+
 ```
 
 ثم نضيف سكربت&nbsp;<em>start</em>&nbsp;إلى package.json:
@@ -498,11 +535,12 @@ npm install express
   // ...
   "scripts": {
     "tsc": "tsc",
-    "multiply": "tsc  &amp;&amp; node multiplier.ts",
-    "start": "tsc &amp;&amp; node index.ts"  // HIGHLIGHT LINE
+    "multiply": "tsc  && node multiplier.ts",
+    "start": "tsc && node index.ts"
   },
   // ..
 }
+
 ```
 
 الآن يمكننا إنشاء الملف&nbsp;<em>index.ts</em>&nbsp;وكتابة نقطة نهاية HTTP GET المسماة&nbsp;<em>ping</em>&nbsp;فيه:
@@ -511,15 +549,16 @@ npm install express
 const express = require('express');
 const app = express();
 
-app.get('/ping', (req, res) =&gt; {
+app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
 const PORT = 3003;
 
-app.listen(PORT, () =&gt; {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 ```
 
 يبدو كل شيء آخر على ما يرام، لكن كما تتوقع، يحتاج المعاملان&nbsp;<em>req</em>&nbsp;و<em>res</em>&nbsp;في <em>app.get</em> إلى كتابة أنواع.
@@ -532,6 +571,7 @@ app.listen(PORT, () =&gt; {
 
 ```js
 import express from 'express';
+
 ```
 
 > يمنحك VSCode إمكانية إصلاح المشكلات تلقائياً بالنقر على زر <em>Quick Fix...</em>. أبقِ عينيك مفتوحتين على هذه المساعدات/الإصلاحات السريعة؛ فالاستماع إلى محرّرك يجعل شيفرتك عادةً أفضل وأسهل قراءة. ويمكن أن توفّر الإصلاحات التلقائية للمشكلات وقتاً كبيراً أيضاً.
@@ -546,6 +586,7 @@ import express from 'express';
 
 ```bash
 npm install --save-dev @types/express
+
 ```
 
 لا ينبغي أن تبقى أي أخطاء. لاحظ أنك قد تحتاج إلى إعادة فتح الملف في المحرّر ليتزامن VS Code.
@@ -562,7 +603,7 @@ npm install --save-dev @types/express
     "target": "esnext",
     "noEmit": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true, // HIGHLIGHT LINE
+    "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "module": "nodenext",
@@ -570,6 +611,7 @@ npm install --save-dev @types/express
     "allowImportingTsExtensions": true
   }
 }
+
 ```
 
 قد يخلق هذا الإعداد مشكلات إذا كانت لديك دوال معرّفة مسبقاً على مستوى المكتبة تتطلب تعريف متغير حتى لو لم يُستخدم إطلاقاً، كما هو الحال هنا. لحسن الحظ، هذه المشكلة محلولة بالفعل على مستوى الإعدادات. ومرة أخرى، يمنحنا تمرير المؤشر فوق المشكلة حلاً. هذه المرة، يمكننا فقط النقر على زر الإصلاح السريع:
@@ -593,16 +635,18 @@ npm install --save-dev @types/express
   // ...
   "scripts": {
       // ...
-      "dev": "tsc &amp;&amp; node --watch index.ts",
+      "dev": "tsc && node --watch index.ts",
   },
   // ...
 }
+
 ```
 
 ومع ذلك، هذا لا يعمل تماماً. إذ يجري فحص الأنواع في البداية فقط. وأحد الحلول سيكون تشغيل فحص الأنواع وNode في وضع المراقبة في الوقت نفسه. وهذا سهل باستخدام حزمة npm المسماة <a href="https://www.npmjs.com/package/concurrently">concurrently</a>. لنثبّتها:
 
 ```bash
 npm install --save-dev concurrently
+
 ```
 
 أضف سكربتاً إلى&nbsp;<em>package.json</em>:
@@ -610,13 +654,14 @@ npm install --save-dev concurrently
 ```
   "scripts": {
     "tsc": "tsc",
-    "multiply": "tsc &amp;&amp; node multiplier.ts",
-    "calculate": "tsc &amp;&amp; node calculator.ts",
-// BEGIN HIGHLIGHT
+    "multiply": "tsc && node multiplier.ts",
+    "calculate": "tsc && node calculator.ts",
+
     "start": "node index.ts",
     "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\""
-// END HIGHLIGHT
+
   },
+
 ```
 
 أصبح <code>npm start</code> الآن أبسط، ويُفترض أن فحص الأنواع يجري <em>قبل</em> تشغيل الشيفرة.
@@ -660,12 +705,14 @@ app.post('/calculate', (req, res) => {
   const result = calculator(value1, value2, op);
   return res.send({ result });
 });
+
 ```
 
 لجعل هذا يعمل، علينا إضافة&nbsp;<em>export</em>&nbsp;إلى الدالة&nbsp;<em>calculator</em>:
 
 ```ts
-export const calculator = (a: number, b: number, op: Operation) : number =&gt; {
+export const calculator = (a: number, b: number, op: Operation) : number => {
+
 ```
 
 عندما تمرّر المؤشر فوق الدالة <em>calculate</em>، يمكنك رؤية أنواع <em>calculator</em> حتى مع أن الشيفرة نفسها لا تحتوي على أي كتابة أنواع:
@@ -688,6 +735,7 @@ export const calculator = (a: number, b: number, op: Operation) : number =&gt; {
 
 ```js
 const a : any = /* no clue what the type will be! */.
+
 ```
 
 لدينا بالفعل <em>noImplicitAny: true</em> مضبوط في مثالنا، فلماذا لا يشتكي المترجم من أنواع <em>any</em> الضمنية؟ السبب هو أن حقل <em>body</em> في كائن <a href="https://expressjs.com/en/5x/api.html#req" target="_blank" rel="noreferrer noopener">Request</a> الخاص بـ Express منمّط صراحةً بـ<em>any</em>. وينطبق الشيء نفسه على حقل <em>request.query</em> الذي يستخدمه Express لمعاملات الاستعلام.
@@ -704,6 +752,7 @@ const a : any = /* no clue what the type will be! */.
 
 ```bash
 npm install --save-dev eslint @eslint/js typescript-eslint
+
 ```
 
 > <strong>ملاحظة:</strong> في وقت كتابة هذا النص (28.3.2026)، فإن أحدث إصدار من <a href="https://www.npmjs.com/package/typescript-eslint">typescript-eslint</a> (وهو 5.57.2) غير متوافق مع TypeScript 6، الذي صدر في 23.3.2026. وبسبب ذلك، يفشل الأمر <code>npm install</code>. وإلى أن يصدر إصدار جديد، عليك تشغيل الأمر بالصيغة <code>npm install --legacy-peer-deps</code>
@@ -731,6 +780,7 @@ export default tseslint.config({
   },
 });
 
+
 ```
 
 لنُعِد أيضاً سكربت npm باسم&nbsp;<em>lint</em>&nbsp;لفحص الملفات عبر تعديل ملف&nbsp;<em>package.json</em>:
@@ -740,15 +790,16 @@ export default tseslint.config({
   // ...
   "scripts": {
       "tsc": "tsc",
-      "calculate": "tsc &amp;&amp; node calculator.ts",
-      "multiply": "tsc &amp;&amp; node multiplier.ts",
+      "calculate": "tsc && node calculator.ts",
+      "multiply": "tsc && node multiplier.ts",
       "start": "node index.ts",
       "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\"",
-      "lint": "eslint ."      // HIGHLIGHT LINE
+      "lint": "eslint ."
       //  ...
   },
   // ...
 }
+
 ```
 
 الآن سيشكو lint إذا حاولنا تعريف متغير من النوع <em>any</em>:
@@ -761,6 +812,7 @@ export default tseslint.config({
 
 ```bash
 npm install --save-dev @stylistic/eslint-plugin
+
 ```
 
 يبدو ملفنا النهائي&nbsp;<em>eslint.config.mjs</em>&nbsp;كما يلي:
@@ -799,6 +851,7 @@ export default tseslint.config({
     ],
   },
 });
+
 ```
 
 هناك عدد لا بأس به من الفواصل المنقوطة المفقودة، لكن إضافتها سهلة. وعلينا أيضاً حل مشكلات ESLint المتعلقة بنوع <em>any</em>:
@@ -811,14 +864,15 @@ export default tseslint.config({
 
 ```js
 app.post('/calculate', (req, res) => {
-  // BEGIN HIGHLIGHT
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { value1, value2, op } = req.body;
-// END HIGHLIGHT
 
-  const result = calculator(Number(value1), Number(value2), op);   // HIGHLIGHT LINE
+
+  const result = calculator(Number(value1), Number(value2), op);
   return res.send({ result });
 });
+
 ```
 
 لكن هذا لا يزال يترك مشكلة واحدة للتعامل معها، وهي أن المعامل الأخير في استدعاء الدالة غير آمن:
@@ -832,12 +886,13 @@ app.post('/calculate', (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { value1, value2, op } = req.body;
 
-// BEGIN HIGHLIGHT
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-// END HIGHLIGHT
+
   const result = calculator(Number(value1), Number(value2), op);
   return res.send({ result });
 });
+
 ```
 
 لقد أسكتنا ESlint الآن، لكننا تحت رحمة المستخدم تماماً. ينبغي بالتأكيد أن نجري بعض التحقق على بيانات POST ونعطي رسالة خطأ مناسبة إذا كانت البيانات غير صالحة:
@@ -847,17 +902,18 @@ app.post('/calculate', (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { value1, value2, op } = req.body;
 
-// BEGIN HIGHLIGHT
+
   if ( !value1 || isNaN(Number(value1)) ) {
      return res.status(400).send({ error: '...'});
   }
   // المزيد من عمليات التحقق هنا...
-// END HIGHLIGHT
+
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const result = calculator(Number(value1), Number(value2), op);
   return res.send({ result });
 });
+
 ```
 
 سنرى لاحقاً في هذا الجزء بعض التقنيات التي يمكن بها&nbsp;<em>تضييق</em>&nbsp;البيانات من النوع <em>any</em> (مثل المدخلات التي يستقبلها التطبيق من المستخدم) إلى نوع أكثر تحديداً (مثل number). ومع التضييق الصحيح للأنواع، لن تبقى هناك حاجة لإسكات قواعد ESlint.
@@ -877,12 +933,13 @@ app.post('/calculate', (req, res) => {
 
 ```ts
 export type Operation = 'multiply' | 'add' | 'divide';
+
 ```
 
 الآن يمكننا استيراد النوع واستخدام تأكيد النوع&nbsp;<em>as</em>&nbsp;لإخبار مترجم TypeScript بنوع المتغير:
 
 ```js
-import { calculator, type Operation } from './calculator'; // HIGHLIGHT LINE
+import { calculator, type Operation } from './calculator';
 // ...
 
 app.post('/calculate', (req: Request, res: Response) => {
@@ -893,10 +950,11 @@ app.post('/calculate', (req: Request, res: Response) => {
      return res.status(400).send({ error: '...'});
   }
 
-  const operation = op as Operation;  // HIGHLIGHT LINE
-  const result = calculator(Number(value1), Number(value2), operation);  // HIGHLIGHT LINE
+  const operation = op as Operation;
+  const result = calculator(Number(value1), Number(value2), operation);
   return res.send({ result });
 });
+
 ```
 
 > لاحظ أننا استوردنا النوع Operation باستخدام الكلمة المفتاحية <em>type</em>:
@@ -914,10 +972,11 @@ app.post('/calculate', (req: Request, res: Response) => {
 
   // التحقق من البيانات هنا
 
-  const result = calculator(Number(value1), Number(value2), op as Operation); // HIGHLIGHT LINE
+  const result = calculator(Number(value1), Number(value2), op as Operation);
 
   return res.send({ result });
 });
+
 ```
 
 استخدام تأكيد النوع (أو إسكات قاعدة ESLint) ينطوي دائماً على بعض المخاطرة. فهو يُعفي مترجم TypeScript من المسؤولية، ويثق المترجم فقط بأننا، كمطورين، نعرف ما نفعله. وإذا لم يكن للنوع المؤكَّد <em>القيمة</em> الصحيحة، ستكون النتيجة خطأ وقت التشغيل، لذا يجب أن يكون المرء حذراً جداً عند التحقق من البيانات إذا استُخدم تأكيد النوع.

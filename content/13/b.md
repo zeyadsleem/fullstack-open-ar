@@ -5,18 +5,18 @@ title: "استخدام قواعد البيانات العلائقية مع Seque
 mainImage: /images/part-13.svg
 lang: ar
 ---
-تأكد من أنك قرأت <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-1" data-type="link" data-id="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-1">الفصل الأول: البدء</a>!
+تأكد من أنك قرأت <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-relational-databases/chapter-1" data-type="link">الفصل الأول: البدء</a>!
 
 ### إيجابيات قواعد البيانات المستندية وسلبياتها
 
 استخدمنا MongoDB في جميع أقسام الدورة السابقة. Mongo قاعدة بيانات مستندية، ومن أبرز خصائصها أنها بلا مخطط (schemaless)، أي أن قاعدة البيانات لا تملك سوى إدراك محدود جداً لنوع البيانات المخزّنة في مجموعاتها. لا يوجد مخطط قاعدة البيانات إلا في شيفرة البرنامج، وهي التي تفسّر البيانات بطريقة معيّنة، مثلاً بتحديد أن بعض الحقول مراجع إلى كائنات في مجموعة أخرى.
 
-في التطبيق المثال في <a href="/part3/saving_data_to_mongo_db#mongo-db" data-type="link" data-id="https://fullstackopen.com/en/part3/saving_data_to_mongo_db#mongo-db">الجزء 3</a> والجزء 4، تخزّن قاعدة البيانات <em>ملاحظات</em> و<em>مستخدمين</em>.
+في التطبيق المثال في <a href="/part3/saving_data_to_mongo_db#mongo-db" data-type="link" >الجزء 3</a> والجزء 4، تخزّن قاعدة البيانات <em>ملاحظات</em> و<em>مستخدمين</em>.
 
 تبدو المجموعة التي تخزّن <em>الملاحظات</em> كما يلي:
 
 ```
-<code>[
+[
   {
     "_id": "600c0e410d10256466898a6c",
     "content": "HTML is easy"
@@ -31,13 +31,27 @@ lang: ar
     "important": true
     "__v": 0
   },
-]</code>
+]
+
 ```
 
 يبدو المستخدمون المحفوظون في مجموعة <em>users</em> كما يلي:
 
 ```
-<code>[<br>  {<br>    "_id": "600c0e410d10256466883a6a",<br>    "username": "mluukkai",<br>    "name": "Matti Luukkainen",<br>    "passwordHash" : "$2b$10$Df1yYJRiQuu3Sr4tUrk.SerVz1JKtBHlBOARfY0PBn/Uo7qr8Ocou",<br>    "__v": 9,<br>    notes: [<br>      "600c0edde86c7264ace9bb78",<br>      "600c0e410d10256466898a6c"<br>    ]<br>  },<br>]</code>
+[
+{
+"_id": "600c0e410d10256466883a6a",
+"username": "mluukkai",
+"name": "Matti Luukkainen",
+"passwordHash" : "$2b$10$Df1yYJRiQuu3Sr4tUrk.SerVz1JKtBHlBOARfY0PBn/Uo7qr8Ocou",
+"__v": 9,
+notes: [
+"600c0edde86c7264ace9bb78",
+"600c0e410d10256466898a6c"
+]
+},
+]
+
 ```
 
 تعرف MongoDB أنواع حقول الكيانات المخزّنة، لكن ليست لديها معلومات عن المجموعة التي تشير إليها معرّفات سجلات المستخدم. كذلك لا يهم MongoDB ما الحقول التي تملكها الكائنات المخزّنة في المجموعات. تترك MongoDB الأمر بالكامل للمبرمج ليضمن تخزين المعلومات الصحيحة في قاعدة البيانات.
@@ -60,7 +74,7 @@ lang: ar
 
 #### حل مستضاف: Aiven
 
-في وقت كتابة هذا النص (9 فبراير 2026) توفّر <a href="https://aiven.io/" data-type="link" data-id="https://aiven.io/">Aiven</a> طبقة مجانية تناسب أغراض هذه الدورة جيداً. اذهب إلى <a href="https://aiven.io/">aiven.io</a> وسجّل. بعد إنشاء قاعدة البيانات، تحقق مما هو رابط الاتصال:
+في وقت كتابة هذا النص (9 فبراير 2026) توفّر <a href="https://aiven.io/" data-type="link">Aiven</a> طبقة مجانية تناسب أغراض هذه الدورة جيداً. اذهب إلى <a href="https://aiven.io/">aiven.io</a> وسجّل. بعد إنشاء قاعدة البيانات، تحقق مما هو رابط الاتصال:
 
 ![صورة توضيحية](/images/mooc/d6c141cdea4c.webp)
 
@@ -71,33 +85,44 @@ lang: ar
 شغّل <a href="https://hub.docker.com/_/postgres" target="_blank" rel="noreferrer noopener">صورة Docker</a>&nbsp;الخاصة بـPostgres بالأمر
 
 ```
-<code>docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres</code>
+docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres
+
 ```
 
 يمكن فتح اتصال طرفية psql بقاعدة البيانات باستخدام أمر&nbsp;<em>docker exec</em>. أولاً عليك معرفة معرّف الحاوية:
 
 ```
-<code>$ docker ps<br>CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES<br>ff3f49eadf27   postgres   "docker-entrypoint.s…"   31 minutes ago   Up 31 minutes   0.0.0.0:5432->5432/tcp   great_raman<br>docker exec -it ff3f49eadf27 psql -U postgres postgres<br>psql (15.2 (Debian 15.2-1.pgdg110+1))<br>Type "help" for help.<br><br>postgres=#</code>
+$ docker ps
+CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES
+ff3f49eadf27   postgres   "docker-entrypoint.s…"   31 minutes ago   Up 31 minutes   0.0.0.0:5432->5432/tcp   great_raman
+docker exec -it ff3f49eadf27 psql -U postgres postgres
+psql (15.2 (Debian 15.2-1.pgdg110+1))
+Type "help" for help.
+
+postgres=#
+
 ```
 
 بالتعريف بهذه الطريقة، لا تبقى البيانات المخزّنة في قاعدة البيانات محفوظة إلا طالما وُجدت الحاوية. يمكن الحفاظ على البيانات بتعريف حجم (volume) للبيانات. يمكنك الاطلاع على <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-containers/chapter-3#066334ce-29a6-4ea8-a66b-035846920009">الجزء 12 </a>للتفاصيل. انظر المزيد <a href="https://github.com/docker-library/docs/blob/master/postgres/README.md#pgdata" target="_blank" rel="noreferrer noopener">هنا</a>.
 
 #### الوصول إلى قاعدة البيانات
 
-لا سيّما عند استخدام قاعدة بيانات علائقية، من الضروري الوصول إلى قاعدة البيانات مباشرة أيضاً. هناك طرق كثيرة لفعل ذلك. أحد الاحتمالات استخدام أداة سطر الأوامر <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noreferrer noopener">psql</a> الخاصة بـPostgres. إذا لم يكن psql مثبتاً لديك أو لم تكن تستخدم تثبيت Docker، <a href="https://www.pgadmin.org/download/" data-type="link" data-id="https://www.pgadmin.org/download/">نزّل</a> وثبّت pgAdmin، وهو عميل Postgres رسومي.
+لا سيّما عند استخدام قاعدة بيانات علائقية، من الضروري الوصول إلى قاعدة البيانات مباشرة أيضاً. هناك طرق كثيرة لفعل ذلك. أحد الاحتمالات استخدام أداة سطر الأوامر <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noreferrer noopener">psql</a> الخاصة بـPostgres. إذا لم يكن psql مثبتاً لديك أو لم تكن تستخدم تثبيت Docker، <a href="https://www.pgadmin.org/download/" data-type="link">نزّل</a> وثبّت pgAdmin، وهو عميل Postgres رسومي.
 
 #### فتح اتصال باستخدام psql
 
 إذا كان psql مثبتاً على جهازك المضيف، يُفتح الاتصال بالأمر
 
 ```
-<code>psql postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require</code>
+psql postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require
+
 ```
 
 إذا كان Docker مثبتاً لديك، يمكنك فتح الاتصال بقاعدة بيانات Aiven كما يلي
 
 ```
-<code>docker run -it --rm postgres psql "postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require"</code>
+docker run -it --rm postgres psql "postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb?sslmode=require"
+
 ```
 
 تذكّر أنك تجد رابط اتصال قاعدة البيانات في لوحة تحكم Aiven.
@@ -123,7 +148,14 @@ lang: ar
 عند فتح الطرفية، لنجرّب أمر psql الرئيسي <code>\d</code>، الذي يخبرك بمحتويات قاعدة البيانات:
 
 ```
-<code>psql (17.4 (Debian 17.4-1.pgdg120+2), server 17.7)<br>SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: postgresql)<br>Type "help" for help.<br><br>defaultdb=> \d<br>Did not find any relations.<br>defaultdb=></code>
+psql (17.4 (Debian 17.4-1.pgdg120+2), server 17.7)
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: postgresql)
+Type "help" for help.
+
+defaultdb=> \d
+Did not find any relations.
+defaultdb=>
+
 ```
 
 كما قد تتوقع، لا يوجد شيء حالياً في قاعدة البيانات.
@@ -131,7 +163,13 @@ lang: ar
 لننشئ جدولاً للملاحظات:
 
 ```
-<code>CREATE TABLE notes (<br>    id SERIAL PRIMARY KEY,<br>    content text NOT NULL,<br>    important boolean,<br>    date time<br>);</code>
+CREATE TABLE notes (
+id SERIAL PRIMARY KEY,
+content text NOT NULL,
+important boolean,
+date time
+);
+
 ```
 
 بضع نقاط: العمود <em>id</em> معرّف بأنه <em>مفتاح أساسي</em>، ما يعني أن القيمة في العمود يجب أن تكون فريدة لكل صف في الجدول، ويجب ألا تكون القيمة فارغة. نوع هذا العمود معرّف بأنه <a href="https://www.postgresql.org/docs/9.1/datatype-numeric.html#DATATYPE-SERIAL" target="_blank" rel="noreferrer noopener">SERIAL</a>، وهو ليس النوع الفعلي بل اختصار لعمود عدد صحيح يُسند إليه Postgres تلقائياً قيمة فريدة متزايدة عند إنشاء الصفوف. العمود المسمى <em>content</em> من النوع text معرّف بطريقة تجعل إسناد قيمة إليه إلزامياً.
@@ -146,6 +184,7 @@ defaultdb=> \d
  public | notes        | table    | username
  public | notes_id_seq | sequence | username
 (2 rows)
+
 ```
 
 إضافة إلى جدول&nbsp;<em>notes</em>، أنشأ Postgres جدولاً فرعياً يُسمى&nbsp;<em>notes_id_seq</em>، يتتبّع القيمة المُسندة إلى عمود&nbsp;<em>id</em>&nbsp;عند إنشاء الملاحظة التالية.
@@ -163,6 +202,7 @@ defaultdb=> \d notes;
  date      | time without time zone |           |          |
 Indexes:
     "notes_pkey" PRIMARY KEY, btree (id)
+
 ```
 
 نرى أن العمود <em>id</em> له <em>قيمة افتراضية</em> تُحصل عليها باستدعاء دالة Postgres الداخلية <code>nextval</code>.
@@ -172,6 +212,7 @@ Indexes:
 ```sql
 insert into notes (content, important) values ('Relational databases rule the world', true);
 insert into notes (content, important) values ('MongoDB is webscale', false);
+
 ```
 
 ولنرَ كيف يبدو المحتوى المُنشأ:
@@ -183,6 +224,7 @@ defaultdb=> select * from notes;
   1 | relational databases rule the world | t         |
   2 | MongoDB is webscale                 | f         |
 (2 rows)
+
 ```
 
 إذا حاولنا تخزين بيانات في قاعدة البيانات لا تتوافق مع المخطط، فلن ينجح ذلك. لا يمكن أن تكون قيمة عمود إلزامي مفقودة:
@@ -191,6 +233,7 @@ defaultdb=> select * from notes;
 defaultdb=> insert into notes (important) values (true);
 ERROR: null value in column "content" of relation "notes" violates not-null constraint
 DETAIL: Failing row contains (9, null, t, null).
+
 ```
 
 لا يمكن أن تكون قيمة العمود من النوع الخاطئ:
@@ -199,6 +242,7 @@ DETAIL: Failing row contains (9, null, t, null).
 defaultdb=> insert into notes (content, important) values ('only valid data can be saved', 1);
 ERROR: column "important" is of type boolean but expression is of type integer
 LINE 1: ...tent, important) values ('only valid data can be saved', 1); ^
+
 ```
 
 الأعمدة غير الموجودة في المخطط لا تُقبل أيضاً:
@@ -207,6 +251,7 @@ LINE 1: ...tent, important) values ('only valid data can be saved', 1); ^
 defaultdb=> insert into notes (content, important, value) values ('only valid data can be saved', true, 10);
 ERROR: column "value" of relation "notes" does not exist
 LINE 1: insert into notes (content, important, value) values ('only ...
+
 ```
 
 الآن حان وقت الانتقال إلى الوصول إلى قاعدة البيانات من التطبيق.
@@ -217,6 +262,7 @@ LINE 1: insert into notes (content, important, value) values ('only ...
 
 ```bash
 npm install express dotenv pg sequelize
+
 ```
 
 من بين هذه، الأخيرة&nbsp;<a href="https://sequelize.org/master/" target="_blank" rel="noreferrer noopener">sequelize</a>&nbsp;هي المكتبة التي نستخدم بها Postgres. Sequelize هي مكتبة&nbsp;<a href="https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping" target="_blank" rel="noreferrer noopener">ربط الكائنات بالعلاقات</a>&nbsp;(ORM) تتيح لك تخزين كائنات JavaScript في قاعدة بيانات علائقية دون استخدام لغة SQL نفسها، على غرار Mongoose الذي استخدمناه مع MongoDB.
@@ -248,6 +294,7 @@ const main = async () => {
 }
 
 main()
+
 ```
 
 يجب تعريف <em>سلسلة الاتصال</em> بقاعدة البيانات، التي تحتوي على عنوان قاعدة البيانات وبيانات الاعتماد، في الملف <em>.env</em>
@@ -256,7 +303,8 @@ main()
 
 ```
 $ cat .env
-<code>postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb</code>
+postgres://userhere:passwordhere@hostnamehere.aivencloud.com:10789/defaultdb
+
 ```
 
 لاحظ أنه يجب عليك إزالة <code>?sslmode=require</code> من سلسلة الاتصال!
@@ -265,6 +313,7 @@ $ cat .env
 
 ```
 DATABASE_URL=postgres://postgres:mysecretpassword@localhost:5432/postgres
+
 ```
 
 بعد إعداد سلسلة الاتصال في الملف&nbsp;<em>.env</em>&nbsp;يمكننا اختبار الاتصال:
@@ -273,6 +322,7 @@ DATABASE_URL=postgres://postgres:mysecretpassword@localhost:5432/postgres
 $ node index.js
 Executing (default): SELECT 1+1 AS result
 Connection has been established successfully.
+
 ```
 
 إذا نجح الاتصال، يمكننا بعد ذلك تشغيل أول استعلام. لنعدّل البرنامج كما يلي:
@@ -301,6 +351,7 @@ const main = async () => {
 }
 
 main()
+
 ```
 
 ينبغي أن يطبع تنفيذ التطبيق ما يلي:
@@ -321,6 +372,7 @@ Executing (default): SELECT * FROM notes
     date: null
   }
 ]
+
 ```
 
 مع أن Sequelize مكتبة ORM، أي أنه لا حاجة تُذكر إلى كتابة SQL بنفسك عند استخدامها، إلا أننا استخدمنا للتو&nbsp;<a href="https://sequelize.org/master/manual/raw-queries.html" target="_blank" rel="noreferrer noopener">SQL مباشراً</a>&nbsp;مع دالة sequelize المسماة&nbsp;<a href="https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-method-query" target="_blank" rel="noreferrer noopener">query</a>.
@@ -374,6 +426,7 @@ const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 بضع تعليقات على الشيفرة: لا شيء مفاجئ كثيراً في تعريف النموذج <em>Note</em>؛ فكل عمود له نوع معرّف، وكذلك خصائص أخرى عند الحاجة، مثل ما إذا كان المفتاح الأساسي للجدول. المعامل الثاني في تعريف النموذج يحتوي على خاصية <em>sequelize</em> وكذلك معلومات تهيئة أخرى. عرّفنا أيضاً أن الجدول لا يلزمه استخدام عمودي الطوابع الزمنية (<em>created_at</em> و<em>updated_at</em>).
@@ -389,6 +442,7 @@ Note.init({
     type: DataTypes.INTEGER,
   },
 })
+
 ```
 
 سيكون اسم العمود المقابل في قاعدة البيانات&nbsp;<em>creation_year</em>. وفي الشيفرة، تكون الإشارة إلى العمود دائماً بالصيغة نفسها كما في النموذج، أي بصيغة "camel case".
@@ -402,12 +456,14 @@ app.get('/api/notes', async (req, res) => {
   const notes = await Note.findAll()
   res.json(notes)
 })
+
 ```
 
 تخبرك الطرفية أن استدعاء الدالة&nbsp;<em>Note.findAll()</em>&nbsp;يسبّب الاستعلام التالي:
 
 ```
 Executing (default): SELECT "id", "content", "important", "date" FROM "notes" AS "note";
+
 ```
 
 بعد ذلك، لننفّذ نقطة نهاية لإنشاء ملاحظات جديدة:
@@ -422,6 +478,7 @@ app.post('/api/notes', async (req, res) => {
   const note = await Note.create({...req.body, date: new Date()})
   res.json(note)
 })
+
 ```
 
 يتم إنشاء ملاحظة جديدة باستدعاء دالة النموذج&nbsp;<em>Note</em>&nbsp;المسماة&nbsp;<a href="https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries" target="_blank" rel="noreferrer noopener">create</a>&nbsp;وتمرير كائن يحدد قيم الأعمدة كمعامل.
@@ -431,6 +488,7 @@ app.post('/api/notes', async (req, res) => {
 ```js
 const note = Note.build(req.body)
 await note.save()
+
 ```
 
 استدعاء دالة&nbsp;<em>build</em>&nbsp;لا يحفظ الكائن في قاعدة البيانات بعد، لذا يظل ممكناً تعديل الكائن قبل حدث الحفظ الفعلي:
@@ -439,6 +497,7 @@ await note.save()
 const note = Note.build(req.body)
 note.important = true
 await note.save()
+
 ```
 
 لحالة استخدام الشيفرة المثال، دالة&nbsp;<a href="https://sequelize.org/master/manual/model-querying-basics.html#simple-insert-queries" target="_blank" rel="noreferrer noopener">create</a>&nbsp;أنسب، لذا لنلتزم بها.
@@ -449,6 +508,7 @@ await note.save()
 (node:39109) UnhandledPromiseRejectionWarning: SequelizeValidationError: notNull Violation: Note.content cannot be null
     at InstanceValidator._validate (/Users/mluukkai/opetus/fs-psql/node_modules/sequelize/lib/instance-validator.js:78:13)
     at processTicksAndRejections (internal/process/task_queues.js:93:5)
+
 ```
 
 لنضف معالجة أخطاء بسيطة عند إضافة ملاحظة جديدة:
@@ -462,6 +522,7 @@ app.post('/api/notes', async (req, res) => {
     return res.status(400).json({ error })
   }
 })
+
 ```
 
 <div class="tasks">
@@ -491,13 +552,16 @@ app.post('/api/notes', async (req, res) => {
 لندمّر الآن جدول <em>notes</em> من الطرفية بإدخال الأمر التالي:
 
 ```
-<code>drop table notes;</code>
+drop table notes;
+
 ```
 
 يكشف الأمر&nbsp;<code>\d</code>&nbsp;أن الجدول فُقد من قاعدة البيانات:
 
 ```
-<code>postgres=# \d<br>Did not find any relations.</code>
+postgres=# \d
+Did not find any relations.
+
 ```
 
 لم يعد التطبيق يعمل.
@@ -505,13 +569,15 @@ app.post('/api/notes', async (req, res) => {
 لنضف الأمر التالي إلى التطبيق مباشرة بعد تعريف النموذج&nbsp;<em>Note</em>:
 
 ```
-<code>Note.sync()</code>
+Note.sync()
+
 ```
 
 عند بدء التطبيق، يُطبع ما يلي على الطرفية:
 
 ```
 Executing (default): CREATE TABLE IF NOT EXISTS "notes" ("id" SERIAL , "content" TEXT NOT NULL, "important" BOOLEAN, "date" TIMESTAMP WITH TIME ZONE, PRIMARY KEY ("id"));
+
 ```
 
 أي أنه عند بدء التطبيق يُنفّذ الأمر&nbsp;<em>CREATE TABLE IF NOT EXISTS "notes"...</em>&nbsp;الذي ينشئ الجدول&nbsp;<em>notes</em>&nbsp;إن لم يكن موجوداً بالفعل.
@@ -523,13 +589,22 @@ Executing (default): CREATE TABLE IF NOT EXISTS "notes" ("id" SERIAL , "content"
 البحث عن ملاحظة واحدة ممكن بدالة&nbsp;<a href="https://sequelize.org/docs/v6/core-concepts/model-querying-finders/#findbypk" target="_blank" rel="noreferrer noopener">findByPk</a>، لأنها تُجلب بناءً على معرّف المفتاح الأساسي:
 
 ```js
-<code>app.get('/api/notes/:id', async (req, res) => {<br>  const note = await Note.findByPk(req.params.id)<br>  if (note) {<br>    res.json(note)<br>  } else {<br>    res.status(404).end()<br>  }<br>})</code>
+app.get('/api/notes/:id', async (req, res) => {
+const note = await Note.findByPk(req.params.id)
+if (note) {
+res.json(note)
+} else {
+res.status(404).end()
+}
+})
+
 ```
 
 جلب ملاحظة واحدة يسبّب أمر SQL التالي:
 
 ```
-<code>Executing (default): SELECT "id", "content", "important", "date" FROM "notes" AS "note" WHERE "note". "id" = '1';</code>
+Executing (default): SELECT "id", "content", "important", "date" FROM "notes" AS "note" WHERE "note". "id" = '1';
+
 ```
 
 إذا لم تُوجد أي ملاحظة، تعيد العملية&nbsp;<em>null</em>، وفي هذه الحالة يُعطى رمز الحالة المناسب.
@@ -537,7 +612,17 @@ Executing (default): CREATE TABLE IF NOT EXISTS "notes" ("id" SERIAL , "content"
 تعديل الملاحظة يتم كما يلي. يُدعم فقط تعديل حقل&nbsp;<em>important</em>، لأن الواجهة الأمامية للتطبيق لا تحتاج شيئاً آخر:
 
 ```js
-<code>app.put('/api/notes/:id', async (req, res) => {<br>  const note = await Note.findByPk(req.params.id)<br>  if (note) {<br>    note.important = req.body.important<br>    await note.save()<br>    res.json(note)<br>  } else {<br>    res.status(404).end()<br>  }<br>})</code>
+app.put('/api/notes/:id', async (req, res) => {
+const note = await Note.findByPk(req.params.id)
+if (note) {
+note.important = req.body.important
+await note.save()
+res.json(note)
+} else {
+res.status(404).end()
+}
+})
+
 ```
 
 يُجلب الكائن المقابل لصف قاعدة البيانات من قاعدة البيانات بدالة&nbsp;<em>findByPk</em>، ويُعدَّل الكائن وتُحفظ النتيجة باستدعاء دالة&nbsp;<em>save</em>&nbsp;على الكائن المقابل لصف قاعدة البيانات.
@@ -558,6 +643,7 @@ app.get('/api/notes/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
 ```
 
 نرى أن النتيجة النهائية ليست تماماً ما توقعناه:
@@ -586,6 +672,7 @@ note {
   },
   isNewRecord: false
 }
+
 ```
 
 إضافة إلى معلومات الملاحظة، تُطبع على الطرفية أمور أخرى من كل نوع. يمكننا الحصول على النتيجة المطلوبة باستدعاء دالة الكائن النموذجي <a href="https://sequelize.org/api/v6/class/src/model.js~model#instance-method-toJSON" target="_blank" rel="noreferrer noopener">toJSON</a>:
@@ -600,6 +687,7 @@ app.get('/api/notes/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
 ```
 
 الآن النتيجة هي بالضبط ما نريد:
@@ -609,17 +697,19 @@ app.get('/api/notes/:id', async (req, res) => {
   content: 'MongoDB is webscale',
   important: false,
   date: 2026-02-09T13:52:58.693Z }
+
 ```
 
 في حالة مجموعة من الكائنات، لا تعمل دالة toJSON مباشرةً، بل يجب استدعاؤها منفصلة لكل كائن في المجموعة:
 
 ```js
-app.get('/api/notes', async (req, res) =&gt; {
+app.get('/api/notes', async (req, res) => {
   const notes = await Note.findAll()
 
-  console.log(notes.map(n=&gt;n.toJSON()))
+  console.log(notes.map(n=>n.toJSON()))
   res.json(notes)
 })
+
 ```
 
 تبدو الطباعة كما يلي:
@@ -633,23 +723,26 @@ app.get('/api/notes', async (req, res) =&gt; {
     content: 'Relational databases rule the world',
     important: true,
     date: 2026-02-09T13:53:10.710Z } ]
+
 ```
 
 لكن ربما الحل الأفضل هو تحويل المجموعة إلى JSON للطباعة باستخدام الدالة&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify" target="_blank" rel="noreferrer noopener">JSON.stringify</a>:
 
 ```js
-app.get('/api/notes', async (req, res) =&gt; {
+app.get('/api/notes', async (req, res) => {
   const notes = await Note.findAll()
 
   console.log(JSON.stringify(notes))
   res.json(notes)
 })
+
 ```
 
 هذه الطريقة أفضل خاصةً إذا كانت الكائنات في المجموعة تحتوي كائنات أخرى. وكثيراً ما يكون مفيداً أيضاً تنسيق الكائنات على الشاشة بصيغة أسهل قراءةً بعض الشيء. يمكن فعل ذلك بالأمر التالي:
 
 ```
 console.log(JSON.stringify(notes, null, 2))
+
 ```
 
 تبدو الطباعة كما يلي:
@@ -669,6 +762,7 @@ console.log(JSON.stringify(notes, null, 2))
     "date": "2026-02-09T13:53:10.710Z"
   }
 ]
+
 ```
 
 <div class="tasks">

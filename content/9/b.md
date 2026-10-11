@@ -37,7 +37,7 @@ TypeScript هي مجموعة شاملة مُنمّطة (typed superset) من Jav
 توصيفات الأنواع في TypeScript طريقة خفيفة لتسجيل&nbsp;<em>العقد</em>&nbsp;المقصود لدالة أو متغير. في المثال أدناه، عرّفنا دالة&nbsp;<em>birthdayGreeter</em>&nbsp;تقبل وسيطين: أحدهما من نوع string والآخر من نوع number. وستعيد الدالة نصاً.
 
 ```ts
-const birthdayGreeter = (name: string, age: number): string =&gt; {
+const birthdayGreeter = (name: string, age: number): string => {
   return `Happy birthday ${name}, you are now ${age} years old!`;
 };
 
@@ -45,6 +45,7 @@ const birthdayHero = "Jane User";
 const age = 22;
 
 console.log(birthdayGreeter(birthdayHero, age));
+
 ```
 
 #### الكلمات المفتاحية
@@ -62,11 +63,12 @@ TypeScript لغة مُنمّطة بنيوياً. في التنميط البني�
 على سبيل المثال، تأمّل الدالة&nbsp;<em>add</em>:
 
 ```ts
-const add = (a: number, b: number) =&gt; {
+const add = (a: number, b: number) => {
   /* تُستخدم القيمة المُعادة لتحديد
      نوع الإرجاع للدالة */
   return a + b;
 }
+
 ```
 
 يُستنتج نوع القيمة المعادة للدالة بتتبّع الشيفرة رجوعاً إلى تعبير الإرجاع. ويجري تعبير الإرجاع عملية جمع للمعاملين a وb. ويمكننا أن نرى أن a وb عددان بناءً على نوعيهما. وهكذا نستنتج أن القيمة المعادة من النوع&nbsp;<em>number</em>.
@@ -79,12 +81,14 @@ const add = (a: number, b: number) =&gt; {
 
 ```js
 let x: SomeType;
+
 ```
 
 المخرج:
 
 ```js
 let x;
+
 ```
 
 وهذا يعني أنه لا تبقى أي معلومات عن الأنواع وقت التشغيل؛ فلا شيء يقول إن المتغير x قد أُعلن من النوع&nbsp;<em>SomeType</em>.

@@ -108,6 +108,7 @@ app.get('/', (req, res) => {
   const page = getFrontPageHtml(notes.length)
   res.send(page)
 })
+
 ```
 
 لا يلزمك فهم الشيفرة الآن.
@@ -160,6 +161,7 @@ xhttp.onreadystatechange = function() {
 
 xhttp.open('GET', '/data.json', true)
 xhttp.send()
+
 ```
 
 تفاصيل الشيفرة ليست مهمة الآن، لكن أُدرجت بعض الشيفرة لإثراء الصور والنص. سنبدأ البرمجة فعلياً في [الجزء 1](/part1). وشيفرة المثال في هذا الجزء لا علاقة لها إطلاقاً بتقنيات البرمجة في هذه الدورة.
@@ -173,6 +175,7 @@ xhttp.send()
 ```js
 xhttp.open('GET', '/data.json', true)
 xhttp.send()
+
 ```
 
 هذا هو الطلب الأخير في الأسفل الظاهر في تبويب Network.
@@ -204,6 +207,7 @@ data.forEach(function(note) {
 })
 
 document.getElementById('notes').appendChild(ul)
+
 ```
 
 تنشئ الشيفرة أولاً قائمة غير مرتّبة بوسم [ul](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul)...
@@ -211,6 +215,7 @@ document.getElementById('notes').appendChild(ul)
 ```js
 var ul = document.createElement('ul')
 ul.setAttribute('class', 'notes')
+
 ```
 
 ...ثم تضيف وسم [li](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li) واحداً لكل ملاحظة. ولا يصبح محتوى وسم li إلا الحقل <i>content</i> لكل ملاحظة. أما الطوابع الزمنية الموجودة في البيانات الخام فلا تُستخدم لشيء هنا.
@@ -222,6 +227,7 @@ data.forEach(function(note) {
   ul.appendChild(li)
   li.appendChild(document.createTextNode(note.content))
 })
+
 ```
 
 افتح الآن تبويب <i>Console</i> في وحدة تحكم المطوّر:
@@ -237,6 +243,7 @@ data.forEach(function(note) {
 ```js
 const data = JSON.parse(this.responseText)
 console.log(data)
+
 ```
 
 إذن، بعد استلام البيانات من الخادم، تطبعها الشيفرة في وحدة التحكم.
@@ -256,12 +263,14 @@ xhttp.onreadystatechange = function() {
 
 xhttp.open('GET', '/data.json', true)
 xhttp.send()
+
 ```
 
 يُرسل الطلب إلى الخادم في السطر الأخير، لكن شيفرة معالجة الاستجابة موجودة في الأعلى. فما الذي يحدث؟
 
 ```js
 xhttp.onreadystatechange = function () {
+
 ```
 
 في هذا السطر، يُعرَّف <i>معالج حدث</i> للحدث <i>onreadystatechange</i> للكائن <em>xhttp</em> الذي يُجري الطلب. وعندما تتغيّر حالة الكائن، يستدعي المتصفح دالة معالج الحدث. وتتحقق شيفرة الدالة من أن [readyState](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState) يساوي 4 (وهو ما يعبّر عن الحالة <i>اكتملت العملية</i>) ومن أن رمز حالة HTTP للاستجابة هو 200.
@@ -272,6 +281,7 @@ xhttp.onreadystatechange = function() {
     // الشيفرة التي تتولى معالجة استجابة الخادم
   }
 }
+
 ```
 
 آلية استدعاء معالجات الأحداث شائعة جداً في JavaScript. وتُسمى دوال معالجات الأحداث [دوال استدعاء راجع](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function) (callback). فلا تستدعي شيفرة التطبيق الدوال بنفسها، بل تستدعيها بيئة التشغيل — أي المتصفح — في الوقت المناسب عندما يقع <i>الحدث</i>.
@@ -296,6 +306,7 @@ html
       form
         input
         input
+
 ```
 
 ويمكن رؤية البنية الشجرية نفسها في تبويب <i>Elements</i> بوحدة التحكم.
@@ -319,12 +330,14 @@ data.forEach(function(note) {
   ul.appendChild(li)
   li.appendChild(document.createTextNode(note.content))
 })
+
 ```
 
 وأخيراً، يُوصل فرع الشجرة الخاص بالمتغير <em>ul</em> إلى مكانه الصحيح في شجرة HTML للصفحة كاملة:
 
 ```js
 document.getElementById('notes').appendChild(ul)
+
 ```
 
 ### التلاعب بكائن المستند من وحدة التحكم
@@ -339,6 +352,7 @@ document.getElementById('notes').appendChild(ul)
 
 ```js
 list = document.getElementsByTagName('ul')[0]
+
 ```
 
 ثم أنشئ عنصر li جديداً وأضف إليه بعض المحتوى النصي:
@@ -346,12 +360,14 @@ list = document.getElementsByTagName('ul')[0]
 ```js
 newElement = document.createElement('li')
 newElement.textContent = 'Page manipulation from console is easy'
+
 ```
 
 وأضف عنصر li الجديد إلى القائمة:
 
 ```js
 list.appendChild(newElement)
+
 ```
 
 ![لقطة شاشة للصفحة بعد إضافة الملاحظة الجديدة إلى القائمة](../../images/0/16e.webp)
@@ -375,6 +391,7 @@ list.appendChild(newElement)
 .notes {
   color: blue;
 }
+
 ```
 
 يعرّف الملف [محددَي فئة](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors) (class selectors). ويُستخدمان لتحديد أجزاء معينة من الصفحة وتعريف قواعد تنسيق لتنسيقها.
@@ -453,6 +470,7 @@ app.post('/new_note', (req, res) => {
 
   return res.redirect('/notes')
 })
+
 ```
 
 تُرسل البيانات كـ [body](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST) لطلب POST.
@@ -466,6 +484,7 @@ notes.push({
   content: req.body.note,
   date: new Date(),
 })
+
 ```
 
 لكل كائن ملاحظة حقلان: <i>content</i> الذي يحتوي على المحتوى الفعلي للملاحظة، و <i>date</i> الذي يحتوي على تاريخ ووقت إنشاء الملاحظة.
@@ -517,6 +536,7 @@ notes.push({
   content: "single page app does not reload the whole page",
   date: "2019-05-25T15:15:59.905Z"
 }
+
 ```
 
 تُخبر ترويسة <i>Content-Type</i> في الطلب الخادمَ بأن البيانات المضمّنة ممثلة بصيغة JSON.
@@ -545,6 +565,7 @@ form.onsubmit = function(e) {
   redrawNotes()
   sendToServer(note)
 }
+
 ```
 
 يوجّه الأمر <em>document.getElementById('notes\_form')</em> الشيفرةَ إلى جلب مرجع إلى عنصر نموذج HTML في الصفحة الذي يحمل المعرّف "notes\_form" وتسجيل <i>معالج حدث</i> للتعامل مع حدث إرسال النموذج. ويستدعي معالج الحدث فوراً الدالة <em>e.preventDefault()</em> لمنع المعالجة الافتراضية لإرسال النموذج. فالطريقة الافتراضية سترسل البيانات إلى الخادم وتتسبب في طلب GET جديد، وهو ما لا نريده.
@@ -562,6 +583,7 @@ var sendToServer = function(note) {
   xhttpForPost.setRequestHeader('Content-type', 'application/json')
   xhttpForPost.send(JSON.stringify(note))
 }
+
 ```
 
 تحدد الشيفرة أن البيانات ستُرسل بطلب HTTP POST وأن نوع البيانات هو JSON. ويُحدد نوع البيانات بترويسة <i>Content-type</i>. ثم تُرسل البيانات كنص JSON.
@@ -629,6 +651,7 @@ part2
   courseinfo
   phonebook
   countries
+
 ```
 
 إذن، لكل جزء مجلده الخاص، الذي يحتوي على مجلد لكل مجموعة تمارين (مثل تمارين unicafe في الجزء 1).
@@ -687,6 +710,7 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
+
 ```
 
 **أنشئ مخططاً مشابهاً** يوضّح الحالة التي ينشئ فيها المستخدم ملاحظة جديدة في الصفحة <https://studies.cs.helsinki.fi/exampleapp/notes> بكتابة شيء في حقل النص والنقر على زر <i>Save</i>.

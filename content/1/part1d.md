@@ -33,6 +33,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 يصل المكوّن إلى الدالتين _setLeft_ و_setRight_ اللتين يمكنه استخدامهما لتحديث جزأي الحالة.
@@ -44,6 +45,7 @@ const App = () => {
   left: 0,
   right: 0
 }
+
 ```
 
 في هذه الحالة، سيبدو التطبيق هكذا:
@@ -79,6 +81,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 الآن أصبح للمكوّن جزء واحد فقط من الحالة، وعلى معالجات الأحداث أن تتولى تغيير <i>حالة التطبيق بأكملها</i>.
@@ -93,6 +96,7 @@ const handleLeftClick = () => {
   }
   setClicks(newClicks)
 }
+
 ```
 
 ويُعيَّن الكائن التالي كحالة جديدة للتطبيق:
@@ -102,6 +106,7 @@ const handleLeftClick = () => {
   left: clicks.left + 1,
   right: clicks.right
 }
+
 ```
 
 أصبحت القيمة الجديدة للخاصية <i>left</i> مساوية الآن لقيمة <i>left + 1</i> من الحالة السابقة، وقيمة الخاصية <i>right</i> مساوية لقيمة الخاصية <i>right</i> من الحالة السابقة.
@@ -124,6 +129,7 @@ const handleRightClick = () => {
   }
   setClicks(newClicks)
 }
+
 ```
 
 قد تبدو الصيغة غريبة بعض الشيء في البداية. عملياً، تُنشئ <em>{ ...clicks }</em> كائناً جديداً يحتوي على نسخ من جميع خصائص كائن _clicks_. وعندما نحدد خاصية معينة — مثل <i>right</i> في <em>{ ...clicks, right: 1 }</em> — تصبح قيمة الخاصية _right_ في الكائن الجديد 1.
@@ -132,6 +138,7 @@ const handleRightClick = () => {
 
 ```js
 { ...clicks, right: clicks.right + 1 }
+
 ```
 
 ينشئ نسخة من كائن _clicks_ تكون فيها قيمة الخاصية _right_ مزيدَة بواحد.
@@ -144,6 +151,7 @@ const handleLeftClick = () =>
 
 const handleRightClick = () =>
   setClicks({ ...clicks, right: clicks.right + 1 })
+
 ```
 
 قد يتساءل بعض القراء لماذا لم نحدّث الحالة مباشرة هكذا:
@@ -153,6 +161,7 @@ const handleLeftClick = () => {
   clicks.left++
   setClicks(clicks)
 }
+
 ```
 
 يبدو أن التطبيق يعمل. لكن <i>يُحرَّم في React تغيير الحالة مباشرة</i>، لأن [ذلك قد يؤدي إلى آثار جانبية غير متوقعة](https://stackoverflow.com/a/40309023). ويجب أن يتم تغيير الحالة دائماً بتعيينها إلى كائن جديد. وإذا لم تتغير خصائص كائن الحالة السابق، فيلزم ببساطة نسخها، ويتم ذلك بنسخ تلك الخصائص إلى كائن جديد وتعيينه كحالة جديدة.
@@ -169,7 +178,7 @@ const handleLeftClick = () => {
 const App = () => {
   const [left, setLeft] = useState(0)
   const [right, setRight] = useState(0)
-  const [allClicks, setAll] = useState([]) // highlight-line
+  const [allClicks, setAll] = useState([])
 
 // highlight-start
   const handleLeftClick = () => {
@@ -191,16 +200,18 @@ const App = () => {
       <button onClick={handleLeftClick}>left</button>
       <button onClick={handleRightClick}>right</button>
       {right}
-      <p>{allClicks.join(' ')}</p> // highlight-line
+      <p>{allClicks.join(' ')}</p>
     </div>
   )
 }
+
 ```
 
 تُخزَّن كل نقرة في جزء منفصل من الحالة يسمى _allClicks_ يُهيَّأ كمصفوفة فارغة:
 
 ```js
 const [allClicks, setAll] = useState([])
+
 ```
 
 عند النقر على الزر <i>left</i>، نضيف الحرف <i>L</i> إلى مصفوفة _allClicks_:
@@ -210,6 +221,7 @@ const handleLeftClick = () => {
   setAll(allClicks.concat('L'))
   setLeft(left + 1)
 }
+
 ```
 
 يُعيَّن جزء الحالة المخزَّن في _allClicks_ الآن مصفوفة تحتوي على جميع عناصر مصفوفة الحالة السابقة إضافة إلى الحرف <i>L</i>. وتتم إضافة العنصر الجديد إلى المصفوفة بالدالة [concat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat)، التي لا تغيّر المصفوفة القائمة بل تُعيد <i>نسخة جديدة منها</i> مع العنصر المضاف إليها.
@@ -222,6 +234,7 @@ const handleLeftClick = () => {
   setAll(allClicks)
   setLeft(left + 1)
 }
+
 ```
 
 لكن __لا__ تفعل ذلك. فكما ذُكر سابقاً، يجب عدم تغيير حالة مكوّنات React مثل _allClicks_ مباشرة. وحتى لو بدا تغيير الحالة يعمل في بعض الحالات، فقد يؤدي إلى مشكلات يصعب جداً تصحيحها.
@@ -238,10 +251,11 @@ const App = () => {
       <button onClick={handleLeftClick}>left</button>
       <button onClick={handleRightClick}>right</button>
       {right}
-      <p>{allClicks.join(' ')}</p> // highlight-line
+      <p>{allClicks.join(' ')}</p>
     </div>
   )
 }
+
 ```
 
 نستدعي الدالة [join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join) على مصفوفة _allClicks_، وهي تدمج جميع العناصر في نص واحد يفصل بينها النص المُمرَّر كمعامل للدالة، وهو في حالتنا مسافة فارغة.
@@ -255,18 +269,18 @@ const App = () => {
   const [left, setLeft] = useState(0)
   const [right, setRight] = useState(0)
   const [allClicks, setAll] = useState([])
-  const [total, setTotal] = useState(0) // highlight-line
+  const [total, setTotal] = useState(0)
 
   const handleLeftClick = () => {
     setAll(allClicks.concat('L'))
     setLeft(left + 1)
-    setTotal(left + right)  // highlight-line
+    setTotal(left + right)
   }
 
   const handleRightClick = () => {
     setAll(allClicks.concat('R'))
     setRight(right + 1)
-    setTotal(left + right)  // highlight-line
+    setTotal(left + right)
   }
 
   return (
@@ -276,10 +290,11 @@ const App = () => {
       <button onClick={handleRightClick}>right</button>
       {right}
       <p>{allClicks.join(' ')}</p>
-      <p>total {total}</p>  // highlight-line
+      <p>total {total}</p>
     </div>
   )
 }
+
 ```
 
 لا يعمل الحل تماماً:
@@ -295,14 +310,15 @@ const App = () => {
   // ...
   const handleLeftClick = () => {
     setAll(allClicks.concat('L'))
-    console.log('left before', left)  // highlight-line
+    console.log('left before', left)
     setLeft(left + 1)
-    console.log('left after', left)  // highlight-line
+    console.log('left after', left)
     setTotal(left + right) 
   }
 
   // ...
 }
+
 ```
 
 تكشف وحدة التحكم المشكلة
@@ -313,6 +329,7 @@ const App = () => {
 
 ```js
 setTotal(left + right) 
+
 ```
 
 والسبب في ذلك أن تحديث الحالة في React يحدث [بشكل غير متزامن](https://react.dev/learn/queueing-a-series-of-state-updates)، أي ليس فوراً بل «في مرحلة ما» بعد انتهاء دالة المكوّن الحالية وقبل إعادة عرض المكوّن.
@@ -331,6 +348,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 فأصبح عدد ضغطات الأزرار الآن مبنياً بالتأكيد على العدد الصحيح لضغطات الزر الأيسر.
@@ -349,6 +367,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 
@@ -384,16 +403,18 @@ const App = () => {
       <button onClick={handleLeftClick}>left</button>
       <button onClick={handleRightClick}>right</button>
       {right}
-      <History allClicks={allClicks} /> // highlight-line
+      <History allClicks={allClicks} />
     </div>
   )
 }
+
 ```
 
 الآن يعتمد سلوك المكوّن على ما إذا كانت أي أزرار قد نُقرت أم لا. فإن لم يكن، أي إذا كانت مصفوفة <em>allClicks</em> فارغة، يعرض المكوّن عنصر div يحتوي على بعض التعليمات بدلاً من ذلك:
 
 ```js
 <div>the app is used by pressing the buttons</div>
+
 ```
 
 وفي جميع الحالات الأخرى، يعرض المكوّن سجل النقرات:
@@ -402,6 +423,7 @@ const App = () => {
 <div>
   button press history: {props.allClicks.join(' ')}
 </div>
+
 ```
 
 يعرض مكوّن <i>History</i> عناصر React مختلفة تماماً حسب حالة التطبيق. ويسمى هذا <i>العرض الشرطي</i>.
@@ -427,7 +449,7 @@ const History = (props) => {
   )
 }
 
-const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button> // highlight-line
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const App = () => {
   const [left, setLeft] = useState(0)
@@ -456,6 +478,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ### React القديمة
@@ -492,13 +515,14 @@ const App = () => {
 
 ```js
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 ```
 
 يعمل كما هو مقصود، فمن المفيد البدء بطباعة متغيراته في وحدة التحكم. ولكي نفعل ذلك بفعالية، يجب تحويل دالتنا إلى الصيغة الأقل إيجازاً واستقبال كائن props كاملاً دون تفكيكه فوراً:
 
 ```js
 const Button = (props) => { 
-  console.log(props) // highlight-line
+  console.log(props)
   const { onClick, text } = props
   return (
     <button onClick={onClick}>
@@ -506,6 +530,7 @@ const Button = (props) => {
     </button>
   )
 }
+
 ```
 
 سيكشف هذا فوراً ما إذا كان أحد الخصائص مثلاً قد كُتب خطأً عند استخدام المكوّن.
@@ -514,18 +539,21 @@ const Button = (props) => {
 
 ```js
 console.log('props value is ' + props)
+
 ```
   
 فإن فعلت ذلك، ستحصل على رسالة سجل غير مفيدة تماماً:
 
 ```js
 props value is [object Object]
+
 ```
 
 بدلاً من ذلك، افصل بين الأشياء التي تريد تسجيلها في وحدة التحكم بفاصلة:
 
 ```js
 console.log('props value is', props)
+
 ```
 
 وبهذه الطريقة، ستكون جميع العناصر المفصولة متاحة في وحدة تحكم المتصفح لمزيد من الفحص.
@@ -558,6 +586,7 @@ console.log('props value is', props)
 const [left, setLeft] = useState(0)
 const [right, setRight] = useState(0)
 const [allClicks, setAll] = useState([])
+
 ```
 
 تعرض أدوات المطوّر حالة الخطافات بترتيب تعريفها:
@@ -601,6 +630,7 @@ const App = () => {
     //...
   )
 }
+
 ```
 
 ### إعادة النظر في معالجة الأحداث
@@ -622,6 +652,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 نريد أن تؤدي النقر على الزر إلى إعادة ضبط الحالة المخزنة في المتغير _value_.
@@ -634,6 +665,7 @@ const App = () => {
 
 ```js
 <button onClick="crap...">button</button>
+
 ```
 
 لحذّرتنا React من ذلك في وحدة التحكم:
@@ -643,24 +675,28 @@ index.js:2178 Warning: Expected `onClick` listener to be a function, instead got
     in button (at index.js:20)
     in div (at index.js:18)
     in App (at index.js:27)
+
 ```
 
 ولن تنجح المحاولة التالية أيضاً:
 
 ```js
 <button onClick={value + 1}>button</button>
+
 ```
 
 فقد حاولنا تعيين معالج الحدث إلى _value + 1_، وهي تُعيد ببساطة نتيجة العملية. وستحذّرنا React بلطف من ذلك في وحدة التحكم:
 
 ```js
 index.js:2178 Warning: Expected `onClick` listener to be a function, instead got a value of `number` type.
+
 ```
 
 ولن تنجح هذه المحاولة أيضاً:
 
 ```js
 <button onClick={value = 0}>button</button>
+
 ```
 
 فمعالج الحدث ليس دالة بل إسناد إلى متغير، وستصدر React مرة أخرى تحذيراً في وحدة التحكم. وهذه المحاولة معيبة أيضاً من حيث إنه يجب ألا نغيّر الحالة مباشرة في React أبداً.
@@ -671,6 +707,7 @@ index.js:2178 Warning: Expected `onClick` listener to be a function, instead got
 <button onClick={console.log('clicked the button')}>
   button
 </button>
+
 ```
 
 تُطبع الرسالة في وحدة التحكم مرة واحدة عند عرض المكوّن، لكن لا يحدث شيء عند النقر على الزر. فلماذا لا يعمل هذا رغم أن معالج الحدث لدينا يحتوي على دالة _console.log_؟
@@ -683,6 +720,7 @@ index.js:2178 Warning: Expected `onClick` listener to be a function, instead got
 
 ```js
 <button onClick={setValue(0)}>button</button>
+
 ```
 
 حاولنا مرة أخرى تعيين استدعاء دالة كمعالج حدث. وهذا لا يعمل. كما تسبب هذه المحاولة تحديداً مشكلة أخرى. فعند عرض المكوّن تُنفَّذ الدالة _setValue(0)_، ما يؤدي بدوره إلى إعادة عرض المكوّن. وتستدعي إعادة العرض بدورها _setValue(0)_ مرة أخرى، ما ينتج عنه استدعاء ذاتي لا نهائي.
@@ -693,6 +731,7 @@ index.js:2178 Warning: Expected `onClick` listener to be a function, instead got
 <button onClick={() => console.log('clicked the button')}>
   button
 </button>
+
 ```
 
 أصبح معالج الحدث الآن دالة معرّفة بصيغة الدالة السهمية _() => console.log('clicked the button')_. وعند عرض المكوّن، لا تُستدعى أي دالة، ويُعيَّن فقط مرجع الدالة السهمية إلى معالج الحدث. ولا يحدث استدعاء الدالة إلا عند النقر على الزر.
@@ -701,6 +740,7 @@ index.js:2178 Warning: Expected `onClick` listener to be a function, instead got
 
 ```js
 <button onClick={() => setValue(0)}>button</button>
+
 ```
 
 أصبح معالج الحدث الآن الدالة _() => setValue(0)_.
@@ -723,12 +763,14 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ويُمرَّر المتغير _handleClick_، الذي يشير إلى تعريف الدالة، إلى الزر كخاصية <i>onClick</i>:
 
 ```js
 <button onClick={handleClick}>button</button>
+
 ```
 
 وبالطبع، يمكن أن تتألف دالة معالج الحدث من أوامر متعددة. وفي هذه الحالات نستخدم صيغة الأقواس المعقوفة الأطول للدوال السهمية:
@@ -751,6 +793,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ### دالة تُعيد دالة
@@ -780,6 +823,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 تعمل الشيفرة بشكل صحيح رغم أنها تبدو معقدة.
@@ -788,6 +832,7 @@ const App = () => {
 
 ```js
 <button onClick={hello()}>button</button>
+
 ```
 
 قلنا سابقاً إن معالج الحدث لا يجوز أن يكون استدعاء دالة، بل يجب أن يكون تعريف دالة أو مرجعاً إلى دالة. فلماذا يعمل استدعاء الدالة في هذه الحالة إذن؟
@@ -800,6 +845,7 @@ const hello = () => {
 
   return handler
 }
+
 ```
 
 و<i>القيمة المُعادة</i> من الدالة هي دالة أخرى تُسند إلى المتغير _handler_.
@@ -808,6 +854,7 @@ const hello = () => {
 
 ```js
 <button onClick={hello()}>button</button>
+
 ```
 
 تُسند القيمة المُعادة من _hello()_ إلى خاصية onClick. وأساساً يتحول السطر إلى:
@@ -816,6 +863,7 @@ const hello = () => {
 <button onClick={() => console.log('hello world')}>
   button
 </button>
+
 ```
 
 ولأن الدالة _hello_ تُعيد دالة، أصبح معالج الحدث الآن دالة.
@@ -849,6 +897,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 أصبح في التطبيق الآن ثلاثة أزرار معالجات أحداثها معرّفة بالدالة _hello_ التي تقبل معاملاً.
@@ -857,6 +906,7 @@ const App = () => {
 
 ```js
 <button onClick={hello('world')}>button</button>
+
 ```
 
 يُنشأ معالج الحدث بـ<i>تنفيذ</i> استدعاء الدالة _hello('world')_. ويُعيد استدعاء الدالة الدالةَ:
@@ -865,12 +915,14 @@ const App = () => {
 () => {
   console.log('hello', 'world')
 }
+
 ```
 
 والزر الثاني معرّف هكذا:
 
 ```js
 <button onClick={hello('react')}>button</button>
+
 ```
 
 ويُعيد استدعاء الدالة _hello('react')_ الذي ينشئ معالج الحدث:
@@ -879,6 +931,7 @@ const App = () => {
 () => {
   console.log('hello', 'react')
 }
+
 ```
 
 ويحصل كلا الزرين على معالج الحدث المخصص له.
@@ -895,6 +948,7 @@ const hello = (who) => {
 
   return handler
 }
+
 ```
 
 لنحذف المتغيرات المساعدة ونُعِد الدالة المُنشأة مباشرة:
@@ -905,6 +959,7 @@ const hello = (who) => {
     console.log('hello', who)
   }
 }
+
 ```
 
 ولأن دالتنا _hello_ تتألف من أمر return واحد، يمكننا حذف الأقواس المعقوفة واستخدام الصيغة الأكثر إيجازاً للدوال السهمية:
@@ -914,6 +969,7 @@ const hello = (who) =>
   () => {
     console.log('hello', who)
   }
+
 ```
 
 وأخيراً، لنكتب جميع الأسهم على السطر نفسه:
@@ -922,6 +978,7 @@ const hello = (who) =>
 const hello = (who) => () => {
   console.log('hello', who)
 }
+
 ```
 
 يمكننا استخدام الحيلة نفسها لتعريف معالجات أحداث تعيّن حالة المكوّن إلى قيمة معينة. لنجرِ التغييرات التالية على شيفرتنا:
@@ -948,12 +1005,14 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 عند عرض المكوّن، يُنشأ زر <i>thousand</i>:
 
 ```js
 <button onClick={setToValue(1000)}>thousand</button>
+
 ```
 
 يُعيَّن معالج الحدث إلى القيمة المُعادة من _setToValue(1000)_، وهي الدالة التالية:
@@ -963,12 +1022,14 @@ const App = () => {
   console.log('value now', 1000)
   setValue(1000)
 }
+
 ```
 
 وزر الزيادة معرّف كما يلي:
 
 ```js
 <button onClick={setToValue(value + 1)}>increment</button>
+
 ```
 
 يُنشأ معالج الحدث باستدعاء الدالة _setToValue(value + 1)_ الذي يتلقى كمعامل له القيمة الحالية لمتغير الحالة _value_ مزيدَة بواحد. فإذا كانت قيمة _value_ تساوي 10، يصبح معالج الحدث المُنشأ هو الدالة:
@@ -978,6 +1039,7 @@ const App = () => {
   console.log('value now', 11)
   setValue(11)
 }
+
 ```
 
 لا يُشترط استخدام دوال تُعيد دوالاً لتحقيق هذه الوظيفة. لنُعِد الدالة _setToValue_ المسؤولة عن تحديث الحالة إلى دالة عادية:
@@ -1006,12 +1068,14 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 يمكننا الآن تعريف معالج الحدث كدالة تستدعي الدالة _setToValue_ بمعامل مناسب. وسيكون معالج الحدث الخاص بإعادة ضبط حالة التطبيق:
 
 ```js
 <button onClick={() => setToValue(0)}>reset</button>
+
 ```
 
 والاختيار بين الطريقتين المعروضتين لتعريف معالجات الأحداث مسألة ذوق في المقام الأول.
@@ -1026,6 +1090,7 @@ const Button = (props) => (
     {props.text}
   </button>
 )
+
 ```
 
 يحصل المكوّن على دالة معالج الحدث من prop باسم _onClick_، وعلى نص الزر من prop باسم _text_. لنستخدم المكوّن الجديد:
@@ -1036,12 +1101,13 @@ const App = (props) => {
   return (
     <div>
       {value}
-      <Button onClick={() => setToValue(1000)} text="thousand" /> // highlight-line
-      <Button onClick={() => setToValue(0)} text="reset" /> // highlight-line
-      <Button onClick={() => setToValue(value + 1)} text="increment" /> // highlight-line
+      <Button onClick={() => setToValue(1000)} text="thousand" />
+      <Button onClick={() => setToValue(0)} text="reset" />
+      <Button onClick={() => setToValue(value + 1)} text="increment" />
     </div>
   )
 }
+
 ```
 
 استخدام مكوّن <i>Button</i> بسيط، وإن كان علينا التأكد من استخدام أسماء الخصائص الصحيحة عند تمرير props إلى المكوّن.
@@ -1071,17 +1137,18 @@ const App = () => {
   }
 
   // لا تعرّف مكوّنات داخل مكوّن آخر
-  const Display = props => <div>{props.value}</div> // highlight-line
+  const Display = props => <div>{props.value}</div>
 
   return (
     <div>
-      <Display value={value} /> // highlight-line
+      <Display value={value} />
       <Button onClick={() => setToValue(1000)} text="thousand" />
       <Button onClick={() => setToValue(0)} text="reset" />
       <Button onClick={() => setToValue(value + 1)} text="increment" />
     </div>
   )
 }
+
 ```
 
 ما زال التطبيق يبدو وكأنه يعمل، لكن **لا تنفّذ المكوّنات بهذه الطريقة!** لا تعرّف مكوّنات داخل مكوّنات أخرى أبداً. فهذه الطريقة لا تقدم أي فائدة ولا تؤدي إلا إلى مشكلات. ومن هذه المشكلات أن React ستعامل المكوّن المعرّف داخل مكوّن آخر كـ«مكوّن جديد» في كل عرض. وهذا يجعل تحسين المكوّن مستحيلاً على React.
@@ -1114,6 +1181,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ### قراءات مفيدة
@@ -1202,6 +1270,7 @@ const App = () => {
 
 ```bash
 rm -rf node_modules/ && npm i
+
 ```
 
 إذا واجهتك رسالة خطأ، و<i>عندما</i> تواجهك
@@ -1228,6 +1297,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 ويمكنك استخدام الشيفرة أدناه كنقطة انطلاق لملف <i>App.jsx</i>:
@@ -1249,6 +1319,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 <h4>1.7: unicafe الخطوة 2</h4>
@@ -1283,6 +1354,7 @@ const App = () => {
     // ...
   )
 }
+
 ```
 
 <h4>1.9: unicafe الخطوة 4</h4>
@@ -1313,6 +1385,7 @@ const Statistics = (props) => {
     </div>
   )
 }
+
 
 ```
 
@@ -1365,6 +1438,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 محتوى ملف <i>main.jsx</i> هو نفسه كما في التمارين السابقة.
@@ -1391,6 +1465,7 @@ const votes = { 0: 1, 1: 3, 2: 4, 3: 2 }
 const copy = { ...votes }
 // زد قيمة الخاصية 2 بواحد
 copy[2] += 1     
+
 ```
 
 أو نسخة من مصفوفة هكذا:
@@ -1401,6 +1476,7 @@ const votes = [1, 4, 6, 3]
 const copy = [...votes]
 // زد القيمة في الموضع 2 بواحد
 copy[2] += 1     
+
 ```
 
 قد يكون استخدام مصفوفة الخيار الأبسط في هذه الحالة. والبحث على الإنترنت سيوفر لك الكثير من التلميحات حول كيفية [إنشاء مصفوفة مملوءة بالأصفار بالطول المطلوب](https://stackoverflow.com/questions/20222501/how-to-create-a-zero-filled-javascript-array-of-arbitrary-length/22209781).

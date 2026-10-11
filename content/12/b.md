@@ -68,6 +68,7 @@ lang: ar
 ```
 $ docker -v
 Docker version 28.0.1, build 068a01e
+
 ```
 
 ### الحاويات والصور
@@ -100,6 +101,7 @@ Docker version 28.0.1, build 068a01e
 
 ```
 $ docker container run hello-world
+
 ```
 
 ستكون هناك مخرجات كثيرة، لكن لنقسّمها إلى عدة أقسام يمكننا فكّها معاً. لقد رقّمتُ الأسطر بنفسي ليسهل متابعة الشرح. ولن تحتوي مخرجاتك على هذه الأرقام.
@@ -110,6 +112,7 @@ $ docker container run hello-world
 3. b8dfde127a29: Pull complete
 4. Digest: sha256:5122f6204b6a3596e048758cabba3c46b1c937a46b5be6225b835d091b90e46c
 5. Status: Downloaded newer image for hello-world:latest
+
 ```
 
 ولأن الصورة&nbsp;<em>hello-world</em>&nbsp;لم تكن موجودة على جهازنا، نزّلها الأمر أولاً من سجل مجاني يُسمى&nbsp;<a href="https://hub.docker.com/" target="_blank" rel="noreferrer noopener">Docker Hub</a>. يمكنك الاطلاع على صفحة الصورة في Docker Hub عبر متصفحك هنا:&nbsp;<a href="https://hub.docker.com/_/hello-world" target="_blank" rel="noreferrer noopener">https://hub.docker.com/_/hello-world</a>
@@ -149,6 +152,7 @@ Share images, automate workflows, and more with a free Docker ID:
 
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
+
 ```
 
 تحتوي المخرجات على بعض الأمور الجديدة التي علينا تعلمها.&nbsp;<em>Docker daemon</em>&nbsp;خدمة تعمل في الخلفية وتتأكد من أن الحاويات تعمل، ونستخدم&nbsp;<em>عميل Docker (Docker client)</em>&nbsp;للتفاعل مع البرنامج الخفي (daemon). لقد تفاعلنا الآن مع الصورة الأولى وأنشأنا حاوية من الصورة. وأثناء تنفيذ تلك الحاوية، تلقينا المخرجات.
@@ -174,6 +178,7 @@ Options:
   -i, --interactive                    Keep STDIN open even if not attached
   -t, --tty                            Allocate a pseudo-TTY
   ...
+
 ```
 
 الخياران، أو العَلَمان، <code>-it</code> يضمنان أننا نستطيع التفاعل مع الحاوية. وبعد الخيارات، حدّدنا أن الصورة المطلوب تشغيلها هي ubuntu. ثم لدينا الأمر <em>bash</em> الذي سيُنفَّذ داخل الحاوية عند تشغيلها.
@@ -186,6 +191,7 @@ Options:
 $ docker container ls -a
 CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                            NAMES
 b8548b9faec3   ubuntu    "bash"    3 minutes ago    Exited (0) 6 seconds ago          hopeful_clarke
+
 ```
 
 > <em>ملاحظة المحرر: للأمر&nbsp;docker container ls&nbsp;صيغة أقصر هي&nbsp;docker ps</em>، وأنا أفضل الأقصر.
@@ -197,6 +203,7 @@ b8548b9faec3   ubuntu    "bash"    3 minutes ago    Exited (0) 6 seconds ago    
 ```
 $ docker start hopeful_clarke
 hopeful_clarke
+
 ```
 
 سيشغّل أمر start الحاوية نفسها التي كانت لدينا سابقاً. وللأسف، نسينا تشغيلها بالعَلَم <code>--interactive</code> (الذي يمكن كتابته أيضاً <code>-i</code>) لذا لا يمكننا التفاعل معها.
@@ -207,6 +214,7 @@ hopeful_clarke
 $ docker container ls -a
 CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                            NAMES
 b8548b9faec3   ubuntu    "bash"    7 minutes ago    Up (0) 15 seconds ago            hopeful_clarke
+
 ```
 
 لاحظ أنه يمكننا أيضاً تنفيذ الأمر دون العَلَم <code>-a</code> لرؤية الحاويات التي تعمل فقط:
@@ -215,6 +223,7 @@ b8548b9faec3   ubuntu    "bash"    7 minutes ago    Up (0) 15 seconds ago       
 $ docker container ls
 CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS             NAMES
 8f5abc55242a   ubuntu    "bash"    8 minutes ago    Up 1 minutes       hopeful_clarke
+
 ```
 
 لنقتلها بأمر <code>kill CONTAINER-ID-OR-CONTAINER-NAME</code> ونحاول مرة أخرى.
@@ -222,6 +231,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS             NAMES
 ```
 $ docker kill hopeful_clarke
 hopeful_clarke
+
 ```
 
 يرسل <code>docker kill</code> إشارة SIGKILL إلى العملية، مجبراً إياها على الخروج، وذلك يوقف الحاوية. ويمكننا التحقق من حالتها بالأمر <code>container ls -a</code>:
@@ -230,6 +240,7 @@ hopeful_clarke
 $ docker container ls -a
 CONTAINER ID   IMAGE     COMMAND   CREATED             STATUS                     NAMES
 b8548b9faec3   ubuntu     "bash"   26 minutes ago      Exited 2 seconds ago       hopeful_clarke
+
 ```
 
 لنبدأ الحاوية الآن مرة أخرى، لكن هذه المرة في الوضع التفاعلي:
@@ -237,6 +248,7 @@ b8548b9faec3   ubuntu     "bash"   26 minutes ago      Exited 2 seconds ago     
 ```
 $ docker start -i hopeful_clarke
 root@b8548b9faec3:/#
+
 ```
 
 لنحرّر الملف&nbsp;<em>index.js</em>&nbsp;ونضف إليه بعض شيفرة JavaScript لتنفيذها. ينقصنا فقط أدوات تحرير الملف.&nbsp;<a href="https://www.nano-editor.org/" target="_blank" rel="noreferrer noopener">Nano</a>&nbsp;سيكون محرر نصوص جيداً في الوقت الحالي. وقد وُجدت تعليمات التثبيت من أول نتيجة في Google. وسنستغني عن استخدام sudo لأننا بالفعل root.
@@ -245,19 +257,20 @@ root@b8548b9faec3:/#
 root@b8548b9faec3:/# apt-get update
 root@b8548b9faec3:/# apt-get -y install nano
 root@b8548b9faec3:/# nano /usr/src/app/index.js
+
 ```
 
 الآن أصبح Nano مثبتاً ويمكننا البدء في تحرير الملفات!
 
 <div class="tasks">
 
-**3. Ubuntu 101**
+**3. أوبونتو 101**
 
 </div>
 
 <div class="tasks">
 
-**4. Ubuntu 102**
+**4. أوبونتو 102**
 
 </div>
 
@@ -267,12 +280,14 @@ root@b8548b9faec3:/# nano /usr/src/app/index.js
 
 ```
 commit CONTAINER-ID-OR-CONTAINER-NAME NEW-IMAGE-NAME
+
 ```
 
 سينشئ صورة جديدة تتضمن التغييرات التي أجريناها. ويمكنك استخدام <code>container diff</code> للتحقق من التغييرات بين الصورة الأصلية والحاوية قبل فعل ذلك.
 
 ```
 $ docker commit hopeful_clarke hello-node-world
+
 ```
 
 يمكنك سرد صورك بالأمر <code>image ls</code>:
@@ -283,6 +298,7 @@ REPOSITORY                                      TAG         IMAGE ID       CREAT
 hello-node-world                                latest      eef776183732   9 minutes ago   252MB
 ubuntu                                          latest      1318b700e415   2 weeks ago     72.8MB
 hello-world                                     latest      d1165f221234   5 months ago    13.3kB
+
 ```
 
 يمكنك الآن تشغيل الصورة الجديدة كما يلي:
@@ -290,6 +306,7 @@ hello-world                                     latest      d1165f221234   5 mon
 ```bash
 docker run -it hello-node-world bash
 root@4d1b322e1aff:/# node /usr/src/app/index.js
+
 ```
 
 هناك طرق متعددة لفعل الشيء نفسه. لنجرّب حلاً أفضل. سنبدأ من صفحة بيضاء باستخدام <code>container rm</code> لإزالة الحاوية القديمة.
@@ -301,6 +318,7 @@ b8548b9faec3   ubuntu    "bash"    31 minutes ago   Exited (0) 9 seconds ago    
 
 $ docker container rm hopeful_clarke
 hopeful_clarke
+
 ```
 
 أنشئ ملفاً باسم&nbsp;<em>index.js</em>&nbsp;في دليلك الحالي واكتب داخله&nbsp;<em>console.log('Hello, World')</em>. لا حاجة إلى الحاويات بعد.
@@ -311,18 +329,21 @@ hopeful_clarke
 
 ```
 $ docker container run -it --name hello-node node:24 bash
+
 ```
 
 لننشئ دليلاً للشيفرة داخل الحاوية:
 
 ```
 root@77d1023af893:/# mkdir /usr/src/app
+
 ```
 
 وبينما نحن داخل الحاوية في هذه الطرفية، افتح طرفية أخرى واستخدم الأمر <code>container cp</code> لنسخ الملف من جهازك إلى الحاوية:
 
 ```
 $ docker container cp ./index.js hello-node:/usr/src/app/index.js
+
 ```
 
 والآن يمكننا تشغيل <code>node /usr/src/app/index.js</code> داخل الحاوية. يمكننا عمل commit لهذا كصورة جديدة أخرى، لكن هناك حل أفضل من ذلك. سيكون القسم التالي كله عن بناء صورك كالمحترفين.

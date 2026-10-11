@@ -19,6 +19,7 @@ export const LOGIN = gql`
     }
   }
 `
+
 ```
 
 لنُعرّف المكوّن&nbsp;<code>LoginForm</code>&nbsp;المسؤول عن تسجيل الدخول في الملف&nbsp;<em>src/components/LoginForm.jsx</em>. وهو يعمل بالطريقة نفسها تقريباً التي تعمل بها المكوّنات السابقة التي تتعامل مع الـ mutations. الأسطر المهمة مُبرَزة في الشيفرة:
@@ -28,53 +29,54 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { LOGIN } from '../queries'
 
-const LoginForm = ({ setError, setToken }) =&gt; { // HIGHLIGHT LINE
+const LoginForm = ({ setError, setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // BEGIN HIGHLIGHT
+
   const [ login ] = useMutation(LOGIN, {
-    onCompleted: (data) =&gt; {
+    onCompleted: (data) => {
       const token = data.login.value
       setToken(token)
       localStorage.setItem('phonebook-user-token', token)
     },
-    onError: (error) =&gt; {
+    onError: (error) => {
       setError(error.message)
     }
   })
-  // END HIGHLIGHT
 
-  // BEGIN HIGHLIGHT
-  const submit = (event) =&gt; {
+
+
+  const submit = (event) => {
     event.preventDefault()
     login({ variables: { username, password } })
   }
-  // END HIGHLIGHT
+
 
   return (
-    &lt;div&gt;
-      &lt;form onSubmit={submit}&gt;
-        &lt;div&gt;
-          username &lt;input
+    <div>
+      <form onSubmit={submit}>
+        <div>
+          username <input
             value={username}
-            onChange={({ target }) =&gt; setUsername(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-          password &lt;input
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password <input
             type='password'
             value={password}
-            onChange={({ target }) =&gt; setPassword(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;button type='submit'&gt;login&lt;/button&gt;
-      &lt;/form&gt;
-    &lt;/div&gt;
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type='submit'>login</button>
+      </form>
+    </div>
   )
 }
 
 export default LoginForm
+
 ```
 
 يتلقّى المكوّن الدالتين&nbsp;<code>setError</code>&nbsp;و<code>setToken</code>&nbsp;كـ props، ويمكن استخدامهما لتغيير حالة التطبيق. ويُترك تعريف إدارة الحالة إلى المكوّن&nbsp;<code>App</code>.
@@ -84,50 +86,52 @@ export default LoginForm
 لنستخدم الآن مكوّن&nbsp;<em>LoginForm</em>&nbsp;في ملف&nbsp;<em>App.jsx</em>. نضيف متغير&nbsp;<code>token</code>&nbsp;إلى حالة التطبيق لتخزين token بعد تسجيل دخول المستخدم. وإذا لم يكن&nbsp;<code>token</code>&nbsp;معرَّفاً، نعرض نموذج تسجيل الدخول فقط:
 
 ```js
-import LoginForm from './components/LoginForm' // HIGHLIGHT LINE
+import LoginForm from './components/LoginForm'
 // ...
 
-const App = () =&gt; {
-  const [token, setToken] = useState(localStorage.getItem('phonebook-user-token')) // HIGHLIGHT LINE
+const App = () => {
+  const [token, setToken] = useState(localStorage.getItem('phonebook-user-token'))
   const [errorMessage, setErrorMessage] = useState(null)
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
-  const notify = (message) =&gt; {
+  const notify = (message) => {
     setErrorMessage(message)
-    setTimeout(() =&gt; {
+    setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
   }
 
-  // BEGIN HIGHLIGHT
+
   if (!token) {
     return (
-      &lt;div&gt;
-        &lt;Notify errorMessage={errorMessage} /&gt;
-        &lt;h2&gt;Login&lt;/h2&gt;
-        &lt;LoginForm
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <h2>Login</h2>
+        <LoginForm
           setToken={setToken}
           setError={notify}
-        /&gt;
-      &lt;/div&gt;
+        />
+      </div>
     )
   }
-  // END HIGHLIGHT
+
 
   return (
     // ...
   )
 }
+
 ```
 
 يُهيَّأ token الآن من قيمة token قد توجد في localStorage:
 
 ```js
 const [token, setToken] = useState(localStorage.getItem('phonebook-user-token'))
+
 ```
 
 بهذه الطريقة، يُستعاد token أيضاً عند إعادة تحميل الصفحة، ويبقى المستخدم مسجّلاً الدخول. وإذا لم يحتوي localStorage على قيمة للمفتاح&nbsp;<em>phonebook-user-token</em>، فستكون قيمة token هي&nbsp;<code>null</code>.
@@ -135,39 +139,40 @@ const [token, setToken] = useState(localStorage.getItem('phonebook-user-token'))
 نضيف أيضاً زراً يسمح للمستخدم المسجّل الدخول بتسجيل الخروج. في معالج النقر على الزر، نضبط&nbsp;<code>token</code>&nbsp;على&nbsp;<code>null</code>، ونحذف token من localStorage، ونعيد تعيين الذاكرة المؤقتة الخاصة بـ Apollo Client:
 
 ```js
-import { useApolloClient, useQuery } from '@apollo/client/react' // HIGHLIGHT LINE
+import { useApolloClient, useQuery } from '@apollo/client/react'
 //...
 
-const App = () =&gt; {
+const App = () => {
   const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const result = useQuery(ALL_PERSONS)
-  const client = useApolloClient() // HIGHLIGHT LINE
+  const client = useApolloClient()
 
   if (result.loading)  {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
-  // BEGIN HIGHLIGHT
-  const onLogout = () =&gt; {
+
+  const onLogout = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
   }
-  // END HIGHLIGHT
+
 
   // ...
 
   return (
-    &lt;&gt;
-      &lt;Notify errorMessage={errorMessage} /&gt;
-      &lt;button onClick={onLogout}&gt;logout&lt;/button&gt; // HIGHLIGHT LINE
-      &lt;Persons persons={result.data.allPersons} /&gt;
-      &lt;PersonForm setError={notify} /&gt;
-      &lt;PhoneForm setError={notify} /&gt;
-    &lt;/&gt;
+    <>
+      <Notify errorMessage={errorMessage} />
+      <button onClick={onLogout}>logout</button>
+      <Persons persons={result.data.allPersons} />
+      <PersonForm setError={notify} />
+      <PhoneForm setError={notify} />
+    </>
   )
 }
+
 ```
 
 تتم إعادة تعيين الذاكرة المؤقتة باستخدام الدالة&nbsp;<a href="https://www.apollographql.com/docs/react/api/core/ApolloClient#resetstore" target="_blank" rel="noreferrer noopener">resetStore</a>&nbsp;في كائن Apollo&nbsp;<code>client</code>، ويمكن الوصول إلى client نفسه عبر الخطاف&nbsp;<a href="https://www.apollographql.com/docs/react/api/react/useApolloClient" target="_blank" rel="noreferrer noopener">useApolloClient</a>. ومسح الذاكرة المؤقتة&nbsp;<a href="https://www.apollographql.com/docs/react/networking/authentication/#reset-store-on-logout" target="_blank" rel="noreferrer noopener">مهم</a>، لأن بعض الاستعلامات قد تكون جلبت بيانات إلى الذاكرة المؤقتة لا يُسمح بالوصول إليها إلا لمستخدم مُصادَق عليه.
@@ -183,10 +188,10 @@ import App from './App.jsx'
 
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
-import { SetContextLink } from '@apollo/client/link/context' // HIGHLIGHT LINE
+import { SetContextLink } from '@apollo/client/link/context'
 
-// BEGIN HIGHLIGHT
-const authLink  = new SetContextLink(({ headers }) =&gt; {
+
+const authLink  = new SetContextLink(({ headers }) => {
   const token = localStorage.getItem('phonebook-user-token')
   return {
     headers: {
@@ -195,27 +200,28 @@ const authLink  = new SetContextLink(({ headers }) =&gt; {
     }
   }
 })
-// END HIGHLIGHT
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000' }) // HIGHLIGHT LINE
 
-// BEGIN HIGHLIGHT
+const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
+
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink)
 })
-// END HIGHLIGHT
+
 
 createRoot(document.getElementById('root')).render(
-  &lt;StrictMode&gt;
-    &lt;ApolloProvider client={client}&gt;
-      &lt;App /&gt;
-    &lt;/ApolloProvider&gt;
-  &lt;/StrictMode&gt;,
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </StrictMode>,
 )
+
 ```
 
-كما في السابق، يُغلَّف عنوان URL الخاص بالخادم باستخدام مُنشئ&nbsp;<a href="https://www.apollographql.com/docs/react/api/link/apollo-link-http" target="_blank" rel="noreferrer noopener">HttpLink</a>&nbsp;لإنشاء كائن&nbsp;<code>httpLink</code>&nbsp;مناسب. لكن هذه المرة، يُعدَّل باستخدام&nbsp;<a href="https://www.apollographql.com/docs/react/api/link/apollo-link-context/#overview" target="_blank" rel="noreferrer noopener">context</a>&nbsp;المعرَّف بواسطة كائن&nbsp;<code>authLink</code>&nbsp;بحيث تُضبط ترويسة&nbsp;<em>authorization</em>&nbsp;لكل طلب على token الذي قد يكون مخزَّناً في localStorage.
+كما في السابق، يُغلَّف عنوان URL الخاص بالخادم باستخدام مُنشئ&nbsp;<a href="https://www.apollographql.com/docs/react/api/link/apollo-link-http" target="_blank" rel="noreferrer noopener">HttpLink</a>&nbsp;لإنشاء كائن&nbsp;<code>httpLink</code>&nbsp;مناسب. لكن هذه المرة، يُعدَّل باستخدام&nbsp;<a href="https://www.apollographql.com/docs/react/api/link/apollo-link-context/#overview" target="_blank" rel="noreferrer noopener">context</a>&nbsp;المعرَّف بواسطة كائن&nbsp;<code>authLink</code>&nbsp;بحيث تُضبط ترويسة&nbsp;<em>authorization</em>&nbsp;لكل طلب لتصبح&nbsp;<a href="https://www.apollographql.com/docs/react/networking/authentication/#header" target="_blank" rel="noreferrer noopener">قيمة token</a> الذي قد يكون مخزَّناً في localStorage.
 
 تعمل إضافة الأشخاص الجدد وتغيير الأرقام مرة أخرى.
 
@@ -230,21 +236,21 @@ createRoot(document.getElementById('root')).render(
 لنغيّر الدالة التي تنشئ أشخاصاً جدد بحيث تضبط&nbsp;<code>phone</code>&nbsp;على&nbsp;<code>undefined</code>&nbsp;إذا لم يُدخل المستخدم قيمة:
 
 ```js
-const PersonForm = ({ setError }) =&gt; {
+const PersonForm = ({ setError }) => {
   // ...
-  const submit = async (event) =&gt; {
+  const submit = async (event) => {
     event.preventDefault()
 
-    // BEGIN HIGHLIGHT
+
     createPerson({
       variables: {
         name,
         street,
         city,
-        phone: phone.length &gt; 0 ? phone : undefined,
+        phone: phone.length > 0 ? phone : undefined,
       },
     })
-    // END HIGHLIGHT
+
 
     setName('')
     setPhone('')
@@ -254,6 +260,7 @@ const PersonForm = ({ setError }) =&gt; {
 
   // ...
 }
+
 ```
 
 من منظور الواجهة الخلفية وقاعدة البيانات، لم تعد لسمة&nbsp;<em>phone</em>&nbsp;قيمة إذا ترك المستخدم الحقل فارغاً. وتعمل إضافة شخص دون رقم هاتف مرة أخرى.
@@ -267,19 +274,19 @@ const PersonForm = ({ setError }) =&gt; {
 لنعدّل التطبيق بحيث تظهر أخطاء التحقق أيضاً عند تغيير رقم هاتف:
 
 ```js
-const PhoneForm = ({ setError }) =&gt; {
+const PhoneForm = ({ setError }) => {
   // ...
 
-  const submit = async (event) =&gt; {
+  const submit = async (event) => {
     event.preventDefault()
 
-    // BEGIN HIGHLIGHT
+
     try {
       await changeNumber({ variables: { name, phone } })
     } catch (error) {
       setError(error.message)
     }
-    // END HIGHLIGHT
+
 
     setName('')
     setPhone('')
@@ -287,6 +294,7 @@ const PhoneForm = ({ setError }) =&gt; {
 
   // ...
 }
+
 ```
 
 الطلب الذي يحدّث الرقم، <code>changeNumber</code>، يُنفَّذ الآن داخل كتلة <em>try</em>. وإذا فشلت تحققات قاعدة البيانات، ينتهي التنفيذ في كتلة <em>catch</em>، حيث تُضبط رسالة خطأ مناسبة في التطبيق باستخدام الدالة <code>setError</code>:
@@ -298,16 +306,17 @@ const PhoneForm = ({ setError }) =&gt; {
 علينا&nbsp;<a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-graphql/chapter-3#updating-the-cache" target="_blank" rel="noreferrer noopener">تحديث</a>&nbsp;الذاكرة المؤقتة لعميل Apollo عند إنشاء أشخاص جدد. يمكننا تحديثها باستخدام خيار&nbsp;<code>refetchQueries</code>&nbsp;الخاص بالـ mutation لتحديد إعادة تنفيذ استعلام&nbsp;<code>ALL_PERSONS</code>.
 
 ```js
-const PersonForm = ({ setError }) =&gt; {
+const PersonForm = ({ setError }) => {
   // ...
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    onError: (error) =&gt; setError(error.message),
-    refetchQueries: [{ query: ALL_PERSONS }], // HIGHLIGHT LINE
+    onError: (error) => setError(error.message),
+    refetchQueries: [{ query: ALL_PERSONS }],
   })
 
 // ...
 }
+
 ```
 
 هذا الأسلوب جيد جداً، وعيبه أن الاستعلام يُعاد تنفيذه دائماً مع أي تحديثات.
@@ -315,24 +324,25 @@ const PersonForm = ({ setError }) =&gt; {
 من الممكن تحسين الحل بتحديث الذاكرة المؤقتة يدوياً. ويتم ذلك بتعريف دالة استدعاء راجعة&nbsp;<a href="https://www.apollographql.com/docs/react/data/mutations/#the-update-function" target="_blank" rel="noreferrer noopener">update</a>&nbsp;مناسبة للـ mutation بدلاً من استخدام السمة&nbsp;<code>refetchQueries</code>. ينفّذ Apollo دالة الاستدعاء الراجعة هذه بعد اكتمال الـ mutation:
 
 ```sql
-const PersonForm = ({ setError }) =&gt; {
+const PersonForm = ({ setError }) => {
   // ...
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    onError: (error) =&gt; setError(error.message),
-    // BEGIN HIGHLIGHT
-    update: (cache, response) =&gt; {
-      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) =&gt; {
+    onError: (error) => setError(error.message),
+
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
         return {
           allPersons: allPersons.concat(response.data.addPerson),
         }
       })
     },
-    // END HIGHLIGHT
+
   })
 
   // ..
 }
+
 ```
 
 تُعطى دالة الاستدعاء الراجعة مرجعاً إلى الذاكرة المؤقتة والبيانات التي أعادتها الـ mutation كمعاملات. وفي حالتنا مثلاً، ستكون هذه البيانات هي الشخص المُنشأ.

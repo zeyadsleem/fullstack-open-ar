@@ -21,18 +21,21 @@ lang: ar
 
 ```js
 console.log('props value is ' + props)
+
 ```
 
 افصل بين الأشياء المراد طباعتها بفاصلة:
 
 ```js
 console.log('props value is', props)
+
 ```
 
 إذا دمجت كائناً مع نص وسجّلته في وحدة التحكم (كما في مثالنا الأول)، فستكون النتيجة عديمة الفائدة تماماً:
 
 ```js
 props value is [object Object]
+
 ```
 
 وعلى العكس، عندما تمرّر الكائنات كوسائط منفصلة تفصل بينها فواصل إلى _console.log_، كما في مثالنا الثاني أعلاه، يُطبع محتوى الكائن في وحدة تحكم المطوّر كنصوص مفيدة.
@@ -58,6 +61,7 @@ props value is [object Object]
     "description": "Log output to console"
   }
 }
+
 ```
 
 تصحيح شيفرتك باستخدام _console.log()_ شائع إلى حد أن Visual Studio Code يضم هذا المقتطف مدمجاً. لاستخدامه، اكتب _log_ واضغط Tab للإكمال التلقائي. وتجد إضافات مقتطفات _console.log()_ الأكثر اكتمالاً في [متجر الإضافات](https://marketplace.visualstudio.com/search?term=console.log&target=VSCode&category=All%20categories&sortBy=Relevance).
@@ -103,6 +107,7 @@ const App = (props) => {
 }
 
 export default App
+
 ```
 
 يبدو الملف <i>main.jsx</i> هكذا:
@@ -132,6 +137,7 @@ const notes = [
 ReactDOM.createRoot(document.getElementById('root')).render(
   <App notes={notes} />
 )
+
 ```
 
 تحتوي كل ملاحظة على محتواها النصي، وقيمة _منطقية_ لتحديد ما إذا كانت الملاحظة قد صُنّفت مهمة أم لا، وكذلك <i>id</i> فريد.
@@ -142,12 +148,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ```js
 <li>{notes[1].content}</li>
+
 ```
 
 هذا ليس عملياً بالطبع. يمكننا تحسين ذلك بتوليد عناصر React من كائنات المصفوفة باستخدام الدالة [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 
 ```js
 notes.map(note => <li>{note.content}</li>)
+
 ```
 
 النتيجة مصفوفة من عناصر <i>li</i>.
@@ -158,6 +166,7 @@ notes.map(note => <li>{note.content}</li>)
   <li>Browser can execute only JavaScript</li>,
   <li>GET and POST are the most important methods of HTTP protocol</li>,
 ]
+
 ```
 
 ويمكن بعد ذلك وضعها داخل وسوم <i>ul</i>:
@@ -177,6 +186,7 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 ولأن الشيفرة التي تولّد وسوم <i>li</i> هي JavaScript، فيجب لفّها بأقواس معقوصة في قالب JSX تماماً مثل كل شيفرة JavaScript الأخرى.
@@ -203,6 +213,7 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 ### خاصية key
@@ -224,7 +235,7 @@ const App = (props) => {
       <h1>Notes</h1>
       <ul>
         {notes.map(note => 
-          <li key={note.id}> // highlight-line
+          <li key={note.id}>
             {note.content}
           </li>
         )}
@@ -232,6 +243,7 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 وتختفي رسالة الخطأ.
@@ -262,6 +274,7 @@ const notes = [
     important: true
   }
 ]
+
 ```
 
 لنتوقف لحظة ونفحص كيف تعمل _map_.
@@ -271,6 +284,7 @@ const notes = [
 ```js
 const result = notes.map(note => note.id)
 console.log(result)
+
 ```
 
 ستُطبع <i>[1, 2, 3]</i> في وحدة التحكم.
@@ -280,6 +294,7 @@ console.log(result)
 
 ```js
 note => note.id
+
 ```
 
 وهي دالة سهمية مكتوبة بالصيغة المختصرة. أما الصيغة الكاملة فتكون:
@@ -288,6 +303,7 @@ note => note.id
 (note) => {
   return note.id
 }
+
 ```
 
 تستقبل الدالة كائن note كوسيط و<i>تعيد</i> قيمة حقل <i>id</i> فيه.
@@ -296,6 +312,7 @@ note => note.id
 
 ```js
 const result = notes.map(note => note.content)
+
 ```
 
 فستحصل على مصفوفة تحتوي على محتويات الملاحظات.
@@ -308,6 +325,7 @@ notes.map(note =>
     {note.content}
   </li>
 )
+
 ```
 
 وهي تولّد وسم <i>li</i> يحتوي على محتوى الملاحظة من كل كائن note.
@@ -316,6 +334,7 @@ notes.map(note =>
 
 ```js
 note => <li key={note.id}>{note.content}</li>
+
 ```
 
 &nbsp;- يُستخدم لإنشاء عناصر العرض، فيجب عرض قيمة المتغير داخل أقواس معقوصة. جرّب أن ترى ماذا يحدث إذا أزلت الأقواس.
@@ -328,6 +347,7 @@ note => <li key={note.id}>{note.content}</li>
 
 ```js
 notes.map((note, i) => ...)
+
 ```
 
 عند الاستدعاء بهذه الطريقة، تُسند إلى _i_ قيمة فهرس الموضع الذي توجد فيه الملاحظة في المصفوفة.
@@ -342,6 +362,7 @@ notes.map((note, i) => ...)
     </li>
   )}
 </ul>
+
 ```
 
 ومع ذلك، هذا **غير موصى به** وقد يخلق مشكلات غير مرغوبة حتى لو بدا أنه يعمل بشكل جيد تماماً.
@@ -353,7 +374,7 @@ notes.map((note, i) => ...)
 لنرتب الشيفرة قليلاً. نحن مهتمون فقط بحقل _notes_ في props، فلنستخرجه مباشرة باستخدام [التفكيك](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment):
 
 ```js
-const App = ({ notes }) => { //highlight-line
+const App = ({ notes }) => {
   return (
     <div>
       <h1>Notes</h1>
@@ -367,6 +388,7 @@ const App = ({ notes }) => { //highlight-line
     </div>
   )
 }
+
 ```
 
 إذا نسيت ما معنى التفكيك وكيف يعمل، فراجع [القسم الخاص بالتفكيك](/part1/component_state_event_handlers#destructuring).
@@ -396,6 +418,7 @@ const App = ({ notes }) => {
     </div>
   )
 }
+
 ```
 
 لاحظ أن خاصية <i>key</i> يجب الآن تعريفها للمكوّنات <i>Note</i>، وليس لوسوم <i>li</i> كما كان الحال سابقاً.
@@ -407,6 +430,7 @@ const App = ({ notes }) => {
 ```js
 import ReactDOM from "react-dom/client"
 import App from "./App"
+
 ```
 
 يستورد [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) وحدتين، ما يمكّنهما من الاستخدام في ذلك الملف. تُوضع الوحدة <i>react-dom/client</i> في المتغير _ReactDOM_، وتُوضع الوحدة التي تعرّف المكوّن الرئيسي للتطبيق في المتغير _App_
@@ -423,6 +447,7 @@ src/
     ├── Footer.jsx        # ملف مسمّى على اسم المكوّن
     ├── Note.jsx
     └── Notification.jsx
+
 ```
 
 الآن، سننشئ مجلداً يسمى <i>components</i> لتطبيقنا ونضع بداخله ملفاً اسمه <i>Note.jsx</i>. ومحتويات الملف كما يلي:
@@ -433,6 +458,7 @@ const Note = ({ note }) => {
 }
 
 export default Note
+
 ```
 
 يُصدّر [exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) السطرُ الأخير من الوحدة المكوّنَ المعرَّف، أي المتغير <i>Note</i>.
@@ -440,11 +466,12 @@ export default Note
 الآن يمكن للملف الذي يستخدم المكوّن - <i>App.jsx</i> - أن [يستورد](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) الوحدة:
 
 ```js
-import Note from './components/Note' // highlight-line
+import Note from './components/Note'
 
 const App = ({ notes }) => {
   // ...
 }
+
 ```
 
 أصبح المكوّن الذي تُصدّره الوحدة متاحاً الآن للاستخدام عبر المتغير <i>Note</i>، كما كان في السابق.
@@ -453,6 +480,7 @@ const App = ({ notes }) => {
 
 ```js
 './components/Note'
+
 ```
 
 النقطة - <i>.</i> - في البداية تشير إلى المجلد الحالي، فموقع الوحدة هو ملف يسمى <i>Note.jsx</i> في المجلد الفرعي <i>components</i> داخل المجلد الحالي. ويمكن حذف امتداد اسم الملف _.jsx_.
@@ -497,6 +525,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 سنقترب من سبب التعطل بإضافة أوامر <em>console.log</em> إلى الشيفرة. ولأن أول ما يُعرض هو المكوّن <i>App</i>، فمن الجدير وضع أول <em>console.log</em> هناك:
@@ -507,12 +536,13 @@ const App = () => {
     // ...
   }
 
-  console.log('App works...') // highlight-line
+  console.log('App works...')
 
   return (
     // ..
   )
 }
+
 ```
 
 لرؤية الطباعة في وحدة التحكم، علينا التمرير للأعلى فوق جدار الأخطاء الأحمر الطويل.
@@ -527,26 +557,28 @@ const Course = ({ course }) => (
     <Header course={course} />
   </div>
 )
+
 ```
 
 يجب تغيير المكوّن إلى صيغته الأطول لنتمكن من إضافة الطباعة:
 
 ```js
 const Course = ({ course }) => { 
-  console.log(course) // highlight-line
+  console.log(course)
   return (
     <div>
       <Header course={course} />
     </div>
   )
 }
+
 ```
 
 غالباً ما يكون جذر المشكلة أن props متوقعة أن تكون من نوع مختلف، أو تُستدعى باسم مختلف عن اسمها الفعلي، فيفشل التفكيك نتيجة لذلك. وكثيراً ما تبدأ المشكلة بحل نفسها عند إزالة التفكيك ورؤية ما تحتويه <em>props</em>.
 
 ```js
-const Course = (props) => { // highlight-line
-  console.log(props)  // highlight-line
+const Course = (props) => {
+  console.log(props)
   const { course } = props
   return (
     <div>
@@ -554,6 +586,7 @@ const Course = (props) => { // highlight-line
     </div>
   )
 }
+
 ```
 
 إذا لم تُحل المشكلة بعد، فللأسف لا يوجد الكثير لفعله سوى مواصلة البحث عن الأخطاء بنثر المزيد من عبارات _console.log_ في أنحاء شيفرتك.
@@ -624,6 +657,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 عرّف مكوّناً مسؤولاً عن تنسيق دورة واحدة يسمى <i>Course</i>.
@@ -638,6 +672,7 @@ App
       Part
       Part
       ...
+
 ```
 
 وبذلك يحتوي المكوّن <i>Course</i> على المكوّنات المعرَّفة في الجزء السابق، وهي مسؤولة عن عرض اسم الدورة وأجزائها.
@@ -667,6 +702,7 @@ App
 ```js
 const total = 
   parts.reduce((s, p) => someMagicHere)
+
 ```
   
 ولا تعمل، فمن الجدير استخدام <i>console.log</i>، وهو ما يتطلب كتابة الدالة السهمية بصيغتها الأطول:
@@ -676,6 +712,7 @@ const total = parts.reduce((s, p) => {
   console.log('what is happening', s, p)
   return someMagicHere 
 })
+
 ```
 
 **لا تعمل؟ :** استخدم محرك البحث للبحث عن كيفية استخدام _reduce_ مع **مصفوفة كائنات**.
@@ -737,6 +774,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 يمكن أن يبدو التطبيق، مثلاً، هكذا:

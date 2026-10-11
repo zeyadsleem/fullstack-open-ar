@@ -41,6 +41,7 @@ query FetchBlogsQuery {
     }
   }
 }
+
 ```
 
 يمكن تفسير محتوى&nbsp;<code>FetchBlogsQuery</code>&nbsp;تقريباً كالتالي: ابحث عن مستخدم اسمه&nbsp;<code>"mluukkai"</code>، ولكل من&nbsp;<code>followedUsers</code>&nbsp;لديه، ابحث عن كل&nbsp;<code>blogs</code>&nbsp;الخاصة به، ولكل مدونة، كل&nbsp;<code>comments</code>&nbsp;الخاصة بها، ولكل&nbsp;<code>user</code>&nbsp;كتب كل تعليق، ابحث عن&nbsp;<code>blogs</code>&nbsp;الخاصة به، وأعِد&nbsp;<code>title</code>&nbsp;لكل منها.
@@ -80,6 +81,7 @@ query FetchBlogsQuery {
     ]
   }
 }
+
 ```
 
 يبقى منطق التطبيق بسيطاً، وتحصل الشيفرة في المتصفح على البيانات التي تحتاجها بالضبط باستعلام واحد.
@@ -104,6 +106,7 @@ type Query {
   allPersons: [Person!]!
   findPerson(name: String!): Person
 }
+
 ```
 
 يصف المخطط&nbsp;<a href="https://graphql.org/learn/schema/#type-system" target="_blank" rel="noreferrer noopener">نوعين</a>. النوع الأول،&nbsp;<em>Person</em>، يحدد أن للأشخاص خمسة حقول. أربعة من الحقول من النوع&nbsp;<em>String</em>، وهو أحد&nbsp;<a href="https://graphql.org/learn/schema/#scalar-types" target="_blank" rel="noreferrer noopener">الأنواع القياسية</a>&nbsp;في GraphQL. يجب إعطاء قيمة لجميع حقول String، باستثناء&nbsp;<em>phone</em>. ويُشار إلى ذلك بعلامة التعجب في المخطط. نوع الحقل&nbsp;<em>id</em>&nbsp;هو&nbsp;<em>ID</em>. حقول&nbsp;<em>ID</em>&nbsp;نصوص، لكن GraphQL يضمن أنها فريدة.
@@ -122,6 +125,7 @@ type Query {
 query {
   personCount
 }
+
 ```
 
 بافتراض أن تطبيقنا حفظ معلومات ثلاثة أشخاص، ستبدو الاستجابة كالتالي:
@@ -132,6 +136,7 @@ query {
     "personCount": 3
   }
 }
+
 ```
 
 الاستعلام الذي يجلب معلومات جميع الأشخاص،&nbsp;<code>allPersons</code>، أكثر تعقيداً قليلاً. ولأن الاستعلام يعيد قائمة من كائنات&nbsp;<em>Person</em>، يجب أن يصف الاستعلام&nbsp;<em>أي&nbsp;<a href="https://graphql.org/learn/queries/#fields" target="_blank" rel="noreferrer noopener">حقول</a></em>&nbsp;من الكائنات سيعيدها:
@@ -143,6 +148,7 @@ query {
     phone
   }
 }
+
 ```
 
 قد تبدو الاستجابة كالتالي:
@@ -166,6 +172,7 @@ query {
     ]
   }
 }
+
 ```
 
 يمكن جعل الاستعلام يعيد أي حقل موصوف في المخطط. على سبيل المثال، ما يلي ممكن أيضاً:
@@ -178,6 +185,7 @@ query {
     street
   }
 }
+
 ```
 
 يوضح المثال الأخير استعلاماً يتطلب معاملاً، ويعيد تفاصيل شخص واحد.
@@ -191,6 +199,7 @@ query {
     id
   }
 }
+
 ```
 
 إذن، أولاً يُوصف المعامل بين قوسين دائريين، ثم تُدرج حقول كائن القيمة المُعادة بين قوسين معقوفين.
@@ -208,6 +217,7 @@ query {
     }
   }
 }
+
 ```
 
 تم تعليم القيمة المُعادة كقابلة للقيمة الفارغة (nullable)، لذا إذا بحثنا عن تفاصيل شخص غير معروف
@@ -218,6 +228,7 @@ query {
     phone
   }
 }
+
 ```
 
 فالقيمة المُعادة هي&nbsp;<em>null</em>.
@@ -228,6 +239,7 @@ query {
     "findPerson": null
   }
 }
+
 ```
 
 كما ترى، هناك رابط مباشر بين استعلام GraphQL وكائن JSON المُعاد. ويمكن للمرء أن يفكر في أن الاستعلام يصف نوع البيانات التي يريدها كاستجابة. والفرق عن استعلامات REST صارخ. ففي REST، لا علاقة لعنوان URL ونوع الطلب بشكل البيانات المُعادة.
@@ -244,6 +256,7 @@ query {
 
 ```bash
 npm install @apollo/server graphql
+
 ```
 
 أنشئ أيضاً ملف&nbsp;<code>index.js</code>&nbsp;في الدليل الجذري لمشروعك.
@@ -295,10 +308,10 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: () =&gt; persons,
-    findPerson: (root, args) =&gt;
-      persons.find(p =&gt; p.name === args.name)
+    personCount: () => persons.length,
+    allPersons: () => persons,
+    findPerson: (root, args) =>
+      persons.find(p => p.name === args.name)
   }
 }
 
@@ -309,9 +322,10 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
-}).then(({ url }) =&gt; {
+}).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
+
 ```
 
 قلب الشيفرة هو&nbsp;<a href="https://www.apollographql.com/docs/apollo-server/api/apollo-server/" target="_blank" rel="noreferrer noopener">ApolloServer</a>، الذي يُعطى معاملين:
@@ -321,6 +335,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 })
+
 ```
 
 المعامل الأول،&nbsp;<code>typeDefs</code>، يحتوي على مخطط GraphQL.
@@ -332,12 +347,13 @@ const server = new ApolloServer({
 ```js
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: () =&gt; persons,
-    findPerson: (root, args) =&gt;
-      persons.find(p =&gt; p.name === args.name)
+    personCount: () => persons.length,
+    allPersons: () => persons,
+    findPerson: (root, args) =>
+      persons.find(p => p.name === args.name)
   }
 }
+
 ```
 
 كما ترى، تتوافق الـ resolvers مع الاستعلامات الموصوفة في المخطط.
@@ -348,6 +364,7 @@ type Query {
   allPersons: [Person!]!
   findPerson(name: String!): Person
 }
+
 ```
 
 إذن يوجد حقل تحت&nbsp;<em>Query</em>&nbsp;لكل استعلام موصوف في المخطط.
@@ -358,12 +375,14 @@ type Query {
 query {
   personCount
 }
+
 ```
 
 له الـ resolver
 
 ```
-() =&gt; persons.length
+() => persons.length
+
 ```
 
 إذن الاستجابة للاستعلام هي طول المصفوفة&nbsp;<code>persons</code>.
@@ -376,12 +395,14 @@ query {
     name
   }
 }
+
 ```
 
 له resolver يعيد&nbsp;<em>جميع</em>&nbsp;الكائنات من المصفوفة&nbsp;<code>persons</code>.
 
 ```
-() =&gt; persons
+() => persons
+
 ```
 
 ## Apollo Studio Explorer
@@ -392,11 +413,12 @@ query {
 {
   //...
   "scripts": {
-    "start": "node index.js", // HIGHLIGHT LINE
-    "dev": "node --watch index.js", // HIGHLIGHT LINE
+    "start": "node index.js",
+    "dev": "node --watch index.js",
     // ...
   }
 }
+
 ```
 
 عند تشغيل خادم Apollo في وضع التطوير، تأخذنا الصفحة&nbsp;<a href="http://localhost:4000/" target="_blank" rel="noreferrer noopener">http://localhost:4000</a>&nbsp;إلى&nbsp;<a href="https://www.apollographql.com/docs/graphos/platform/explorer" target="_blank" rel="noreferrer noopener">GraphOS Studio Explorer</a>. وهذا مفيد جداً للمطوّر، ويمكن استخدامه لإجراء استعلامات على الخادم.
@@ -427,6 +449,7 @@ const typeDefs = `
     findPerson(name: String!): Person
   }
 `
+
 ```
 
 يحتوي المخطط على معلومات بنيوية، لكن في محرر الشيفرة يظهر المحتوى كله باللون نفسه، ولا تستطيع أدوات التنسيق التلقائي مثل Prettier تنسيق محتوياته. يمكننا تفعيل إبراز صيغة مخطط GraphQL، والإكمال التلقائي مثلاً، في VS Code بتثبيت إضافة&nbsp;<a href="https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql" target="_blank" rel="noreferrer noopener">GraphQL: Language Feature Support</a>.
@@ -449,12 +472,14 @@ query {
     street
   }
 }
+
 ```
 
 له resolver يختلف عن السابق لأنه يُعطى&nbsp;<em>معاملين</em>:
 
 ```
-(root, args) =&gt; persons.find(p =&gt; p.name === args.name)
+(root, args) => persons.find(p => p.name === args.name)
+
 ```
 
 المعامل الثاني،&nbsp;<code>args</code>، يحتوي على معاملات الاستعلام. ثم يعيد الـ resolver من المصفوفة&nbsp;<code>persons</code>&nbsp;الشخص الذي يتطابق اسمه مع قيمة&nbsp;<em>args.name</em>. ولا يحتاج الـ resolver إلى المعامل الأول&nbsp;<code>root</code>.
@@ -473,6 +498,7 @@ query {
     street
   }
 }
+
 ```
 
 يعرف الخادم كيف يعيد بالضبط الحقول التي يتطلبها الاستعلام. كيف يحدث ذلك؟
@@ -484,20 +510,21 @@ query {
 ```js
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: () =&gt; persons,
-    findPerson: (root, args) =&gt; persons.find(p =&gt; p.name === args.name)
+    personCount: () => persons.length,
+    allPersons: () => persons,
+    findPerson: (root, args) => persons.find(p => p.name === args.name)
   },
-  // BEGIN HIGHLIGHT
+
   Person: {
-    name: (root) =&gt; root.name,
-    phone: (root) =&gt; root.phone,
-    street: (root) =&gt; root.street,
-    city: (root) =&gt; root.city,
-    id: (root) =&gt; root.id
+    name: (root) => root.name,
+    phone: (root) => root.phone,
+    street: (root) => root.street,
+    city: (root) => root.city,
+    id: (root) => root.id
   }
-  // END HIGHLIGHT
+
 }
+
 ```
 
 يعيد الـ resolver الافتراضي قيمة الحقل المقابل في الكائن. ويمكن الوصول إلى الكائن نفسه عبر المعامل الأول للـ resolver،&nbsp;<code>root</code>.
@@ -508,9 +535,10 @@ const resolvers = {
 
 ```
 Person: {
-  street: (root) =&gt; "Manhattan",
-  city: (root) =&gt; "New York"
+  street: (root) => "Manhattan",
+  city: (root) => "New York"
 }
+
 ```
 
 ## كائن داخل كائن
@@ -518,17 +546,17 @@ Person: {
 لنعدّل المخطط قليلاً
 
 ```
-  // BEGIN HIGHLIGHT
+
 type Address {
   street: String!
   city: String!
 }
-  // END HIGHLIGHT
+
 
 type Person {
   name: String!
   phone: String
-  address: Address!   // HIGHLIGHT LINE
+  address: Address!
   id: ID!
 }
 
@@ -537,6 +565,7 @@ type Query {
   allPersons: [Person!]!
   findPerson(name: String!): Person
 }
+
 ```
 
 فأصبح للشخص الآن حقل من النوع&nbsp;<em>Address</em>، يحتوي على الشارع والمدينة.
@@ -546,22 +575,23 @@ type Query {
 ```js
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: () =&gt; persons,
-    findPerson: (root, args) =&gt;
-      persons.find(p =&gt; p.name === args.name)
+    personCount: () => persons.length,
+    allPersons: () => persons,
+    findPerson: (root, args) =>
+      persons.find(p => p.name === args.name)
   },
-  // BEGIN HIGHLIGHT
+
   Person: {
-    address: (root) =&gt; {
+    address: (root) => {
       return {
         street: root.street,
         city: root.city
       }
     }
   }
-  // END HIGHLIGHT
+
 }
+
 ```
 
 إذن في كل مرة يُعاد كائن&nbsp;<em>Person</em>، تُعاد الحقول&nbsp;<em>name</em>&nbsp;و&nbsp;<em>phone</em>&nbsp;و&nbsp;<em>id</em>&nbsp;باستخدام resolvers الافتراضية، أما الحقل&nbsp;<em>address</em>&nbsp;فيُكوَّن باستخدام resolver معرَّف ذاتياً. المعامل&nbsp;<code>root</code>&nbsp;في دالة الـ resolver هو كائن الشخص، لذا يمكن أخذ الشارع والمدينة في العنوان من حقوله.
@@ -578,6 +608,7 @@ query {
     }
   }
 }
+
 ```
 
 والاستجابة الآن كائن شخص <em>يحتوي</em>&nbsp;على كائن عنوان.
@@ -594,6 +625,7 @@ query {
     }
   }
 }
+
 ```
 
 ما زلنا نحفظ الأشخاص في الخادم بالطريقة نفسها التي فعلناها سابقاً.
@@ -609,6 +641,7 @@ let persons = [
   },
   // ...
 ]
+
 ```
 
 كائنات الأشخاص المحفوظة في الخادم ليست مطابقة تماماً لكائنات النوع&nbsp;<em>Person</em>&nbsp;الموصوفة في المخطط.
@@ -620,19 +653,20 @@ let persons = [
 ```js
 const resolvers = {
   Query: {
-    personCount: () =&gt; persons.length,
-    allPersons: () =&gt; persons,
-    findPerson: (root, args) =&gt; persons.find((p) =&gt; p.name === args.name),
+    personCount: () => persons.length,
+    allPersons: () => persons,
+    findPerson: (root, args) => persons.find((p) => p.name === args.name),
   },
   Person: {
-    address: ({ street, city }) =&gt; { // HIGHLIGHT LINE
+    address: ({ street, city }) => {
       return {
-        street, // HIGHLIGHT LINE
-        city, // HIGHLIGHT LINE
+        street,
+        city,
       }
     },
   },
 }
+
 ```
 
 يمكن العثور على الشيفرة الحالية للتطبيق على&nbsp;<a href="https://github.com/fullstack-hy2020/graphql-phonebook-backend/tree/part8-1" target="_blank" rel="noreferrer noopener">Github</a>، في الفرع&nbsp;<em>part8-1</em>.
@@ -652,6 +686,7 @@ type Mutation {
     city: String!
   ): Person
 }
+
 ```
 
 تُعطى الـ Mutation تفاصيل الشخص كمعاملات. والمعامل&nbsp;<em>phone</em>&nbsp;هو الوحيد القابل للقيمة الفارغة. وللـ Mutation أيضاً قيمة مُعادة. القيمة المُعادة من النوع&nbsp;<em>Person</em>، والفكرة أن تُعاد تفاصيل الشخص المضاف إذا نجحت العملية، وإلا فـ null. ولا تُعطى قيمة للحقل&nbsp;<em>id</em>&nbsp;كمعامل. فمن الأفضل ترك توليد المعرّف للخادم.
@@ -659,7 +694,7 @@ type Mutation {
 تتطلب الـ mutations أيضاً resolver:
 
 ```js
-const { v1: uuid } = require('uuid') // HIGHLIGHT LINE
+const { v1: uuid } = require('uuid')
 
 // ...
 
@@ -670,18 +705,19 @@ const resolvers = {
   Person: {
     // ...
   },
-  // BEGIN HIGHLIGHT
+
   Mutation: {
-    addPerson: (root, args) =&gt; {
+    addPerson: (root, args) => {
       const person = { ...args, id: uuid() }
       persons = persons.concat(person)
       return person
     }
   }
-  // END HIGHLIGHT
+
 }
 
 // ...
+
 ```
 
 تضيف الـ mutation الكائن المُعطى لها كمعامل&nbsp;<code>args</code>&nbsp;إلى المصفوفة&nbsp;<code>persons</code>، وتعيد الكائن الذي أضافته إلى المصفوفة.
@@ -707,6 +743,7 @@ mutation {
     id
   }
 }
+
 ```
 
 لاحظ أن الشخص يُحفظ في المصفوفة&nbsp;<code>persons</code>&nbsp;بالشكل
@@ -719,6 +756,7 @@ mutation {
   city: "Helsinki",
   id: "2b24e0b0-343c-11e9-8c2a-cb57c2bf804f"
 }
+
 ```
 
 لكن الاستجابة للـ mutation هي
@@ -737,6 +775,7 @@ mutation {
     }
   }
 }
+
 ```
 
 إذن يقوم resolver الحقل&nbsp;<em>address</em>&nbsp;من النوع&nbsp;<em>Person</em>&nbsp;بتنسيق كائن الاستجابة إلى الشكل الصحيح.
@@ -754,16 +793,16 @@ mutation {
 لنمنع إضافة الاسم نفسه إلى دليل الهاتف عدة مرات:
 
 ```js
-const { GraphQLError } = require('graphql') // HIGHLIGHT LINE
+const { GraphQLError } = require('graphql')
 
 // ...
 
 const resolvers = {
   // ..
   Mutation: {
-    addPerson: (root, args) =&gt; {
-      // BEGIN HIGHLIGHT
-      if (persons.find(p =&gt; p.name === args.name)) {
+    addPerson: (root, args) => {
+
+      if (persons.find(p => p.name === args.name)) {
         throw new GraphQLError(`Name must be unique: ${args.name}`, {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -771,7 +810,7 @@ const resolvers = {
           }
         })
       }
-      // END HIGHLIGHT
+
 
       const person = { ...args, id: uuid() }
       persons = persons.concat(person)
@@ -779,6 +818,7 @@ const resolvers = {
     }
   }
 }
+
 ```
 
 إذن إذا كان الاسم المراد إضافته موجوداً بالفعل في دليل الهاتف، فارمِ خطأ&nbsp;<code>GraphQLError</code>.
@@ -798,6 +838,7 @@ query {
     phone
   }
 }
+
 ```
 
 أو الأشخاص الذين ليس لديهم رقم هاتف
@@ -808,23 +849,25 @@ query {
     name
   }
 }
+
 ```
 
 يتغير المخطط كالتالي:
 
 ```
-// BEGIN HIGHLIGHT
+
 enum YesNo {
   YES
   NO
 }
-// END HIGHLIGHT
+
 
 type Query {
   personCount: Int!
-  allPersons(phone: YesNo): [Person!]! // HIGHLIGHT LINE
+  allPersons(phone: YesNo): [Person!]!
   findPerson(name: String!): Person
 }
+
 ```
 
 النوع&nbsp;<em>YesNo</em>&nbsp;هو&nbsp;<a href="https://graphql.org/learn/schema/#enumeration-types" target="_blank" rel="noreferrer noopener">enum</a>&nbsp;في GraphQL، أو نوع قابل للتعداد، بقيمتين محتملتين:&nbsp;<em>YES</em>&nbsp;أو&nbsp;<em>NO</em>. في الاستعلام&nbsp;<code>allPersons</code>، يمتلك المعامل&nbsp;<code>phone</code>&nbsp;النوع&nbsp;<em>YesNo</em>، لكنه قابل للقيمة الفارغة.
@@ -833,22 +876,23 @@ type Query {
 
 ```js
 Query: {
-  personCount: () =&gt; persons.length,
-  // BEGIN HIGHLIGHT
-  allPersons: (root, args) =&gt; {
+  personCount: () => persons.length,
+
+  allPersons: (root, args) => {
     if (!args.phone) {
       return persons
     }
 
-    const byPhone = (person) =&gt;
+    const byPhone = (person) =>
       args.phone === 'YES' ? person.phone : !person.phone
 
     return persons.filter(byPhone)
   },
-  // END HIGHLIGHT
-  findPerson: (root, args) =&gt;
-    persons.find(p =&gt; p.name === args.name)
+
+  findPerson: (root, args) =>
+    persons.find(p => p.name === args.name)
 },
+
 ```
 
 ## تغيير رقم هاتف
@@ -863,13 +907,14 @@ type Mutation {
     street: String!
     city: String!
   ): Person
-  // BEGIN HIGHLIGHT
+
   editNumber(
     name: String!
     phone: String!
   ): Person
-  // END HIGHLIGHT
+
 }
+
 ```
 
 وتُنفَّذ عبر resolver:
@@ -877,17 +922,18 @@ type Mutation {
 ```js
 Mutation: {
   // ...
-  editNumber: (root, args) =&gt; {
-    const person = persons.find(p =&gt; p.name === args.name)
+  editNumber: (root, args) => {
+    const person = persons.find(p => p.name === args.name)
     if (!person) {
       return null
     }
 
     const updatedPerson = { ...person, phone: args.phone }
-    persons = persons.map(p =&gt; p.name === args.name ? updatedPerson : p)
+    persons = persons.map(p => p.name === args.name ? updatedPerson : p)
     return updatedPerson
   }
 }
+
 ```
 
 تجد الـ mutation الشخص المراد تحديثه عبر الحقل&nbsp;<em>name</em>.
@@ -905,6 +951,7 @@ query {
     name
   }
 }
+
 ```
 
 تبدو الاستجابة كالتالي:
@@ -926,6 +973,7 @@ query {
     ]
   }
 }
+
 ```
 
 يمكن للاستعلام المدمج أيضاً استخدام الاستعلام نفسه عدة مرات. لكن يجب إعطاء الاستعلامات أسماء بديلة كالتالي:
@@ -939,6 +987,7 @@ query {
     name
   }
 }
+
 ```
 
 تبدو الاستجابة كالتالي:
@@ -961,6 +1010,7 @@ query {
     ]
   }
 }
+
 ```
 
 في بعض الحالات، قد يكون من المفيد تسمية الاستعلامات. ويحدث ذلك خاصة عندما تحتوي الاستعلامات أو الـ mutations على&nbsp;<a href="https://graphql.org/learn/queries/#variables" target="_blank" rel="noreferrer noopener">معاملات</a>. وسنتناول المعاملات قريباً.

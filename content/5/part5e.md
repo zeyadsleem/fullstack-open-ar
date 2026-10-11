@@ -69,6 +69,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 لكن هذه الطريقة ليست مثالية: يبقى عنوان URL للموقع كما هو حتى عندما تكون في عرض مختلف. ينبغي أن يكون لكل عرض عنوان URL خاص به، حتى يتمكّن المستخدمون مثلاً من حفظ الصفحات في المفضلة. علاوة على ذلك، لا يعمل زر الرجوع في المتصفح بشكل منطقي إذا لم تكن للصفحات عناوين خاصة بها؛ أي أن النقر على زر الرجوع لا ينقلك إلى العرض الذي شاهدته سابقاً في التطبيق بل إلى مكان آخر تماماً.
@@ -81,6 +82,7 @@ const App = () => {
 
 ```bash
 npm install react-router-dom
+
 ```
 
 أنشئ مكوّناً جديداً يعمل كصفحة رئيسية للتطبيق
@@ -95,16 +97,18 @@ const Home = () => {
 }
 
 export default Home
+
 ```
 
 سنستخرج العرض الرئيسي السابق للتطبيق (الذي كان في المكوّن <i>App</i>) إلى مكوّن خاص به، لكن سننقل إدارة حالة الملاحظات خارج المكوّن:
 
 ```js
 // قائمة الملاحظات تُمرَّر كمعامل
-const NoteList = ({ notes }) => { // highlight-line
+const NoteList = ({ notes }) => {
   // المحتوى مطابق تقريباً لما في مكوّن App
   // أُزيلت الإشارة إلى NoteForm
 }
+
 ```
 
 يتغيّر المكوّن <i>App</i> الآن كما يلي
@@ -170,6 +174,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 يُفعَّل التوجيه، أي العرض الشرطي للمكوّنات بناءً على <i>URL</i> المتصفح، بوضع المكوّنات كأبناء لمكوّن [Router](https://reactrouter.com/api/declarative-routers/Router)، أي داخل وسوم <i>Router</i>.
@@ -182,6 +187,7 @@ export default App
   <Link style={padding} to="/notes">notes</Link>
   <Link style={padding} to="/create">new note</Link>
 </div>
+
 ```
 
 بعد ذلك، يُعرَّف توجيه التطبيق باستخدام مكوّن [Routes](https://reactrouter.com/api/components/Routes). وداخل المكوّن، نستخدم [Route](https://reactrouter.com/api/components/Route) لتعريف مجموعة من القواعد والمكوّنات القابلة للعرض المقابلة لها:
@@ -196,6 +202,7 @@ export default App
   } />
   <Route path="/" element={<Home />} />
 </Routes>
+
 ```
 
 إذا كنت في عنوان URL الجذري للتطبيق، يُعرض المكوّن <i>Home</i>:
@@ -214,9 +221,10 @@ export default App
 
 ```js
 import {
-  BrowserRouter as Router, // highlight-line
+  BrowserRouter as Router,
   Routes, Route, Link
 } from 'react-router-dom'
+
 ```
 
 وفقاً [للتوثيق](https://reactrouter.com/en/main/router-components/browser-router)
@@ -237,7 +245,7 @@ import {
 نُفِّذت قابلية النقر على الاسم في المكوّن <i>NoteList</i> كما يلي:
 
 ```js
-import { Link } from 'react-router-dom' // highlight-line
+import { Link } from 'react-router-dom'
 
 const NoteList = ({ notes }) => {
   // ...
@@ -257,7 +265,7 @@ const NoteList = ({ notes }) => {
       <ul>
         {notesToShow.map(note => (
           <li key={note.id}>
-            <Link to={`/notes/${note.id}`}>{note.content}</Link> // highlight-line
+            <Link to={`/notes/${note.id}`}>{note.content}</Link>
           </li>
         ))}
       </ul>
@@ -266,6 +274,7 @@ const NoteList = ({ notes }) => {
 }
 
 export default NoteList
+
 ```
 
 إذن، يُستخدم [Link](https://reactrouter.com/api/components/Link) مرة أخرى. مثلاً، النقر على اسم ملاحظة معرّفها <i>id</i> هو 12345 يؤدي إلى تحديث عنوان URL في المتصفح إلى <i>notes/12345</i>.
@@ -288,18 +297,20 @@ export default NoteList
     <Route path="/" element={<Home />} />      
   </Routes>
 </Router>
+
 ```
 
 المسار الذي يعرض واجهة ملاحظة واحدة يُعرَّف بأسلوب «Express» عبر وسم معامل المسار بالترميز <i>:id</i> كما يلي:
 
 ```js
 <Route path="/notes/:id" element={<Note notes={notes} ... />} />
+
 ```
 
 عندما ينتقل المتصفح إلى عنوان URL الفريد لملاحظة، مثل <i>/notes/12345</i>، يُعرض المكوّن <i>Note</i>، الذي اضطررنا الآن إلى تعديله قليلاً:
 
 ```js
-import { useParams } from 'react-router-dom' // highlight-line
+import { useParams } from 'react-router-dom'
 
 const Note = ({ notes, toggleImportance }) => {
   // highlight-start
@@ -318,6 +329,7 @@ const Note = ({ notes, toggleImportance }) => {
 }
 
 export default Note
+
 ```
 
 خلافاً لما كان عليه الحال سابقاً، يتلقّى المكوّن <i>Note</i> الآن <i>كل الملاحظات</i> عبر prop المسمّى <i>notes</i>، ويمكنه الوصول إلى الجزء الفريد من عنوان URL، وتحديداً <i>id</i> الملاحظة المراد عرضها، باستخدام دالة React Router المسماة [useParams](https://reactrouter.com/api/hooks/useParams).
@@ -349,7 +361,7 @@ const App = () => {
           <Note 
             notes={notes}
             toggleImportanceOf={toggleImportanceOf}
-            deleteNote={deleteNote} // highlight-line
+            deleteNote={deleteNote}
           />
         } />
         <Route path="/notes" element={
@@ -365,6 +377,7 @@ const App = () => {
     </Router>
   )
 }  
+
 ```
 
 يتغيّر المكوّن <i>Note</i> كما يلي:
@@ -372,9 +385,9 @@ const App = () => {
 ```js
 import { useParams, useNavigate } from 'react-router-dom'
 
-const Note = ({ notes, toggleImportanceOf, deleteNote }) => { // highlight-line
+const Note = ({ notes, toggleImportanceOf, deleteNote }) => {
   const id = useParams().id
-  const navigate = useNavigate()  // highlight-line
+  const navigate = useNavigate()
   const note = notes.find(n => n.id === id)
 
   const label = note.important ? 'make not important' : 'make important'
@@ -392,12 +405,13 @@ const Note = ({ notes, toggleImportanceOf, deleteNote }) => { // highlight-line
     <li className="note">
       <span>{note.content}</span>
       <button onClick={() => toggleImportanceOf(id)}>{label}</button>
-      <button onClick={handleDelete}>delete</button>  // highlight-line
+      <button onClick={handleDelete}>delete</button>
     </li>
   )
 }
 
 export default Note
+
 ```
 
 عند حذف ملاحظة، يُعاد توجيه المستخدم إلى الصفحة التي تسرد كل الملاحظات. ويتم ذلك باستدعاء الدالة التي يعيدها [useNavigate](https://reactrouter.com/api/components/Navigate) من React Router مع عنوان URL المطلوب: <i>navigate('/notes')</i>.
@@ -408,11 +422,11 @@ export default Note
 
 ```js
 import { useState } from 'react' 
-import { useNavigate } from 'react-router-dom' // highlight-line
+import { useNavigate } from 'react-router-dom'
 
 const NoteForm = ({ createNote }) => {
   const [newNote, setNewNote] = useState('')
-  const navigate = useNavigate() // highlight-line
+  const navigate = useNavigate()
 
   const addNote = event => {
     event.preventDefault()
@@ -421,7 +435,7 @@ const NoteForm = ({ createNote }) => {
       important: true
     })
 
-    navigate('/notes') // highlight-line
+    navigate('/notes')
     setNewNote('')
   }
 
@@ -440,6 +454,7 @@ const NoteForm = ({ createNote }) => {
     </div>
   )
 }
+
 ```
 
 ### إعادة النظر في المسار بمعامل
@@ -452,6 +467,7 @@ const Note = ({ notes, toggleImportance }) => {
   const note = notes.find(n => n.id === Number(id))
   // ...
 }
+
 ```
 
 هل يمكن تعديل التطبيق بحيث يتلقّى _Note_ الملاحظة المراد عرضها فقط كـ prop:
@@ -459,7 +475,7 @@ const Note = ({ notes, toggleImportance }) => {
 ```js
 import { useParams, useNavigate } from 'react-router-dom'
 
-const Note = ({ note, id, toggleImportanceOf, deleteNote }) => {  // highlight-line
+const Note = ({ note, id, toggleImportanceOf, deleteNote }) => {
   const id = useParams().id
   const navigate = useNavigate()
 
@@ -475,6 +491,7 @@ const Note = ({ note, id, toggleImportanceOf, deleteNote }) => {  // highlight-l
 }
 
 export default Note
+
 ```
 
 إحدى الطرق هي تحديد <i>id</i> الملاحظة المراد عرضها داخل المكوّن باستخدام دالة الخطاف [useMatch](https://reactrouter.com/api/hooks/useMatch) من React Router.
@@ -483,10 +500,11 @@ export default Note
 
 ```js
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Router> // highlight-line
+  <Router>
     <App />
-  </Router> // highlight-line
+  </Router>
 )
+
 ```
 
 يصبح المكوّن <i>App</i>:
@@ -494,7 +512,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 ```js
 import {
   // ...
-  useMatch  // highlight-line
+  useMatch
 } from 'react-router-dom'
 
 const App = () => {
@@ -518,7 +536,7 @@ const App = () => {
       <Routes>
         <Route path="/notes/:id" element={
           <Note
-            note={note} // highlight-line
+            note={note}
             toggleImportanceOf={toggleImportanceOf}
             deleteNote={deleteNote}
           />
@@ -538,12 +556,14 @@ const App = () => {
     </div>
   )
 }    
+
 ```
 
 في كل مرة يُعرض فيها المكوّن <i>App</i> (وهو ما يحدث عملياً كلما تغيّر عنوان URL في شريط عنوان المتصفح) يُنفَّذ الأمر التالي
 
 ```js
 const match = useMatch('/notes/:id')
+
 ```
 
 إذا كان عنوان URL بالصيغة _/notes/:id_، أي يقابل عنوان URL لملاحظة واحدة، تُسنَد إلى المتغيّر <i>match</i> قيمة كائن يمكن استخدامه لتحديد الجزء ذي المعامل من المسار، أي <i>id</i> الملاحظة. وهذا يتيح لنا استرجاع الملاحظة المراد عرضها:
@@ -552,6 +572,7 @@ const match = useMatch('/notes/:id')
 const note = match 
   ? notes.find(note => note.id === match.params.id)
   : null
+
 ```
 
 
@@ -576,6 +597,7 @@ const Note = ({ note, toggleImportanceOf, deleteNote }) => {
     //...
   )
 }
+
 ```
 
 في التطبيق ميزة مزعجة أخرى: منطق تسجيل الدخول لا يزال كله في الصفحة التي تسرد الملاحظات. ومع ذلك، سنترك الوظيفة في هذه الحالة غير المكتملة نوعاً ما في الوقت الحالي.
@@ -672,6 +694,7 @@ const Note = ({ note, toggleImportanceOf, deleteNote }) => {
 
 ```bash
 npm install @mui/material @emotion/react @emotion/styled
+
 ```
 
 عند استخدام MaterialUI، يُعرض عادةً محتوى التطبيق كله داخل مكوّن [Container](https://material-ui.com/components/container/):
@@ -687,6 +710,7 @@ const App = () => {
     </Container>
   )
 }
+
 ```
 
 #### الجدول
@@ -743,6 +767,7 @@ const NoteList = ({ notes }) => {
 }
 
 export default NoteList
+
 ```
 
 يبدو الجدول كما يلي:
@@ -754,7 +779,7 @@ export default NoteList
 
 بعد ذلك، لنحسّن عرض إنشاء ملاحظة جديدة <i>NoteForm</i> باستخدام مكوّني [TextField](https://mui.com/components/text-fields/) و[Button](https://mui.com/api/button/):
 
-```js 
+```js
 import { TextField, Button } from '@mui/material'
 
 // ...
@@ -784,6 +809,7 @@ const NoteForm = ({ createNote }) => {
 
 export default NoteForm
 
+
 ```
 
 النتيجة أنيقة:
@@ -811,6 +837,7 @@ const Notification = ({ notification }) => {
 }
 
 export default Notification
+
 ```
 
 انقل مكوّن الإشعارات وإدارة حالته إلى المكوّن <i>App</i>:
@@ -818,14 +845,14 @@ export default Notification
 ```js
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [notification, setNotification] = useState(null) // highlight-line
+  const [notification, setNotification] = useState(null)
 
   // ...
 
   const addNote = noteObject => {
     noteService.create(noteObject).then(returnedNote => {
       setNotes(notes.concat(returnedNote))
-      setNotification({ text: `Note '${returnedNote.content}' added!`, type: 'success' }) // highlight-line
+      setNotification({ text: `Note '${returnedNote.content}' added!`, type: 'success' })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -840,7 +867,7 @@ const App = () => {
         <Link style={padding} to="/create">new note</Link>
       </div>
 
-      <Notification notification={notification} /> // highlight-line
+      <Notification notification={notification} />
 
       <Routes>
         <Route path="/notes/:id" element={
@@ -863,6 +890,7 @@ const App = () => {
     </Container>
   )
 }
+
 ```
 
 يتميّز Alert بتصميم أنيق:
@@ -883,6 +911,7 @@ const App = () => {
     <Button color="inherit"><Link to="/create">new note</Link></Button>
   </Toolbar>
 </AppBar>
+
 ```
 
 يوفر هذا حلاً يعمل بالفعل، لكن مظهره ليس الأفضل ممكناً:
@@ -897,6 +926,7 @@ const App = () => {
 <Button color="inherit" component={Link} to="/">
   home
 </Button>
+
 ```
 
 يُعرض مكوّن <i>Button</i> بحيث يكون مكوّنه الجذري هو مكوّن <i>Link</i> من مكتبة <i>react-router-dom</i>، ويُمرَّر إليه prop المسمّى <i>to</i> الذي يحدّد المسار.
@@ -911,6 +941,7 @@ const App = () => {
     <Button color="inherit" component={Link} to="/create">new note</Button>
   </Toolbar>
 </AppBar>
+
 ```
 
 وتبدو النتيجة تماماً كما نريد:
@@ -940,6 +971,7 @@ return (
 
     // ...
 )
+
 ```
 
 نحن راضون أخيراً:
@@ -973,6 +1005,7 @@ const Input = styled.input`
   margin: 0.25em;
   width: 300px;  
 `
+
 ```
 
 تُنشئ الشيفرة نسخاً منسّقة من عنصرَي HTML هما <i>button</i> و<i>input</i>، وتُسنِدها إلى المتغيّرين <i>Button</i> و<i>Input</i>.
@@ -991,16 +1024,17 @@ const NoteForm = ({ createNote }) => {
       <h2>Create a new note</h2>
 
       <form onSubmit={addNote}>
-        <Input> // highlight-line
+        <Input>
           value={newNote}
           onChange={event => setNewNote(event.target.value)}
           placeholder="write note content here"
         />
-        <Button type="submit">save</Button> // highlight-line
+        <Button type="submit">save</Button>
       </form>
     </div>
   )
 }
+
 ```
 
 يبدو النموذج الآن كما يلي:
@@ -1025,6 +1059,7 @@ const Footer = styled.div`
   padding: 1em;
   margin-top: 1em;
 `
+
 ```
 
 يمكن الآن استخدام المكوّنات الجديدة في التطبيق:
@@ -1034,12 +1069,12 @@ const App = () => {
   // ...
 
   return (
-    <Page> // highlight-line
-      <Navigation> // highlight-line
+    <Page>
+      <Navigation>
         <Link style={padding} to="/">home</Link>
         <Link style={padding} to="/notes">notes</Link>
         <Link style={padding} to="/create">new note</Link>
-      </Navigation> // highlight-line
+      </Navigation>
 
       <Routes>
         <Route path="/notes/:id" element={
@@ -1065,6 +1100,7 @@ const App = () => {
     // highlight-end
   )
 }
+
 ```
 
 النتيجة النهائية كما يلي:

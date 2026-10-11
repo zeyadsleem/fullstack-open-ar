@@ -42,6 +42,7 @@ lang: ar
     _id: 141414,
   },
 ]
+
 ```
 
 تحتوي مجموعة <i>notes</i> على ثلاث ملاحظات، جميعها تحوي حقلاً <i>user</i> يشير إلى مستخدم في مجموعة <i>users</i>:
@@ -67,6 +68,7 @@ lang: ar
     user: 141414,
   },
 ]
+
 ```
 
 لا تشترط قواعد البيانات المستندية تخزين المفتاح الخارجي في موارد الملاحظات، بل يمكن <i>أيضاً</i> تخزينه في مجموعة المستخدمين، أو في كلتيهما معاً:
@@ -84,6 +86,7 @@ lang: ar
     notes: [221244],
   },
 ]
+
 ```
 
 ولأن المستخدم يمكن أن يملك ملاحظات كثيرة، تُخزَّن المعرّفات المرتبطة في مصفوفة داخل حقل <i>notes</i>.
@@ -118,6 +121,7 @@ lang: ar
     ],
   },
 ]
+
 ```
 
 في هذا المخطط، ستكون الملاحظات متداخلة بإحكام تحت المستخدمين ولن تولّد قاعدة البيانات معرّفات لها.
@@ -158,6 +162,7 @@ userSchema.set('toJSON', {
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
+
 ```
 
 تُخزَّن معرّفات الملاحظات داخل مستند المستخدم كمصفوفة من معرّفات Mongo. والتعريف كالتالي:
@@ -167,6 +172,7 @@ module.exports = User
   type: mongoose.Schema.Types.ObjectId,
   ref: 'Note'
 }
+
 ```
 
 نوع الحقل هو <i>ObjectId</i>، أي أنه يشير إلى مستند آخر. ويحدد حقل <i>ref</i> اسم النموذج المشار إليه. ولا يعرف Mongo بطبيعته أن هذا حقل يشير إلى ملاحظات؛ فالصياغة مرتبطة بـ Mongoose ومحددة به وحده.
@@ -188,6 +194,7 @@ const noteSchema = new mongoose.Schema({
   }
   // highlight-end
 })
+
 ```
 
 وعلى النقيض تماماً من أعراف قواعد البيانات العلائقية، <i>تُخزَّن المراجع الآن في كلا المستندين</i>: فالملاحظة تشير إلى المستخدم الذي أنشأها، ولدى المستخدم مصفوفة مراجع إلى جميع الملاحظات التي أنشأها.
@@ -200,6 +207,7 @@ const noteSchema = new mongoose.Schema({
 
 ```bash
 npm install bcrypt
+
 ```
 
 يتم إنشاء المستخدمين الجدد وفقاً لأعراف REST التي ناقشناها في [الجزء 3](/part3/node_js_and_express#rest)، عبر إجراء طلب HTTP POST إلى مسار <i>users</i>.
@@ -209,14 +217,15 @@ npm install bcrypt
 ```js
 // ...
 const notesRouter = require('./controllers/notes')
-const usersRouter = require('./controllers/users') // highlight-line
+const usersRouter = require('./controllers/users')
 
 // ...
 
 app.use('/api/notes', notesRouter)
-app.use('/api/users', usersRouter) // highlight-line
+app.use('/api/users', usersRouter)
 
 // ...
+
 ```
 
 محتويات الملف <i>controllers/users.js</i> الذي يعرّف الموجّه كالتالي:
@@ -244,6 +253,7 @@ usersRouter.post('/', async (request, response) => {
 })
 
 module.exports = usersRouter
+
 ```
 
 كلمة المرور المرسلة في الطلب <i>لا</i> تُخزَّن في قاعدة البيانات. بل نخزّن <i>تجزئة</i> كلمة المرور المولَّدة بالدالة _bcrypt.hash_.
@@ -296,6 +306,7 @@ describe('when there is initially one user in db', () => {
     assert(usernames.includes(newUser.username))
   })
 })
+
 ```
 
 تستخدم الاختبارات دالة المساعدة <i>usersInDb()</i> التي نفذناها في الملف <i>tests/test_helper.js</i>. وتُستخدم الدالة لمساعدتنا في التحقق من حالة قاعدة البيانات بعد إنشاء مستخدم:
@@ -316,6 +327,7 @@ module.exports = {
   notesInDb,
   usersInDb,
 }
+
 ```
 
 تضيف كتلة <i>beforeEach</i> مستخدماً باسم المستخدم <i>root</i> إلى قاعدة البيانات. ويمكننا كتابة اختبار جديد يتحقق من أنه لا يمكن إنشاء مستخدم جديد بنفس اسم المستخدم:
@@ -345,6 +357,7 @@ describe('when there is initially one user in db', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 })
+
 ```
 
 من الواضح أن حالة الاختبار لن تنجح في هذه المرحلة. نحن في جوهر الأمر نمارس [التطوير المدفوع بالاختبارات (TDD)](https://en.wikipedia.org/wiki/Test-driven_development)، حيث تُكتب اختبارات الوظيفة الجديدة قبل تنفيذ الوظيفة.
@@ -373,9 +386,10 @@ const userSchema = mongoose.Schema({
 })
 
 // ...
+
 ```
 
-غير أننا نريد توخي الحذر عند استخدام فهرس الفرادة. فإذا كانت هناك مستندات في قاعدة البيانات تخالف شرط الفرادة بالفعل، فلن يُنشأ أي فهرس. لذا عند إضافة فهرس فرادة، تأكد من أن قاعدة البيانات في حالة سليمة! لقد أضاف الاختبار أعلاه المستخدم ذا اسم المستخدم _root_ إلى قاعدة البيانات مرتين، ويجب إزالتهما ليتشكّل الفهرس وتعمل الشيفرة.
+غير أننا نريد توخي الحذر عند استخدام فهرس الفرادة. فإذا كانت هناك مستندات في قاعدة البيانات تخالف شرط الفرادة بالفعل، [فلن يُنشأ أي فهرس](https://dev.to/akshatsinghania/mongoose-unique-not-working-16bf). لذا عند إضافة فهرس فرادة، تأكد من أن قاعدة البيانات في حالة سليمة! لقد أضاف الاختبار أعلاه المستخدم ذا اسم المستخدم _root_ إلى قاعدة البيانات مرتين، ويجب إزالتهما ليتشكّل الفهرس وتعمل الشيفرة.
 
 لا تكتشف تحققات Mongoose انتهاك الفهرس، وبدلاً من _ValidationError_ تُعيد خطأً من النوع _MongoServerError_. ولذلك نحتاج إلى توسيع معالج الأخطاء لتلك الحالة:
 
@@ -393,6 +407,7 @@ const errorHandler = (error, request, response, next) => {
 
   next(error)
 }
+
 ```
 
 بعد هذه التغييرات، ستنجح الاختبارات.
@@ -406,6 +421,7 @@ usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
   response.json(users)
 })
+
 ```
 
 لإنشاء مستخدمين جدد في بيئة إنتاج أو تطوير، يمكنك إرسال طلب POST إلى ```/api/users/``` عبر Postman أو REST Client بالصيغة التالية:
@@ -416,6 +432,7 @@ usersRouter.get('/', async (request, response) => {
     "name": "Superuser",
     "password": "salainen"
 }
+
 ```
 
 تبدو القائمة هكذا:
@@ -433,14 +450,14 @@ usersRouter.get('/', async (request, response) => {
 ```js
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
-const User = require('../models/user') //highlight-line
+const User = require('../models/user')
 
 //...
 
 notesRouter.post('/', async (request, response) => {
   const body = request.body
 
-  const user = await User.findById(body.userId)// highlight-line
+  const user = await User.findById(body.userId)
 
   // highlight-start
   if (!user) {
@@ -451,17 +468,18 @@ notesRouter.post('/', async (request, response) => {
   const note = new Note({
     content: body.content,
     important: body.important || false,
-    user: user._id //highlight-line
+    user: user._id
   })
 
   const savedNote = await note.save()
-  user.notes = user.notes.concat(savedNote._id) //highlight-line
-  await user.save()  //highlight-line
+  user.notes = user.notes.concat(savedNote._id)
+  await user.save()
 
   response.status(201).json(savedNote)
 })
 
 // ...
+
 ```
 
 يُستعلَم أولاً من قاعدة البيانات عن مستخدم باستخدام <i>userId</i> المقدم في الطلب. وإذا لم يُعثر على المستخدم، تُرسَل الاستجابة برمز حالة 400 (<i>Bad Request</i>) ورسالة خطأ: <i>"userId missing or not valid"</i>.
@@ -475,6 +493,7 @@ const user = await User.findById(body.userId)
 
 user.notes = user.notes.concat(savedNote._id)
 await user.save()
+
 ```
 
 لنجرب إنشاء ملاحظة جديدة
@@ -503,11 +522,12 @@ await user.save()
 
 ```js
 usersRouter.get('/', async (request, response) => {
-  const users = await User  // highlight-line
-    .find({}).populate('notes') // highlight-line
+  const users = await User
+    .find({}).populate('notes')
 
   response.json(users)
 })
+
 ```
 
 تُسلسَل دالة [populate](http://mongoosejs.com/docs/populate.html) بعد دالة <i>find</i> التي تُجري الاستعلام الأولي. وتحدد الوسيطة المعطاة لدالة populate أن <i>المعرّفات</i> التي تشير إلى كائنات <i>note</i> في حقل <i>notes</i> من مستند <i>user</i> ستُستبدَل بمستندات <i>note</i> المشار إليها. يستعلم Mongoose أولاً من مجموعة <i>users</i> عن قائمة المستخدمين، ثم يستعلم من المجموعة المقابلة لكائن النموذج المحدد بخاصية <i>ref</i> في مخطط المستخدمين عن بيانات ذات معرّف الكائن المعطى.
@@ -527,6 +547,7 @@ usersRouter.get('/', async (request, response) => {
 
   response.json(users)
 })
+
 ```
 
 النتيجة الآن هي بالضبط ما نريد:
@@ -542,6 +563,7 @@ notesRouter.get('/', async (request, response) => {
 
   response.json(notes)
 })
+
 ```
 
 الآن تُضاف معلومات المستخدم إلى حقل <i>user</i> في كائنات الملاحظات.
@@ -565,6 +587,7 @@ const noteSchema = new mongoose.Schema({
     ref: 'User'
   }
 })
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي بالكامل في فرع <i>part4-8</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-8).

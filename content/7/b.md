@@ -42,40 +42,41 @@ lang: ar
 ```js
 import { useState } from 'react'
 
-const expensiveCalculation = () =&gt; {
+const expensiveCalculation = () => {
   let sum = 0
-  for (let i = 0; i &lt; 100000; i++) sum += i
+  for (let i = 0; i < 100000; i++) sum += i
   return sum
 }
 
-const ITEMS = Array.from({ length: 10000 }, (_, i) =&gt; `item ${i + 1}`)
+const ITEMS = Array.from({ length: 10000 }, (_, i) => `item ${i + 1}`)
 
-const FilteredList = () =&gt; {
+const FilteredList = () => {
   const [filter, setFilter] = useState('')
   const [darkMode, setDarkMode] = useState(false)
 
   console.log('filtering...')
-  const filtered = ITEMS.filter(item =&gt; {
+  const filtered = ITEMS.filter(item => {
     expensiveCalculation()
     return item.includes(filter)
   })
 
   return (
-    &lt;div style={{ background: darkMode ? '#333' : '#fff' }}&gt;
-      &lt;input
+    <div style={{ background: darkMode ? '#333' : '#fff' }}>
+      <input
         value={filter}
-        onChange={e =&gt; setFilter(e.target.value)}
+        onChange={e => setFilter(e.target.value)}
         placeholder="filter items"
-      /&gt;
-      &lt;button onClick={() =&gt; setDarkMode(!darkMode)}&gt;toggle dark mode&lt;/button&gt;
-      &lt;ul&gt;
-        {filtered.map(item =&gt; &lt;li key={item}&gt;{item}&lt;/li&gt;)}
-      &lt;/ul&gt;
-    &lt;/div&gt;
+      />
+      <button onClick={() => setDarkMode(!darkMode)}>toggle dark mode</button>
+      <ul>
+        {filtered.map(item => <li key={item}>{item}</li>)}
+      </ul>
+    </div>
   )
 }
 
 export default FilteredList
+
 ```
 
 أصبحت تصفية القائمة الآن تستغرق وقتاً، ويعود ذلك جزئياً إلى الإبطاء المصطنع الذي أضفناه.
@@ -85,32 +86,33 @@ export default FilteredList
 يمكننا إصلاح ذلك باستخدام&nbsp;<em>useMemo</em>:
 
 ```js
-// BEGIN HIGHLIGHT
-import { useState, useMemo } from 'react'
-// END HIGHLIGHT
 
-const FilteredList = () =&gt; {
+import { useState, useMemo } from 'react'
+
+
+const FilteredList = () => {
   const [filter, setFilter] = useState('')
   const [darkMode, setDarkMode] = useState(false)
 
-  // BEGIN HIGHLIGHT
-  const filtered = useMemo(() =&gt; {
-  // END HIGHLIGHT
+
+  const filtered = useMemo(() => {
+
     console.log('filtering...')
-    return ITEMS.filter(item =&gt; {
+    return ITEMS.filter(item => {
       expensiveCalculation()
       return item.includes(filter)
     })
-  // BEGIN HIGHLIGHT
+
   }, [filter])
-  // END HIGHLIGHT
+
 
   return (
-    &lt;div style={{ background: darkMode ? '#333' : '#fff' }}&gt;
+    <div style={{ background: darkMode ? '#333' : '#fff' }}>
       //...
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 باستخدام&nbsp;<em>useMemo</em>، لا تُنفَّذ التصفية المكلفة إلا عندما تتغيّر&nbsp;<em>filter</em>. أما تبديل الوضع الداكن فلا يحدّث سوى لون الخلفية، وتُعاد القائمة المصفّاة المخزّنة مؤقتاً فوراً.
@@ -120,16 +122,17 @@ const FilteredList = () =&gt; {
 يمكن استخدام&nbsp;<em>useMemo</em>&nbsp;أيضاً لتخزين الكائنات والمصفوفات الممرَّرة كـ props مؤقتاً، ما يمنع عمليات إعادة العرض غير الضرورية للمكوّنات الابنة التي تعتمد على تساوي المراجع. على سبيل المثال:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const [filter, setFilter] = useState('')
 
   // بدون useMemo، يكون 'options' كائناً جديداً في كل عرض حتى لو لم يتغيّر filter
-  // BEGIN HIGHLIGHT
-  const options = useMemo(() =&gt; ({ caseSensitive: false, filter }), [filter])
-  // END HIGHLIGHT
 
-  return &lt;SearchResults options={options} /&gt;
+  const options = useMemo(() => ({ caseSensitive: false, filter }), [filter])
+
+
+  return <SearchResults options={options} />
 }
+
 ```
 
 <em>useMemo</em>&nbsp;تحسين للأداء، ولا ينبغي اللجوء إليه افتراضياً. فـ<a href="https://wiki.c2.com/?PrematureOptimization" target="_blank" rel="noopener">التخزين المؤقت المبكر</a>&nbsp;يضيف تعقيداً بلا فائدة عندما يكون الحساب سريعاً. قِس أولاً، ولا تُضف&nbsp;<em>useMemo</em>&nbsp;إلا بعد أن تتأكد من أن حساباً معيناً يمثل عنق زجاجة.
@@ -139,10 +142,11 @@ const App = () =&gt; {
 بينما تخزّن&nbsp;<em>useMemo</em>&nbsp;نتيجة حساب داخل مكوّن، تأخذ&nbsp;<a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener">React.memo</a>&nbsp;مقاربة مختلفة: فهي تخزّن الخرج المعروض لمكوّن كامل. و<em>React.memo</em>&nbsp;ليست خطافاً بل مكوّن عالي الرتبة (higher-order component)، ونغطيها هنا لأنها تكمّل&nbsp;<em>useMemo</em>&nbsp;جيداً. فعندما يُغلَّف مكوّن بـ<em>React.memo</em>، يتخطى React إعادة عرضه إذا لم تتغيّر props الخاصة به منذ العرض الأخير.
 
 ```js
-const MyComponent = React.memo(({ value }) =&gt; {
+const MyComponent = React.memo(({ value }) => {
   console.log('rendered')
-  return &lt;div&gt;{value}&lt;/div&gt;
+  return <div>{value}</div>
 })
+
 ```
 
 بدون&nbsp;<em>React.memo</em>، يُعاد عرض&nbsp;<em>MyComponent</em>&nbsp;في كل مرة يُعرض فيها المكوّن الأب، حتى لو كانت&nbsp;<em>value</em>&nbsp;هي نفسها. ومعها، يقارن React بين props القديمة والجديدة باستخدام التساوي السطحي (shallow equality)، ولا يعيد العرض إلا عندما يتغيّر شيء فعلاً.
@@ -165,21 +169,21 @@ const MyComponent = React.memo(({ value }) =&gt; {
 
 ```js
 // تجعل React.memo هذا المكوّن يتخطى إعادة العرض إذا لم تتغيّر props الخاصة به
-const NoteList = memo(({ onDelete, notes }) =&gt; {
+const NoteList = memo(({ onDelete, notes }) => {
   console.log('NoteList rendered')
   return (
-    &lt;ul&gt;
-      {notes.map(note =&gt; (
-        &lt;li key={note.id}&gt;
+    <ul>
+      {notes.map(note => (
+        <li key={note.id}>
           {note.content}
-          &lt;button onClick={() =&gt; onDelete(note.id)}&gt;delete&lt;/button&gt;
-        &lt;/li&gt;
+          <button onClick={() => onDelete(note.id)}>delete</button>
+        </li>
       ))}
-    &lt;/ul&gt;
+    </ul>
   )
 })
 
-const App = () =&gt; {
+const App = () => {
   const [notes, setNotes] = useState([
     { id: 1, content: 'Learn React' },
     { id: 2, content: 'Learn hooks' },
@@ -189,23 +193,24 @@ const App = () =&gt; {
   ])
   const [newNote, setNewNote] = useState('')
 
-  const handleDelete = (id) =&gt; {
-    setNotes(notes =&gt; notes.filter(note =&gt; note.id !== id))
+  const handleDelete = (id) => {
+    setNotes(notes => notes.filter(note => note.id !== id))
   }
 
-  const handleAdd = () =&gt; {
-    setNotes(notes =&gt; [...notes, { id: Date.now(), content: newNote }])
+  const handleAdd = () => {
+    setNotes(notes => [...notes, { id: Date.now(), content: newNote }])
     setNewNote('')
   }
 
   return (
-    &lt;div&gt;
-      &lt;input value={newNote} onChange={e =&gt; setNewNote(e.target.value)} /&gt;
-      &lt;button onClick={handleAdd}&gt;add&lt;/button&gt;
-      &lt;NoteList notes={notes} onDelete={handleDelete} /&gt;
-    &lt;/div&gt;
+    <div>
+      <input value={newNote} onChange={e => setNewNote(e.target.value)} />
+      <button onClick={handleAdd}>add</button>
+      <NoteList notes={notes} onDelete={handleDelete} />
+    </div>
   )
 }
+
 ```
 
 المشكلة هنا أن&nbsp;<em>handleDelete</em>&nbsp;معرّفة كدالة عادية داخل&nbsp;<em>App</em>. ففي كل مرة يُعاد فيها عرض&nbsp;<em>App</em>&nbsp;(وهو ما يحدث مع كل ضغطة مفتاح في حقل إدخال الملاحظة)، يُنشأ كائن دالة جديد تماماً ويُمرَّر إلى&nbsp;<em>NoteList</em>&nbsp;كـ prop باسم&nbsp;<em>onDelete</em>.
@@ -223,17 +228,18 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
 
-// BEGIN HIGHLIGHT
+
   const handleDelete = useCallback((id) => {
     setNotes(notes => notes.filter(note => note.id !== id))
   }, []) // لا اعتماديات خارجية: لا تحتاج هذه الدالة إلى التغيّر أبداً
-// END HIGHLIGHT
+
 
   // ...
   return (
     // ...
   )
 }
+
 ```
 
 الآن أصبحت&nbsp;<em>handleDelete</em>&nbsp;مستقرة: يعيد React كائن الدالة نفسه تماماً في كل عرض، فلا ترى&nbsp;<em>React.memo</em>&nbsp;أي تغيّر في prop الـ<em>onDelete</em>&nbsp;وتتخطى إعادة عرض&nbsp;<em>NoteList</em>&nbsp;بالكامل.
@@ -259,41 +265,42 @@ const App = () => {
 ```js
 import { useState } from 'react'
 
-const App = () =&gt; {
+const App = () => {
   const [counter, setCounter] = useState(0)
 
   return (
-    &lt;div&gt;
-      &lt;div&gt;{counter}&lt;/div&gt;
-      &lt;button onClick={() =&gt; setCounter(counter + 1)}&gt;
+    <div>
+      <div>{counter}</div>
+      <button onClick={() => setCounter(counter + 1)}>
         plus
-      &lt;/button&gt;
-      &lt;button onClick={() =&gt; setCounter(counter - 1)}&gt;
+      </button>
+      <button onClick={() => setCounter(counter - 1)}>
         minus
-      &lt;/button&gt;
-      &lt;button onClick={() =&gt; setCounter(0)}&gt;
+      </button>
+      <button onClick={() => setCounter(0)}>
         zero
-      &lt;/button&gt;
-    &lt;/div&gt;
+      </button>
+    </div>
   )
 }
+
 ```
 
 لنستخلص منطق العدّاد في خطاف مخصص. وشيفرة الخطاف كما يلي:
 
 ```js
-const useCounter = () =&gt; {
+const useCounter = () => {
   const [value, setValue] = useState(0)
 
-  const increase = () =&gt; {
+  const increase = () => {
     setValue(value + 1)
   }
 
-  const decrease = () =&gt; {
+  const decrease = () => {
     setValue(value - 1)
   }
 
-  const zero = () =&gt; {
+  const zero = () => {
     setValue(0)
   }
 
@@ -304,6 +311,7 @@ const useCounter = () =&gt; {
     zero
   }
 }
+
 ```
 
 يستخدم خطافنا المخصص خطاف&nbsp;<em>useState</em>&nbsp;داخلياً لإنشاء حالته. ويعيد الخطاف كائناً تشمل خصائصه قيمة العدّاد إضافة إلى دوال للتحكم في القيمة.
@@ -311,24 +319,25 @@ const useCounter = () =&gt; {
 يمكن لمكوّنات React استخدام الخطاف كما هو موضح أدناه:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const counter = useCounter()
 
   return (
-    &lt;div&gt;
-      &lt;div&gt;{counter.value}&lt;/div&gt;
-      &lt;button onClick={counter.increase}&gt;
+    <div>
+      <div>{counter.value}</div>
+      <button onClick={counter.increase}>
         plus
-      &lt;/button&gt;
-      &lt;button onClick={counter.decrease}&gt;
+      </button>
+      <button onClick={counter.decrease}>
         minus
-      &lt;/button&gt;
-      &lt;button onClick={counter.zero}&gt;
+      </button>
+      <button onClick={counter.zero}>
         zero
-      &lt;/button&gt;
-    &lt;/div&gt;
+      </button>
+    </div>
   )
 }
+
 ```
 
 بهذه الطريقة يمكننا نقل حالة مكوّن&nbsp;<em>App</em>&nbsp;والتحكم فيها بالكامل إلى خطاف&nbsp;<em>useCounter</em>. فإدارة حالة العدّاد ومنطقه أصبحت الآن مسؤولية الخطاف المخصص.
@@ -336,23 +345,24 @@ const App = () =&gt; {
 ويمكن&nbsp;<em>إعادة استخدام</em>&nbsp;الخطاف نفسه في التطبيق الذي كان يتتبع عدد النقرات على الزرين الأيسر والأيمن:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const left = useCounter()
   const right = useCounter()
 
   return (
-    &lt;div&gt;
+    <div>
       {left.value}
-      &lt;button onClick={left.increase}&gt;
+      <button onClick={left.increase}>
         left
-      &lt;/button&gt;
-      &lt;button onClick={right.increase}&gt;
+      </button>
+      <button onClick={right.increase}>
         right
-      &lt;/button&gt;
+      </button>
       {right.value}
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 ينشئ التطبيق&nbsp;<em>عدّادين</em>&nbsp;منفصلين تماماً. يُسند الأول إلى المتغير&nbsp;<em>left</em>&nbsp;والآخر إلى المتغير&nbsp;<em>right</em>. وكل استدعاء لـ<em>useCounter</em>&nbsp;ينشئ قطعة الحالة المستقلة الخاصة به.
@@ -373,9 +383,9 @@ const App = () =&gt; {
 
 ```js
 const useCounter = () => {
-// BEGIN HIGHLIGHT
+
   const [count, setCount] = useState(0) // هذه الحالة تنتمي إلى المكوّن المستدعي
-// END HIGHLIGHT
+
   return {
     count,
     increment: () => setCount(c => c + 1)
@@ -384,10 +394,11 @@ const useCounter = () => {
 
 const MyComponent = () => {
   const { count, increment } = useCounter()
-// BEGIN HIGHLIGHT
+
   // يُعاد العرض كلما حُدّثت حالة count داخل الخطاف
-// END HIGHLIGHT
+
 }
+
 ```
 
 #### خطاف حقل النموذج
@@ -395,41 +406,42 @@ const MyComponent = () => {
 التعامل مع النماذج في React صعب بعض الشيء. يعرض التطبيق التالي على المستخدم نموذجاً يطلب منه إدخال اسمه وتاريخ ميلاده وطوله:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   const [height, setHeight] = useState('')
 
   return (
-    &lt;div&gt;
-      &lt;form&gt;
+    <div>
+      <form>
         name:
-        &lt;input
+        <input
           type='text'
           value={name}
-          onChange={(event) =&gt; setName(event.target.value)}
-        /&gt;
-        &lt;br/&gt;
+          onChange={(event) => setName(event.target.value)}
+        />
+        <br/>
         birthdate:
-        &lt;input
+        <input
           type='date'
           value={born}
-          onChange={(event) =&gt; setBorn(event.target.value)}
-        /&gt;
-        &lt;br /&gt;
+          onChange={(event) => setBorn(event.target.value)}
+        />
+        <br />
         height:
-        &lt;input
+        <input
           type='number'
           value={height}
-          onChange={(event) =&gt; setHeight(event.target.value)}
-        /&gt;
-      &lt;/form&gt;
-      &lt;div&gt;
+          onChange={(event) => setHeight(event.target.value)}
+        />
+      </form>
+      <div>
         {name} {born} {height}
-      &lt;/div&gt;
-    &lt;/div&gt;
+      </div>
+    </div>
   )
 }
+
 ```
 
 لكل حقل في النموذج حالته الخاصة. ولإبقاء حالة النموذج متزامنة مع البيانات التي يوفرها المستخدم، علينا تسجيل معالج&nbsp;<em>onChange</em>&nbsp;مناسب لكل عنصر من عناصر&nbsp;<em>input</em>. والنمط متطابق في كل حقل، ولا يختلف سوى اسم متغير الحالة. وهذا بالضبط نوع التكرار الذي صُممت الخطافات المخصصة للتخلص منه.
@@ -437,10 +449,10 @@ const App = () =&gt; {
 لنعرّف خطافنا المخصص&nbsp;<em>useField</em>&nbsp;الذي يبسّط إدارة حالة النموذج:
 
 ```js
-const useField = (type) =&gt; {
+const useField = (type) => {
   const [value, setValue] = useState('')
 
-  const onChange = (event) =&gt; {
+  const onChange = (event) => {
     setValue(event.target.value)
   }
 
@@ -450,6 +462,7 @@ const useField = (type) =&gt; {
     onChange
   }
 }
+
 ```
 
 تستقبل دالة الخطاف نوع حقل الإدخال كمعامل. وهي تعيد جميع السمات التي يحتاجها عنصر&nbsp;<em>input</em>: نوعه وقيمته ومعالج onChange.
@@ -457,29 +470,30 @@ const useField = (type) =&gt; {
 ويمكن استخدام الخطاف بالطريقة التالية:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const name = useField('text')
   // ...
 
   return (
-    &lt;div&gt;
-      &lt;form&gt;
-        &lt;input
+    <div>
+      <form>
+        <input
           type={name.type}
           value={name.value}
           onChange={name.onChange}
-        /&gt;
+        />
         // ...
-      &lt;/form&gt;
+      </form>
 // ...
-      &lt;div&gt;
-        // BEGIN HIGHLIGHT
+      <div>
+
         {name.value} {born} {height}
-        // END HIGHLIGHT
-      &lt;/div&gt;
-    &lt;/div&gt;
+
+      </div>
+    </div>
   )
 }
+
 ```
 
 ### خصائص النشر
@@ -487,48 +501,51 @@ const App = () =&gt; {
 يمكننا تبسيط الأمور أكثر قليلاً. فلأن كائن&nbsp;<em>name</em>&nbsp;يحتوي بالضبط على جميع الخصائص التي يتوقع عنصر&nbsp;<em>input</em>&nbsp;استقبالها كـ props، يمكننا تمرير الـ props إلى العنصر باستخدام&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">صيغة النشر</a>&nbsp;بالطريقة التالية:
 
 ```
-&lt;input {...name} /&gt;
+<input {...name} />
+
 ```
 
 وكما يوضح&nbsp;<a href="https://react.dev/learn/updating-objects-in-state#copying-objects-with-the-spread-syntax" target="_blank" rel="noopener">المثال</a>&nbsp;في وثائق React، فإن الطريقتين التاليتين لتمرير props إلى مكوّن تعطيان النتيجة نفسها تماماً:
 
 ```js
-&lt;Greeting firstName='Arto' lastName='Hellas' /&gt;
+<Greeting firstName='Arto' lastName='Hellas' />
 
 const person = {
   firstName: 'Arto',
   lastName: 'Hellas'
 }
 
-&lt;Greeting {...person} /&gt;
+<Greeting {...person} />
+
 ```
 
 فيصبح التطبيق مبسّطاً بالشكل التالي:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const name = useField('text')
   const born = useField('date')
   const height = useField('number')
 
   return (
-    &lt;div&gt;
-      &lt;form&gt;
+    <div>
+      <form>
         name:
-        &lt;input  {...name} /&gt;
-        &lt;br/&gt;
+        <input  {...name} />
+        <br/>
         birthdate:
-        &lt;input {...born} /&gt;
-        &lt;br /&gt;
+        <input {...born} />
+        <br />
         height:
-        &lt;input {...height} /&gt;
-      &lt;/form&gt;
-      &lt;div&gt;
+        <input {...height} />
+      </form>
+      <div>
         {name.value} {born.value} {height.value}
-      &lt;/div&gt;
-    &lt;/div&gt;
+      </div>
+    </div>
   )
 }
+
 ```
 
 يصبح التعامل مع النماذج أبسط بكثير عندما تُغلَّف التفاصيل الدقيقة المزعجة المتعلقة بمزامنة حالة النموذج داخل خطافنا المخصص.
@@ -540,8 +557,8 @@ const App = () =&gt; {
 ```js
 import { useState } from 'react'
 
-const useLocalStorage = (key, initialValue) =&gt; {
-  const [storedValue, setStoredValue] = useState(() =&gt; {
+const useLocalStorage = (key, initialValue) => {
+  const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = window.localStorage.getItem(key)
       return item ? JSON.parse(item) : initialValue
@@ -550,7 +567,7 @@ const useLocalStorage = (key, initialValue) =&gt; {
     }
   })
 
-  const setValue = (value) =&gt; {
+  const setValue = (value) => {
     try {
       setStoredValue(value)
       window.localStorage.setItem(key, JSON.stringify(value))
@@ -561,6 +578,7 @@ const useLocalStorage = (key, initialValue) =&gt; {
 
   return [storedValue, setValue]
 }
+
 ```
 
 يقبل الخطاف مفتاح تخزين وقيمة أولية. وفي العرض الأول يقرأ من localStorage، ويرجع إلى&nbsp;<em>initialValue</em>&nbsp;إذا لم يكن هناك شيء مخزّن بعد. ودالة التعيين المعادة تحدّث حالة React وlocalStorage في الوقت نفسه.
@@ -568,16 +586,17 @@ const useLocalStorage = (key, initialValue) =&gt; {
 ويبدو المكوّن الذي يستخدمه تماماً كالمكوّن الذي يستخدم&nbsp;<em>useState</em>&nbsp;العادي:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const [name, setName] = useLocalStorage('name', '')
 
   return (
-    &lt;div&gt;
-      &lt;input value={name} onChange={e =&gt; setName(e.target.value)} /&gt;
-      &lt;p&gt;Hello, {name}! (your name is stored in localStorage)&lt;/p&gt;
-    &lt;/div&gt;
+    <div>
+      <input value={name} onChange={e => setName(e.target.value)} />
+      <p>Hello, {name}! (your name is stored in localStorage)</p>
+    </div>
   )
 }
+
 ```
 
 لا يعرف المكوّن شيئاً عن تورّط localStorage. فهذا الشأن مخفي بالكامل داخل الخطاف.

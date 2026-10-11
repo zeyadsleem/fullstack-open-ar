@@ -41,6 +41,7 @@ lang: ar
 
 ```js
 npm init playwright@latest
+
 ```
 
 سيسألك سكربت التثبيت بضعة أسئلة، أجب عنها كما يلي:
@@ -62,11 +63,13 @@ Playwright Host validation warning:
 ║     libpcre.so.3                                     ║
 ║     libffi.so.7                                      ║
 ╚══════════════════════════════════════════════════════╝
+
 ```
 إذا كان الأمر كذلك، يمكنك إما تحديد متصفحات معينة للاختبار بـ `--project=` في ملف _package.json_:
 
 ```js
     "test": "playwright test --project=chromium --project=firefox",
+
 ```
 
 أو إزالة الإدخال الخاص بأي متصفحات مشكِلة من ملف _playwright.config.js_:
@@ -79,6 +82,7 @@ Playwright Host validation warning:
     //},
     // ...
   ]
+
 ```
 
 لنعرّف سكربت npm لتشغيل الاختبارات وتقارير الاختبار في _package.json_:
@@ -92,6 +96,7 @@ Playwright Host validation warning:
   },
   // ...
 }
+
 ```
 
 أثناء التثبيت، تُطبع الرسالة التالية في الطرفية:
@@ -101,6 +106,7 @@ And check out the following files:
   - ./tests/example.spec.js - Example end-to-end test
   - ./tests-examples/demo-todo-app.spec.js - Demo Todo App end-to-end tests
   - ./playwright.config.js - Playwright Test configuration
+
 ```
 
 أي موقع بعض الاختبارات النموذجية للمشروع التي أنشأها التثبيت.
@@ -120,18 +126,21 @@ Running 6 tests using 5 workers
 To open last HTML report run:
 
   npx playwright show-report
+
 ```
 
 تنجح الاختبارات. ويمكن فتح تقرير اختبار أكثر تفصيلاً إما بالأمر الذي اقترحه الناتج، أو بسكربت npm الذي عرّفناه للتو:
 
 ```
 npm run test:report
+
 ```
 
 يمكن أيضاً تشغيل الاختبارات عبر الواجهة الرسومية بالأمر:
 
 ```
 npm run test -- --ui
+
 ```
 
 تبدو الاختبارات النموذجية في الملف tests/example.spec.js هكذا:
@@ -141,7 +150,7 @@ npm run test -- --ui
 import { test, expect } from '@playwright/test';
 
 test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/'); // highlight-line
+  await page.goto('https://playwright.dev/');
 
   // توقّع أن "يحتوي" العنوان على سلسلة فرعية.
   await expect(page).toHaveTitle(/Playwright/);
@@ -156,6 +165,7 @@ test('get started link', async ({ page }) => {
   // يتوقع أن تحتوي الصفحة على عنوان فرعي باسم Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
 ```
 
 يقول السطر الأول من دوال الاختبار إن الاختبارات تختبر الصفحة الموجودة على https://playwright.dev/.
@@ -177,10 +187,11 @@ test('get started link', async ({ page }) => {
     "test": "cross-env NODE_ENV=test node --test",
     "lint": "eslint .",
     // ...
-    "start:test": "cross-env NODE_ENV=test node --watch index.js" // highlight-line
+    "start:test": "cross-env NODE_ENV=test node --watch index.js"
   },
   // ...
 }
+
 ```
 
 لنشغّل الواجهة الأمامية والخلفية، وننشئ أول ملف اختبار للتطبيق <code>tests/note\_app.spec.js</code>:
@@ -195,6 +206,7 @@ test('front page can be opened', async ({ page }) => {
   await expect(locator).toBeVisible()
   await expect(page.getByText('Note app, Department of Computer Science, University of Helsinki 2024')).toBeVisible()
 })
+
 ```
 
 أولاً، يفتح الاختبار التطبيق بالدالة [page.goto](https://playwright.dev/docs/writing-tests#navigation). بعد ذلك يستخدم الدالة [page.getByText](https://playwright.dev/docs/api/class-page#page-get-by-text) للحصول على [محدِّد موقع](https://playwright.dev/docs/locators) (locator) يقابل العنصر الذي يوجد فيه النص <i>Notes</i>.
@@ -215,6 +227,7 @@ test('front page can be opened', async ({ page }) => {
 
 ```js
 npm test -- --project chromium
+
 ```
 
 لنصحّح الآن الاختبار بالسنة الصحيحة، ولنضف كتلة _describe_ إلى الاختبارات:
@@ -222,7 +235,7 @@ npm test -- --project chromium
 ```js
 const { test, describe, expect } = require('@playwright/test')
 
-describe('Note app', () => {  // highlight-line
+describe('Note app', () => {
   test('front page can be opened', async ({ page }) => {
     await page.goto('http://localhost:5173')
 
@@ -231,6 +244,7 @@ describe('Note app', () => {  // highlight-line
     await expect(page.getByText('Note app, Department of Computer Science, University of Helsinki 2025')).toBeVisible()
   })
 })
+
 ```
 
 قبل أن نمضي قدماً، لنجعل الاختبارات تفشل مرة أخرى. نلاحظ أن تنفيذ الاختبارات سريع جداً عندما تنجح، لكنه أبطأ بكثير إذا لم تنجح. والسبب في ذلك أن سياسة Playwright هي الانتظار للعناصر المبحوث عنها حتى [تُعرَض وتصبح جاهزة للتفاعل](https://playwright.dev/docs/actionability). وإذا لم يُعثر على العنصر، يُرفَع _TimeoutError_ ويفشل الاختبار. وينتظر Playwright العناصر افتراضياً 5 أو 30 ثانية [حسب الدوال المستخدمة في الاختبار](https://playwright.dev/docs/test-timeouts#introduction).
@@ -240,11 +254,12 @@ describe('Note app', () => {  // highlight-line
 ```js
 export default defineConfig({
   // ...
-  timeout: 3000, // highlight-line
-  fullyParallel: false, // highlight-line
-  workers: 1, // highlight-line
+  timeout: 3000,
+  fullyParallel: false,
+  workers: 1,
   // ...
 })
+
 ```
 
 أجرينا أيضاً تغييرين آخرين على الملف، حددنا فيهما أن [تُنفَّذ](https://playwright.dev/docs/test-parallel) جميع الاختبارات واحداً تلو الآخر. فمع الإعداد الافتراضي يحدث التنفيذ على التوازي، ولأن اختباراتنا تستخدم قاعدة بيانات، يسبب التنفيذ المتوازي مشكلات.
@@ -265,6 +280,7 @@ describe('Note app', () => {
     await page.getByRole('button', { name: 'login' }).click()
   })
 })
+
 ```
 
 يستخدم الاختبار أولاً الدالة [page.getByRole](https://playwright.dev/docs/api/class-page#page-get-by-role) لاسترجاع الزر بناءً على نصه. وتعيد الدالة [المحدِّد الموقع](https://playwright.dev/docs/api/class-locator) (Locator) المقابل لعنصر الزر. ويُنفَّذ الضغط على الزر باستخدام دالة المحدِّد الموقع [click](https://playwright.dev/docs/api/class-locator#locator-click).
@@ -273,6 +289,7 @@ describe('Note app', () => {
 
 ```
 npm test -- --ui
+
 ```
 
 نرى الآن أن الاختبار يعثر على الزر
@@ -293,9 +310,10 @@ describe('Note app', () => {
     await page.goto('http://localhost:5173')
 
     await page.getByRole('button', { name: 'login' }).click()
-    await page.getByRole('textbox').fill('mluukkai')  // highlight-line
+    await page.getByRole('textbox').fill('mluukkai')
   })
 })
+
 ```
 
 ينتج عن ذلك خطأ:
@@ -304,6 +322,7 @@ describe('Note app', () => {
 Error: locator.fill: Error: strict mode violation: getByRole('textbox') resolved to 2 elements:
   1) <input value=""/> aka locator('div').filter({ hasText: /^username$/ }).getByRole('textbox')
   2) <input value="" type="password"/> aka locator('input[type="password"]')
+
 ```
 
 المشكلة الآن أن _getByRole_ يجد حقلَي نص، ويفشل استدعاء الدالة [fill](https://playwright.dev/docs/api/class-locator#locator-fill) لأنه يفترض وجود حقل نص واحد فقط. ومن طرق التفاف حول المشكلة استخدام الدالتين [first](https://playwright.dev/docs/api/class-locator#locator-first) و[last](https://playwright.dev/docs/api/class-locator#locator-last):
@@ -325,6 +344,7 @@ describe('Note app', () => {
     // highlight-end
   })
 })
+
 ```
 
 بعد الكتابة في حقلي النص، يضغط الاختبار على زر _login_ ويتحقق من أن التطبيق يعرض على الشاشة معلومات المستخدم المسجَّل دخوله.
@@ -350,6 +370,7 @@ describe('Note app', () => {
     await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
   })  
 })
+
 ```
 
 تعمل هذه النسخة ونسخة الاختبار السابقة. لكن كلتيهما إشكالية إلى حد أنه إذا تغيّر نموذج التسجيل، فقد تتعطل الاختبارات لأنها تعتمد على وجود الحقول في الصفحة بترتيب معيّن.
@@ -362,28 +383,29 @@ describe('Note app', () => {
 // ...
 <form onSubmit={handleSubmit}>
   <div>
-    <label> // highlight-line
-      username // highlight-line
+    <label>
+      username
       <input
         type="text"
         value={username}
         onChange={handleUsernameChange}
       />
-    </label> // highlight-line
+    </label>
   </div>
   <div>
-    <label> // highlight-line
-      password // highlight-line
+    <label>
+      password
       <input
         type="password"
         value={password}
         onChange={handlePasswordChange}
       />
-    </label> // highlight-line
+    </label>
   </div>
   <button type="submit">login</button>
 </form>
 // ...
+
 ```
 
 يمكن بل ينبغي تحديد موقع حقول الإدخال في الاختبارات باستخدام <i>التسميات</i> مع الدالة [getByLabel](https://playwright.dev/docs/api/class-page#page-get-by-label):
@@ -396,14 +418,15 @@ describe('Note app', () => {
     await page.goto('http://localhost:5173')
 
     await page.getByRole('button', { name: 'login' }).click()
-    await page.getByLabel('username').fill('mluukkai') // highlight-line
-    await page.getByLabel('password').fill('salainen')  // highlight-line
+    await page.getByLabel('username').fill('mluukkai')
+    await page.getByLabel('password').fill('salainen')
   
     await page.getByRole('button', { name: 'login' }).click() 
   
     await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
   })
 })
+
 ```
 
 عند تحديد مواقع العناصر، من المنطقي أن نسعى إلى الاستفادة من المحتوى الظاهر للمستخدم في الواجهة، لأن ذلك يحاكي على أفضل وجه كيفية عثور المستخدم فعلاً على حقل الإدخال المطلوب أثناء تنقله في التطبيق.
@@ -438,6 +461,7 @@ describe('Note app', () => {
     await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
   })
 })
+
 ```
 
 ### اختبار إنشاء ملاحظة
@@ -466,6 +490,7 @@ describe('Note app', () => {
     })
   })  
 })
+
 ```
 
 عُرِّف الاختبار في كتلة _describe_ خاصة به. ويتطلب إنشاء ملاحظة أن يكون المستخدم مسجَّلاً دخوله، وهذا ما تعالجه كتلة _beforeEach_.
@@ -474,6 +499,7 @@ describe('Note app', () => {
 
 ```js
 page.getByRole('textbox')
+
 ```
 
 لو كان هناك حقول أكثر، لتعطّل الاختبار. ولهذا قد يكون من الأفضل إضافة <i>test-id</i> إلى حقل إدخال النموذج والبحث عنه في الاختبار بناءً على هذا المعرّف.
@@ -482,6 +508,7 @@ page.getByRole('textbox')
 
 ```js
 await expect(page.getByText('a note created by playwright')).toBeVisible()
+
 ```
 
 يسبب مشكلات عندما تُنشأ الملاحظة نفسها في التطبيق أكثر من مرة. وسنحل المشكلة في الفصل التالي.
@@ -518,6 +545,7 @@ describe('Note app', () => {
     })
   })
 })
+
 ```
 
 بما أننا منعنا تشغيل الاختبارات على التوازي، يشغّل Playwright الاختبارات بالترتيب الذي تظهر به في شيفرة الاختبار. أي أنه يُنفَّذ أولاً الاختبار <i>user can log in</i> الذي يسجّل فيه المستخدم دخوله إلى التطبيق. بعد ذلك يُنفَّذ الاختبار <i>a new note can be created</i> الذي يقوم أيضاً بتسجيل الدخول في كتلة <i>beforeEach</i>. لماذا نفعل هذا، أليس المستخدم مسجَّلاً دخوله بالفعل بفضل الاختبار السابق؟ لا، لأن تنفيذ <i>كل</i> اختبار يبدأ من «الحالة الصفرية» للمتصفح، فتُصفَّر جميع التغييرات التي أجرتها الاختبارات السابقة على حالة المتصفح.
@@ -545,6 +573,7 @@ router.post('/reset', async (request, response) => {
 })
 
 module.exports = router
+
 ```
 
 ونضيفه إلى الواجهة الخلفية فقط <i>إذا كان التطبيق يعمل في وضع الاختبار</i>:
@@ -567,12 +596,14 @@ app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 module.exports = app
+
 ```
 
 بعد التغييرات، يؤدي طلب HTTP POST إلى نقطة النهاية <i>/api/testing/reset</i> إلى إفراغ قاعدة البيانات. تأكد من أن واجهتك الخلفية تعمل في وضع الاختبار بتشغيلها بهذا الأمر (المُعدّ سابقاً في ملف package.json):
 
 ```js
   npm run start:test
+
 ```
 
 يمكن العثور على شيفرة الواجهة الخلفية المعدّلة في فرع <i>part5-1</i> على [GitHub](https://github.com/fullstack-hy2020/part3-notes-backend/tree/part5-1).
@@ -608,6 +639,7 @@ describe('Note app', () => {
     // ...
   })
 })
+
 ```
 
 أثناء التهيئة، يوجّه الاختبار طلبات HTTP إلى الواجهة الخلفية بالدالة [post](https://playwright.dev/docs/api/class-apirequestcontext#api-request-context-post) الخاصة بالمعامل _request_.
@@ -643,6 +675,7 @@ describe('Note app', () => {
     })
   })
 })
+
 ```
 
 يبحث الأمر الأول أولاً عن المكوّن الذي يوجد فيه النص <i>another note by playwright</i> ثم عن الزر <i>make not important</i> بداخله وينقر عليه.
@@ -672,6 +705,7 @@ describe('Note app', () => {
 
   // ...
 })
+
 ```
 
 يتحقق الاختبار بالدالة [page.getByText](https://playwright.dev/docs/api/class-page#page-get-by-text) من أن التطبيق يطبع رسالة خطأ.
@@ -685,11 +719,12 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div className="error"> // highlight-line
+    <div className="error">
       {message}
     </div>
   )
 }
+
 ```
 
 يمكننا تحسين الاختبار لضمان طباعة رسالة الخطأ في المكان الصحيح بالضبط، أي في العنصر الذي يحتوي على صنف CSS وهو <i>error</i>:
@@ -698,9 +733,10 @@ const Notification = ({ message }) => {
 test('login fails with wrong password', async ({ page }) => {
   // ...
 
-  const errorDiv = page.locator('.error') // highlight-line
+  const errorDiv = page.locator('.error')
   await expect(errorDiv).toContainText('wrong credentials')
 })
+
 ```
 
 إذن يستخدم الاختبار الدالة [page.locator](https://playwright.dev/docs/api/class-page#page-locator) للعثور على المكوّن الذي يحتوي على صنف CSS وهو <i>error</i> ويخزّنه في متغير. ويمكن التحقق من صحة النص المرتبط بالمكوّن بالتوقع [toContainText](https://playwright.dev/docs/api/class-locatorassertions#locator-assertions-to-contain-text). لاحظ أن [محدِّد صنف CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors) يبدأ بنقطة، لذا فإن محدِّد الصنف <i>error</i> هو <i> .error</i>.
@@ -713,9 +749,10 @@ test('login fails with wrong password', async ({ page }) => {
 
   const errorDiv = page.locator('.error')
   await expect(errorDiv).toContainText('wrong credentials')
-  await expect(errorDiv).toHaveCSS('border-style', 'solid') // highlight-line
-  await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)') // highlight-line
+  await expect(errorDiv).toHaveCSS('border-style', 'solid')
+  await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
 })
+
 ```
 
 يجب تعريف الألوان لـ Playwright برموز [rgb](https://rgbcolorcode.com/color/red).
@@ -734,8 +771,9 @@ test('login fails with wrong password', async ({ page }) =>{
   await expect(errorDiv).toHaveCSS('border-style', 'solid')
   await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
 
-  await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible() // highlight-line
+  await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
 })
+
 ```
 
 ### تشغيل الاختبارات واحداً تلو الآخر
@@ -745,7 +783,7 @@ test('login fails with wrong password', async ({ page }) =>{
 ```js
 describe(() => {
   // هذا هو الاختبار الوحيد الذي سيُنفَّذ!
-  test.only('login fails with wrong password', async ({ page }) => {  // highlight-line
+  test.only('login fails with wrong password', async ({ page }) => {
     // ...
   })
 
@@ -756,6 +794,7 @@ describe(() => {
 
   // ...
 })
+
 ```
 
 عندما يصبح الاختبار جاهزاً، يمكن بل **يجب** حذف <i>only</i>.
@@ -764,13 +803,14 @@ describe(() => {
 
 ```
 npm test -- -g "login fails with wrong password"
+
 ```
 
 ### دوال مساعدة للاختبارات
 
 تبدو اختبارات تطبيقنا حالياً هكذا:
 
-```js 
+```js
 const { test, describe, expect, beforeEach } = require('@playwright/test')
 
 describe('Note app', () => {
@@ -803,6 +843,7 @@ describe('Note app', () => {
     // ...
   })  
 })
+
 ```
 
 أولاً تُختبر دالة تسجيل الدخول. بعد ذلك تحتوي كتلة _describe_ أخرى على مجموعة اختبارات تفترض أن المستخدم مسجَّل دخوله، ويُعالَج تسجيل الدخول داخل كتلة التهيئة _beforeEach_.
@@ -811,7 +852,7 @@ describe('Note app', () => {
 
 من الجدير أيضاً السعي إلى عدم تكرار الشيفرة في الاختبارات. لنعزل الشيفرة التي تعالج تسجيل الدخول في دالة مساعدة توضع مثلاً في الملف _tests/helper.js_:
 
-```js 
+```js
 const loginWith = async (page, username, password)  => {
   await page.getByRole('button', { name: 'login' }).click()
   await page.getByLabel('username').fill(username)
@@ -820,24 +861,25 @@ const loginWith = async (page, username, password)  => {
 }
 
 export { loginWith }
+
 ```
 
 تصبح الاختبارات أبسط وأوضح:
 
 ```js
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { loginWith } = require('./helper') // highlight-line
+const { loginWith } = require('./helper')
 
 describe('Note app', () => {
   // ...
 
   test('user can log in', async ({ page }) => {
-    await loginWith(page, 'mluukkai', 'salainen') // highlight-line
+    await loginWith(page, 'mluukkai', 'salainen')
     await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
   })
 
   test('login fails with wrong password', async ({ page }) => {
-    await loginWith(page, 'mluukkai', 'wrong') // highlight-line
+    await loginWith(page, 'mluukkai', 'wrong')
 
     const errorDiv = page.locator('.error')
     // ...
@@ -845,12 +887,13 @@ describe('Note app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await loginWith(page, 'mluukkai', 'salainen') // highlight-line
+      await loginWith(page, 'mluukkai', 'salainen')
     })
 
     // ...
   })
 })
+
 ```
 
 تقدم Playwright أيضاً [حلاً](https://playwright.dev/docs/auth) يُنفَّذ فيه تسجيل الدخول مرة واحدة قبل الاختبارات، ويبدأ كل اختبار من حالة يكون فيها التطبيق مسجَّلاً دخوله بالفعل. ولكي نستفيد من هذه الطريقة، ينبغي أن تكون تهيئة بيانات اختبار التطبيق مختلفة قليلاً عما هي عليه الآن. ففي الحل الحالي تُصفَّر قاعدة البيانات قبل كل اختبار، ولهذا يستحيل تسجيل الدخول مرة واحدة فقط قبل الاختبارات. ولكي نستخدم تسجيل الدخول المسبق الذي توفره Playwright، ينبغي تهيئة المستخدم مرة واحدة فقط قبل الاختبارات. ونلتزم بحلنا الحالي من أجل البساطة.
@@ -882,6 +925,7 @@ describe('Note app', function() {
     })
   })
 })
+
 ```
 
 عُزل إنشاء الملاحظة أيضاً في دالة مساعدة خاصة به. ويتوسّع ملف _tests/helper.js_ كما يلي:
@@ -902,14 +946,15 @@ const createNote = async (page, content) => {
 }
 // highlight-end
 
-export { loginWith, createNote } // highlight-line
+export { loginWith, createNote }
+
 ```
 
 تُبسَّط الاختبارات كما يلي:
 
 ```js
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { createNote, loginWith } = require('./helper') // highlight-line
+const { createNote, loginWith } = require('./helper')
 
 describe('Note app', () => {
   // ...
@@ -920,13 +965,13 @@ describe('Note app', () => {
     })
 
     test('a new note can be created', async ({ page }) => {
-      await createNote(page, 'a note created by playwright') // highlight-line
+      await createNote(page, 'a note created by playwright')
       await expect(page.getByText('a note created by playwright')).toBeVisible()
     })
 
     describe('and a note exists', () => {
       beforeEach(async ({ page }) => {
-        await createNote(page, 'another note by playwright') // highlight-line
+        await createNote(page, 'another note by playwright')
       })
   
       test('importance can be changed', async ({ page }) => {
@@ -936,6 +981,7 @@ describe('Note app', () => {
     })
   })
 })
+
 ```
 
 هناك سمة مزعجة أخرى في اختباراتنا. فعنوان الواجهة الأمامية <i>http:localhost:5173</i> وعنوان الواجهة الخلفية <i>http:localhost:3001</i> مكتوبان مباشرة في الاختبارات. ومن هذين، عنوان الواجهة الخلفية غير مفيد فعلاً، لأن وكيلاً (proxy) قد عُرِّف في إعدادات Vite للواجهة الأمامية، وهو يمرر جميع الطلبات التي تجريها الواجهة الأمامية إلى العنوان <i>http:localhost:5173/api</i> إلى الواجهة الخلفية:
@@ -952,6 +998,7 @@ export default defineConfig({
   },
   // ...
 })
+
 ```
 
 لذا يمكننا استبدال جميع العناوين في الاختبارات من _http://localhost:3001/api/..._ إلى _http://localhost:5173/api/..._
@@ -967,6 +1014,7 @@ export default defineConfig({
   },
   // ...
 })
+
 ```
 
 جميع الأوامر في الاختبارات التي تستخدم عنوان url للتطبيق، مثل
@@ -974,6 +1022,7 @@ export default defineConfig({
 ```js
 await page.goto('http://localhost:5173')
 await request.post('http://localhost:5173/api/testing/reset')
+
 ```
 
 يمكن الآن تحويلها إلى:
@@ -981,6 +1030,7 @@ await request.post('http://localhost:5173/api/testing/reset')
 ```js
 await page.goto('/')
 await request.post('/api/testing/reset')
+
 ```
 
 توجد الشيفرة الحالية للاختبارات على [GitHub](https://github.com/fullstack-hy2020/notes-e2e/tree/part5-2)، في فرع <i>part5-2</i>.
@@ -994,7 +1044,7 @@ await request.post('/api/testing/reset')
 ```js
 describe('when logged in', () => {
   // ...
-  describe('and several notes exists', () => { // highlight-line
+  describe('and several notes exists', () => {
     beforeEach(async ({ page }) => {
       // highlight-start
       await createNote(page, 'first note')
@@ -1011,6 +1061,7 @@ describe('when logged in', () => {
     })
   })
 })
+
 ```
 
 يبحث الاختبار أولاً عن العنصر المقابل للملاحظة الأولى المنشأة بالدالة _page.getByText_ ويخزّنه في متغير. بعد ذلك يُبحث داخل العنصر عن زر نصه _make not important_ ويُضغط عليه. وأخيراً يتحقق الاختبار من أن نص الزر قد تغيّر إلى _make important_.
@@ -1025,6 +1076,7 @@ test('one of those can be made nonimportant', async ({ page }) => {
   await expect(page.getByText('first note').getByText('make important'))
     .toBeVisible()
 })
+
 ```
 
 لنغيّر مكوّن _Note_ بحيث يُعرَض نص الملاحظة داخل عنصر _span_
@@ -1036,11 +1088,12 @@ const Note = ({ note, toggleImportance }) => {
 
   return (
     <li className='note'>
-      <span>{note.content}</span> // highlight-line
+      <span>{note.content}</span>
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
 }
+
 ```
 
 تتعطل الاختبارات! والسبب في المشكلة أن الأمر _page.getByText('first note')_ يعيد الآن عنصر _span_ يحتوي على النص فقط، والزر خارج عنه.
@@ -1049,12 +1102,13 @@ const Note = ({ note, toggleImportance }) => {
 
 ```js
 test('one of those can be made nonimportant', async ({ page }) => {
-  const otherNoteText = page.getByText('first note') // highlight-line
-  const otherNoteElement = otherNoteText.locator('..') // highlight-line
+  const otherNoteText = page.getByText('first note')
+  const otherNoteElement = otherNoteText.locator('..')
 
   await otherNoteElement.getByRole('button', { name: 'make not important' }).click()
   await expect(otherNoteElement.getByText('make important')).toBeVisible()
 })
+
 ```
 
 يبحث السطر الأول الآن عن عنصر _span_ الذي يحتوي على النص المرتبط بالملاحظة الأولى المنشأة. وفي السطر الثاني تُستخدم الدالة _locator_ ويُمرَّر _.._ كوسيط، وهو يسترجع العنصر الأب للعنصر. ودالة المحدِّد الموقع مرنة جداً، ونستفيد من كونها تقبل [كوسيط](https://playwright.dev/docs/locators#locate-by-css-or-xpath) ليس محددات CSS فقط بل محدد [XPath](https://developer.mozilla.org/en-US/docs/Web/XPath) أيضاً. وكان يمكن التعبير عن الأمر نفسه بـ CSS، لكن XPath يوفر في هذه الحالة أبسط طريقة للعثور على العنصر الأب لعنصر.
@@ -1067,6 +1121,7 @@ test('one of those can be made nonimportant', async ({ page }) => {
   await secondNoteElement.getByRole('button', { name: 'make not important' }).click()
   await expect(secondNoteElement.getByText('make important')).toBeVisible()
 })
+
 ```
 
 لنغيّر الاختبار بحيث تُنشأ ثلاث ملاحظات، وتُغيَّر الأهمية في الملاحظة الثانية المنشأة:
@@ -1086,11 +1141,11 @@ describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await createNote(page, 'first note')
       await createNote(page, 'second note')
-      await createNote(page, 'third note') // highlight-line
+      await createNote(page, 'third note')
     })
 
     test('one of those can be made nonimportant', async ({ page }) => {
-      const otherNoteText = page.getByText('second note') // highlight-line
+      const otherNoteText = page.getByText('second note')
       const otherNoteElement = otherNoteText.locator('..')
     
       await otherNoteElement.getByRole('button', { name: 'make not important' }).click()
@@ -1098,6 +1153,7 @@ describe('when logged in', () => {
     })
   })
 }) 
+
 ```
 
 لسبب ما يبدأ الاختبار بالعمل بشكل غير موثوق، فينجح أحياناً ويفشل أحياناً. حان وقت أن نشمّر عن سواعدنا ونتعلم كيفية تصحيح أخطاء الاختبارات.
@@ -1110,6 +1166,7 @@ describe('when logged in', () => {
 
 ```
 npm test -- -g'one of those can be made nonimportant' --debug
+
 ```
 
 يعرض مفتّش Playwright (inspector) تقدم الاختبارات خطوة بخطوة. وزر السهم/النقطة في الأعلى ينقل الاختبارات خطوة إلى الأمام. وتُعرض في المتصفح العناصر التي عثرت عليها المحدِّدات الموقعة والتفاعل مع المتصفح:
@@ -1137,7 +1194,7 @@ describe('Note app', () => {
       })
   
       test('one of those can be made nonimportant', async ({ page }) => {
-        await page.pause() // highlight-line
+        await page.pause()
         const otherNoteText = page.getByText('second note')
         const otherNoteElement = otherNoteText.locator('..')
       
@@ -1147,6 +1204,7 @@ describe('Note app', () => {
     })
   })
 })
+
 ```
 
 الآن يمكنك في الاختبار الانتقال إلى _page.pause()_ بخطوة واحدة، بالضغط على رمز السهم الأخضر في المفتّش.
@@ -1166,26 +1224,30 @@ const createNote = async (page, content) => {
   await page.getByRole('button', { name: 'new note' }).click()
   await page.getByRole('textbox').fill(content)
   await page.getByRole('button', { name: 'save' }).click()
-  await page.getByText(content).waitFor() // highlight-line
+  await page.getByText(content).waitFor()
 }
+
 ```
 
 بدلاً من وضع التصحيح أو إلى جانبه، قد يكون تشغيل الاختبارات في وضع واجهة المستخدم مفيداً. وكما ذُكر سابقاً، تُشغَّل الاختبارات في وضع واجهة المستخدم كما يلي:
 
 ```
 npm run test -- --ui
+
 ```
 
 يشبه استخدام [عارض التتبع](https://playwright.dev/docs/trace-viewer-intro) (Trace Viewer) في Playwright وضعَ واجهة المستخدم تقريباً. والفكرة أن يُحفظ «تتبع مرئي» للاختبارات، يمكن عرضه عند الحاجة بعد اكتمال الاختبارات. ويُحفظ التتبع بتشغيل الاختبارات كما يلي:
 
 ```
 npm run test -- --trace on
+
 ```
 
 وعند الحاجة، يمكن عرض التتبع بالأمر
 
 ```
 npx playwright show-report
+
 ```
 
 أو بسكربت npm الذي عرّفناه _npm run test:report_
@@ -1200,6 +1262,7 @@ npx playwright show-report
 
 ```js
 page.locator('li').filter({ hasText: 'third note' }).getByRole('button')
+
 ```
 
 تُستدعى الدالة [page.locator](https://playwright.dev/docs/api/class-page#page-locator) بالوسيط _li_، أي نبحث عن جميع عناصر li في الصفحة، وعددها ثلاثة إجمالاً. بعد ذلك، باستخدام دالة [locator.filter](https://playwright.dev/docs/api/class-locator#locator-filter)، نضيّق النطاق إلى عنصر li الذي يحتوي على النص <i>third note</i>، ويُؤخذ عنصر الزر بداخله باستخدام دالة [locator.getByRole](https://playwright.dev/docs/api/class-locator#locator-get-by-role).
@@ -1208,6 +1271,7 @@ page.locator('li').filter({ hasText: 'third note' }).getByRole('button')
 
 ```js
 page.getByText('first note').locator('..').getByRole('button', { name: 'make not important' })
+
 ```
 
 أي المحدِّدين الموقعين أفضل هو على الأرجح مسألة ذوق.
@@ -1216,6 +1280,7 @@ page.getByText('first note').locator('..').getByRole('button', { name: 'make not
 
 ```
 npx playwright codegen http://localhost:5173/
+
 ```
 
 عند تفعيل وضع _Record_، «يسجّل» مولّد الاختبارات تفاعل المستخدم في مفتّش Playwright، حيث يمكن نسخ المحدِّدات الموقعة والإجراءات إلى الاختبارات:
@@ -1251,7 +1316,7 @@ npx playwright codegen http://localhost:5173/
 
 ينبغي أن يكون جسم الاختبار كما يلي:
 
-```js 
+```js
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
@@ -1264,6 +1329,7 @@ describe('Blog app', () => {
   })
 })
 
+
 ```
 
 #### 5.18: اختبار قائمة المدونات من الطرف إلى الطرف، الخطوة 2
@@ -1272,7 +1338,7 @@ describe('Blog app', () => {
 
 يتوسّع جسم الاختبارات كما يلي
 
-```js 
+```js
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
@@ -1296,6 +1362,7 @@ describe('Blog app', () => {
     })
   })
 })
+
 ```
 
 يجب أن تفرّغ كتلة _beforeEach_ قاعدة البيانات باستخدام مثلاً طريقة reset التي استخدمناها في [المادة](/part5#controlling-the-state-of-the-database).
@@ -1304,7 +1371,7 @@ describe('Blog app', () => {
 
 أنشئ اختباراً يتحقق من أن مستخدماً مسجَّل دخوله يمكنه إنشاء مدونة. وقد يبدو جسم الاختبار كما يلي
 
-```js 
+```js
 describe('When logged in', () => {
   beforeEach(async ({ page }) => {
     // ...
@@ -1314,6 +1381,7 @@ describe('When logged in', () => {
     // ...
   })
 })
+
 ```
 
 ينبغي أن يضمن الاختبار ظهور المدونة المنشأة في قائمة المدونات.

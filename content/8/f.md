@@ -22,6 +22,7 @@ query {
     }
   }
 }
+
 ```
 
 واستعلام جميع الأشخاص
@@ -37,6 +38,7 @@ query {
     }
   }
 }
+
 ```
 
 كلاهما يُعيد أشخاصاً. وعند اختيار الحقول المُعادة، يجب أن يعرّف الاستعلامان الحقول نفسها تماماً.
@@ -52,6 +54,7 @@ fragment PersonDetails on Person {
     city
   }
 }
+
 ```
 
 باستخدام الـfragment، يمكننا كتابة الاستعلامات بصيغة مختصرة:
@@ -59,15 +62,16 @@ fragment PersonDetails on Person {
 ```
 query {
   allPersons {
-    ...PersonDetails // HIGHLIGHT LINE
+    ...PersonDetails
   }
 }
 
 query {
   findPerson(name: "Pekka Mikkola") {
-    ...PersonDetails // HIGHLIGHT LINE
+    ...PersonDetails
   }
 }
+
 ```
 
 الـfragments&nbsp;<em><strong>لا تُعرَّف</strong></em>&nbsp;في مخطط GraphQL، بل في العميل. ويجب التصريح عن الـfragments عندما يستخدمها العميل في الاستعلامات.
@@ -92,6 +96,7 @@ export const FIND_PERSON = gql`
     }
   }
 `
+
 ```
 
 لكن من الأكثر منطقية بكثير تعريف الـfragment مرة واحدة وتخزينه في متغير. لنضف تعريف الـfragment إلى بداية ملف&nbsp;<em>queries.js</em>:
@@ -108,6 +113,7 @@ const PERSON_DETAILS = gql`
     }
   }
 `
+
 ```
 
 يمكن الآن تضمين الـfragment في كل الاستعلامات والـmutations التي تحتاجه باستخدام عملية&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noreferrer noopener">الأقواس المعقوفة بعد علامة الدولار</a>:
@@ -122,6 +128,7 @@ export const FIND_PERSON = gql`
 
   ${PERSON_DETAILS}
 `
+
 ```
 
 إذ يُدرَج الآن القالب النصي الموجود في المتغير&nbsp;<code>PERSON_DETAILS</code>&nbsp;كجزء من القالب النصي&nbsp;<code>FIND_PERSON</code>. وعملياً، النتيجة النهائية مطابقة تماماً لما في المثال السابق، حيث كان الـfragment معرَّفاً مباشرة إلى جانب الاستعلام.
@@ -145,7 +152,7 @@ const { startStandaloneServer } = require('@apollo/server/standalone')
 
 // ...
 
-const startServer = (port) =&gt; {
+const startServer = (port) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -153,13 +160,14 @@ const startServer = (port) =&gt; {
 
   startStandaloneServer(server, {
     listen: { port },
-    context: async ({ req }) =&gt; {
+    context: async ({ req }) => {
       // ...
     },
-  }).then(({ url }) =&gt; {
+  }).then(({ url }) => {
     console.log(`Server ready at ${url}`)
   })
 }
+
 ```
 
 لسوء الحظ، لا تسمح startStandaloneServer بإضافة اشتراكات إلى التطبيق، لذا لننتقل إلى الدالة الأقوى&nbsp;<a href="https://www.apollographql.com/docs/apollo-server/api/express-middleware/" target="_blank" rel="noreferrer noopener">expressMiddleware</a>. وكما يوحي اسم الدالة، فهي وسيط Express، ما يعني أنه يجب إعداد Express أيضاً للتطبيق، بحيث يعمل خادم GraphQL كوسيط.
@@ -168,13 +176,14 @@ const startServer = (port) =&gt; {
 
 ```bash
 npm install express cors @as-integrations/express5
+
 ```
 
 ونغيّر ملف&nbsp;<em>server.js</em>&nbsp;إلى الشكل التالي:
 
 ```js
 const { ApolloServer } = require('@apollo/server')
-// BEGIN HIGHLIGHT
+
 const {
   ApolloServerPluginDrainHttpServer,
 } = require('@apollo/server/plugin/drainHttpServer')
@@ -183,14 +192,14 @@ const cors = require('cors')
 const express = require('express')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const http = require('http')
-// END HIGHLIGHT
+
 const jwt = require('jsonwebtoken')
 
 const resolvers = require('./resolvers')
 const typeDefs = require('./schema')
 const User = require('./models/user')
 
-const getUserFromAuthHeader = async (auth) =&gt; {
+const getUserFromAuthHeader = async (auth) => {
   if (!auth || !auth.startsWith('Bearer ')) {
     return null
   }
@@ -199,8 +208,8 @@ const getUserFromAuthHeader = async (auth) =&gt; {
   return User.findById(decodedToken.id).populate('friends')
 }
 
-// BEGIN HIGHLIGHT
-const startServer = async (port) =&gt; {
+
+const startServer = async (port) => {
   const app = express()
   const httpServer = http.createServer(app)
 
@@ -216,7 +225,7 @@ const startServer = async (port) =&gt; {
     cors(),
     express.json(),
     expressMiddleware(server, {
-      context: async ({ req }) =&gt; {
+      context: async ({ req }) => {
         const auth = req.headers.authorization
         const currentUser = await getUserFromAuthHeader(auth)
         return { currentUser }
@@ -224,13 +233,14 @@ const startServer = async (port) =&gt; {
     }),
   )
 
-  httpServer.listen(port, () =&gt;
+  httpServer.listen(port, () =>
     console.log(`Server is now running on http://localhost:${port}`),
   )
 }
-// END HIGHLIGHT
+
 
 module.exports = startServer
+
 ```
 
 خادم GraphQL في المتغير&nbsp;<code>server</code>&nbsp;متصل الآن بالاستماع إلى جذر الخادم، أي إلى المسار&nbsp;<code>/</code>، باستخدام كائن&nbsp;<code>expressMiddleware</code>. وتُضبط معلومات المستخدم المسجَّل الدخول في السياق باستخدام الدالة التي عرّفناها سابقاً. ولأنه خادم Express، نحتاج أيضاً إلى الوسيطين express-json وcors كي تُحلَّل البيانات المضمّنة في الطلبات تحليلاً صحيحاً وكي لا تظهر مشكلات CORS.
@@ -239,6 +249,7 @@ module.exports = startServer
 
 ```
 await server.start()
+
 ```
 
 ووفقاً للتوصيات الواردة في الوثائق، أُضيف&nbsp;<a href="https://www.apollographql.com/docs/apollo-server/api/plugin/drain-http-server" target="_blank" rel="noreferrer noopener">ApolloServerPluginDrainHttpServer</a>&nbsp;إلى إعدادات خادم GraphQL:
@@ -246,8 +257,9 @@ await server.start()
 ```js
   const server = new ApolloServer({
     schema: makeExecutableSchema({ typeDefs, resolvers }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })], // HIGHLIGHT LINE
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
+
 ```
 
 تضمن هذه الإضافة إغلاق الخادم إغلاقاً نظيفاً عند إيقاف عملية الخادم. فهي مثلاً تتيح إنهاء معالجة الطلبات الجارية وإغلاق اتصالات العملاء كي لا تبقى معلّقة.
@@ -264,6 +276,7 @@ await server.start()
 type Subscription {
   personAdded: Person!
 }
+
 ```
 
 فعند إضافة شخص جديد، تُرسَل كل تفاصيله إلى جميع المشتركين.
@@ -272,23 +285,24 @@ type Subscription {
 
 ```bash
 npm install graphql-ws ws @graphql-tools/schema
+
 ```
 
 يُغيَّر ملف&nbsp;<em>server.js</em>&nbsp;إلى:
 
 ```js
-// BEGIN HIGHLIGHT
+
 const { WebSocketServer } = require('ws')
 const { useServer } = require('graphql-ws/use/ws')
-// END HIGHLIGHT
+
 
 // ...
 
-const startServer = async (port) =&gt; {
+const startServer = async (port) => {
   const app = express()
   const httpServer = http.createServer(app)
 
-  // BEGIN HIGHLIGHT
+
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: '/',
@@ -296,10 +310,10 @@ const startServer = async (port) =&gt; {
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
   const serverCleanup = useServer({ schema }, wsServer)
-  // END HIGHLIGHT
+
 
   const server = new ApolloServer({
-    // BEGIN HIGHLIGHT
+
     schema,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -313,13 +327,14 @@ const startServer = async (port) =&gt; {
         },
       },
     ],
-    // END HIGHLIGHT
+
   })
 
   await server.start()
 
   // ...
 }
+
 ```
 
 عند استخدام الاستعلامات والـmutations، يستخدم GraphQL بروتوكول HTTP في التواصل. أما في حالة الاشتراكات، فيحدث التواصل بين العميل والخادم عبر&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noreferrer noopener">WebSockets</a>.
@@ -334,24 +349,25 @@ const startServer = async (port) =&gt; {
 
 ```bash
 npm install graphql-subscriptions
+
 ```
 
 التغييرات في ملف&nbsp;<em>resolvers.js</em>&nbsp;كالتالي:
 
 ```js
 const { GraphQLError } = require('graphql')
-const { PubSub } = require('graphql-subscriptions') // HIGHLIGHT LINE
+const { PubSub } = require('graphql-subscriptions')
 const jwt = require('jsonwebtoken')
 
 const Person = require('./models/person')
 const User = require('./models/user')
 
-const pubsub = new PubSub() // HIGHLIGHT LINE
+const pubsub = new PubSub()
 
 const resolvers = {
   // ...
   Mutation: {
-    addPerson: async (root, args, context) =&gt; {
+    addPerson: async (root, args, context) => {
         const currentUser = context.currentUser
 
         if (!currentUser) {
@@ -389,20 +405,21 @@ const resolvers = {
         })
       }
 
-      pubsub.publish('PERSON_ADDED', { personAdded: person })  // HIGHLIGHT LINE
+      pubsub.publish('PERSON_ADDED', { personAdded: person })
 
       return person
     },
     // ...
   },
-  // BEGIN HIGHLIGHT
+
   Subscription: {
     personAdded: {
-      subscribe: () =&gt; pubsub.asyncIterableIterator('PERSON_ADDED')
+      subscribe: () => pubsub.asyncIterableIterator('PERSON_ADDED')
     },
   },
-  // END HIGHLIGHT
+
 }
+
 ```
 
 مع الاشتراكات، يتبع التواصل نمط النشر والاشتراك باستخدام كائن&nbsp;<a href="https://www.apollographql.com/docs/apollo-server/data/subscriptions#the-pubsub-class" target="_blank" rel="noreferrer noopener">PubSub</a>.
@@ -412,9 +429,10 @@ const resolvers = {
 ```
 Subscription: {
   personAdded: {
-    subscribe: () =&gt; pubsub.asyncIterableIterator('PERSON_ADDED')
+    subscribe: () => pubsub.asyncIterableIterator('PERSON_ADDED')
   },
 },
+
 ```
 
 اسم المُكرِّر نص عشوائي، لكنه اتباعاً للعُرف يكون اسم الاشتراك مكتوباً بأحرف كبيرة.
@@ -423,6 +441,7 @@ Subscription: {
 
 ```
 pubsub.publish('PERSON_ADDED', { personAdded: person })
+
 ```
 
 تنفيذ هذا السطر يرسل رسالة WebSocket عن الشخص المُضاف إلى كل العملاء المسجَّلين في المُكرِّر&nbsp;<em>PERSON_ADDED</em>.
@@ -440,6 +459,7 @@ subscription Subscription {
     name
   }
 }
+
 ```
 
 عند الضغط على الزر الأزرق&nbsp;<em>PersonAdded</em>، يبدأ Explorer في انتظار إضافة شخص جديد. وعند الإضافة، تظهر معلومات الشخص المُضاف على الجانب الأيمن من Explorer.
@@ -456,6 +476,7 @@ subscription Subscription {
 
 ```bash
 npm install graphql-ws
+
 ```
 
 يجب تعديل الإعدادات في&nbsp;<em>main.jsx</em>&nbsp;هكذا:
@@ -467,19 +488,19 @@ import App from './App.jsx'
 
 import {
   ApolloClient,
-  ApolloLink, // HIGHLIGHT LINE
+  ApolloLink,
   HttpLink,
   InMemoryCache,
 } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
 import { SetContextLink } from '@apollo/client/link/context'
-// BEGIN HIGHLIGHT
+
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
-// END HIGHLIGHT
 
-const authLink = new SetContextLink(({ headers }) =&gt; {
+
+const authLink = new SetContextLink(({ headers }) => {
   const token = localStorage.getItem('phonebook-user-token')
   return {
     headers: {
@@ -491,40 +512,41 @@ const authLink = new SetContextLink(({ headers }) =&gt; {
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
 
-// BEGIN HIGHLIGHT
+
 const wsLink = new GraphQLWsLink(
   createClient({
     url: 'ws://localhost:4000',
   }),
 )
-// END HIGHLIGHT
 
-// BEGIN HIGHLIGHT
+
+
 const splitLink = ApolloLink.split(
-  ({ query }) =&gt; {
+  ({ query }) => {
     const definition = getMainDefinition(query)
     return (
-      definition.kind === 'OperationDefinition' &amp;&amp;
+      definition.kind === 'OperationDefinition' &&
       definition.operation === 'subscription'
     )
   },
   wsLink,
   authLink.concat(httpLink),
 )
-// END HIGHLIGHT
+
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: splitLink, // HIGHLIGHT LINE
+  link: splitLink,
 })
 
 createRoot(document.getElementById('root')).render(
-  &lt;StrictMode&gt;
-    &lt;ApolloProvider client={client}&gt;
-      &lt;App /&gt;
-    &lt;/ApolloProvider&gt;
-  &lt;/StrictMode&gt;,
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </StrictMode>,
 )
+
 ```
 
 يعود الإعداد الجديد إلى أن التطبيق يجب أن يملك اتصال HTTP بالإضافة إلى اتصال WebSocket بخادم GraphQL:
@@ -537,6 +559,7 @@ const wsLink = new GraphQLWsLink(
     url: 'ws://localhost:4000',
   }),
 )
+
 ```
 
 لنعدّل بعد ذلك التطبيق ليُشترك في معلومات عن الأشخاص الجدد من الخادم. أضف الشيفرة التي تعرّف الاشتراك إلى ملف&nbsp;<em>queries.js</em>:
@@ -551,6 +574,7 @@ export const PERSON_ADDED = gql`
 
   ${PERSON_DETAILS}
 `
+
 ```
 
 تُنشأ الاشتراكات باستخدام دالة الخطاف&nbsp;<a href="https://www.apollographql.com/docs/react/api/react/hooks/#usesubscription" target="_blank" rel="noreferrer noopener">useSubscription</a>. لننشئ اشتراكاً في مكوّن&nbsp;<em>App</em>:
@@ -559,7 +583,7 @@ export const PERSON_ADDED = gql`
 import {
   useApolloClient,
   useQuery,
-  useSubscription, // HIGHLIGHT LINE
+  useSubscription,
 } from '@apollo/client/react'
 import { useState } from 'react'
 import LoginForm from './components/LoginForm'
@@ -567,9 +591,9 @@ import Notify from './components/Notify'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import PhoneForm from './components/PhoneForm'
-import { ALL_PERSONS, PERSON_ADDED } from './queries' // HIGHLIGHT LINE
+import { ALL_PERSONS, PERSON_ADDED } from './queries'
 
-const App = () =&gt; {
+const App = () => {
   const [token, setToken] = useState(
     localStorage.getItem('phonebook-user-token'),
   )
@@ -577,20 +601,21 @@ const App = () =&gt; {
   const result = useQuery(ALL_PERSONS)
   const client = useApolloClient()
 
-  // BEGIN HIGHLIGHT
+
   useSubscription(PERSON_ADDED, {
-    onData: ({ data }) =&gt; {
+    onData: ({ data }) => {
       console.log(data)
     },
   })
-  // END HIGHLIGHT
+
 
   if (result.loading) {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
   // ...
 }
+
 ```
 
 عند إضافة شخص جديد الآن إلى دفتر الهاتف، أياً كان مكان الإضافة، تُطبع تفاصيل الشخص الجديد في وحدة تحكم العميل:
@@ -602,18 +627,19 @@ const App = () =&gt; {
 يمكننا إظهار إشعار للمستخدم عند إضافة شخص جديد كما يلي:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   // ...
 
   useSubscription(PERSON_ADDED, {
-    onData: ({ data }) =&gt; {
-      const addedPerson = data.data.personAdded // HIGHLIGHT LINE
-      notify(`${addedPerson.name} added`) // HIGHLIGHT LINE
+    onData: ({ data }) => {
+      const addedPerson = data.data.personAdded
+      notify(`${addedPerson.name} added`)
     }
   })
 
   // ...
 }
+
 ```
 
 الآن، مثلاً، يُعرض الشخص المُضاف عبر Apollo Studio Explorer فوراً في واجهة التطبيق.
@@ -627,10 +653,10 @@ const App = () =&gt; {
 ```js
 import { ALL_PERSONS } from '../queries'
 
-export const addPersonToCache = (cache, personToAdd) =&gt; {
-  cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) =&gt; {
+export const addPersonToCache = (cache, personToAdd) => {
+  cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
     const personExists = allPersons.some(
-      (person) =&gt; person.id === personToAdd.id,
+      (person) => person.id === personToAdd.id,
     )
 
     if (personExists) {
@@ -642,14 +668,16 @@ export const addPersonToCache = (cache, personToAdd) =&gt; {
     }
   })
 }
+
 ```
 
 تُحدّث الدالة المساعدة&nbsp;<code>addPersonToCache</code>&nbsp;الذاكرة المؤقتة باستخدام الطريقة المألوفة&nbsp;<code>cache.updateQuery</code>. وفي منطق تحديث الذاكرة المؤقتة، نتحقق أولاً مما إذا كان الشخص قد أُضيف إلى الذاكرة المؤقتة سابقاً. ونبحث عن الشخص المطلوب إضافته بين الأشخاص الموجودين حالياً في الذاكرة المؤقتة باستخدام طريقة&nbsp;<code>some</code>&nbsp;في مصفوفة JavaScript:
 
 ```js
   const personExists = allPersons.some(
-    (person) =&gt; person.id === personToAdd.id,
+    (person) => person.id === personToAdd.id,
   )
+
 ```
 
 <code>some</code>&nbsp;طريقة تبحث في مجموعة عن عنصر يطابق الشرط المعطى. وهي تعيد قيمة منطقية تشير إلى ما إذا عُثر على عنصر مطابق. وفي حالتنا، تعيد الطريقة&nbsp;<code>True</code>&nbsp;إذا كانت الذاكرة المؤقتة تحتوي بالفعل على شخص بهذا&nbsp;<em>id</em>، وإلا فإنها تعيد&nbsp;<code>False</code>.
@@ -664,14 +692,15 @@ export const addPersonToCache = (cache, personToAdd) =&gt; {
   return {
     allPersons: allPersons.concat(personToAdd),
   }
+
 ```
 
 لنعدّل خطاف&nbsp;<code>useSubscription</code>&nbsp;في مكوّن&nbsp;<code>App</code>&nbsp;ليحدّث الذاكرة المؤقتة باستخدام الدالة المساعدة&nbsp;<code>addPersonToCache</code>&nbsp;التي أنشأناها:
 
 ```js
-import { addPersonToCache } from './utils/apolloCache' // HIGHLIGHT LINE
+import { addPersonToCache } from './utils/apolloCache'
 
-const App = () =&gt; {
+const App = () => {
   const [token, setToken] = useState(
     localStorage.getItem('phonebook-user-token'),
   )
@@ -680,40 +709,42 @@ const App = () =&gt; {
   const client = useApolloClient()
 
   useSubscription(PERSON_ADDED, {
-    onData: ({ data }) =&gt; {
+    onData: ({ data }) => {
       const addedPerson = data.data.personAdded
       notify(`${addedPerson.name} added`)
-      addPersonToCache(client.cache, addedPerson) // HIGHLIGHT LINE
+      addPersonToCache(client.cache, addedPerson)
     },
   })
 
   // ...
 }
+
 ```
 
 وسنستخدم الدالة أيضاً عند تحديث الذاكرة المؤقتة المتعلق بإضافة شخص جديد:
 
 ```sql
-import { addPersonToCache } from '../utils/apolloCache' // HIGHLIGHT LINE
+import { addPersonToCache } from '../utils/apolloCache'
 
-const PersonForm = ({ setError }) =&gt; {
+const PersonForm = ({ setError }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    onError: (error) =&gt; setError(error.message),
-    update: (cache, response) =&gt; {
-      // BEGIN HIGHLIGHT
+    onError: (error) => setError(error.message),
+    update: (cache, response) => {
+
       const addedPerson = response.data.addPerson
       addPersonToCache(cache, addedPerson)
-      // END HIGHLIGHT
+
     },
   })
 
   // ...
 }
+
 ```
 
 الآن يعمل تحديث الذاكرة المؤقتة بشكل صحيح في جميع الحالات، أي أن الشخص الجديد يُضاف إلى الذاكرة المؤقتة فقط إذا لم يكن قد أُضيف إليها سابقاً.
@@ -729,9 +760,10 @@ type Person {
   name: String!
   phone: String
   address: Address!
-  friendOf: [User!]! // HIGHLIGHT LINE
+  friendOf: [User!]!
   id: ID!
 }
+
 ```
 
 يجب أن يدعم التطبيق الاستعلام التالي:
@@ -744,24 +776,26 @@ query {
     }
   }
 }
+
 ```
 
 ولأن&nbsp;<code>friendOf</code>&nbsp;ليس حقلاً من حقول كائنات&nbsp;<em>Person</em>&nbsp;في قاعدة البيانات، علينا إنشاء resolver له قادر على حل هذه المسألة. لننشئ أولاً resolver يعيد قائمة فارغة:
 
 ```js
 Person: {
-  address: ({ street, city }) =&gt; {
+  address: ({ street, city }) => {
     return {
       street,
       city,
     }
   },
-  // BEGIN HIGHLIGHT
-  friendOf: async (root) =&gt; {
+
+  friendOf: async (root) => {
     return []
   }
-  // END HIGHLIGHT
+
 },
+
 ```
 
 المعامل <code>root</code> هو كائن الشخص الذي تُنشأ له قائمة أصدقاء، لذا نبحث في كل كائنات <code>User</code> عن تلك التي تحتوي <code>root._id</code> في قائمة أصدقائها:
@@ -769,7 +803,7 @@ Person: {
 ```bash
   Person: {
     // ...
-    friendOf: async (root) =&gt; {
+    friendOf: async (root) => {
       const friends = await User.find({
         friends: {
           $in: [root._id]
@@ -779,6 +813,7 @@ Person: {
       return friends
     }
   },
+
 ```
 
 الآن يعمل التطبيق.
@@ -794,24 +829,26 @@ query {
     }
   }
 }
+
 ```
 
 لكن التطبيق الآن لديه مشكلة واحدة: يجري عدد كبير غير معقول من استعلامات قاعدة البيانات. لنضف تسجيلاً في وحدة التحكم إلى أجزاء الـresolvers التي تنفّذ استعلامات قاعدة البيانات:
 
 ```js
-allPersons: async (root, args) =&gt; {
-  console.log('Person.find') // HIGHLIGHT LINE
+allPersons: async (root, args) => {
+  console.log('Person.find')
   if (!args.phone) {
     return Person.find({})
   }
 
   return Person.find({ phone: { $exists: args.phone === 'YES' } })
 }
+
 ```
 
 ```bash
-friendOf: async (root) =&gt; {
-  console.log('User.find') // HIGHLIGHT LINE
+friendOf: async (root) => {
+  console.log('User.find')
   const friends = await User.find({
     friends: {
       $in: [root._id],
@@ -820,6 +857,7 @@ friendOf: async (root) =&gt; {
 
   return friends
 }
+
 ```
 
 نلاحظ أنه إذا كان في قاعدة البيانات خمسة أشخاص، فإن استعلام&nbsp;<code>allPersons</code>&nbsp;المذكور سابقاً يسبّب استعلامات قاعدة البيانات التالية:
@@ -831,6 +869,7 @@ User.find
 User.find
 User.find
 User.find
+
 ```
 
 إذ على الرغم من أننا ننفّذ أساساً استعلاماً واحداً لكل الأشخاص، فإن كل شخص يسبّب استعلاماً إضافياً في الـresolver الخاص به.
@@ -862,32 +901,34 @@ const schema = new mongoose.Schema({
     required: true,
     minlength: 3
   },
-  // BEGIN HIGHLIGHT
+
   friendOf: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     }
   ],
-  // END HIGHLIGHT
+
 })
+
 ```
 
 ثم يمكننا تنفيذ "استعلام دمج"، أو تعبئة حقول&nbsp;<code>friendOf</code>&nbsp;للأشخاص عند جلب كائنات&nbsp;<code>Person</code>:
 
 ```js
 Query: {
-  allPersons: (root, args) =&gt; {
+  allPersons: (root, args) => {
     console.log('Person.find')
     if (!args.phone) {
-      return Person.find({}).populate('friendOf') // HIGHLIGHT LINE
+      return Person.find({}).populate('friendOf')
     }
 
     return Person.find({ phone: { $exists: args.phone === 'YES' } })
-      .populate('friendOf') // HIGHLIGHT LINE
+      .populate('friendOf')
   },
   // ...
 }
+
 ```
 
 بعد هذا التغيير، لن نحتاج إلى resolver منفصل لحقل&nbsp;<code>friendOf</code>.
@@ -901,6 +942,7 @@ query {
     phone
   }
 }
+
 ```
 
 إذا عدّلنا&nbsp;<code>allPersons</code>&nbsp;لتنفيذ استعلام دمج لأنها تسبّب أحياناً مشكلة n+1، فسيصبح أثقل عندما لا نحتاج إلى معلومات عن أشخاص ذوي صلة. وباستخدام&nbsp;<a href="https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments" target="_blank" rel="noreferrer noopener">المعامل الرابع</a>&nbsp;لدوال الـresolver، يمكننا تحسين الاستعلام أكثر. فالمعامل الرابع يمكن استخدامه لفحص الاستعلام نفسه، بحيث ننفّذ استعلام الدمج فقط في الحالات التي يُتوقَّع فيها خطر مشكلات n+1. لكن لا ينبغي أن نتعجل إلى هذا المستوى من التحسين قبل التأكد من أنه يستحق العناء.

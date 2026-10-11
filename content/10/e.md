@@ -13,6 +13,7 @@ lang: ar
 
 ```bash
 npx expo install jest-expo jest @types/jest --dev
+
 ```
 
 لاستخدام الإعداد المسبق jest-expo في Jest، نحتاج إلى إضافة&nbsp;<a href="https://docs.expo.dev/develop/unit-testing/#additional-configuration-for-using-transformignorepatterns" target="_blank" rel="noreferrer noopener">إعداد Jest</a>&nbsp;التالي إلى ملف&nbsp;<em>package.json</em>&nbsp;إلى جانب سكربت&nbsp;<em>test</em>:
@@ -22,18 +23,19 @@ npx expo install jest-expo jest @types/jest --dev
   // ...
   "scripts": {
     // سكربتات أخرى...
-    "test": "jest" // HIGHLIGHT LINE
+    "test": "jest"
   },
-  // BEGIN HIGHLIGHT
+
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|react-router-native)"
     ]
   }
-  // END HIGHLIGHT
+
   // ...
 }
+
 ```
 
 نحتاج أيضاً إلى قليل من الإعداد حتى يتمكن VS Code من اقتراح المطابِقات (matchers) المناسبة لكلمة&nbsp;<code>expect</code>&nbsp;مثلاً. ويمكن فعل ذلك بإنشاء ملف&nbsp;<em>jsconfig.json</em>&nbsp;في جذر المشروع بالمحتوى التالي:
@@ -45,12 +47,14 @@ npx expo install jest-expo jest @types/jest --dev
     "types": ["jest"]
   }
 }
+
 ```
 
 لاستخدام ESLint في ملفات اختبار Jest، نحتاج أيضاً إلى إضافة&nbsp;<a href="https://www.npmjs.com/package/eslint-plugin-jest" target="_blank" rel="noreferrer noopener">eslint-plugin-jest</a>&nbsp;الخاصة بـESLint. لنثبّتها:
 
 ```bash
 npm install eslint-plugin-jest --save-dev
+
 ```
 
 لاستخدام إضافة eslint-plugin-jest، نحتاج إلى تفعيلها في ملف&nbsp;<em>eslint.config.js</em>:
@@ -59,30 +63,32 @@ npm install eslint-plugin-jest --save-dev
 // https://docs.expo.dev/guides/using-eslint/
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
-const pluginJest = require('eslint-plugin-jest'); // HIGHLIGHT LINE
+const pluginJest = require('eslint-plugin-jest');
 
 module.exports = defineConfig([
   expoConfig,
   {
     ignores: ['dist/*'],
   },
-  // BEGIN HIGHLIGHT
+
   {
     files: ['**/*.test.js', '**/*.spec.js'],
     ...pluginJest.configs['flat/recommended'],
   },
-  // END HIGHLIGHT
+
 ]);
+
 ```
 
 للتأكد من أن الإعداد يعمل، أنشئ مجلد&nbsp;<em>__tests__</em>&nbsp;داخل مجلد&nbsp;<em>src</em>&nbsp;وأنشئ في المجلد الذي أنشأته ملفاً باسم&nbsp;<em>example.test.js</em>. وأضف في ذلك الملف هذا الاختبار البسيط:
 
 ```
-describe('Example', () =&gt; {
-  it('works', () =&gt; {
+describe('Example', () => {
+  it('works', () => {
     expect(1).toBe(1);
   });
 });
+
 ```
 
 الآن، لنشغّل اختبارنا النموذجي بتنفيذ&nbsp;<code>npm test</code>. ينبغي أن تشير مخرجات الأمر إلى أن الاختبار الموجود في ملف&nbsp;<em>src/__tests__/example.test.js</em>&nbsp;قد نجح.
@@ -102,6 +108,7 @@ src/
       authStorage.js
       ...
     ...
+
 ```
 
 وثمة أسلوب آخر هو تنظيم الاختبارات قرب التنفيذ. وهذا يعني مثلاً أن ملف الاختبار الذي يحوي اختبارات مكوّن&nbsp;<code>AppBar</code>&nbsp;يوجد في المجلد نفسه الذي توجد فيه شيفرة المكوّن. وسينتج عن ذلك البنية التالية:
@@ -114,6 +121,7 @@ src/
       index.jsx
     ...
   ...
+
 ```
 
 في هذا المثال، توجد شيفرة المكوّن في ملف&nbsp;<em>index.jsx</em>&nbsp;والاختبار في ملف&nbsp;<em>AppBar.test.jsx</em>. لاحظ أنه لكي يعثر Jest على ملفات اختبارك، عليك إما وضعها في مجلد&nbsp;<em>__tests__</em>، أو استخدام اللاحقة&nbsp;<em>.test</em>&nbsp;أو&nbsp;<em>.spec</em>، أو&nbsp;<a href="https://jestjs.io/docs/en/configuration#testmatch-arraystring" target="_blank" rel="noreferrer noopener">ضبط الأنماط العامة يدوياً</a>.
@@ -126,6 +134,7 @@ src/
 
 ```bash
 npx expo install @testing-library/react-native --dev
+
 ```
 
 > <strong>ملاحظة:</strong>&nbsp;إذا فشل التثبيت بسبب مشكلات في الاعتماديات النظيرة (peer dependencies)، جرّب تثبيت مكتبة react-test-renderer صراحةً مع الراية&nbsp;<code>--legacy-peer-deps</code>:
@@ -140,23 +149,24 @@ npx expo install @testing-library/react-native --dev
 import { Text, View } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
 
-const Greeting = ({ name }) =&gt; {
+const Greeting = ({ name }) => {
   return (
-    &lt;View&gt;
-      &lt;Text&gt;Hello {name}!&lt;/Text&gt;
-    &lt;/View&gt;
+    <View>
+      <Text>Hello {name}!</Text>
+    </View>
   );
 };
 
-describe('Greeting', () =&gt; {
-  it('renders a greeting message based on the name prop', () =&gt; {
-    render(&lt;Greeting name="Kalle" /&gt;);
+describe('Greeting', () => {
+  it('renders a greeting message based on the name prop', () => {
+    render(<Greeting name="Kalle" />);
 
     screen.debug();
 
     expect(screen.getByText('Hello Kalle!')).toBeDefined();
   });
 });
+
 ```
 
 تستخدم الاختبارات الكائن&nbsp;<a href="https://oss.callstack.com/react-native-testing-library/docs/api/screen" target="_blank" rel="noreferrer noopener">screen</a>&nbsp;لإجراء الاستعلامات على المكوّن المعروض.
@@ -176,43 +186,43 @@ import { useState } from 'react';
 import { Text, TextInput, Pressable, View } from 'react-native';
 import { render, fireEvent, screen } from '@testing-library/react-native';
 
-const Form = ({ onSubmit }) =&gt; {
+const Form = ({ onSubmit }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = () =&gt; {
+  const handleSubmit = () => {
     onSubmit({ username, password });
   };
 
   return (
-    &lt;View&gt;
-      &lt;View&gt;
-        &lt;TextInput
+    <View>
+      <View>
+        <TextInput
           value={username}
-          onChangeText={(text) =&gt; setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
           placeholder="Username"
-        /&gt;
-      &lt;/View&gt;
-      &lt;View&gt;
-        &lt;TextInput
+        />
+      </View>
+      <View>
+        <TextInput
           value={password}
-          onChangeText={(text) =&gt; setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
           placeholder="Password"
-        /&gt;
-      &lt;/View&gt;
-      &lt;View&gt;
-        &lt;Pressable onPress={handleSubmit}&gt;
-          &lt;Text&gt;Submit&lt;/Text&gt;
-        &lt;/Pressable&gt;
-      &lt;/View&gt;
-    &lt;/View&gt;
+        />
+      </View>
+      <View>
+        <Pressable onPress={handleSubmit}>
+          <Text>Submit</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 };
 
-describe('Form', () =&gt; {
-  it('calls function provided by onSubmit prop after pressing the submit button', () =&gt; {
+describe('Form', () => {
+  it('calls function provided by onSubmit prop after pressing the submit button', () => {
     const onSubmit = jest.fn();
-    render(&lt;Form onSubmit={onSubmit} /&gt;);
+    render(<Form onSubmit={onSubmit} />);
 
     fireEvent.changeText(screen.getByPlaceholderText('Username'), 'kalle');
     fireEvent.changeText(screen.getByPlaceholderText('Password'), 'password');
@@ -227,6 +237,7 @@ describe('Form', () =&gt; {
     });
   });
 });
+
 ```
 
 في هذا الاختبار، نريد اختبار أنه بعد ملء حقول النموذج باستخدام الدالة&nbsp;<code>fireEvent.changeText</code>&nbsp;والضغط على زر الإرسال باستخدام الدالة&nbsp;<code>fireEvent.press</code>، تُستدعى دالة النداء العكسي&nbsp;<code>onSubmit</code>&nbsp;بشكل صحيح. وللفحص مما إذا كانت دالة&nbsp;<code>onSubmit</code>&nbsp;قد استُدعيت وبأي وسائط، يمكننا استخدام&nbsp;<a href="https://jestjs.io/docs/en/mock-function-api" target="_blank" rel="noreferrer noopener">دالة وهمية</a>&nbsp;(mock function). الدوال الوهمية دوال ذات سلوك مبرمج مسبقاً مثل قيمة إرجاع محددة. وإضافة إلى ذلك، يمكننا إنشاء توقعات للدوال الوهمية مثل «توقّع أن تكون الدالة الوهمية قد استُدعيت مرة واحدة». ويمكن العثور على القائمة الكاملة للتوقعات المتاحة في&nbsp;<a href="https://jestjs.io/docs/en/expect" target="_blank" rel="noreferrer noopener">توثيق expect</a>&nbsp;في Jest.
@@ -240,47 +251,49 @@ describe('Form', () =&gt; {
 بعد ذلك، لنلقِ نظرة على استراتيجية لاختبار المكوّنات ذات الآثار الجانبية. لنأخذ مكوّن&nbsp;<code>RepositoryList</code>&nbsp;من تطبيقنا كمثال. في الوقت الحالي، للمكوّن أثر جانبي واحد هو استعلام GraphQL لجلب المستودعات المُقيَّمة. والتنفيذ الحالي لمكوّن&nbsp;<code>RepositoryList</code>&nbsp;يبدو شيئاً كهذا:
 
 ```js
-const RepositoryList = () =&gt; {
+const RepositoryList = () => {
   const { repositories } = useRepositories();
 
   const repositoryNodes = repositories
-    ? repositories.edges.map((edge) =&gt; edge.node)
+    ? repositories.edges.map((edge) => edge.node)
     : [];
 
   return (
-    &lt;FlatList
+    <FlatList
       data={repositoryNodes}
       // ...
-    /&gt;
+    />
   );
 };
 
 export default RepositoryList;
+
 ```
 
 الأثر الجانبي الوحيد هو استخدام خطاف&nbsp;<code>useRepositories</code>&nbsp;الذي يرسل استعلام GraphQL. وهناك طرق عدة لاختبار هذا المكوّن. إحدى الطرق هي محاكاة استجابات Apollo Client على النحو الموضح في&nbsp;<a href="https://www.apollographql.com/docs/react/development-testing/testing/" target="_blank" rel="noreferrer noopener">توثيق</a>&nbsp;Apollo Client. وهناك طريقة أبسط هي افتراض أن خطاف&nbsp;<code>useRepositories</code>&nbsp;يعمل كما هو مقصود (ويُفضّل ذلك بعد اختباره) واستخراج الشيفرة «النقية» من المكوّن إلى مكوّن آخر مثل مكوّن&nbsp;<code>RepositoryListContainer</code>:
 
 ```js
-export const RepositoryListContainer = ({ repositories }) =&gt; {
+export const RepositoryListContainer = ({ repositories }) => {
   const repositoryNodes = repositories
-    ? repositories.edges.map((edge) =&gt; edge.node)
+    ? repositories.edges.map((edge) => edge.node)
     : [];
 
   return (
-    &lt;FlatList
+    <FlatList
       data={repositoryNodes}
       // ...
-    /&gt;
+    />
   );
 };
 
-const RepositoryList = () =&gt; {
+const RepositoryList = () => {
   const { repositories } = useRepositories();
 
-  return &lt;RepositoryListContainer repositories={repositories} /&gt;;
+  return <RepositoryListContainer repositories={repositories} />;
 };
 
 export default RepositoryList;
+
 ```
 
 الآن، لم يعد مكوّن <code>RepositoryList</code> يحتوي إلا على الآثار الجانبية وتنفيذه بسيط جداً. ويمكننا اختبار مكوّن <code>RepositoryListContainer</code> بتزويده ببيانات مستودعات مقسّمة إلى صفحات عبر خاصية <code>repositories</code> والتحقق من أن المحتوى المعروض يحوي المعلومات الصحيحة.
@@ -377,6 +390,7 @@ export default RepositoryList;
     }
   }
 }
+
 ```
 
 تخبر الوسيطة&nbsp;<code>first</code>&nbsp;الواجهة البرمجية بأن تعيد أول مستودعين فقط. وإليك مثالاً على نتيجة الاستعلام:
@@ -412,6 +426,7 @@ export default RepositoryList;
     }
   }
 }
+
 ```
 
 تعتمد صيغة كائن النتيجة والوسائط على&nbsp;<a href="https://relay.dev/graphql/connections.htm" target="_blank" rel="noreferrer noopener">مواصفة اتصالات المؤشر في GraphQL من Relay</a>، التي أصبحت مواصفة ترقيم صفحات شائعة إلى حد كبير واعتُمدت على نطاق واسع مثلاً في&nbsp;<a href="https://docs.github.com/en/graphql" target="_blank" rel="noreferrer noopener">واجهة GitHub البرمجية لـGraphQL</a>. في كائن النتيجة، لدينا مصفوفة&nbsp;<code>edges</code>&nbsp;تحتوي عناصر لها خاصيتا&nbsp;<code>node</code>&nbsp;و<code>cursor</code>. وكما نعلم، يحتوي&nbsp;<code>node</code>&nbsp;على المستودع نفسه. أما&nbsp;<code>cursor</code>&nbsp;فهو تمثيل مرمّز بترميز Base64 للعقدة. وفي هذه الحالة، يحتوي على معرّف المستودع وتاريخ إنشاء المستودع على شكل طابع زمني. وهذه هي المعلومات التي نحتاجها للإشارة إلى العنصر عندما تُرتَّب العناصر حسب وقت إنشاء المستودع. ويحتوي&nbsp;<code>pageInfo</code>&nbsp;على معلومات مثل مؤشر العنصر الأول والأخير في المصفوفة.
@@ -437,6 +452,7 @@ export default RepositoryList;
     }
   }
 }
+
 ```
 
 الآن بعد أن حصلنا على العنصرين التاليين، يمكننا مواصلة فعل ذلك حتى تأخذ&nbsp;<code>hasNextPage</code>&nbsp;القيمة&nbsp;<code>false</code>، أي أننا وصلنا إلى نهاية القائمة. للتعمق أكثر في ترقيم الصفحات المعتمد على المؤشر، اقرأ مقال Shopify بعنوان&nbsp;<a href="https://shopify.engineering/pagination-relative-cursors" target="_blank" rel="noreferrer noopener">Pagination with Relative Cursors</a>. فهو يقدّم تفاصيل رائعة عن التنفيذ نفسه والفوائد مقارنةً بترقيم الصفحات التقليدي المعتمد على الفهرس.
@@ -456,40 +472,41 @@ export default RepositoryList;
 ```js
 export const RepositoryListContainer = ({
   repositories,
-  onEndReached, // HIGHLIGHT LINE
+  onEndReached,
   /* ... */,
-}) =&gt; {
+}) => {
   const repositoryNodes = repositories
-    ? repositories.edges.map((edge) =&gt; edge.node)
+    ? repositories.edges.map((edge) => edge.node)
     : [];
 
   return (
-    &lt;FlatList
+    <FlatList
       data={repositoryNodes}
       // ...
-      // BEGIN HIGHLIGHT
+
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
-      // END HIGHLIGHT
-    /&gt;
+
+    />
   );
 };
 
-const RepositoryList = () =&gt; {
+const RepositoryList = () => {
   // ...
 
   const { repositories } = useRepositories(/* ... */);
 
   return (
-    &lt;RepositoryListContainer
+    <RepositoryListContainer
       repositories={repositories}
-      onEndReached={() =&gt; console.log('End of the list reached');} // HIGHLIGHT LINE
+      onEndReached={() => console.log('End of the list reached');}
       // ...
-    /&gt;
+    />
   );
 };
 
 export default RepositoryList;
+
 ```
 
 جرّب التمرير إلى نهاية قائمة المستودعات المُقيَّمة، وينبغي أن ترى الرسالة في السجلات.
@@ -501,13 +518,13 @@ export default RepositoryList;
 ```js
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { SetContextLink } from '@apollo/client/link/context';
-import { relayStylePagination } from '@apollo/client/utilities'; // HIGHLIGHT LINE
+import { relayStylePagination } from '@apollo/client/utilities';
 
 const httpLink = new HttpLink({
   uri: process.env.EXPO_PUBLIC_APOLLO_URI,
 });
 
-// BEGIN HIGHLIGHT
+
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -517,10 +534,10 @@ const cache = new InMemoryCache({
     },
   },
 });
-// END HIGHLIGHT
 
-const createApolloClient = authStorage =&gt; {
-  const authLink = new SetContextLink(async ({ headers }) =&gt; {
+
+const createApolloClient = authStorage => {
+  const authLink = new SetContextLink(async ({ headers }) => {
     try {
       const accessToken = await authStorage.getAccessToken();
       return {
@@ -539,11 +556,12 @@ const createApolloClient = authStorage =&gt; {
 
   return new ApolloClient({
     link: authLink.concat(httpLink),
-    cache, // HIGHLIGHT LINE
+    cache,
   });
 };
 
 export default createApolloClient;
+
 ```
 
 كما ذُكر سابقاً، تعتمد صيغة كائن نتيجة ترقيم الصفحات والوسائط على مواصفة ترقيم الصفحات من Relay. ولحسن الحظ، يوفّر Apollo Client سياسة حقل معرّفة مسبقاً هي&nbsp;<code>relayStylePagination</code>&nbsp;التي يمكن استخدامها في هذه الحالة.
@@ -551,15 +569,15 @@ export default createApolloClient;
 بعد ذلك، لنعدّل خطاف&nbsp;<code>useRepositories</code>&nbsp;بحيث يعيد دالة&nbsp;<code>fetchMore</code>&nbsp;مزيّنة تستدعي دالة&nbsp;<code>fetchMore</code>&nbsp;الفعلية بوسائط مناسبة حتى نتمكن من جلب المجموعة التالية من المستودعات:
 
 ```js
-const useRepositories = (variables) =&gt; {
-  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {  // HIGHLIGHT LINE
+const useRepositories = (variables) => {
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
     variables,
     // ...
   });
 
-  // BEGIN HIGHLIGHT
-  const handleFetchMore = () =&gt; {
-    const canFetchMore = !loading &amp;&amp; data?.repositories.pageInfo.hasNextPage;
+
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
 
     if (!canFetchMore) {
       return;
@@ -572,15 +590,16 @@ const useRepositories = (variables) =&gt; {
       },
     });
   };
-  // END HIGHLIGHT
+
 
   return {
     repositories: data?.repositories,
-    fetchMore: handleFetchMore,  // HIGHLIGHT LINE
+    fetchMore: handleFetchMore,
     loading,
     ...result,
   };
 };
+
 ```
 
 تأكد من وجود الحقلين&nbsp;<code>pageInfo</code>&nbsp;و<code>cursor</code>&nbsp;في استعلام&nbsp;<code>repositories</code>&nbsp;كما هو موضح في أمثلة ترقيم الصفحات. وستحتاج أيضاً إلى تضمين الوسيطتين&nbsp;<code>after</code>&nbsp;و<code>first</code>&nbsp;في الاستعلام.
@@ -590,24 +609,25 @@ const useRepositories = (variables) =&gt; {
 الخطوة الأخيرة هي تمرير دالة&nbsp;<code>fetchMore</code>&nbsp;كقيمة للخاصية&nbsp;<code>onEndReached</code>:
 
 ```js
-const RepositoryList = () =&gt; {
+const RepositoryList = () => {
   // ...
 
-  const { repositories, fetchMore } = useRepositories({  // HIGHLIGHT LINE
-    first: 5, // HIGHLIGHT LINE
+  const { repositories, fetchMore } = useRepositories({
+    first: 5,
     // ...
   });
 
   return (
-    &lt;RepositoryListContainer
+    <RepositoryListContainer
       repositories={repositories}
-      onEndReached={fetchMore}  // HIGHLIGHT LINE
+      onEndReached={fetchMore}
       // ...
-    /&gt;
+    />
   );
 };
 
 export default RepositoryList;
+
 ```
 
 استخدم قيمة صغيرة نسبياً للوسيطة <code>first</code> مثل 5 أثناء تجربة التمرير اللانهائي. وبهذه الطريقة لن تحتاج إلى تقييم عدد كبير جداً من المستودعات. وإذا كانت القائمة تحتوي مستودعات قليلة بحيث تكون نهاية القائمة قريبة بالفعل أو مرئية، فقد تُستدعى <code>fetchMore</code> فوراً عند تحميل العرض أو قد لا تُطلق حتى يمرّر المستخدم. وإذا سبّب ذلك مشكلات أثناء الاختبار، يمكنك تجاوز هذه المسألة بزيادة قيمة الوسيطة <code>first</code>. وبمجرد أن تطمئن إلى أن التمرير اللانهائي يعمل، لا تتردد في استخدام قيمة أكبر للوسيطة <code>first</code>.
@@ -630,12 +650,14 @@ export default RepositoryList;
 
 ```bash
 npx eas-cli@latest login
+
 ```
 
 بعد ذلك، هيّئ المستودع كمشروع EAS:
 
 ```bash
 npx eas-cli@latest update:configure
+
 ```
 
 يربط أمر&nbsp;<code>update:configure</code>&nbsp;المشروع بخدمة EAS من Expo ويضيف الإعداد المطلوب إلى ملف&nbsp;<em>app.json</em>.
@@ -650,6 +672,7 @@ npx eas-cli@latest update:configure
 
 ```bash
 npx eas-cli@latest env:create --name EXPO_PUBLIC_APOLLO_URI --value https://rate-repository-api-2.ext.ocp-prod-0.k8s.it.helsinki.fi/ --environment preview --visibility plaintext
+
 ```
 - يُنشأ متغير البيئة في بيئة تسمى <code>preview</code>، وهي مخصّصة تحديداً لهذا النوع من اختبار التطبيقات.
 - تُضبط رؤية متغير البيئة على <code>plaintext</code>، لأن القيمة ليست سرية بشكل خاص.
@@ -658,6 +681,7 @@ npx eas-cli@latest env:create --name EXPO_PUBLIC_APOLLO_URI --value https://rate
 
 ```bash
 npx eas-cli@latest update --branch main --environment preview --message "The first deploy"
+
 ```
 - يتيح EAS Update تجميع التحديثات في فروع مختلفة. وفي حالتنا، يحدّد الخيار <code>--branch</code> نشر التحديث في فرع يسمى <code>main</code>.
 - بفضل الخيار <code>--environment</code> يحصل تطبيقنا على صلاحية الوصول إلى بيئة <code>preview</code> وإلى متغير البيئة <code>EXPO_PUBLIC_APOLLO_URI</code> الذي عرّفناه سابقاً.
@@ -701,32 +725,33 @@ const FancyText = styled.Text`
   color: grey;
   font-size: 14px;
 
-  ${({ isBlue }) =&gt;
-    isBlue &amp;&amp;
+  ${({ isBlue }) =>
+    isBlue &&
     css`
       color: blue;
     `}
 
-  ${({ isBig }) =&gt;
-    isBig &amp;&amp;
+  ${({ isBig }) =>
+    isBig &&
     css`
       font-size: 24px;
       font-weight: 700;
     `}
 `;
 
-const Main = () =&gt; {
+const Main = () => {
   return (
-    &lt;&gt;
-      &lt;FancyText&gt;Simple text&lt;/FancyText&gt;
-      &lt;FancyText isBlue&gt;Blue text&lt;/FancyText&gt;
-      &lt;FancyText isBig&gt;Big text&lt;/FancyText&gt;
-      &lt;FancyText isBig isBlue&gt;
+    <>
+      <FancyText>Simple text</FancyText>
+      <FancyText isBlue>Blue text</FancyText>
+      <FancyText isBig>Big text</FancyText>
+      <FancyText isBig isBlue>
         Big blue text
-      &lt;/FancyText&gt;
-    &lt;/&gt;
+      </FancyText>
+    </>
   );
 };
+
 ```
 
 ولأن styled-components تعالج تعريفات الأنماط، فمن الممكن استخدام صيغة snake case الشبيهة بـCSS في أسماء الخصائص والوحدات في قيم الخصائص. غير أن الوحدات ليس لها أي تأثير لأن قيم الخصائص تُعامل داخلياً بلا وحدات. لمزيد من المعلومات عن styled-components، توجّه إلى&nbsp;<a href="https://styled-components.com/docs" target="_blank" rel="noreferrer noopener">التوثيق</a>.

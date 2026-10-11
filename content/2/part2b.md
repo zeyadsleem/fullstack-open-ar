@@ -14,11 +14,11 @@ lang: ar
 لكي تتحدّث صفحتنا عند إضافة ملاحظات جديدة، من الأفضل تخزين الملاحظات في حالة المكوّن <i>App</i>. لنستورد الدالة [useState](https://react.dev/reference/react/useState) ونستخدمها لتعريف قطعة حالة تُهيَّأ بمصفوفة الملاحظات الأولية الممرَّرة في props.
 
 ```js
-import { useState } from 'react' // highlight-line
+import { useState } from 'react'
 import Note from './components/Note'
 
-const App = (props) => { // highlight-line
-  const [notes, setNotes] = useState(props.notes) // highlight-line
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
 
   return (
     <div>
@@ -33,6 +33,7 @@ const App = (props) => { // highlight-line
 }
 
 export default App 
+
 ```
 
 يستخدم المكوّن الدالة <em>useState</em> لتهيئة قطعة الحالة المخزَّنة في <em>notes</em> بمصفوفة الملاحظات الممرَّرة في props:
@@ -43,6 +44,7 @@ const App = (props) => {
 
   // ...
 }
+
 ```
 
 يمكننا أيضاً استخدام React Developer Tools لنرى أن هذا يحدث فعلاً:
@@ -57,6 +59,7 @@ const App = () => {
 
   // ...
 }  
+
 ```
 
 لنبقَ على القيمة الأولية الممرَّرة في props في الوقت الحالي.
@@ -91,6 +94,7 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 أضفنا الدالة _addNote_ كمعالج أحداث إلى عنصر النموذج، وستُستدعى عند إرسال النموذج بالنقر على زر الإرسال.
@@ -102,6 +106,7 @@ const addNote = (event) => {
   event.preventDefault()
   console.log('button clicked', event.target)
 }
+
 ```
 
 الوسيط <em>event</em> هو [الحدث](https://react.dev/learn/responding-to-events) الذي يُطلق استدعاء دالة معالج الأحداث:
@@ -145,12 +150,13 @@ const App = (props) => {
         )}
       </ul>
       <form onSubmit={addNote}>
-        <input value={newNote} /> //highlight-line
+        <input value={newNote} />
         <button type="submit">save</button>
       </form>   
     </div>
   )
 }
+
 ```
 
 يظهر النص البديل المخزَّن كقيمة أولية للحالة <em>newNote</em> في عنصر <i>input</i>، لكن نص الإدخال لا يمكن تحريره. وتعرض وحدة التحكم تحذيراً يعطينا فكرة عما قد يكون الخطأ:
@@ -188,13 +194,14 @@ const App = (props) => {
       <form onSubmit={addNote}>
         <input
           value={newNote}
-          onChange={handleNoteChange} // highlight-line
+          onChange={handleNoteChange}
         />
         <button type="submit">save</button>
       </form>   
     </div>
   )
 }
+
 ```
 
 سجّلنا الآن معالج أحداث على الخاصية <i>onChange</i> لعنصر <i>input</i> في النموذج:
@@ -204,6 +211,7 @@ const App = (props) => {
   value={newNote}
   onChange={handleNoteChange}
 />
+
 ```
 
 يُستدعى معالج الأحداث في كل مرة <i>يحدث فيها تغيير في عنصر الإدخال</i>. وتستقبل دالة معالج الأحداث كائن الحدث كوسيط <em>event</em> لها:
@@ -213,6 +221,7 @@ const handleNoteChange = (event) => {
   console.log(event.target.value)
   setNewNote(event.target.value)
 }
+
 ```
 
 تشير خاصية <em>target</em> في كائن الحدث الآن إلى عنصر <i>input</i> المتحكَّم به، ويعبّر <em>event.target.value</em> عن قيمة الإدخال في ذلك العنصر.
@@ -241,6 +250,7 @@ const addNote = (event) => {
   setNotes(notes.concat(noteObject))
   setNewNote('')
 }
+
 ```
 
 أولاً، ننشئ كائناً جديداً للملاحظة يسمى <em>noteObject</em> يستقبل محتواه من الحالة <em>newNote</em> في المكوّن. ويُولَّد المعرّف الفريد <i>id</i> بناءً على العدد الإجمالي للملاحظات. هذه الطريقة تصلح لتطبيقنا لأن الملاحظات لا تُحذف أبداً. وبمساعدة الدالة <em>Math.random()</em>، يكون لملاحظتنا احتمال 50% أن تُعلَّم كمهمة.
@@ -249,6 +259,7 @@ const addNote = (event) => {
 
 ```js
 setNotes(notes.concat(noteObject))
+
 ```
 
 لا تعدّل الدالة مصفوفة <em>notes</em> الأصلية، بل تنشئ <i>نسخة جديدة من المصفوفة مع إضافة العنصر الجديد إلى نهايتها</i>. هذا مهم لأننا يجب أن [لا نعدّل الحالة مباشرة أبداً](https://react.dev/learn/updating-objects-in-state#why-is-mutating-state-not-recommended-in-react) في React!
@@ -257,6 +268,7 @@ setNotes(notes.concat(noteObject))
 
 ```js
 setNewNote('')
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في الفرع <i>part2-2</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part2-2).
@@ -271,10 +283,11 @@ setNewNote('')
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes) 
   const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true) // highlight-line
+  const [showAll, setShowAll] = useState(true)
   
   // ...
 }
+
 ```
 
 لنغيّر المكوّن بحيث يخزّن قائمة بكل الملاحظات المعروضة في المتغير <em>notesToShow</em>. وتعتمد عناصر القائمة على حالة المكوّن:
@@ -300,7 +313,7 @@ const App = (props) => {
     <div>
       <h1>Notes</h1>
       <ul>
-        {notesToShow.map(note => // highlight-line
+        {notesToShow.map(note =>
           <Note key={note.id} note={note} />
         )}
       </ul>
@@ -308,6 +321,7 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 تعريف المتغير <em>notesToShow</em> مختصر جداً:
@@ -316,6 +330,7 @@ const App = (props) => {
 const notesToShow = showAll
   ? notes
   : notes.filter(note => note.important === true)
+
 ```
 
 يستخدم التعريف [المعامل الشرطي](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) الموجود أيضاً في كثير من لغات البرمجة الأخرى.
@@ -324,6 +339,7 @@ const notesToShow = showAll
 
 ```js
 const result = condition ? val1 : val2
+
 ```
 
 فستُضبط قيمة المتغير <em>result</em> على قيمة <em>val1</em> إذا كانت <em>condition</em> صحيحة. وإذا كانت <em>condition</em> خاطئة، فستُضبط قيمة المتغير <em>result</em> على قيمة <em>val2</em>.
@@ -332,12 +348,14 @@ const result = condition ? val1 : val2
 
 ```js
 notes.filter(note => note.important === true)
+
 ```
 
 معامل المقارنة زائد عن الحاجة، لأن قيمة <em>note.important</em> هي إما <i>true</i> أو <i>false</i>، ما يعني أنه يمكننا ببساطة كتابة:
 
 ```js
 notes.filter(note => note.important)
+
 ```
 
 أظهرنا معامل المقارنة أولاً للتأكيد على تفصيل مهم: في JavaScript لا يعمل <em>val1 == val2</em> دائماً كما هو متوقع. لذلك من الأكثر أماناً عند إجراء المقارنات استخدام <em>val1 === val2</em> حصراً. يمكنك القراءة أكثر عن الموضوع [هنا](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
@@ -378,18 +396,21 @@ const App = (props) => {
     </div>
   )
 }
+
 ```
 
 تتحكم الملاحظات المعروضة (الكل مقابل المهمة) بزر. ومعالج الأحداث الخاص بالزر بسيط لدرجة أنه عُرّف مباشرة في خاصية عنصر الزر. يبدّل معالج الأحداث قيمة _showAll_ من true إلى false والعكس:
 
 ```js
 () => setShowAll(!showAll)
+
 ```
 
 يعتمد نص الزر على قيمة الحالة <em>showAll</em>:
 
 ```js
 show {showAll ? 'important' : 'all'}
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في الفرع <i>part2-3</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part2-3).
@@ -436,6 +457,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 الحالة <em>newName</em> مخصصة للتحكم بعنصر الإدخال في النموذج.
@@ -444,6 +466,7 @@ export default App
 
 ```html
 <div>debug: {newName}</div>
+
 ```
 
 من المهم أيضاً الاستفادة جيداً مما تعلمناه في فصل [تصحيح أخطاء تطبيقات React](/part1/a_more_complex_state_debugging_react_apps) من الجزء الأول. إن إضافة [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) <i>مفيدة للغاية</i> لتتبع التغييرات التي تطرأ على حالة التطبيق.
@@ -471,18 +494,21 @@ export default App
 
 ```js
 `${newName} is already added to phonebook`
+
 ```
 
 إذا كان المتغير <em>newName</em> يحمل القيمة <i>Arto Hellas</i>، فسيعيد تعبير نص القالب النص
 
 ```js
 `Arto Hellas is already added to phonebook`
+
 ```
 
 ويمكن فعل الشيء نفسه على طريقة Java أكثر باستخدام معامل الجمع:
 
 ```js
 newName + ' is already added to phonebook'
+
 ```
 
 استخدام نصوص القوالب هو الخيار الأكثر أصالةً وعلامة على مبرمج JavaScript حقيقي.
@@ -497,6 +523,7 @@ newName + ' is already added to phonebook'
   <div>number: <input /></div>
   <div><button type="submit">add</button></div>
 </form>
+
 ```
 
 عند هذه النقطة، قد يبدو التطبيق شيئاً مثل هذا. تعرض الصورة أيضاً حالة التطبيق بمساعدة [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):
@@ -524,6 +551,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 يوفر عليك هذا عناء إدخال البيانات يدوياً في تطبيقك لتجربة وظيفتك الجديدة.
@@ -558,6 +586,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 **ملاحظة**: قد تواجه مشكلات في هذا التمرين إذا عرّفت مكوّناتك «في المكان الخاطئ». والآن وقت مناسب لمراجعة فصل [لا تعرّف مكوّناً داخل مكوّن آخر](/part1/a_more_complex_state_debugging_react_apps#do-not-define-components-within-components) من الجزء السابق.

@@ -33,12 +33,14 @@ lang: ar
     }
   ]
 }
+
 ```
 
 يمكنك تشغيل JSON Server دون تثبيت منفصل بتنفيذ أمر _npx_ التالي في الدليل الجذر للتطبيق:
 
 ```js
 npx json-server --port 3001 db.json
+
 ```
 
 يبدأ JSON Server العمل على المنفذ 3000 افتراضياً، لكننا سنحدّد الآن منفذاً بديلاً هو 3001. لننتقل إلى العنوان <http://localhost:3001/notes> في المتصفح. يمكننا أن نرى أن JSON Server يقدّم الملاحظات التي كتبناها سابقاً في الملف بصيغة JSON:
@@ -75,6 +77,7 @@ xhttp.onreadystatechange = function() {
 
 xhttp.open('GET', '/data.json', true)
 xhttp.send()
+
 ```
 
 في البداية تماماً، نسجّل <i>معالج حدث</i> على كائن <em>xhttp</em> الذي يمثّل طلب HTTP، وسيستدعيه وقت تشغيل JavaScript كلما تغيّرت حالة كائن <em>xhttp</em>. وإذا كان تغيّر الحالة يعني أن استجابة الطلب قد وصلت، فتُعالَج البيانات وفقاً لذلك.
@@ -92,6 +95,7 @@ List<Note> notes = request.get(url);
 notes.forEach(m => {
   System.out.println(m.content);
 });
+
 ```
 
 في Java، تُنفَّذ الشيفرة سطراً بسطر وتتوقف لتنتظر طلب HTTP، أي تنتظر انتهاء الأمر _request.get(...)_. ثم تُخزَّن البيانات التي يعيدها الأمر، وهي الملاحظات في هذه الحالة، في متغير، ونبدأ في التعامل مع البيانات بالطريقة المطلوبة.
@@ -123,6 +127,7 @@ const App = (props) => {
 
   // ...
 }
+
 ```
 
 يعمل كل شيء بشكل طبيعي لمدة خمس ثوانٍ. وعندما تُنفَّذ الدالة المعرّفة كوسيط لـ<em>setTimeout</em>، تصبح صفحة المتصفح غير مستجيبة طوال مدة الحلقة الطويلة. تتجمّد الصفحة تماماً، أي لا يمكنك النقر على أزرارها أو استخدام أي وظيفة أخرى.
@@ -172,6 +177,7 @@ const App = (props) => {
     "vite": "^6.0.5"
   }
 }
+
 ```
 
 في هذه المرحلة، يهمّنا أكثر من غيره قسم <i>dependencies</i> لأنه يحدّد ما للمشروع من <i>اعتماديات</i>، أو مكتبات خارجية.
@@ -180,6 +186,7 @@ const App = (props) => {
 
 ```js
 npm install axios
+
 ```
 
 **ملاحظة: يجب دائماً تنفيذ أوامر _npm_ في الدليل الجذر للمشروع**، حيث يوجد ملف <i>package.json</i>.
@@ -199,12 +206,13 @@ npm install axios
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.7.9", // highlight-line
+    "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   // ...
 }
+
 ```
 
 إضافةً إلى إضافة axios إلى الاعتماديات، فإن أمر <em>npm install</em> <i>نزّل</i> أيضاً شيفرة المكتبة. وكما هو الحال مع الاعتماديات الأخرى، تجد الشيفرة في دليل <i>node\_modules</i> الموجود في الجذر. وكما لاحظت ربما، يحتوي <i>node\_modules</i> على قدر لا بأس به من الأشياء المثيرة للاهتمام.
@@ -213,6 +221,7 @@ npm install axios
 
 ```js
 npm install json-server --save-dev
+
 ```
 
 وأجرِ إضافة صغيرة إلى قسم <i>scripts</i> في ملف <i>package.json</i>:
@@ -225,15 +234,17 @@ npm install json-server --save-dev
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server -p 3001 db.json" // highlight-line
+    "server": "json-server -p 3001 db.json"
   },
 }
+
 ```
 
 يمكننا الآن بسهولة، ودون تعريف وسائط، تشغيل json-server من الدليل الجذر للمشروع بالأمر:
 
 ```js
 npm run server
+
 ```
 
 سنتعرّف على أداة _npm_ أكثر في [الجزء الثالث من الدورة](/part3).
@@ -253,6 +264,7 @@ npm run server
 ```js
 npm install axios
 npm install json-server --save-dev
+
 ```
 
 هناك فرق دقيق في الوسائط. فـ<i>axios</i> تُثبَّت كاعتمادية تشغيل للتطبيق لأن تنفيذ البرنامج يتطلب وجود المكتبة. في المقابل، ثُبّت <i>json-server</i> كاعتمادية تطوير (_--save-dev_)، لأن البرنامج نفسه لا يحتاجها. فهي تُستخدم للمساعدة أثناء تطوير البرمجيات. وسنوضّح المزيد عن الاعتماديات المختلفة في الجزء التالي من الدورة.
@@ -275,6 +287,7 @@ console.log(promise)
 
 const promise2 = axios.get('http://localhost:3001/foobar')
 console.log(promise2)
+
 ```
 
 إذا فتحت <http://localhost:5173/> في المتصفح، فينبغي أن يُطبع هذا في وحدة التحكم
@@ -305,6 +318,7 @@ const promise = axios.get('http://localhost:3001/notes')
 promise.then(response => {
   console.log(response)
 })
+
 ```
 
 يُطبع ما يلي في وحدة التحكم:
@@ -320,6 +334,7 @@ axios.get('http://localhost:3001/notes').then(response => {
   const notes = response.data
   console.log(notes)
 })
+
 ```
 
 تأخذ الدالة الاستدعائية الآن البيانات الموجودة داخل الاستجابة، وتخزّنها في متغير، وتطبع الملاحظات في وحدة التحكم.
@@ -333,6 +348,7 @@ axios
     const notes = response.data
     console.log(notes)
   })
+
 ```
 
 البيانات التي يعيدها الخادم نص عادي، أي مجرد نص طويل واحد. ومع ذلك تستطيع مكتبة axios تحليل البيانات إلى مصفوفة JavaScript، لأن الخادم حدّد أن صيغة البيانات هي <i>application/json; charset=utf-8</i> (انظر الصورة السابقة) باستخدام ترويسة <i>content-type</i>.
@@ -350,6 +366,7 @@ axios.get('http://localhost:3001/notes').then(response => {
   const notes = response.data
   ReactDOM.createRoot(document.getElementById('root')).render(<App notes={notes} />)
 })
+
 ```
 
 قد تكون هذه الطريقة مقبولة في بعض الظروف، لكنها إشكالية إلى حد ما. لننقل بدلاً من ذلك جلب البيانات إلى مكوّن <i>App</i>.
@@ -372,17 +389,18 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
 ```
 
 يتغيّر مكوّن <i>App</i> كما يلي:
 
 ```js
-import { useState, useEffect } from 'react' // highlight-line
-import axios from 'axios' // highlight-line
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Note from './components/Note'
 
-const App = () => { // highlight-line
-  const [notes, setNotes] = useState([]) // highlight-line
+const App = () => {
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
 
@@ -402,6 +420,7 @@ const App = () => { // highlight-line
 
   // ...
 }
+
 ```
 
 أضفنا أيضاً بعض الطبعات المفيدة التي توضّح تتابع التنفيذ.
@@ -413,6 +432,7 @@ render 0 notes
 effect
 promise fulfilled
 render 3 notes
+
 ```
 
 أولاً، يُنفَّذ جسم الدالة التي تعرّف المكوّن ويُعرض المكوّن لأول مرة. في هذه المرحلة تُطبع <i>render 0 notes</i>، ما يعني أن البيانات لم تُجلب من الخادم بعد.
@@ -429,6 +449,7 @@ render 3 notes
       setNotes(response.data)
     })
 }
+
 ```
 
 تُنفَّذ مباشرة بعد العرض. وينتج عن تنفيذ الدالة طباعة <i>effect</i> في وحدة التحكم، ويبدأ الأمر <em>axios.get</em> جلب البيانات من الخادم، كما يسجّل الدالة التالية كـ<i>معالج حدث</i> للعملية:
@@ -438,6 +459,7 @@ response => {
   console.log('promise fulfilled')
   setNotes(response.data)
 })
+
 ```
 
 وعندما تصل البيانات من الخادم، يستدعي وقت تشغيل JavaScript الدالة المسجَّلة كمعالج حدث، فتُطبع <i>promise fulfilled</i> في وحدة التحكم وتُخزَّن الملاحظات المستلمة من الخادم في الحالة باستخدام الدالة <em>setNotes(response.data)</em>.
@@ -455,6 +477,7 @@ useEffect(() => {
       setNotes(response.data)
     })
 }, [])
+
 ```
 
 لنعد كتابة الشيفرة بطريقة مختلفة قليلاً.
@@ -471,6 +494,7 @@ const hook = () => {
 }
 
 useEffect(hook, [])
+
 ```
 
 الآن يمكننا أن نرى بوضوح أكبر أن الدالة [useEffect](https://react.dev/reference/react/useEffect) تأخذ <i>وسيطين</i>. الأول دالة، وهي <i>التأثير</i> نفسه. ووفقاً للوثائق:
@@ -499,6 +523,7 @@ useEffect(() => {
   const promise = axios.get('http://localhost:3001/notes')
   promise.then(eventHandler)
 }, [])
+
 ```
 
 يُسنَد مرجع إلى دالة معالج حدث إلى المتغير <em>eventHandler</em>. ويُخزَّن الـ promise الذي تعيده دالة <em>get</em> في Axios في المتغير <em>promise</em>. ويحدث تسجيل الدالة الاستدعائية بتمرير المتغير <em>eventHandler</em>، الذي يشير إلى دالة معالج الحدث، كوسيط إلى الدالة <em>then</em> الخاصة بالـ promise. وليس من الضروري عادةً إسناد الدوال والـ promises إلى متغيرات، ويكفي تمثيل أكثر إحكاماً كما هو موضح أدناه.
@@ -513,6 +538,7 @@ useEffect(() => {
       setNotes(response.data)
     })
 }, [])
+
 ```
 
 لا تزال لدينا مشكلة في تطبيقنا. فعند إضافة ملاحظات جديدة، لا تُخزَّن في الخادم.
@@ -566,6 +592,7 @@ useEffect(() => {
     }
   ]
 }
+
 ```
 
 شغّل json-server على المنفذ 3001 وتأكد من أن الخادم يعيد قائمة الأشخاص بالانتقال إلى العنوان <http://localhost:3001/persons> في المتصفح.
@@ -580,6 +607,7 @@ events.js:182
 Error: listen EADDRINUSE 0.0.0.0:3001
     at Object._errnoException (util.js:1019:11)
     at _exceptionWithHostPort (util.js:1041:20)
+
 ```
 
 فهذا يعني أن المنفذ 3001 مستخدم بالفعل من تطبيق آخر، مثل json-server يعمل بالفعل. أغلق التطبيق الآخر، أو غيّر المنفذ إذا لم ينجح ذلك.

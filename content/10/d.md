@@ -21,6 +21,7 @@ lang: ar
 
 ```
 fetch('https://my-api.com/get-end-point');
+
 ```
 
 طريقة الطلب الافتراضية هي&nbsp;<em>GET</em>. والوسيط الثاني لدالة&nbsp;<code>fetch</code>&nbsp;هو كائن خيارات، يمكنك استخدامه مثلاً لتحديد طريقة طلب مختلفة، أو ترويسات الطلب، أو جسم الطلب:
@@ -37,6 +38,7 @@ fetch('https://my-api.com/post-end-point', {
     secondParam: 'secondValue',
   }),
 });
+
 ```
 
 لاحظ أن عناوين URL هذه وهمية و(على الأرجح) لن ترسل استجابة لطلباتك. وبالمقارنة مع Axios، تعمل Fetch API على مستوى أدنى قليلاً. فمثلاً، لا توجد أي عملية تسلسل أو تحليل لجسم الطلب أو الاستجابة. وهذا يعني أنه عليك مثلاً ضبط ترويسة&nbsp;<em>Content-Type</em>&nbsp;بنفسك واستخدام دالة&nbsp;<code>JSON.stringify</code>&nbsp;لتسلسل جسم الطلب.
@@ -44,12 +46,13 @@ fetch('https://my-api.com/post-end-point', {
 تُعيد دالة&nbsp;<code>fetch</code>&nbsp;قيمة promise تُحلّ إلى كائن&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/Response" target="_blank" rel="noreferrer noopener">Response</a>.&nbsp;لاحظ أن رموز حالة الأخطاء مثل 400 و500&nbsp;<em>لا تُرفض</em>&nbsp;كما يحدث مثلاً في Axios. وفي حالة استجابة بصيغة JSON، يمكننا تحليل جسم الاستجابة باستخدام&nbsp;دالة&nbsp;<code>Response.json</code>:
 
 ```js
-const fetchMovies = async () =&gt; {
+const fetchMovies = async () => {
   const response = await fetch('https://reactnative.dev/movies.json');
   const json = await response.json();
 
   return json;
 };
+
 ```
 
 لمقدمة أكثر تفصيلاً عن Fetch API، اقرأ مقال&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noreferrer noopener">Using Fetch</a>&nbsp;في وثائق MDN.
@@ -65,14 +68,14 @@ const fetchMovies = async () =&gt; {
 الآن بعد أن عرفنا عنوان URL لنقطة النهاية، لنستخدم البيانات الفعلية التي يوفّرها الخادم في قائمة المستودعات المُقيَّمة. نستخدم حالياً بيانات وهمية مخزّنة في متغير&nbsp;<code>repositories</code>.&nbsp;احذف متغير&nbsp;<code>repositories</code>&nbsp;واستبدل استخدام البيانات الوهمية بهذه القطعة من الشيفرة&nbsp;في ملف&nbsp;<em>RepositoryList.jsx</em>&nbsp;في مجلد&nbsp;<em>components</em>:
 
 ```js
-import { useState, useEffect } from 'react';  // HIGHLIGHT LINE
+import { useState, useEffect } from 'react';
 // ...
 
-const RepositoryList = () =&gt; {
-  // BEGIN HIGHLIGHT
+const RepositoryList = () => {
+
   const [repositories, setRepositories] = useState();
 
-  const fetchRepositories = async () =&gt; {
+  const fetchRepositories = async () => {
     // استبدل جزء عنوان IP بعنوان IP الخاص بك!
     const response = await fetch('http://192.168.1.33:5000/api/repositories');
     const json = await response.json();
@@ -82,25 +85,26 @@ const RepositoryList = () =&gt; {
     setRepositories(json);
   };
 
-  useEffect(() =&gt; {
+  useEffect(() => {
     fetchRepositories();
   }, []);
 
   // احصل على العناصر (nodes) من مصفوفة edges
   const repositoryNodes = repositories
-    ? repositories.edges.map(edge =&gt; edge.node)
+    ? repositories.edges.map(edge => edge.node)
     : [];
-  // END HIGHLIGHT
+
 
   return (
-    &lt;FlatList
-      data={repositoryNodes}  // HIGHLIGHT LINE
+    <FlatList
+      data={repositoryNodes}
       // props أخرى
-    /&gt;
+    />
   );
 };
 
 export default RepositoryList;
+
 ```
 
 نستخدم خطاف&nbsp;<code>useState</code>&nbsp;من React للحفاظ على حالة قائمة المستودعات، وخطاف&nbsp;<code>useEffect</code>&nbsp;لاستدعاء دالة&nbsp;<code>fetchRepositories</code>&nbsp;عند تركيب مكوّن&nbsp;<code>RepositoryList</code>.&nbsp;ونستخرج المستودعات الفعلية إلى متغير&nbsp;<code>repositoryNodes</code>&nbsp;ونستبدل به المتغير&nbsp;<code>repositories</code>&nbsp;المستخدم سابقاً في خاصية&nbsp;<code>data</code>&nbsp;لمكوّن&nbsp;<code>FlatList</code>.&nbsp;والآن ينبغي أن ترى بيانات فعلية يوفّرها الخادم في قائمة المستودعات المُقيَّمة.
@@ -112,11 +116,11 @@ export default RepositoryList;
 ```js
 import { useState, useEffect } from 'react';
 
-const useRepositories = () =&gt; {
+const useRepositories = () => {
   const [repositories, setRepositories] = useState();
   const [loading, setLoading] = useState(false);
 
-  const fetchRepositories = async () =&gt; {
+  const fetchRepositories = async () => {
     setLoading(true);
 
     // استبدل جزء عنوان IP بعنوان IP الخاص بك!
@@ -127,7 +131,7 @@ const useRepositories = () =&gt; {
     setRepositories(json);
   };
 
-  useEffect(() =&gt; {
+  useEffect(() => {
     fetchRepositories();
   }, []);
 
@@ -135,30 +139,32 @@ const useRepositories = () =&gt; {
 };
 
 export default useRepositories;
+
 ```
 
 الآن بعد أن أصبح لدينا تجريد نظيف لجلب المستودعات المُقيَّمة، لنستخدم&nbsp;خطاف&nbsp;<code>useRepositories</code>&nbsp;في مكوّن&nbsp;<code>RepositoryList</code>:
 
 ```js
 // ...
-import useRepositories from '../hooks/useRepositories'; // HIGHLIGHT LINE
+import useRepositories from '../hooks/useRepositories';
 
-const RepositoryList = () =&gt; {
-  const { repositories } = useRepositories(); // HIGHLIGHT LINE
+const RepositoryList = () => {
+  const { repositories } = useRepositories();
 
   const repositoryNodes = repositories
-    ? repositories.edges.map(edge =&gt; edge.node)
+    ? repositories.edges.map(edge => edge.node)
     : [];
 
   return (
-    &lt;FlatList
+    <FlatList
       data={repositoryNodes}
       // props أخرى
-    /&gt;
+    />
   );
 };
 
 export default RepositoryList;
+
 ```
 
 وهذا كل شيء، الآن لم يعد مكوّن&nbsp;<code>RepositoryList</code>&nbsp;على علم بطريقة الحصول على المستودعات. وربما في المستقبل سنحصل عليها عبر GraphQL API بدلاً من REST API. سنرى ما سيحدث.
@@ -175,6 +181,7 @@ export default RepositoryList;
 
 ```bash
 npm install @apollo/client graphql
+
 ```
 
 لننشئ دالة مساعدة لإنشاء Apollo Client بالإعدادات المطلوبة. أنشئ مجلد&nbsp;<em>utils</em>&nbsp;في مجلد&nbsp;<em>src</em>،&nbsp;وأنشئ في مجلد&nbsp;<em>utils</em>&nbsp;هذا ملف&nbsp;<em>apolloClient.js</em>. وفي ذلك الملف اضبط Apollo Client للاتصال بخادم Apollo:
@@ -186,7 +193,7 @@ const httpLink = new HttpLink({
   uri: 'http://192.168.1.100:4000/graphql',
 });
 
-const createApolloClient = () =&gt; {
+const createApolloClient = () => {
   return new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
@@ -194,32 +201,34 @@ const createApolloClient = () =&gt; {
 };
 
 export default createApolloClient;
+
 ```
 
 عنوان URL المستخدم للاتصال بخادم Apollo هو نفسه الذي استخدمته مع Fetch API، باستثناء أن المنفذ هو&nbsp;<em>4000</em>&nbsp;والمسار هو&nbsp;<em>/graphql</em>. وأخيراً، نحتاج إلى توفير Apollo Client باستخدام&nbsp;سياق&nbsp;<a href="https://www.apollographql.com/docs/react/api/react/ApolloProvider" target="_blank" rel="noreferrer noopener">ApolloProvider</a>.&nbsp;وسنضيفه إلى مكوّن&nbsp;<code>App</code>&nbsp;في ملف&nbsp;<em>App.js</em>:
 
 ```js
-import { ApolloProvider } from '@apollo/client/react';  // HIGHLIGHT LINE
+import { ApolloProvider } from '@apollo/client/react';
 import { StatusBar } from 'expo-status-bar';
 import { NativeRouter } from 'react-router-native';
 
 import Main from './src/components/Main';
-import createApolloClient from './src/utils/apolloClient'; // HIGHLIGHT LINE
+import createApolloClient from './src/utils/apolloClient';
 
-const apolloClient = createApolloClient(); // HIGHLIGHT LINE
+const apolloClient = createApolloClient();
 
-const App = () =&gt; {
+const App = () => {
   return (
-    &lt;StatusBar style="light" /&gt;
-    &lt;NativeRouter&gt;
-      &lt;ApolloProvider client={apolloClient}&gt; // HIGHLIGHT LINE
-        &lt;Main /&gt;
-      &lt;/ApolloProvider&gt; // HIGHLIGHT LINE
-    &lt;/NativeRouter&gt;
+    <StatusBar style="light" />
+    <NativeRouter>
+      <ApolloProvider client={apolloClient}>
+        <Main />
+      </ApolloProvider>
+    </NativeRouter>
   );
 };
 
 export default App;
+
 ```
 
 ## تنظيم الشيفرة المتعلقة بـ GraphQL
@@ -242,6 +251,7 @@ export const GET_REPOSITORIES = gql`
 `;
 
 // استعلامات أخرى...
+
 ```
 
 يمكننا استيراد هذه المتغيرات واستخدامها مع خطاف&nbsp;<code>useQuery</code>&nbsp;هكذا:
@@ -251,10 +261,11 @@ import { useQuery } from '@apollo/client/react';
 
 import { GET_REPOSITORIES } from '../graphql/queries';
 
-const Component = () =&gt; {
+const Component = () => {
   const { data, error, loading } = useQuery(GET_REPOSITORIES);
   // ...
 };
+
 ```
 
 والأمر نفسه ينطبق على تنظيم mutations. والفرق الوحيد أننا نعرّفها في ملف مختلف هو&nbsp;<em>mutations.js</em>. ويُوصى باستخدام&nbsp;<a href="https://www.apollographql.com/docs/react/data/fragments/" target="_blank" rel="noreferrer noopener">fragments</a>&nbsp;في الاستعلامات لتجنب إعادة كتابة الحقول نفسها مراراً وتكراراً.
@@ -270,6 +281,7 @@ components/
   B.jsx
   C.jsx
   ...
+
 ```
 - أنشئ مجلد <em>A</em> في مجلد <em>components</em> وأنشئ فيه ملفي <em>B.jsx</em> و <em>C.jsx</em>. ولتجنب كسر المكوّنات التي تستورد ملف <em>A.jsx</em>، انقل ملف <em>A.jsx</em> إلى مجلد <em>A</em> وأعد تسميته إلى <em>index.jsx</em>. وينتج عن ذلك البنية التالية:
 
@@ -280,6 +292,7 @@ components/
     C.jsx
     index.jsx
   ...
+
 ```
 
 الخيار الأول مقبول تماماً، لكن إذا لم يكن المكوّنان&nbsp;<code>B</code>&nbsp;و&nbsp;<code>C</code>&nbsp;قابلين لإعادة الاستخدام خارج المكوّن&nbsp;<code>A</code>، فلا فائدة من تضخيم مجلد&nbsp;<em>components</em>&nbsp;بإضافتهما كملفين منفصلين. والخيار الثاني معياري (modular) تماماً ولا يكسر أي عمليات استيراد، لأن استيراد مسار مثل&nbsp;<em>./A</em>&nbsp;سيتطابق مع كلٍّ من&nbsp;<em>A.jsx</em>&nbsp;و&nbsp;<em>A/index.jsx</em>.
@@ -304,6 +317,7 @@ components/
 
 ```
 EXPO_PUBLIC_ENV=test
+
 ```
 
 هنا نعرّف متغير بيئة باسم <code>EXPO_PUBLIC_ENV</code>. وقد تحتاج إلى إعادة تشغيل أدوات تطوير Expo لتطبيق التغييرات التي أجريتها على ملف <em>.env</em>.
@@ -320,8 +334,8 @@ import createApolloClient from './src/utils/apolloClient';
 
 const apolloClient = createApolloClient();
 
-const App = () =&gt; {
-  console.log("env check:", process.env.EXPO_PUBLIC_ENV);  // HIGHLIGHT LINE
+const App = () => {
+  console.log("env check:", process.env.EXPO_PUBLIC_ENV);
 
   return (
     // ...
@@ -329,6 +343,7 @@ const App = () =&gt; {
 };
 
 export default App;
+
 ```
 
 ينبغي أن ترى الآن 'env check: test' في السجلات.
@@ -349,6 +364,7 @@ export default App;
 
 ```bash
 npx expo install @react-native-async-storage/async-storage
+
 ```
 
 تتشابه واجهة&nbsp;<code>AsyncStorage</code>&nbsp;من نواحٍ كثيرة مع&nbsp;واجهة&nbsp;<code>localStorage</code>. فكلاهما تخزين مفتاح-قيمة بدوال متشابهة. وأكبر فرق بينهما هو أن عمليات&nbsp;<code>AsyncStorage</code>&nbsp;<em>غير متزامنة</em>&nbsp;كما يوحي الاسم.
@@ -386,7 +402,7 @@ class ShoppingCartStorage {
   }
 }
 
-const doShopping = async () =&gt; {
+const doShopping = async () => {
   const shoppingCartA = new ShoppingCartStorage('shoppingCartA');
   const shoppingCartB = new ShoppingCartStorage('shoppingCartB');
 
@@ -405,6 +421,7 @@ const doShopping = async () =&gt; {
 };
 
 doShopping();
+
 ```
 
 ولأن&nbsp;مفاتيح&nbsp;<code>AsyncStorage</code>&nbsp;عامة، فمن الجيد عادةً إضافة&nbsp;<em>نطاق أسماء (namespace)</em>&nbsp;للمفاتيح. وفي هذا السياق، نطاق الأسماء مجرد بادئة نوفّرها لمفاتيح تجريد التخزين. ويحمي استخدام نطاق الأسماء مفاتيح التخزين من التعارض مع مفاتيح&nbsp;<code>AsyncStorage</code>&nbsp;أخرى. وفي هذا المثال، عُرِّف نطاق الأسماء كوسيط للمُنشئ (constructor)، ونستخدم الصيغة&nbsp;<code>namespace:key</code>&nbsp;للمفاتيح.
@@ -436,40 +453,41 @@ import { NativeRouter } from 'react-router-native';
 
 import Main from './src/components/Main';
 import createApolloClient from './src/utils/apolloClient';
-import AuthStorage from './src/utils/authStorage'; // HIGHLIGHT LINE
+import AuthStorage from './src/utils/authStorage';
 
-const authStorage = new AuthStorage(); // HIGHLIGHT LINE
-const apolloClient = createApolloClient(authStorage); // HIGHLIGHT LINE
+const authStorage = new AuthStorage();
+const apolloClient = createApolloClient(authStorage);
 
-const App = () =&gt; {
+const App = () => {
   return (
-    &lt;&gt;
-      &lt;StatusBar style="light" /&gt;
-      &lt;NativeRouter&gt;
-        &lt;ApolloProvider client={apolloClient}&gt;
-          &lt;Main /&gt;
-        &lt;/ApolloProvider&gt;
-      &lt;/NativeRouter&gt;
-    &lt;/&gt;
+    <>
+      <StatusBar style="light" />
+      <NativeRouter>
+        <ApolloProvider client={apolloClient}>
+          <Main />
+        </ApolloProvider>
+      </NativeRouter>
+    </>
   );
 };
 
 export default App;
+
 ```
 
 كما قدّمنا نسخة التخزين إلى&nbsp;دالة&nbsp;<code>createApolloClient</code>&nbsp;كوسيط. وذلك لأننا سنرسل بعد ذلك رمز الوصول إلى خادم Apollo في كل طلب. وسيتوقع خادم Apollo وجود رمز الوصول في&nbsp;ترويسة&nbsp;<em>Authorization</em>&nbsp;بالصيغة&nbsp;<em>Bearer &lt;ACCESS_TOKEN&gt;</em>. ويمكننا تحسين طلب Apollo Client باستخدام&nbsp;دالة&nbsp;<a href="https://www.apollographql.com/docs/react/api/link/apollo-link-context" target="_blank" rel="noreferrer noopener">setContextLink</a>. لنرسل رمز الوصول إلى خادم Apollo بتعديل&nbsp;دالة&nbsp;<code>createApolloClient</code>&nbsp;في ملف&nbsp;<em>apolloClient.js</em>:
 
 ```js
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-import { SetContextLink } from '@apollo/client/link/context'; // HIGHLIGHT LINE
+import { SetContextLink } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({
   uri: process.env.EXPO_PUBLIC_APOLLO_URI,
 });
 
-// BEGIN HIGHLIGHT
-const createApolloClient = (authStorage) =&gt; {
-  const authLink = new SetContextLink(async ({ headers }) =&gt; {
+
+const createApolloClient = (authStorage) => {
+  const authLink = new SetContextLink(async ({ headers }) => {
     try {
       const accessToken = await authStorage.getAccessToken();
       return {
@@ -491,9 +509,10 @@ const createApolloClient = (authStorage) =&gt; {
     cache: new InMemoryCache(),
   });
 };
-// END HIGHLIGHT
+
 
 export default createApolloClient;
+
 ```
 
 ## استخدام React Context لحقن الاعتماديات
@@ -506,6 +525,7 @@ import { createContext } from 'react';
 const AuthStorageContext = createContext();
 
 export default AuthStorageContext;
+
 ```
 
 الآن يمكننا استخدام&nbsp;<code>AuthStorageContext.Provider</code>&nbsp;لتوفير نسخة التخزين إلى الأبناء في السياق. لنضفه إلى&nbsp;مكوّن&nbsp;<code>App</code>:
@@ -518,39 +538,41 @@ import { NativeRouter } from 'react-router-native';
 import Main from './src/components/Main';
 import createApolloClient from './src/utils/apolloClient';
 import AuthStorage from './src/utils/authStorage';
-import AuthStorageContext from './src/contexts/AuthStorageContext'; // HIGHLIGHT LINE
+import AuthStorageContext from './src/contexts/AuthStorageContext';
 
 const authStorage = new AuthStorage();
 const apolloClient = createApolloClient(authStorage);
 
-const App = () =&gt; {
+const App = () => {
   return (
-    &lt;&gt;
-      &lt;StatusBar style="light" /&gt;
-      &lt;NativeRouter&gt;
-        &lt;ApolloProvider client={apolloClient}&gt;
-          &lt;AuthStorageContext.Provider value={authStorage}&gt; // HIGHLIGHT LINE
-            &lt;Main /&gt;
-          &lt;/AuthStorageContext.Provider&gt; // HIGHLIGHT LINE
-        &lt;/ApolloProvider&gt;
-      &lt;/NativeRouter&gt;
-    &lt;/&gt;
+    <>
+      <StatusBar style="light" />
+      <NativeRouter>
+        <ApolloProvider client={apolloClient}>
+          <AuthStorageContext.Provider value={authStorage}>
+            <Main />
+          </AuthStorageContext.Provider>
+        </ApolloProvider>
+      </NativeRouter>
+    </>
   );
 };
 
 export default App;
+
 ```
 
 أصبح الوصول إلى نسخة التخزين في&nbsp;خطاف&nbsp;<code>useSignIn</code>&nbsp; ممكناً الآن باستخدام&nbsp;خطاف&nbsp;<a href="https://react.dev/reference/react/useContext" target="_blank" rel="noreferrer noopener">useContext</a> من React هكذا:
 
 ```js
 // ...
-import { useContext } from 'react'; // HIGHLIGHT LINE
+import { useContext } from 'react';
 
 import AuthStorageContext from '../contexts/AuthStorageContext';
-const useSignIn = () =&gt; {
+const useSignIn = () => {
   const authStorage = useContext(AuthStorageContext);  // ...
 };
+
 ```
 
 لاحظ أن الوصول إلى قيمة سياق باستخدام&nbsp;خطاف&nbsp;<code>useContext</code>&nbsp;لا يعمل إلا إذا استُخدم خطاف&nbsp;<code>useContext</code>&nbsp;في مكوّن&nbsp;<em>ابن</em>&nbsp;لمكوّن&nbsp;<a href="https://react.dev/reference/react/createContext#provider" target="_blank" rel="noreferrer noopener">Context.Provider</a>.
@@ -561,22 +583,24 @@ const useSignIn = () =&gt; {
 import { useContext } from 'react';
 import AuthStorageContext from '../contexts/AuthStorageContext';
 
-const useAuthStorage = () =&gt; {
+const useAuthStorage = () => {
   return useContext(AuthStorageContext);
 };
 
 export default useAuthStorage;
+
 ```
 
 تنفيذ الخطاف بسيط جداً، لكنه يحسّن قابلية قراءة وصيانة الخطافات والمكوّنات التي تستخدمه. ويمكننا استخدام الخطاف لإعادة هيكلة خطاف&nbsp;<code>useSignIn</code>&nbsp;هكذا:
 
 ```js
 // ...
-import useAuthStorage from '../hooks/useAuthStorage'; // HIGHLIGHT LINE
+import useAuthStorage from '../hooks/useAuthStorage';
 
-const useSignIn = () =&gt; {
+const useSignIn = () => {
   const authStorage = useAuthStorage();  // ...
 };
+
 ```
 
 تفتح القدرة على توفير البيانات لأبناء المكوّن الكثير من حالات الاستخدام لـ React Context، كما رأينا سابقاً في&nbsp;<a href="/part6" target="_blank" rel="noreferrer noopener">الفصل الأخير</a>&nbsp;من الجزء 6.

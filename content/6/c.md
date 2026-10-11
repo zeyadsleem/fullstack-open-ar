@@ -10,7 +10,7 @@ lang: ar
 لتسهيل التطوير، سنغيّر الحالة الأولية بحيث تحتوي مسبقاً على بضع ملاحظات:
 
 ```js
-// BEGIN HIGHLIGHT
+
 const initialNotes = [
     {
       id: 1,
@@ -26,12 +26,13 @@ const initialNotes = [
       important: true,
     }
   ]
-// END HIGHLIGHT
+
 
 const useNoteStore = create((set) => ({
   notes: initialNotes,
   // ...
 }
+
 ```
 
 ### حالة أكثر تعقيداً
@@ -45,9 +46,9 @@ const useNoteStore = create((set) => ({
 ```js
 const useNoteStore = create((set) => ({
   notes: initialNotes,
-  // BEGIN HIGHLIGHT
+
   filter: 'all',
-  // END HIGHLIGHT
+
   actions: {
     add: note => set(
       state => ({ notes: state.notes.concat(note) })
@@ -59,17 +60,18 @@ const useNoteStore = create((set) => ({
         )
       })
     ),
-  // BEGIN HIGHLIGHT
+
     setFilter: value => set(() => ({ filter: value }))
-  // END HIGHLIGHT
+
   }
 }))
 
 export const useNotes = () => useNoteStore((state) => state.notes)
-// BEGIN HIGHLIGHT
+
 export const useFilter = () => useNoteStore((state) => state.filter)
-// END HIGHLIGHT
+
 export const useNoteActions = () => useNoteStore((state) => state.actions)
+
 ```
 
 المكوّن الذي يضبط قيمة المرشّح:
@@ -77,49 +79,51 @@ export const useNoteActions = () => useNoteStore((state) => state.actions)
 ```js
 import { useNoteActions } from './store'
 
-const VisibilityFilter = () =&gt; {
+const VisibilityFilter = () => {
   const { setFilter } = useNoteActions()
 
   return (
-    &lt;div&gt;
-      &lt;input
+    <div>
+      <input
         type="radio"
         name="filter"
-        onChange={() =&gt; setFilter('all')}
+        onChange={() => setFilter('all')}
         defaultChecked
-      /&gt;
+      />
       all
-      &lt;input
+      <input
         type="radio"
         name="filter"
-        onChange={() =&gt; setFilter('important')}
-      /&gt;
+        onChange={() => setFilter('important')}
+      />
       important
-      &lt;input
+      <input
         type="radio"
         name="filter"
-        onChange={() =&gt; setFilter('nonimportant')}
-      /&gt;
+        onChange={() => setFilter('nonimportant')}
+      />
       not important
-    &lt;/div&gt;
+    </div>
   )
 }
 
 export default VisibilityFilter
+
 ```
 
 يعرض مكوّن&nbsp;<em>App</em>&nbsp;المرشّح:
 
 ```js
 const App = () => (
-  &lt;div>
-    &lt;NoteForm />
-  // BEGIN HIGHLIGHT
-    &lt;VisibilityFilter />
-  // END HIGHLIGHT
-    &lt;NoteList />
-  &lt;/div>
+  <div>
+    <NoteForm />
+
+    <VisibilityFilter />
+
+    <NoteList />
+  </div>
 )
+
 ```
 
 يمكن التعامل مع ترشيح الملاحظات المعروضة في مكوّن&nbsp;<em>NoteList</em>&nbsp;على النحو التالي مثلاً:
@@ -131,7 +135,7 @@ import Note from './Note'
 const NoteList = () => {
   const notes = useNotes()
 
-  // BEGIN HIGHLIGHT
+
   const filter = useFilter()
 
   const notesToShow = notes.filter(note => {
@@ -139,18 +143,19 @@ const NoteList = () => {
     if (filter === 'nonimportant') return !note.important
     return true
   })
-  // END HIGHLIGHT
+
 
   return (
-    &lt;ul>
-      // BEGIN HIGHLIGHT
+    <ul>
+
       {notesToShow.map(note => (
-      // END HIGHLIGHT
-        &lt;Note key={note.id} note={note} />
+
+        <Note key={note.id} note={note} />
       ))}
-    &lt;/ul>
+    </ul>
   )
 }
+
 ```
 
 الحل الأكثر أناقة هو تضمين منطق الترشيح مباشرةً في دالة <em>useNotes</em> الخاصة بالـ store:
@@ -162,7 +167,7 @@ const useNoteStore = create((set) => ({
   // ...
 }))
 
-// BEGIN HIGHLIGHT
+
 export const useNotes = () => {
   const notes = useNoteStore((state) => state.notes)
   const filter = useNoteStore((state) => state.filter)
@@ -172,7 +177,8 @@ export const useNotes = () => {
 
   return notes
 }
-// END HIGHLIGHT
+
+
 ```
 
 وهكذا تُعيد دالة&nbsp;<em>useNotes</em>&nbsp;دائماً قائمة ملاحظات مرشَّحة بالطريقة المطلوبة. بل إن مستخدِم الدالة، وهو مكوّن&nbsp;<em>NoteList</em>، لا يحتاج حتى إلى معرفة أن المرشّح موجود:
@@ -181,18 +187,19 @@ export const useNotes = () => {
 import { useNotes } from './store'
 import Note from './Note'
 
-const NoteList = () =&gt; {
+const NoteList = () => {
   // يحصل المكوّن دائماً على مجموعة الملاحظات المرشَّحة بشكل صحيح
   const notes = useNotes()
 
   return (
-    &lt;ul&gt;
-      {notes.map(note =&gt; (
-        &lt;Note key={note.id} note={note} /&gt;
+    <ul>
+      {notes.map(note => (
+        <Note key={note.id} note={note} />
       ))}
-    &lt;/ul&gt;
+    </ul>
   )
 }
+
 ```
 
 الحل أنيق!
@@ -261,12 +268,14 @@ const NoteList = () =&gt; {
     }
   ]
 }
+
 ```
 
 ثبّت JSON Server:
 
 ```bash
 npm install json-server --save-dev
+
 ```
 
 وأضف السطر التالي إلى قسم&nbsp;<em>scripts</em>&nbsp;في&nbsp;<em>package.json</em>:
@@ -276,6 +285,7 @@ npm install json-server --save-dev
   "server": "json-server -p 3001 db.json",
   // ...
 }
+
 ```
 
 شغّل JSON Server بالأمر&nbsp;<em>npm run server</em>.
@@ -297,6 +307,7 @@ added 23 packages, and audited 302 packages in 1s
   run `npm fund` for details
 
 found 0 vulnerabilities
+
 ```
 
 إذن لن يثبّت الأمر مكتبة Axios فقط، بل أكثر من 20 حزمة npm أخرى تحتاجها Axios لتعمل.
@@ -312,7 +323,7 @@ found 0 vulnerabilities
 ```js
 const baseUrl = 'http://localhost:3001/notes'
 
-const getAll = async () =&gt; {
+const getAll = async () => {
   const response = await fetch(baseUrl)
 
   if (!response.ok) {
@@ -324,6 +335,7 @@ const getAll = async () =&gt; {
 }
 
 export default { getAll }
+
 ```
 
 لنلقِ نظرة أدق على تنفيذ دالة&nbsp;<em>getAll</em>. تُجلب الملاحظات الآن من الواجهة الخلفية باستدعاء دالة&nbsp;<em>fetch()</em>&nbsp;التي أُعطي لها عنوان URL الخاص بالواجهة الخلفية كوسيط. ولم يُحدَّد نوع الطلب بشكل منفصل، لذا تنفّذ&nbsp;<em>fetch</em>&nbsp;الإجراء الافتراضي، وهو طلب GET.
@@ -334,6 +346,7 @@ export default { getAll }
 if (!response.ok) {
   throw new Error('Failed to fetch notes')
 }
+
 ```
 
 تأخذ السمة&nbsp;<em>response.ok</em>&nbsp;القيمة&nbsp;<em>true</em>&nbsp;إذا نجح الطلب، أي إذا كان رمز حالة الاستجابة ضمن النطاق 200-299. أما لجميع رموز الحالة الأخرى، مثل 404 أو 500، فتأخذ القيمة&nbsp;<em>false</em>.
@@ -344,6 +357,7 @@ if (!response.ok) {
 
 ```js
 const data = await response.json()
+
 ```
 
 لا تحوّل&nbsp;<em>fetch</em>&nbsp;تلقائياً البيانات التي قد تصحب الاستجابة إلى صيغة JSON؛ بل يجب إجراء التحويل يدوياً. ويجدر بالذكر أيضاً أن&nbsp;<em>response.json()</em>&nbsp;دالة غير متزامنة، لذا يجب استخدام الكلمة المفتاحية&nbsp;<em>await</em>&nbsp;معها.
@@ -358,28 +372,30 @@ const getAll = async () => {
     throw new Error('Failed to fetch notes')
   }
 
-  // BEGIN HIGHLIGHT
+
   return await response.json()
-  // END HIGHLIGHT
+
 }
+
 ```
 
 لنضف إلى الـ store دالة يمكن استخدامها لتهيئة الحالة بملاحظات مجلوبة من الخادم:
 
 ```js
 const useNoteStore = create((set) => ({
-  // BEGIN HIGHLIGHT
+
   notes: [],
-  // END HIGHLIGHT
+
   filter: '',
   actions: {
     // ...
     setFilter: value => set(() => ({ filter: value })),
-  // BEGIN HIGHLIGHT
+
     initialize: notes => set(() => ({ notes }))
-  // END HIGHLIGHT
+
   }
 }))
+
 ```
 
 لننفّذ تهيئة الملاحظات في مكوّن <em>App</em>. وكما جرت العادة عند جلب البيانات من الخادم، نستخدم خطاف <em>useEffect</em>:
@@ -388,20 +404,21 @@ const useNoteStore = create((set) => ({
 const App = () => {
   const { initialize } = useNoteActions()
 
- // BEGIN HIGHLIGHT
+
   useEffect(() => {
     noteService.getAll().then(notes => initialize(notes))
   }, [initialize])
- // END HIGHLIGHT
+
 
   return (
-    &lt;div>
-      &lt;NoteForm />
-      &lt;VisibilityFilter />
-      &lt;NoteList />
-    &lt;/div>
+    <div>
+      <NoteForm />
+      <VisibilityFilter />
+      <NoteList />
+    </div>
   )
 }
+
 ```
 
 وهكذا تُجلب الملاحظات من الخادم باستخدام دالة&nbsp;<em>getAll()</em>&nbsp;التي عرّفناها، ثم تُخزَّن باستخدام دالة&nbsp;<em>initialize</em>&nbsp;التابعة للـ store. وتُنفَّذ هذه الإجراءات في خطاف&nbsp;<em>useEffect</em>، ما يعني أنها تُنفَّذ أثناء العرض الأول لمكوّن App.
@@ -429,7 +446,7 @@ const getAll = async () => {
   return await response.json()
 }
 
-// BEGIN HIGHLIGHT
+
 const createNew = async (content) => {
   const response = await fetch(baseUrl, {
     method: 'POST',
@@ -443,18 +460,19 @@ const createNew = async (content) => {
 
   return await response.json()
 }
-// END HIGHLIGHT
 
-// BEGIN HIGHLIGHT
+
+
 export default { getAll, createNew }
-// END HIGHLIGHT
+
+
 ```
 
 لنلقِ نظرة أدق على تنفيذ دالة&nbsp;<em>createNew</em>. يحدّد الوسيط الأول لدالة&nbsp;<em>fetch()</em>&nbsp;عنوان URL الذي يُوجَّه إليه الطلب. أما الوسيط الثاني فهو كائن يحدّد التفاصيل الأخرى للطلب، مثل نوع الطلب والترويسات والبيانات المُرسَلة مع الطلب. ويمكننا زيادة توضيح الشيفرة بتخزين الكائن الذي يحدّد تفاصيل الطلب في متغير مساعد منفصل&nbsp;<em>options</em>:
 
 ```js
 const createNew = async (content) => {
-  // BEGIN HIGHLIGHT
+
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -462,7 +480,7 @@ const createNew = async (content) => {
   }
 
   const response = await fetch(baseUrl, options)
-  // END HIGHLIGHT
+
 
   const response = await fetch(baseUrl, options)
   if (!response.ok) {
@@ -471,6 +489,7 @@ const createNew = async (content) => {
 
   return await response.json()
 }
+
 ```
 
 لنلقِ نظرة أدق على كائن&nbsp;<em>options</em>:
@@ -484,12 +503,14 @@ const createNew = async (content) => {
 if (!response.ok) {
   throw new Error('Failed to create note')
 }
+
 ```
 
 إذا نجح الطلب، يُعيد&nbsp;<em>JSON Server</em>&nbsp;الملاحظة التي أُنشئت للتو، وقد ولّد لها أيضاً&nbsp;<em>id</em>&nbsp;فريداً. ولا تزال البيانات الواردة في الاستجابة بحاجة إلى التحويل إلى صيغة JSON باستخدام دالة&nbsp;<em>response.json()</em>:
 
 ```js
 return await response.json()
+
 ```
 
 لنغيّر بعد ذلك مكوّن&nbsp;<em>NoteForm</em>&nbsp;في تطبيقنا بحيث تُرسَل الملاحظة الجديدة إلى الواجهة الخلفية. وتتغير دالة&nbsp;<em>addNote</em>&nbsp;في المكوّن قليلاً:
@@ -504,22 +525,23 @@ const NoteForm = () => {
   const addNote = async (e) => {
     e.preventDefault()
     const content = e.target.note.value
-    // BEGIN HIGHLIGHT
+
     const newNote = await noteService.createNew(content)
-    // END HIGHLIGHT
+
     add(newNote)
     e.target.reset()
   }
 
   return (
-    &lt;form onSubmit={addNote}>
-      &lt;input name="note" />
-      &lt;button type="submit">add&lt;/button>
-    &lt;/form>
+    <form onSubmit={addNote}>
+      <input name="note" />
+      <button type="submit">add</button>
+    </form>
   )
 }
 
 export default NoteForm
+
 ```
 
 عند إنشاء ملاحظة جديدة في الواجهة الخلفية باستدعاء دالة&nbsp;<em>createNew()</em>، نحصل في المقابل على كائن يصف الملاحظة، وقد ولّدت الواجهة الخلفية له&nbsp;<em>id</em>.
@@ -534,82 +556,85 @@ export default NoteForm
 
 ```js
 const App = () => {
-  // BEGIN HIGHLIGHT
+
   const { initialize } = useNoteActions()
-  // END HIGHLIGHT
+
   useEffect(() => {
-    // BEGIN HIGHLIGHT
+
     initialize()
-    // END HIGHLIGHT
+
   }, [initialize])
 
   return (
-    &lt;div>
-      &lt;NoteForm />
-      &lt;VisibilityFilter />
-      &lt;NoteList />
-    &lt;/div>
+    <div>
+      <NoteForm />
+      <VisibilityFilter />
+      <NoteList />
+    </div>
   )
 }
+
 ```
 
 ويُنشئ&nbsp;<em>NoteForm</em>&nbsp;بدوره ملاحظة جديدة هكذا:
 
 ```js
 const NoteForm = () => {
-  // BEGIN HIGHLIGHT
+
   const { add } = useNoteActions()
-  // END HIGHLIGHT
+
 
   const addNote = async (e) => {
     e.preventDefault()
     const content = e.target.note.value
-    // BEGIN HIGHLIGHT
+
     await add(content)
-    // END HIGHLIGHT
+
     e.target.reset()
   }
 
   return (
-    &lt;form onSubmit={addNote}>
-      &lt;input name="note" />
-      &lt;button type="submit">add&lt;/button>
-    &lt;/form>
+    <form onSubmit={addNote}>
+      <input name="note" />
+      <button type="submit">add</button>
+    </form>
   )
 }
+
 ```
 
 أما التغيير في&nbsp;<em>store.js</em>&nbsp;فهو كما يلي:
 
 ```js
 import { create } from 'zustand'
-// BEGIN HIGHLIGHT
+
 import noteService from './services/notes'
 
-// END HIGHLIGHT
+
 const useNoteStore = create((set) => ({
   notes: [],
   filter: '',
   actions: {
-    // BEGIN HIGHLIGHT
+
     add: async (content) => {
-    // END HIGHLIGHT
-      // BEGIN HIGHLIGHT
+
+
       const newNote = await noteService.createNew(content)
-      // END HIGHLIGHT
+
       set(state => ({ notes: state.notes.concat(newNote) }))
     },
-    // BEGIN HIGHLIGHT
+
     initialize: async () => {
-    // END HIGHLIGHT
-      // BEGIN HIGHLIGHT
+
+
       const notes = await noteService.getAll()
-      // END HIGHLIGHT
+
       set(() => ({ notes }))
     },
     // ...
   }
 }))
+
 ```
 
 وهكذا حُوّلت الدالتان <em>add</em> و<em>initialize</em> إلى دالتين غير متزامنتين، تستدعيان أولاً دالة&nbsp;<em>noteService</em>&nbsp;المناسبة، ثم تحدّثان الحالة.
@@ -621,7 +646,7 @@ const useNoteStore = create((set) => ({
 نوسّع&nbsp;<em>noteService.js</em>&nbsp;كما يلي:
 
 ```js
-const update = async (id, note) =&gt; {
+const update = async (id, note) => {
   const response = await fetch(`${baseUrl}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -636,6 +661,7 @@ const update = async (id, note) =&gt; {
 }
 
 export default { getAll, createNew, update }
+
 ```
 
 أما التغيير في دالة&nbsp;<em>toggleImportance</em>&nbsp;التابعة للـ store فهو كما يلي:
@@ -649,7 +675,7 @@ const useNoteStore = create((set) => ({
       const newNote = await noteService.createNew(content)
       set(state => ({ notes: state.notes.concat(newNote) }))
     },
-    // BEGIN HIGHLIGHT
+
     toggleImportance: async (id) => {
       const note = useNoteStore.getState().notes.find(n => n.id === id)
       const updated = await noteService.update(
@@ -659,7 +685,7 @@ const useNoteStore = create((set) => ({
         notes: state.notes.map(n => n.id === id ? updated : n)
       }))
     },
-    // END HIGHLIGHT
+
     setFilter: value => set(() => ({ filter: value })),
     initialize: async () => {
       const notes = await noteService.getAll()
@@ -667,12 +693,14 @@ const useNoteStore = create((set) => ({
     }
   }
 }))
+
 ```
 
 ثمة تفصيل جدير بالملاحظة في الدالة الجديدة. تستقبل الدالة معرّف الملاحظة (id) كوسيط. لكن يجب إرسال الملاحظة المعدَّلة إلى الواجهة الخلفية. ويمكن العثور عليها باستدعاء دالة&nbsp;<em>getState</em>&nbsp;التابعة للـ store:
 
 ```js
-const note = useNoteStore.getState().notes.find(n =&gt; n.id === id)
+const note = useNoteStore.getState().notes.find(n => n.id === id)
+
 ```
 
 تحتوي stores الخاصة بـ Zustand أيضاً على عدد من&nbsp;<a href="https://zustand.docs.pmnd.rs/reference/apis/create#returns" target="_blank" rel="noopener">الدوال المساعدة</a>&nbsp;الأخرى، قد تكون مفيدة في بعض الحالات.
@@ -680,16 +708,16 @@ const note = useNoteStore.getState().notes.find(n =&gt; n.id === id)
 لنغيّر أيضاً تعريف الـ store بحيث نمرّر كذلك الوسيط <a href="https://zustand.docs.pmnd.rs/reference/apis/create#parameters">get</a> إلى الدالة المُعطاة لـ <em>create</em>، والذي يمكننا من خلاله الوصول إلى قيم الحالة عند الحاجة:
 
 ```js
-// BEGIN HIGHLIGHT
+
 const useNoteStore = create((set, get) => ({
-// END HIGHLIGHT
+
   notes: [],
   filter: '',
   actions: {
     toggleImportance: async (id) => {
-      // BEGIN HIGHLIGHT
+
       const note = get().notes.find(n => n.id === id)
-      // END HIGHLIGHT
+
       const updated = await noteService.update(
         id, { ...note, important: !note.important }
       )
@@ -700,6 +728,7 @@ const useNoteStore = create((set, get) => ({
     // ...
   }
 }))
+
 ```
 
 تُعيد دالة&nbsp;<em>get</em>&nbsp;الحالة الحالية للـ store. فمثلاً، يعطينا الاستدعاء&nbsp;<em>get().notes</em>&nbsp;ملاحظات الـ store الحالية. ودالة&nbsp;<em>get</em>&nbsp;مكافئة وظيفياً لاستدعاء&nbsp;<em>useNoteStore.getState()</em>، لكنها الطريقة الأكثر أصالة للإشارة إلى حالة الـ store من داخل دوال الـ store نفسها.
@@ -751,30 +780,32 @@ const useNoteStore = create((set, get) => ({
 وصيغة دوال الوسيط غامضة بعض الشيء. وفي ما يلي&nbsp;<em>logger</em>&nbsp;يطبع دائماً الحالة القديمة والجديدة للـ store كلما تغيرت الحالة:
 
 ```js
-const logger = (config) =&gt; (set, get) =&gt; config(
-  (...args) =&gt; {
+const logger = (config) => (set, get) => config(
+  (...args) => {
     console.log('prev state', get());
     set(...args);
     console.log('next state', get());
   },
   get
 );
+
 ```
 
 يُفعَّل الوسيط بـ«التفاف» الدالة المُعطاة كوسيط لـ&nbsp;<em>create</em>&nbsp;في Zustand:
 
 ```js
-// BEGIN HIGHLIGHT
+
 const useNoteStore = create(logger((set, get) => ({
-// END HIGHLIGHT
+
   notes: [],
   filter: '',
   actions: {
     // ...
   }
-// BEGIN HIGHLIGHT
+
 })))
-// END HIGHLIGHT
+
+
 ```
 
 الآن، كلما تغيرت حالة الـ store، يمكننا دائماً رؤية كيف تتغير الحالة في وحدة التحكم:
@@ -784,11 +815,12 @@ const useNoteStore = create(logger((set, get) => ({
 عملياً، يعمل الوسيط الذي عرّفناه باستبدال الدالة الأصلية&nbsp;<em>set</em>&nbsp;بالدالة
 
 ```
-  (...args) =&gt; {
+  (...args) => {
     console.log('prev state', get());
     set(...args);
     console.log('next state', get());
   }
+
 ```
 
 التي تطبع، إضافةً إلى استدعاء&nbsp;<em>set</em>، الحالة القديمة والجديدة (المتاحة عبر دالة&nbsp;<em>get</em>) في وحدة التحكم. أما الوسيط الثاني فهو&nbsp;<em>get</em>&nbsp;القديمة دون تغيير.
@@ -799,22 +831,23 @@ const useNoteStore = create(logger((set, get) => ({
 
 ```js
 import { create } from 'zustand'
-// BEGIN HIGHLIGHT
+
 import { devtools } from 'zustand/middleware'
-// END HIGHLIGHT
-// BEGIN HIGHLIGHT
+
+
 
 const useNoteStore = create(devtools((set, get) => ({
 
-// END HIGHLIGHT
+
   notes: [],
   filter: '',
   actions: {
     // ...
   }
-// BEGIN HIGHLIGHT
+
 })))
-// END HIGHLIGHT
+
+
 ```
 
 عند تثبيت إضافة Redux DevTools في المتصفح، يمكن فحص حالة الـ store وتغييراتها في أدوات تطوير المتصفح:
@@ -842,9 +875,10 @@ const useCounterStore = create(set => ({
 export const useCounter = () => useCounterStore(state => state.counter)
 export const useCounterControls = () => useCounterStore(state => state.actions)
 
-// BEGIN HIGHLIGHT
+
 export default useCounterStore
-// END HIGHLIGHT
+
+
 ```
 
 أضفنا إلى التعريف تصديراً لأجل الاختبارات، يتيح للاختبار الوصول إلى الـ store.
@@ -853,6 +887,7 @@ export default useCounterStore
 
 ```bash
 npm install --save-dev vitest
+
 ```
 
 لننفّذ الاختبار في ملف&nbsp;<em>store.test.js</em>:
@@ -861,32 +896,33 @@ npm install --save-dev vitest
 import { beforeEach, describe, expect, it } from 'vitest'
 import useCounterStore from './store'
 
-beforeEach(() =&gt; {
+beforeEach(() => {
   useCounterStore.setState({ counter: 0 })
 })
 
-describe('counter store', () =&gt; {
-  it('initial state is 0', () =&gt; {
+describe('counter store', () => {
+  it('initial state is 0', () => {
     expect(useCounterStore.getState().counter).toBe(0)
   })
 
-  it('increment increases counter by 1', () =&gt; {
+  it('increment increases counter by 1', () => {
     useCounterStore.getState().actions.increment()
     expect(useCounterStore.getState().counter).toBe(1)
   })
 
-  it('decrement decreases counter by 1', () =&gt; {
+  it('decrement decreases counter by 1', () => {
     useCounterStore.getState().actions.decrement()
     expect(useCounterStore.getState().counter).toBe(-1)
   })
 
-  it('zero resets counter to 0', () =&gt; {
+  it('zero resets counter to 0', () => {
     useCounterStore.getState().actions.increment()
     useCounterStore.getState().actions.increment()
     useCounterStore.getState().actions.zero()
     expect(useCounterStore.getState().counter).toBe(0)
   })
 })
+
 ```
 
 الاختبارات بسيطة إلى حد كبير، إذ تستفيد من دالة&nbsp;<a href="https://zustand.docs.pmnd.rs/reference/apis/create#returns" target="_blank" rel="noopener">getState</a>&nbsp;التابعة للـ store، ما يتيح لها قراءة حالة الـ store وتنفيذ دواله.
@@ -902,10 +938,11 @@ const useCounterStore = create(set => ({
   // ...
 }))
 
-// BEGIN HIGHLIGHT
+
 export const useCounter = () => useCounterStore(state => state.counter)
 export const useCounterControls = () => useCounterStore(state => state.actions)
-// END HIGHLIGHT
+
+
 ```
 
 في هذه الحالة لا تحتوي الخطافات على أي منطق، بل تكشف فقط وبشكل منفصل القيمة المخزنة في الـ store ودوال الـ store. لذا فإن أسلوب الاختبار الذي استخدمناه أعلاه جيد تماماً.
@@ -916,6 +953,7 @@ export const useCounterControls = () => useCounterStore(state => state.actions)
 
 ```bash
 npm install --save-dev @testing-library/react jsdom
+
 ```
 
 لنضف إعداد بيئة الاختبار إلى&nbsp;<em>vite.config.js</em>:
@@ -923,12 +961,13 @@ npm install --save-dev @testing-library/react jsdom
 ```js
 export default defineConfig({
   plugins: [react()],
-  // BEGIN HIGHLIGHT
+
   test: {
     environment: 'jsdom',
   },
-   // END HIGHLIGHT
+
 })
+
 ```
 
 والاختبارات كما يلي:
@@ -938,39 +977,39 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import useCounterStore, { useCounter, useCounterControls } from './store'
 
-beforeEach(() =&gt; {
+beforeEach(() => {
   useCounterStore.setState({ counter: 0 })
 })
 
-describe('counter hooks', () =&gt; {
-  it('useCounter returns initial value of 0', () =&gt; {
-    const { result } = renderHook(() =&gt; useCounter())
+describe('counter hooks', () => {
+  it('useCounter returns initial value of 0', () => {
+    const { result } = renderHook(() => useCounter())
     expect(result.current).toBe(0)
   })
 
-  it('increment updates counter', () =&gt; {
-    const { result: counter } = renderHook(() =&gt; useCounter())
-    const { result: controls } = renderHook(() =&gt; useCounterControls())
+  it('increment updates counter', () => {
+    const { result: counter } = renderHook(() => useCounter())
+    const { result: controls } = renderHook(() => useCounterControls())
 
-    act(() =&gt; controls.current.increment())
+    act(() => controls.current.increment())
 
     expect(counter.current).toBe(1)
   })
 
-  it('decrement updates counter', () =&gt; {
-    const { result: counter } = renderHook(() =&gt; useCounter())
-    const { result: controls } = renderHook(() =&gt; useCounterControls())
+  it('decrement updates counter', () => {
+    const { result: counter } = renderHook(() => useCounter())
+    const { result: controls } = renderHook(() => useCounterControls())
 
-    act(() =&gt; controls.current.decrement())
+    act(() => controls.current.decrement())
 
     expect(counter.current).toBe(-1)
   })
 
-  it('zero resets counter', () =&gt; {
-    const { result: counter } = renderHook(() =&gt; useCounter())
-    const { result: controls } = renderHook(() =&gt; useCounterControls())
+  it('zero resets counter', () => {
+    const { result: counter } = renderHook(() => useCounter())
+    const { result: controls } = renderHook(() => useCounterControls())
 
-    act(() =&gt; {
+    act(() => {
       controls.current.increment()
       controls.current.increment()
       controls.current.zero()
@@ -979,13 +1018,15 @@ describe('counter hooks', () =&gt; {
     expect(counter.current).toBe(0)
   })
 })
+
 ```
 
 ثمة أمور قليلة مثيرة للاهتمام في الاختبار. في بداية الاختبارات، تُعرَض الخطافات باستخدام دالة&nbsp;<a href="https://testing-library.com/docs/react-testing-library/api/#renderhook" target="_blank" rel="noopener">renderHook</a>:
 
 ```js
-const { result: counter } = renderHook(() =&gt; useCounter())
-const { result: controls } = renderHook(() =&gt; useCounterControls())
+const { result: counter } = renderHook(() => useCounter())
+const { result: controls } = renderHook(() => useCounterControls())
+
 ```
 
 وبهذه الطريقة يصل الاختبار إلى القيم التي تُعيدها الخطافات، والمخزنة في المتغيرين&nbsp;<em>counter</em>&nbsp;و&nbsp;<em>controls</em>.
@@ -993,17 +1034,19 @@ const { result: controls } = renderHook(() =&gt; useCounterControls())
 تُستدعى الخطافات بتغليف الاستدعاء داخل دالة&nbsp;<a href="https://testing-library.com/docs/react-testing-library/api/#act" target="_blank" rel="noopener">act</a>:
 
 ```
-act(() =&gt; {
+act(() => {
   controls.current.increment()
   controls.current.increment()
   controls.current.zero()
 })
+
 ```
 
 وأخيراً يأتي توقّع الاختبار:
 
 ```
 expect(counter.current).toBe(0)
+
 ```
 
 وكما نرى، للوصول إلى الخطاف نفسه لا نزال بحاجة إلى أخذ الحقل&nbsp;<em>current</em>&nbsp;من الكائن الذي تُعيده&nbsp;<em>renderHook</em>، وهو ما يقابل القيمة الحالية للخطاف.
@@ -1035,27 +1078,27 @@ const useNoteStore = create(set => ({
   filter: '',
   actions: {
     add: async (content) => {
-      // BEGIN HIGHLIGHT
+
       const newNote = await noteService.createNew(content)
-      // END HIGHLIGHT
+
       set(state => ({ notes: state.notes.concat(newNote) }))
     },
     toggleImportance: async (id) => {
       const note = useNoteStore.getState().notes.find(n => n.id === id)
-      // BEGIN HIGHLIGHT
+
       const updated = await noteService.update(
         id, { ...note, important: !note.important }
       )
-       // END HIGHLIGHT
+
       set(state => ({
         notes: state.notes.map(n => n.id === id ? updated : n)
       }))
     },
     setFilter: value => set(() => ({ filter: value })),
     initialize: async () => {
-      // BEGIN HIGHLIGHT
+
       const notes = await noteService.getAll()
-      // END HIGHLIGHT
+
       set(() => ({ notes }))
     }
   }
@@ -1072,6 +1115,7 @@ export const useNotes = () => {
 
 export const useFilter = () => useNoteStore((state) => state.filter)
 export const useNoteActions = () => useNoteStore((state) => state.actions)
+
 ```
 
 هذه المرة تحتوي&nbsp;<em>useNotes</em>&nbsp;أيضاً على قدر كبير من المنطق، لذا يُحتمل أن يكون الاختبار عبر الخطافات باستخدام React Testing Library هو الأنسب.
@@ -1080,6 +1124,7 @@ export const useNoteActions = () => useNoteStore((state) => state.actions)
 
 ```bash
 npm install --save-dev vitest @testing-library/react jsdom
+
 ```
 
 لنضف إعداد بيئة الاختبار إلى&nbsp;<em>vite.config.js</em>:
@@ -1090,12 +1135,13 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // BEGIN HIGHLIGHT
+
   test: {
     environment: 'jsdom',
   },
-   // END HIGHLIGHT
+
 })
+
 ```
 
 الجزء الأول من الاختبارات كما يلي:
@@ -1104,7 +1150,7 @@ export default defineConfig({
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
-vi.mock('./services/notes', () =&gt; ({
+vi.mock('./services/notes', () => ({
   default: {
     getAll: vi.fn(),
     createNew: vi.fn(),
@@ -1115,55 +1161,56 @@ vi.mock('./services/notes', () =&gt; ({
 import noteService from './services/notes'
 import useNoteStore, { useNotes, useFilter, useNoteActions } from './store'
 
-beforeEach(() =&gt; {
+beforeEach(() => {
   useNoteStore.setState({ notes: [], filter: '' })
   vi.clearAllMocks()
 })
 
-describe('useNoteActions', () =&gt; {
-  it('initialize loads notes from service', async () =&gt; {
+describe('useNoteActions', () => {
+  it('initialize loads notes from service', async () => {
     const mockNotes = [{ id: 1, content: 'Test', important: false }]
     noteService.getAll.mockResolvedValue(mockNotes)
 
-    const { result } = renderHook(() =&gt; useNoteActions())
+    const { result } = renderHook(() => useNoteActions())
 
-    await act(async () =&gt; {
+    await act(async () => {
       await result.current.initialize()
     })
 
-    const { result: notesResult } = renderHook(() =&gt; useNotes())
+    const { result: notesResult } = renderHook(() => useNotes())
     expect(notesResult.current).toEqual(mockNotes)
   })
 
-  it('add appends a new note', async () =&gt; {
+  it('add appends a new note', async () => {
     const newNote = { id: 2, content: 'New note', important: false }
     noteService.createNew.mockResolvedValue(newNote)
 
-    const { result } = renderHook(() =&gt; useNoteActions())
+    const { result } = renderHook(() => useNoteActions())
 
-    await act(async () =&gt; {
+    await act(async () => {
       await result.current.add('New note')
     })
 
-    const { result: notesResult } = renderHook(() =&gt; useNotes())
+    const { result: notesResult } = renderHook(() => useNotes())
     expect(notesResult.current).toContainEqual(newNote)
   })
 
-  it('toggleImportance flips important flag', async () =&gt; {
+  it('toggleImportance flips important flag', async () => {
     const note = { id: 1, content: 'Test', important: false }
     useNoteStore.setState({ notes: [note] })
     noteService.update.mockResolvedValue({ ...note, important: true })
 
-    const { result } = renderHook(() =&gt; useNoteActions())
+    const { result } = renderHook(() => useNoteActions())
 
-    await act(async () =&gt; {
+    await act(async () => {
       await result.current.toggleImportance(1)
     })
 
-    const { result: notesResult } = renderHook(() =&gt; useNotes())
+    const { result: notesResult } = renderHook(() => useNotes())
     expect(notesResult.current[0].important).toBe(true)
   })
 })
+
 ```
 
 ثمة الكثير مما يحتاج إلى استيعاب في هذه الاختبارات. تنشئ الاختبارات، باستخدام Vitest، نسخة&nbsp;<a href="https://vitest.dev/guide/mocking" target="_blank" rel="noopener">mock</a>&nbsp;من&nbsp;<em>noteService</em>&nbsp;المسؤولة عن التواصل مع الخادم:
@@ -1171,13 +1218,14 @@ describe('useNoteActions', () =&gt; {
 ```sql
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-vi.mock('./services/notes', () =&gt; ({
+vi.mock('./services/notes', () => ({
   default: {
     getAll: vi.fn(),
     createNew: vi.fn(),
     update: vi.fn(),
   }
 }))
+
 ```
 
 تستبدل&nbsp;<a href="https://vitest.dev/api/vi.html#vi-mock" target="_blank" rel="noopener">vi.mock</a>&nbsp;الـ&nbsp;<em>noteService</em>&nbsp;في وحدة&nbsp;<em>./services/notes</em>&nbsp;بنسختها الخاصة، حيث تُستبدل جميع الدوال بدوال mock تُعيدها&nbsp;<a href="https://vitest.dev/api/vi.html#vi-fn" target="_blank" rel="noopener">vi.fn</a>.
@@ -1185,20 +1233,21 @@ vi.mock('./services/notes', () =&gt; ({
 قبل كل اختبار، يُعاد ضبط الـ store إلى حالته الأولية وتُفرَّغ دوال mock:
 
 ```
-beforeEach(() =&gt; {
+beforeEach(() => {
   useNoteStore.setState({ notes: [], filter: '' })
   vi.clearAllMocks()
 })
+
 ```
 
 في بداية كل اختبار، يُخبَر&nbsp;<em>noteService</em>&nbsp;المُستبدَل، عبر دالة&nbsp;<a href="https://vitest.dev/api/mock.html#mockresolvedvalue" target="_blank" rel="noopener">mockResolvedValue</a>، بكيفية تصرفه في سياق الاختبار:
 
 ```js
 it('initialize loads notes from service', async () => {
-  // BEGIN HIGHLIGHT
+
   const mockNotes = [{ id: 1, content: 'Test', important: false }]
   noteService.getAll.mockResolvedValue(mockNotes)
-  // END HIGHLIGHT
+
 
   const { result } = renderHook(() => useNoteActions())
 
@@ -1209,6 +1258,7 @@ it('initialize loads notes from service', async () => {
   const { result: notesResult } = renderHook(() => useNotes())
   expect(notesResult.current).toEqual(mockNotes)
 })
+
 ```
 
 أولاً، يحدّد الاختبار أنه عند استدعاء دالة&nbsp;<em>noteService.getAll</em>، تُعاد إلى الـ store الملاحظات الموجودة في مصفوفة&nbsp;<em>mockNotes</em>.
@@ -1216,9 +1266,10 @@ it('initialize loads notes from service', async () => {
 والشيء الذي يجري اختباره هو استدعاء دالة&nbsp;<em>initialize</em>:
 
 ```
-await act(async () =&gt; {
+await act(async () => {
   await result.current.initialize()
 })
+
 ```
 
 ولأن هذه دالة غير متزامنة، يجب انتظار اكتمال الاستدعاء بالكلمة المفتاحية&nbsp;<em>await</em>.
@@ -1226,8 +1277,9 @@ await act(async () =&gt; {
 وأخيراً، يتحقق الاختبار من أن حالة الـ store تحتوي على القائمة نفسها من الملاحظات التي أعادتها&nbsp;<em>noteService.getAll</em>&nbsp;المُستبدَلة:
 
 ```js
-const { result: notesResult } = renderHook(() =&gt; useNotes())
+const { result: notesResult } = renderHook(() => useNotes())
 expect(notesResult.current).toEqual(mockNotes)
+
 ```
 
 تتبع الاختبارات الأخرى النمط نفسه: أولاً يُحدَّد ما تُعيده دالة&nbsp;<em>noteService</em>&nbsp;التي يستدعيها الـ store، ثم يُشغَّل الاختبار الفعلي.
@@ -1235,33 +1287,34 @@ expect(notesResult.current).toEqual(mockNotes)
 ويتحقق الجزء الثاني من الاختبارات من أن الترشيح يعمل بشكل صحيح:
 
 ```js
-describe('useNotes filtering', () =&gt; {
+describe('useNotes filtering', () => {
   const notes = [
     { id: 1, content: 'A', important: true },
     { id: 2, content: 'B', important: false },
   ]
 
-  beforeEach(() =&gt; {
+  beforeEach(() => {
     useNoteStore.setState({ notes })
   })
 
-  it('returns all notes with no filter', () =&gt; {
-    const { result } = renderHook(() =&gt; useNotes())
+  it('returns all notes with no filter', () => {
+    const { result } = renderHook(() => useNotes())
     expect(result.current).toHaveLength(2)
   })
 
-  it('filters important notes', () =&gt; {
+  it('filters important notes', () => {
     useNoteStore.setState({ notes, filter: 'important' })
-    const { result } = renderHook(() =&gt; useNotes())
+    const { result } = renderHook(() => useNotes())
     expect(result.current).toEqual([notes[0]])
   })
 
-  it('filters nonimportant notes', () =&gt; {
+  it('filters nonimportant notes', () => {
     useNoteStore.setState({ notes, filter: 'nonimportant' })
-    const { result } = renderHook(() =&gt; useNotes())
+    const { result } = renderHook(() => useNotes())
     expect(result.current).toEqual([notes[1]])
   })
 })
+
 ```
 
 تُهيَّأ الحالة بملاحظتين، إحداهما مهمة والأخرى غير مهمة. وتتحقق حالات الاختبار الثلاث من أن&nbsp;<em>useNotes</em>&nbsp;تُعيد الملاحظات الصحيحة لجميع قيم المرشّح.

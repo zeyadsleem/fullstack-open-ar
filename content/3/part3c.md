@@ -39,6 +39,7 @@ __ملاحظة__ قد يحتوي إصدار أحدث من Visual Studio Code ع�
 
 ```bash
 node --inspect index.js
+
 ```
 
 يمكنك الوصول إلى مصحّح الأخطاء بالنقر على الأيقونة الخضراء - شعار node - التي تظهر في وحدة تحكم مطوّري Chrome:
@@ -107,6 +108,7 @@ node --inspect index.js
 
 ```js
 mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
 ```
 
 أصبحنا الآن مستعدين لاستخدام قاعدة البيانات.
@@ -119,6 +121,7 @@ mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/?retryWrite
 
 ```bash
 npm install mongoose
+
 ```
 
 لن نضف بعد أي شيفرة تتعامل مع Mongo إلى الواجهة الخلفية. بدلاً من ذلك، لننشئ تطبيقاً تدريبياً بإنشاء ملف جديد هو <i>mongo.js</i> في جذر تطبيق الملاحظات الخلفي:
@@ -155,6 +158,7 @@ note.save().then(result => {
   console.log('note saved!')
   mongoose.connection.close()
 })
+
 ```
 
 **ملاحظة:** حسب المنطقة التي اخترتها عند بناء عنقودك، قد يختلف <i>MongoDB URI</i> عن المثال أعلاه. ينبغي أن تتحقق من URI الصحيح الذي وُلِّد من MongoDB Atlas وتستخدمه.
@@ -163,6 +167,7 @@ note.save().then(result => {
 
 ```js
 mongoose.connect(url, { family: 4 })
+
 ```
 
 تأخذ الدالة عنوان URL لقاعدة البيانات كمعامل أول، وكائناً يعرّف الإعدادات المطلوبة كمعامل ثانٍ. يدعم MongoDB Atlas عناوين IPv4 فقط، لذا نحدّد بالكائن _{ family: 4 }_ أن الاتصال ينبغي أن يستخدم IPv4 دائماً.
@@ -171,6 +176,7 @@ mongoose.connect(url, { family: 4 })
 
 ```js
 const password = process.argv[2]
+
 ```
 
 عندما تُشغَّل الشيفرة بالأمر <i>node mongo.js yourPassword</i>، ستضيف Mongo وثيقة جديدة إلى قاعدة البيانات.
@@ -189,6 +195,7 @@ const password = process.argv[2]
 
 ```js
 const url = `mongodb+srv://fullstack:${password}@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+
 ```
 
 لنشغّل شيفرتنا مرة أخرى:
@@ -208,6 +215,7 @@ const noteSchema = new mongoose.Schema({
 })
 
 const Note = mongoose.model('Note', noteSchema)
+
 ```
 
 أولاً، نعرّف [مخطط](https://mongoosejs.com/docs/guide.html#schemas) الملاحظة الذي يُخزَّن في المتغير _noteSchema_. يخبر المخطط Mongoose كيف ينبغي تخزين كائنات الملاحظات في قاعدة البيانات.
@@ -227,6 +235,7 @@ const note = new Note({
   content: 'HTML is Easy',
   important: false,
 })
+
 ```
 
 الطرازات <i>دوال بانية</i> تنشئ كائنات JavaScript جديدة بناءً على المعاملات المقدَّمة. وبما أن الكائنات تُنشأ بالدالة البانية للطراز، فإنها تملك جميع خصائص الطراز، ومنها دوال حفظ الكائن في قاعدة البيانات.
@@ -238,6 +247,7 @@ note.save().then(result => {
   console.log('note saved!')
   mongoose.connection.close()
 })
+
 ```
 
 عندما يُحفظ الكائن في قاعدة البيانات، يُستدعى معالج الحدث المزوَّد إلى _then_. يغلق معالج الحدث اتصال قاعدة البيانات بالأمر <code>mongoose.connection.close()</code>. وإذا لم يُغلق الاتصال، يبقى الاتصال مفتوحاً حتى ينتهي البرنامج.
@@ -259,6 +269,7 @@ Note.find({}).then(result => {
   })
   mongoose.connection.close()
 })
+
 ```
 
 عند تنفيذ الشيفرة، يطبع البرنامج جميع الملاحظات المخزّنة في قاعدة البيانات:
@@ -275,6 +286,7 @@ Note.find({}).then(result => {
 Note.find({ important: true }).then(result => {
   // ...
 })
+
 ```
 
 </div>
@@ -295,24 +307,28 @@ Note.find({ important: true }).then(result => {
 
 ```bash
 node mongo.js yourpassword Anna 040-1234556
+
 ```
 
 ونتيجة لذلك، سيطبع التطبيق:
 
 ```bash
 added Anna number 040-1234556 to phonebook
+
 ```
 
 سيُحفظ المدخل الجديد في دليل الهاتف في قاعدة البيانات. لاحظ أنه إذا كان الاسم يحتوي محارف مسافة بيضاء، فيجب وضعه بين علامتي اقتباس:
 
 ```bash
 node mongo.js yourpassword "Arto Vihavainen" 045-1232456
+
 ```
 
 إذا كانت كلمة المرور هي المعامل الوحيد الممنوح للبرنامج، أي أنه يُستدعى هكذا:
 
 ```bash
 node mongo.js yourpassword
+
 ```
 
 فسيُفترض بالبرنامج أن يعرض جميع مدخلات دليل الهاتف:
@@ -322,6 +338,7 @@ phonebook:
 Anna 040-1234556
 Arto Vihavainen 045-1232456
 Ada Lovelace 040-1231236
+
 ```
 
 يمكنك الحصول على معاملات سطر الأوامر من المتغير [process.argv](https://nodejs.org/docs/latest-v18.x/api/process.html#process_process_argv).
@@ -336,6 +353,7 @@ Person
   })
 
 mongoose.connection.close()
+
 ```
 
 في الشيفرة أعلاه، سيُنفَّذ الأمر <i>mongoose.connection.close()</i> فوراً بعد بدء عملية <i>Person.find</i>. وهذا يعني أن اتصال قاعدة البيانات سيُغلق فوراً، ولن يصل التنفيذ أبداً إلى النقطة التي تنتهي فيها عملية <i>Person.find</i> وتُستدعى فيها الدالة <i>callback</i>.
@@ -349,6 +367,7 @@ Person
     // ...
     mongoose.connection.close()
   })
+
 ```
 
 **ملاحظة:** إذا عرّفت طرازاً باسم <i>Person</i>، فستسمّي mongoose المجموعة المرتبطة به تلقائياً <i>people</i>.
@@ -379,6 +398,7 @@ const noteSchema = new mongoose.Schema({
 })
 
 const Note = mongoose.model('Note', noteSchema)
+
 ```
 
 لنغيّر معالج جلب جميع الملاحظات إلى الشكل التالي:
@@ -389,6 +409,7 @@ app.get('/api/notes', (request, response) => {
     response.json(notes)
   })
 })
+
 ```
 
 لنشغّل الواجهة الخلفية بالأمر <code>node --watch index.js yourpassword</code> حتى نتحقق في المتصفح من أن الواجهة الخلفية تعرض بشكل صحيح جميع الملاحظات المحفوظة في قاعدة البيانات:
@@ -407,6 +428,7 @@ noteSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
 ```
 
 رغم أن خاصية <i>\_id</i> في كائنات Mongoose تبدو كنص، فهي في الحقيقة كائن. الدالة _toJSON_ التي عرّفناها تحوّلها إلى نص من باب الاحتياط فقط. ولو لم نجري هذا التغيير، لسبّب لنا ضرراً أكبر في المستقبل بمجرد أن نبدأ كتابة الاختبارات.
@@ -419,6 +441,7 @@ app.get('/api/notes', (request, response) => {
     response.json(notes)
   })
 })
+
 ```
 
 تستخدم الشيفرة تلقائياً الدالة _toJSON_ المعرَّفة عند تنسيق الملاحظات في الاستجابة.
@@ -434,7 +457,7 @@ const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI // highlight-line
+const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 mongoose.connect(url, { family: 4 })
@@ -460,19 +483,22 @@ noteSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Note', noteSchema) // highlight-line
+module.exports = mongoose.model('Note', noteSchema)
+
 ```
 
 هناك بعض التغييرات في الشيفرة مقارنةً بالسابق. أصبح عنوان URL لاتصال قاعدة البيانات يُمرَّر إلى التطبيق عبر متغير البيئة MONGODB_URI، إذ ليس من الجيد تضمينه مباشرة في الشيفرة:
 
 ```js
 const url = process.env.MONGODB_URI
+
 ```
 
 هناك طرق كثيرة لتعريف قيمة متغير بيئة. على سبيل المثال، يمكننا تعريفه عند تشغيل التطبيق كما يلي:
 
 ```bash
 MONGODB_URI="your_connection_string_here" npm run dev
+
 ```
 
 سنتعلّم قريباً طريقة أكثر تطوراً لتعريف متغيرات البيئة.
@@ -487,6 +513,7 @@ mongoose.connect(url, { family: 4 })
   .catch(error => {
     console.log('error connecting to MongoDB:', error.message)
   })
+
 ```
 
 أصبحت الدالة المسؤولة عن إنشاء الاتصال تُمنَح دالتين للتعامل مع محاولة اتصال ناجحة وأخرى فاشلة. كلتا الدالتين تسجّلان فقط رسالة في الطرفية عن حالة النجاح:
@@ -502,6 +529,7 @@ mongoose.connect(url, { family: 4 })
 
 ```js
 const Note = require('./models/note')
+
 ```
 
 بهذه الطريقة سيُسنَد المتغير _Note_ إلى الكائن نفسه الذي تعرّفه الوحدة.
@@ -512,6 +540,7 @@ const Note = require('./models/note')
 
 ```bash
 npm install dotenv
+
 ```
 
 لاستخدام المكتبة، ننشئ ملف <i>.env</i> في جذر المشروع. تُعرَّف متغيرات البيئة داخل الملف، وقد يبدو هكذا:
@@ -519,6 +548,7 @@ npm install dotenv
 ```bash
 MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0
 PORT=3001
+
 ```
 
 أضفنا أيضاً منفذ الخادم المضمَّن في الشيفرة إلى متغير البيئة <em>PORT</em>.
@@ -532,17 +562,18 @@ PORT=3001
 لنحمّل متغيرات البيئة في بداية ملف index.js لتكون متاحة في التطبيق كله. لنغيّر ملف <i>index.js</i> بالطريقة التالية:
 
 ```js
-require('dotenv').config() // highlight-line
+require('dotenv').config()
 const express = require('express')
-const Note = require('./models/note') // highlight-line
+const Note = require('./models/note')
 
 const app = express()
 // ..
 
-const PORT = process.env.PORT // highlight-line
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 من المهم أن يُستورَد <i>dotenv</i> قبل استيراد طراز <i>note</i>. هذا يضمن أن متغيرات البيئة من ملف <i>.env</i> متاحة عالمياً قبل استيراد الشيفرة من الوحدات الأخرى.
@@ -555,12 +586,14 @@ app.listen(PORT, () => {
 
 ```bash
 .env
+
 ```
 
 وضبط قيمة متغير البيئة من سطر الأوامر بالأمر:
 
 ```bash
 fly secrets set MONGODB_URI="mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0"
+
 ```
 
 **مستخدمو Render:** عند استخدام Render، يُعطى عنوان url لقاعدة البيانات بتعريف متغير البيئة المناسب في لوحة التحكم:
@@ -592,6 +625,7 @@ app.post('/api/notes', (request, response) => {
     response.json(savedNote)
   })
 })
+
 ```
 
 تُنشأ كائنات الملاحظات بالدالة البانية _Note_. تُرسَل الاستجابة داخل الدالة الراجعة لعملية _save_. وهذا يضمن ألا تُرسَل الاستجابة إلا إذا نجحت العملية. سنناقش معالجة الأخطاء بعد قليل.
@@ -600,6 +634,7 @@ app.post('/api/notes', (request, response) => {
 
 ```js
 response.json(savedNote)
+
 ```
 
 باستخدام دالة [findById](https://mongoosejs.com/docs/api/model.html#model_Model-findById) في Mongoose، يصبح جلب ملاحظة فردية كما يلي:
@@ -610,6 +645,7 @@ app.get('/api/notes/:id', (request, response) => {
     response.json(note)
   })
 })
+
 ```
 
 ### التحقق من تكامل الواجهة الأمامية والخلفية
@@ -694,6 +730,7 @@ app.get('/api/notes/:id', (request, response) => {
     })
     // highlight-end
 })
+
 ```
 
 إذا لم يوجد كائن مطابق في قاعدة البيانات، ستكون قيمة _note_ هي _null_ وستُنفَّذ كتلة _else_. وينتج عن ذلك استجابة برمز الحالة <i>404 not found</i>. أما إذا رُفض الوعد الذي تعيده دالة <em>findById</em>، فستحمل الاستجابة رمز الحالة <i>500 internal server error</i>. وتعرض الطرفية معلومات أكثر تفصيلاً عن الخطأ.
@@ -711,6 +748,7 @@ Body:   {}
     at CastError (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/error/cast.js:27:11)
     at ObjectId.cast (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/schema/objectid.js:158:13)
     ...
+
 ```
 
 عند إعطاء معرّف مشوّه كمعامل، ستطلق دالة <em>findById</em> خطأً يؤدي إلى رفض الوعد المُعاد. وسيؤدي ذلك إلى استدعاء الدالة الراجعة المعرَّفة في كتلة <em>catch</em>.
@@ -729,9 +767,10 @@ app.get('/api/notes/:id', (request, response) => {
     })
     .catch(error => {
       console.log(error)
-      response.status(400).send({ error: 'malformatted id' }) // highlight-line
+      response.status(400).send({ error: 'malformatted id' })
     })
 })
+
 ```
 
 إذا كانت صيغة المعرّف غير صحيحة، فسننتهي في معالج الأخطاء المعرَّف في كتلة _catch_. ورمز الحالة المناسب لهذه الحالة هو [400 Bad Request](https://www.rfc-editor.org/rfc/rfc9110.html#name-400-bad-request) لأن الحالة تطابق الوصف تماماً:
@@ -746,9 +785,10 @@ app.get('/api/notes/:id', (request, response) => {
 
 ```js
 .catch(error => {
-  console.log(error)  // highlight-line
+  console.log(error)
   response.status(400).send({ error: 'malformatted id' })
 })
+
 ```
 
 قد يكون سبب استدعاء معالج الأخطاء أمراً مختلفاً تماماً عما توقعته. وإذا سجّلت الخطأ في الطرفية، فقد تنقذ نفسك من جلسات تصحيح أخطاء طويلة ومحبطة. علاوة على ذلك، تدعم معظم الخدمات الحديثة التي تنشر تطبيقك عليها شكلاً من أشكال نظام التسجيل يمكنك استخدامه للتحقق من هذه السجلات. وكما ذُكر، فإن Fly.io واحدة منها.
@@ -764,7 +804,7 @@ app.get('/api/notes/:id', (request, response) => {
 لنغيّر معالج المسار <i>/api/notes/:id</i> بحيث يمرّر الخطأ إلى الأمام بالدالة <em>next</em>. تُمرَّر الدالة next إلى المعالج كمعامل ثالث:
 
 ```js
-app.get('/api/notes/:id', (request, response, next) => { // highlight-line
+app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
     .then(note => {
       if (note) {
@@ -773,8 +813,9 @@ app.get('/api/notes/:id', (request, response, next) => { // highlight-line
         response.status(404).end()
       }
     })
-    .catch(error => next(error)) // highlight-line
+    .catch(error => next(error))
 })
+
 ```
 
 يُمنَح الخطأ المُمرَّر إلى الأمام للدالة <em>next</em> كمعامل. وإذا استُدعيت <em>next</em> دون معامل، فسينتقل التنفيذ ببساطة إلى المسار أو الوسيط التالي. أما إذا استُدعيت الدالة <em>next</em> بمعامل، فسيستمر التنفيذ إلى <i>وسيط معالج الأخطاء</i>.
@@ -794,6 +835,7 @@ const errorHandler = (error, request, response, next) => {
 
 // يجب أن يكون هذا آخر وسيط يُحمَّل، كما ينبغي تسجيل جميع المسارات قبله!
 app.use(errorHandler)
+
 ```
 
 يتحقق معالج الأخطاء مما إذا كان الخطأ استثناء <i>CastError</i>، وفي هذه الحالة نعرف أن الخطأ سبّبه معرّف كائن غير صالح في Mongo. في هذه الحالة، سيرسل معالج الأخطاء استجابة إلى المتصفح بكائن الاستجابة المُمرَّر كمعامل. وفي جميع حالات الأخطاء الأخرى، يمرّر الوسيط الخطأ إلى معالج الأخطاء الافتراضي في Express.
@@ -829,6 +871,7 @@ const errorHandler = (error, request, response, next) => {
 
 // معالج الطلبات التي تؤدي إلى أخطاء
 app.use(errorHandler)
+
 ```
 
 ينبغي أن يكون وسيط محلل json من أوائل الوسيطات المحمَّلة في Express. لو كان الترتيب كالتالي:
@@ -843,6 +886,7 @@ app.post('/api/notes', (request, response) => {
 })
 
 app.use(express.json())
+
 ```
 
 فلن تكون بيانات JSON المُرسَلة مع طلبات HTTP متاحة لوسيط المسجّل أو لمعالج مسار POST، لأن _request.body_ ستكون _undefined_ في تلك المرحلة.
@@ -860,6 +904,7 @@ app.use(unknownEndpoint)
 app.get('/api/notes', (request, response) => {
   // ...
 })
+
 ```
 
 الآن أصبحت معالجة نقاط النهاية غير المعروفة مرتَّبة <i>قبل معالج طلبات HTTP</i>. وبما أن معالج نقطة النهاية غير المعروفة يستجيب لجميع الطلبات بـ <i>404 unknown endpoint</i>، فلن يُستدعى أي مسار أو وسيط بعد إرسال الاستجابة من وسيط نقطة النهاية غير المعروفة. والاستثناء الوحيد لذلك هو معالج الأخطاء الذي يجب أن يأتي في النهاية تماماً، بعد معالج نقاط النهاية غير المعروفة.
@@ -878,6 +923,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
 ```
 
 في كلتا حالتي حذف مورد بنجاح، تستجيب الواجهة الخلفية برمز الحالة <i>204 no content</i>. والحالتان المختلفتان هما حذف ملاحظة موجودة، وحذف ملاحظة غير موجودة في قاعدة البيانات. ويمكن استخدام المعامل الراجع _result_ للتحقق مما إذا كان المورد قد حُذف فعلاً، ويمكننا استخدام تلك المعلومة لإعادة رموز حالة مختلفة للحالتين إذا رأينا ذلك ضرورياً. ويُمرَّر أي استثناء يحدث إلى معالج الأخطاء.
@@ -904,6 +950,7 @@ app.put('/api/notes/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
 ```
 
 تُجلَب الملاحظة المراد تحديثها أولاً من قاعدة البيانات باستخدام الدالة _findById_. وإذا لم يوجد كائن في قاعدة البيانات بالمعرّف المحدد، فستكون قيمة المتغير _note_ هي _null_، ويستجيب الاستعلام برمز الحالة <i>404 Not Found</i>.
@@ -926,6 +973,7 @@ app.put('/api/notes/:id', (request, response, next) => {
         response.json(updatedNote)
       })
       // highlight-end
+
 ```
 
 عادةً لا يُنصح بهذا لأنه قد يجعل الشيفرة صعبة القراءة. غير أن الحل يعمل في هذه الحالة لأنه يضمن ألا تُنفَّذ كتلة _.then_ التي تلي الدالة _save()_ إلا إذا وُجدت ملاحظة بالمعرّف المحدد في قاعدة البيانات واستُدعيت الدالة _save()_. وفي الجزء الرابع من الدورة، سنستكشف صيغة async/await التي تقدّم طريقة أسهل وأوضح للتعامل مع مثل هذه الحالات.

@@ -35,6 +35,7 @@ lang: ar
   "author": "Matti Luukkainen",
   "license": "MIT"
 }
+
 ```
 
 يعرّف الملف، على سبيل المثال، أن نقطة دخول التطبيق هي ملف <i>index.js</i>.
@@ -45,29 +46,33 @@ lang: ar
 {
   // ...
   "scripts": {
-    "start": "node index.js", // highlight-line
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   // ...
 }
+
 ```
 
 بعد ذلك، لننشئ الإصدار الأول من تطبيقنا بإضافة ملف <i>index.js</i> إلى جذر المشروع بالشيفرة التالية:
 
 ```js
 console.log('hello world')
+
 ```
 
 يمكننا تشغيل البرنامج مباشرة بـ Node من سطر الأوامر:
 
 ```bash
 node index.js
+
 ```
 
 أو يمكننا تشغيله كـ [سكربت npm](https://docs.npmjs.com/misc/scripts):
 
 ```bash
 npm start
+
 ```
 
 يعمل سكربت npm المسمى <i>start</i> لأننا عرّفناه في ملف <i>package.json</i>:
@@ -81,6 +86,7 @@ npm start
   },
   // ...
 }
+
 ```
 
 رغم أن تنفيذ المشروع يعمل عند تشغيله باستدعاء _node index.js_ من سطر الأوامر، فمن المعتاد في مشاريع npm تنفيذ مثل هذه المهام كسكربتات npm.
@@ -89,6 +95,7 @@ npm start
 
 ```bash
 echo "Error: no test specified" && exit 1
+
 ```
 
 ### خادم ويب بسيط
@@ -106,12 +113,14 @@ const app = http.createServer((request, response) => {
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
+
 ```
 
 بمجرد تشغيل التطبيق، تُطبع الرسالة التالية في الطرفية:
 
 ```bash
 Server running on port 3001
+
 ```
 
 يمكننا فتح تطبيقنا المتواضع في المتصفح بزيارة العنوان <http://localhost:3001>:
@@ -136,6 +145,7 @@ events.js:167
 Error: listen EADDRINUSE :::3001
     at Server.setupListenHandle [as _listen2] (net.js:1330:14)
     at listenInCluster (net.js:1378:12)
+
 ```
 
 لديك خياران. إما إيقاف التطبيق الذي يستخدم المنفذ 3001 (كان JSON Server في الجزء الأخير من المادة يستخدم المنفذ 3001)، أو استخدام منفذ مختلف لهذا التطبيق.
@@ -144,12 +154,14 @@ Error: listen EADDRINUSE :::3001
 
 ```js
 const http = require('http')
+
 ```
 
 في السطر الأول، يستورد التطبيق وحدة [خادم الويب](https://nodejs.org/docs/latest-v18.x/api/http.html) المدمجة في Node. هذا عملياً ما كنا نفعله بالفعل في شيفرتنا على جانب المتصفح، لكن بتركيب مختلف قليلاً:
 
 ```js
 import http from 'http'
+
 ```
 
 في هذه الأيام، تستخدم الشيفرة التي تعمل في المتصفح وحدات ES6. تُعرَّف الوحدات بـ [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) وتُضمَّن في الملف الحالي بـ [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
@@ -165,6 +177,7 @@ const app = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
   response.end('Hello World')
 })
+
 ```
 
 تستخدم الشيفرة الدالة _createServer_ من وحدة [http](https://nodejs.org/docs/latest-v18.x/api/http.html) لإنشاء خادم ويب جديد. يُسجَّل <i>معالج حدث</i> لدى الخادم يُستدعى <i>في كل مرة</i> يُرسَل فيها طلب HTTP إلى عنوان الخادم <http://localhost:3001>.
@@ -177,6 +190,7 @@ const app = http.createServer((request, response) => {
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
+
 ```
 
 الغرض الأساسي من خادم الواجهة الخلفية في هذا المقرر هو تقديم بيانات خام بصيغة JSON إلى الواجهة الأمامية. لهذا السبب، لنغيّر خادمنا فوراً ليعيد قائمة ملاحظات مضمّنة في الشيفرة بصيغة JSON:
@@ -212,6 +226,7 @@ const app = http.createServer((request, response) => {
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
+
 ```
 
 لنعد تشغيل الخادم (يمكنك إيقاف الخادم بالضغط على _Ctrl+C_ في الطرفية) ولنحدّث المتصفح.
@@ -232,6 +247,7 @@ console.log(`Server running on port ${PORT}`)
 
 ```bash
 npm install express
+
 ```
 
 تُضاف الاعتمادية أيضاً إلى ملف <i>package.json</i> لدينا:
@@ -243,6 +259,7 @@ npm install express
     "express": "^5.1.0"
   }
 }
+
 ```
 
 تُثبَّت الشيفرة المصدرية للاعتمادية في مجلد <i>node\_modules</i> الموجود في جذر المشروع. بالإضافة إلى Express، يمكنك العثور على عدد كبير من الاعتماديات الأخرى في المجلد:
@@ -255,6 +272,7 @@ npm install express
 
 ```json
 "express": "^5.1.0"
+
 ```
 
 يسمى نموذج الإصدارات المستخدم في npm [الإصدار الدلالي](https://docs.npmjs.com/about-semantic-versioning).
@@ -265,12 +283,14 @@ npm install express
 
 ```bash
 npm update
+
 ```
 
 وبالمثل، إذا بدأنا العمل على المشروع على حاسوب آخر، يمكننا تثبيت جميع اعتماديات المشروع المحدَّثة المعرَّفة في <i>package.json</i> بتنفيذ الأمر التالي في المجلد الجذر للمشروع:
 
 ```bash
 npm install
+
 ```
 
 إذا لم يتغير الرقم <i>major</i> لاعتمادية ما، فينبغي أن تكون الإصدارات الأحدث [متوافقة مع الإصدارات السابقة](https://en.wikipedia.org/wiki/Backward_compatibility). هذا يعني أنه إذا استخدم تطبيقنا مستقبلاً الإصدار 5.99.175 من Express، فيجب أن تظل كل الشيفرة المنفذة في هذا الجزء تعمل دون إجراء تغييرات على الشيفرة. في المقابل، قد يحتوي الإصدار 6.0.0 من Express في المستقبل على تغييرات تجعل تطبيقنا يتوقف عن العمل.
@@ -299,6 +319,7 @@ const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 لتفعيل الإصدار الجديد من تطبيقنا، علينا أولاً إعادة تشغيله.
@@ -308,6 +329,7 @@ app.listen(PORT, () => {
 ```js
 const express = require('express')
 const app = express()
+
 ```
 
 بعد ذلك، نعرّف <i>مسارين</i> للتطبيق. الأول يعرّف معالج حدث يُستخدم للتعامل مع طلبات HTTP GET المُرسَلة إلى جذر التطبيق <i>/</i>:
@@ -316,6 +338,7 @@ const app = express()
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
+
 ```
 
 تقبل دالة معالج الحدث معاملين اثنين. المعامل الأول [request](https://expressjs.com/en/5x/api/request/) يحتوي على كل معلومات طلب HTTP، والمعامل الثاني [response](https://expressjs.com/en/5x/api/response/) يُستخدم لتحديد كيفية الاستجابة للطلب.
@@ -332,6 +355,7 @@ app.get('/', (request, response) => {
 app.get('/api/notes', (request, response) => {
   response.json(notes)
 })
+
 ```
 
 تُستجاب للطلب بالدالة [json](https://expressjs.com/en/5x/api/response/#resjsonbody) من كائن _response_. استدعاء الدالة سيرسل مصفوفة __notes__ التي مُرِّرت إليها كنص بصيغة JSON. يضبط Express تلقائياً ترويسة <i>Content-Type</i> بالقيمة المناسبة <i>application/json</i>.
@@ -344,6 +368,7 @@ app.get('/api/notes', (request, response) => {
 
 ```js
 response.end(JSON.stringify(notes))
+
 ```
 
 مع Express، لم يعد هذا مطلوباً، لأن هذا التحويل يحدث تلقائياً.
@@ -364,6 +389,7 @@ response.end(JSON.stringify(notes))
 
 ```bash
 node --watch index.js
+
 ```
 
 الآن، ستؤدي التغييرات في شيفرة التطبيق إلى إعادة تشغيل الخادم تلقائياً. لاحظ أنه رغم إعادة تشغيل الخادم تلقائياً، فلا تزال بحاجة إلى تحديث المتصفح. على عكس React، لا نملك، ولا يمكننا أن نملك، وظيفة إعادة التحميل الفوري (hot reload) التي تحدّث المتصفح في هذا السيناريو (حيث نعيد بيانات JSON).
@@ -375,17 +401,19 @@ node --watch index.js
   // ..
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js", // highlight-line
+    "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   // ..
 }
+
 ```
 
 يمكننا الآن تشغيل الخادم في وضع التطوير بالأمر
 
 ```bash
 npm run dev
+
 ```
 
 على عكس تشغيل سكربتات <i>start</i> أو <i>test</i>، يجب أن يتضمن الأمر <i>run</i>.
@@ -440,6 +468,7 @@ app.get('/api/notes/:id', (request, response) => {
   const note = notes.find(note => note.id === id)
   response.json(note)
 })
+
 ```
 
 الآن سيتعامل <code>app.get('/api/notes/:id', ...)</code> مع جميع طلبات HTTP GET من الشكل <i>/api/notes/SOMETHING</i>، حيث <i>SOMETHING</i> أي نص عشوائي.
@@ -448,6 +477,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 ```js
 const id = request.params.id
+
 ```
 
 تُستخدم الدالة _find_ المألوفة الآن للمصفوفات للعثور على الملاحظة ذات المعرّف المطابق للمعامل. ثم تُعاد الملاحظة إلى مُرسِل الطلب.
@@ -482,6 +512,7 @@ app.get('/api/notes/:id', (request, response) => {
   }
   // highlight-end
 })
+
 ```
 
 بما أنه لا تُرفَق بيانات بالاستجابة، نستخدم الدالة [status](https://expressjs.com/en/5x/api/response/#resstatuscode) لضبط الحالة والدالة [end](https://expressjs.com/en/5x/api/response/#resenddata-encoding-callback) للاستجابة للطلب دون إرسال أي بيانات.
@@ -503,6 +534,7 @@ app.delete('/api/notes/:id', (request, response) => {
 
   response.status(204).end()
 })
+
 ```
 
 إذا نجح حذف المورد، أي أن الملاحظة موجودة وأُزيلت، نستجيب للطلب برمز الحالة [204 no content](https://www.rfc-editor.org/rfc/rfc9110.html#name-204-no-content) ولا نعيد أي بيانات مع الاستجابة.
@@ -557,7 +589,7 @@ app.delete('/api/notes/:id', (request, response) => {
 const express = require('express')
 const app = express()
 
-app.use(express.json())  // highlight-line
+app.use(express.json())
 
 //...
 
@@ -569,6 +601,7 @@ app.post('/api/notes', (request, response) => {
   response.json(note)
 })
 // highlight-end
+
 ```
 
 يمكن لدالة معالج الحدث الوصول إلى البيانات من خاصية <i>body</i> في كائن _request_.
@@ -624,6 +657,7 @@ content-type: application/json
     "name": "sample",
     "time": "Wed, 21 Oct 2015 18:27:50 GMT"
 }
+
 ```
 
 يتيح Postman أيضاً للمستخدمين حفظ الطلبات، لكن الوضع قد يصبح فوضويّاً جداً خصوصاً عند العمل على مشاريع متعددة غير مترابطة.
@@ -652,6 +686,7 @@ app.post('/api/notes', (request, response) => {
 
   response.json(note)
 })
+
 ```
 
 نحتاج إلى معرّف فريد للملاحظة. أولاً، نجد أكبر رقم معرّف في القائمة الحالية ونسنده إلى المتغير _maxId_. ثم يُعرَّف معرّف الملاحظة الجديدة كـ _maxId + 1_ على هيئة نص. لا يُوصى بهذه الطريقة، لكننا سنتعايش معها الآن إذ سنستبدلها قريباً بما يكفي.
@@ -685,6 +720,7 @@ app.post('/api/notes', (request, response) => {
 
   response.json(note)
 })
+
 ```
 
 استُخلص منطق توليد رقم المعرّف الجديد للملاحظات في دالة منفصلة _generateId_.
@@ -697,6 +733,7 @@ if (!body.content) {
     error: 'content missing' 
   })
 }
+
 ```
 
 لاحظ أن استدعاء return جوهري، وإلا فستُنفَّذ الشيفرة حتى نهايتها وتُحفظ الملاحظة المشوّهة في التطبيق.
@@ -706,6 +743,7 @@ if (!body.content) {
 
 ```js
 important: body.important || false,
+
 ```
 
 إذا كانت البيانات المحفوظة في المتغير _body_ تملك خاصية <i>important</i> وقيمتها [صادقة (truthy)](https://developer.mozilla.org/en-US/docs/Glossary/Truthy)، فسيُقيَّم التعبير إلى تلك القيمة. وإذا لم تكن الخاصية موجودة، فستكون قيمتها <i>undefined</i>، وهي [كاذبة (falsy)](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)، وبالتالي سيُقيَّم التعبير إلى false المعرفة على الجانب الأيمن من الخطين العموديين.
@@ -727,12 +765,14 @@ const generateId = () => {
     : 0
   return String(maxId + 1)
 }
+
 ```
 
 يحتوي جسم الدالة على سطر يبدو مثيراً للفضول نوعاً ما:
 
 ```js
 Math.max(...notes.map(n => Number(n.id)))
+
 ```
 
 ما الذي يحدث بالضبط في ذلك السطر من الشيفرة؟ <em>notes.map(n => Number(n.id))</em> ينشئ مصفوفة جديدة تحتوي على جميع معرّفات الملاحظات على هيئة أعداد. وتعيد [Math.max](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max) القيمة العظمى للأعداد المُمرَّرة إليها. غير أن <em>notes.map(n => Number(n.id))</em> هي <i>مصفوفة</i> لذا لا يمكن تمريرها مباشرة إلى _Math.max_. ويمكن تحويل المصفوفة إلى أعداد منفردة باستخدام صيغة [النشر](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) «النقاط الثلاث» <em>...</em>.
@@ -778,6 +818,7 @@ Math.max(...notes.map(n => Number(n.id)))
       "number": "39-23-6423122"
     }
 ]
+
 ```
 
 المخرجات في المتصفح بعد طلب GET:
@@ -827,6 +868,7 @@ Math.max(...notes.map(n => Number(n.id)))
 
 ```js
 { error: 'name must be unique' }
+
 ```
 
 </div>
@@ -881,6 +923,7 @@ const requestLogger = (request, response, next) => {
   console.log('---')
   next()
 }
+
 ```
 
 في نهاية جسم الدالة، تُستدعى الدالة _next_ التي مُرِّرت كمعامل. وتسلم دالة _next_ التحكم إلى الوسيط التالي.
@@ -890,6 +933,7 @@ const requestLogger = (request, response, next) => {
 ```js
 app.use(express.json())
 app.use(requestLogger)
+
 ```
 
 تذكر أن دوال الوسيط تُستدعى بالترتيب الذي يصادفها به محرك JavaScript. لاحظ أن _json-parser_ مُدرَج قبل _requestLogger_، وإلا فلن تتم تهيئة <i>request.body</i> عند تنفيذ المسجِّل!
@@ -904,6 +948,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي كاملة في فرع <i>part3-2</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part3-notes-backend/tree/part3-2).

@@ -25,6 +25,7 @@ lang: ar
 
 ```bash
 npm install @apollo/client graphql
+
 ```
 
 استبدل المحتوى الافتراضي للملف&nbsp;<em>main.jsx</em>&nbsp;بهيكل البرنامج التالي:
@@ -57,23 +58,25 @@ const query = gql`
   }
 `
 
-client.query({ query }).then((response) =&gt; {
+client.query({ query }).then((response) => {
   console.log(response.data)
 })
 
 createRoot(document.getElementById('root')).render(
-  &lt;StrictMode&gt;
-    &lt;App /&gt;
-  &lt;/StrictMode&gt;,
+  <StrictMode>
+    <App />
+  </StrictMode>,
 )
+
 ```
 
 تُنشئ بداية الشيفرة كائن&nbsp;<a href="https://www.apollographql.com/docs/react/get-started#step-3-initialize-apolloclient" target="_blank" rel="noreferrer noopener">عميل</a>&nbsp;جديداً، يُستخدم بعدها لإرسال استعلام إلى الخادم:
 
 ```
-client.query({ query }).then((response) =&gt; {
+client.query({ query }).then((response) => {
   console.log(response.data)
 })
+
 ```
 
 تُطبع استجابة الخادم في وحدة التحكم:
@@ -83,11 +86,11 @@ client.query({ query }).then((response) =&gt; {
 يُضاف وسم&nbsp;<code>gql</code>&nbsp;قبل القالب النصي الذي يشكّل الاستعلام، وهو مستورد من حزمة @apollo/client:
 
 ```js
-import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client' // HIGHLIGHT LINE
+import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client'
 
 // ...
 
-const query = gql` // HIGHLIGHT LINE
+const query = gql`
   query {
     allPersons {
       name
@@ -100,6 +103,7 @@ const query = gql` // HIGHLIGHT LINE
     }
   }
 `
+
 ```
 
 بفضل الوسم، تتعرّف إضافة GraphQL في VS Code والأدوات الأخرى على التعريف باعتباره GraphQL، ما يتيح ميزات مثل إبراز الصيغة في المحرر. أما في جهة الخادم، فقد حققنا الشيء نفسه بإضافة تعليق يحدد النوع قبل القالب النصي، لأن مكتبة @apollo/server المستخدمة في الخادم لا تتضمن وسم&nbsp;<code>gql</code>&nbsp;مقابلاً.
@@ -112,7 +116,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 
 import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client'
-import { ApolloProvider } from '@apollo/client/react' // HIGHLIGHT LINE
+import { ApolloProvider } from '@apollo/client/react'
 
 const client = new ApolloClient({
   link: new HttpLink({
@@ -124,12 +128,13 @@ const client = new ApolloClient({
 // ...
 
 createRoot(document.getElementById('root')).render(
-  &lt;StrictMode&gt;
-    &lt;ApolloProvider client={client}&gt; // HIGHLIGHT LINE
-      &lt;App /&gt;
-    &lt;/ApolloProvider&gt; // HIGHLIGHT LINE
-  &lt;/StrictMode&gt;,
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </StrictMode>,
 )
+
 ```
 
 ## إجراء الاستعلامات
@@ -154,56 +159,60 @@ const ALL_PERSONS = gql`
   }
 `
 
-const App = () =&gt; {
+const App = () => {
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
   return (
-    &lt;div&gt;
-      {result.data.allPersons.map(p =&gt; p.name).join(', ')}
-    &lt;/div&gt;
+    <div>
+      {result.data.allPersons.map(p => p.name).join(', ')}
+    </div>
   )
 }
 
 export default App
+
 ```
 
 عند استدعائه، يُجري&nbsp;<code>useQuery</code>&nbsp;الاستعلام الذي يستقبله كمعامل. وهو يعيد كائناً فيه عدة&nbsp;<a href="https://www.apollographql.com/docs/react/api/react/hooks/#result" target="_blank" rel="noreferrer noopener">حقول</a>. يكون الحقل&nbsp;<em>loading</em>&nbsp;قيمته true إذا لم يتلقَّ الاستعلام استجابة بعد. عندئذٍ تُعرض الشيفرة التالية:
 
 ```js
 if (result.loading) {
-  return &lt;div&gt;loading...&lt;/div&gt;
+  return <div>loading...</div>
 }
+
 ```
 
 عند استلام استجابة، يمكن العثور على نتيجة استعلام&nbsp;<em>allPersons</em>&nbsp;في الحقل data، ويمكننا عرض قائمة الأسماء على الشاشة.
 
 ```
-&lt;div&gt;
-  {result.data.allPersons.map(p =&gt; p.name).join(', ')}
-&lt;/div&gt;
+<div>
+  {result.data.allPersons.map(p => p.name).join(', ')}
+</div>
+
 ```
 
 افصل عرض الأشخاص في مكوّن خاص به في الملف&nbsp;<em>src/components/Persons.jsx</em>:
 
 ```js
-const Persons = ({ persons }) =&gt; {
+const Persons = ({ persons }) => {
   return (
-    &lt;div&gt;
-      &lt;h2&gt;Persons&lt;/h2&gt;
-      {persons.map(p =&gt;
-        &lt;div key={p.id}&gt;
+    <div>
+      <h2>Persons</h2>
+      {persons.map(p =>
+        <div key={p.id}>
           {p.name} {p.phone}
-        &lt;/div&gt;
+        </div>
       )}
-    &lt;/div&gt;
+    </div>
   )
 }
 
 export default Persons
+
 ```
 
 لا يزال مكوّن&nbsp;<code>App</code>&nbsp;يجري الاستعلام، ويمرر النتيجة إلى المكوّن الجديد ليُعرض:
@@ -211,19 +220,20 @@ export default Persons
 ```js
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
-import Persons from './components/Persons' // HIGHLIGHT LINE
+import Persons from './components/Persons'
 
 // ...
 
-const App = () =&gt; {
+const App = () => {
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
-  return &lt;Persons persons={result.data.allPersons} /&gt; // HIGHLIGHT LINE
+  return <Persons persons={result.data.allPersons} />
 }
+
 ```
 
 ## الاستعلامات المسماة والمتغيرات
@@ -241,6 +251,7 @@ query {
     id
   }
 }
+
 ```
 
 عندما نُجري استعلامات برمجياً، يجب أن نكون قادرين على إعطائها معاملات ديناميكياً.
@@ -260,6 +271,7 @@ query findPersonByName($nameToSearch: String!) {
     }
   }
 }
+
 ```
 
 اسم الاستعلام هو&nbsp;<em>findPersonByName</em>، ويُعطى نصاً&nbsp;<em>$nameToSearch</em>&nbsp;كمعامل.
@@ -295,55 +307,56 @@ const FIND_PERSON = gql`
   }
 `
 
-const Person = ({ person, onClose }) =&gt; {
+const Person = ({ person, onClose }) => {
   return (
-    &lt;div&gt;
-      &lt;h2&gt;{person.name}&lt;/h2&gt;
-      &lt;div&gt;
+    <div>
+      <h2>{person.name}</h2>
+      <div>
         {person.address.street} {person.address.city}
-      &lt;/div&gt;
-      &lt;div&gt;{person.phone}&lt;/div&gt;
-      &lt;button onClick={onClose}&gt;close&lt;/button&gt;
-    &lt;/div&gt;
+      </div>
+      <div>{person.phone}</div>
+      <button onClick={onClose}>close</button>
+    </div>
   )
 }
 
-const Persons = ({ persons }) =&gt; {
-  // BEGIN HIGHLIGHT
+const Persons = ({ persons }) => {
+
   const [nameToSearch, setNameToSearch] = useState(null)
   const result = useQuery(FIND_PERSON, {
     variables: { nameToSearch },
     skip: !nameToSearch,
   })
-  // END HIGHLIGHT
 
-  // BEGIN HIGHLIGHT
-  if (nameToSearch &amp;&amp; result.data) {
+
+
+  if (nameToSearch && result.data) {
     return (
-      &lt;Person
+      <Person
         person={result.data.findPerson}
-        onClose={() =&gt; setNameToSearch(null)}
-      /&gt;
+        onClose={() => setNameToSearch(null)}
+      />
     )
   }
-  // END HIGHLIGHT
+
 
   return (
-    &lt;div&gt;
-      &lt;h2&gt;Persons&lt;/h2&gt;
-      {persons.map((p) =&gt; (
-        &lt;div key={p.id}&gt;
+    <div>
+      <h2>Persons</h2>
+      {persons.map((p) => (
+        <div key={p.id}>
           {p.name} {p.phone}
-          &lt;button onClick={() =&gt; setNameToSearch(p.name)}&gt; // HIGHLIGHT LINE
-            show address // HIGHLIGHT LINE
-          &lt;/button&gt; // HIGHLIGHT LINE
-        &lt;/div&gt;
+          <button onClick={() => setNameToSearch(p.name)}>
+            show address
+          </button>
+        </div>
       ))}
-    &lt;/div&gt;
+    </div>
   )
 }
 
 export default Persons
+
 ```
 
 تغيّرت الشيفرة كثيراً، وليست كل التغييرات ظاهرة تماماً.
@@ -351,9 +364,10 @@ export default Persons
 عند الضغط على زر&nbsp;<em>show address</em>&nbsp;لشخص ما، يُضبط اسم الشخص في الحالة&nbsp;<em>nameToSearch</em>:
 
 ```
-&lt;button onClick={() =&gt; setNameToSearch(p.name)}&gt;
+<button onClick={() => setNameToSearch(p.name)}>
   show address
-&lt;/button&gt;
+</button>
+
 ```
 
 يتسبب هذا في إعادة عرض المكوّن لنفسه. وعند العرض يُنفَّذ استعلام&nbsp;<em>FIND_PERSON</em>&nbsp;الذي يجلب المعلومات التفصيلية لمستخدم إذا كانت للمتغير&nbsp;<em>nameToSearch</em>&nbsp;قيمة:
@@ -361,8 +375,9 @@ export default Persons
 ```js
 const result = useQuery(FIND_PERSON, {
   variables: { nameToSearch },
-  skip: !nameToSearch, // HIGHLIGHT LINE
+  skip: !nameToSearch,
 })
+
 ```
 
 عندما لا يهتم المستخدم برؤية المعلومات التفصيلية لأي شخص، يكون متغير الحالة&nbsp;<em>nameToSearch</em>&nbsp;قيمته null ولا يُنفَّذ الاستعلام.
@@ -370,14 +385,15 @@ const result = useQuery(FIND_PERSON, {
 إذا كانت للحالة&nbsp;<em>nameToSearch</em>&nbsp;قيمة وكانت نتيجة الاستعلام جاهزة، يعرض مكوّن&nbsp;<em>Person</em>&nbsp;المعلومات التفصيلية لشخص:
 
 ```js
-if (nameToSearch &amp;&amp; result.data) {
+if (nameToSearch && result.data) {
   return (
-    &lt;Person
+    <Person
       person={result.data.findPerson}
-      onClose={() =&gt; setNameToSearch(null)}
-    /&gt;
+      onClose={() => setNameToSearch(null)}
+    />
   )
 }
+
 ```
 
 يبدو عرض الشخص الواحد كالتالي:
@@ -427,6 +443,7 @@ const CREATE_PERSON = gql`
     }
   }
 `
+
 ```
 
 توفر دالة الخطاف&nbsp;<a href="https://www.apollographql.com/docs/react/api/react/hooks/#usemutation" target="_blank" rel="noreferrer noopener">useMutation</a>&nbsp;وظيفة إجراء الـ mutations.
@@ -457,20 +474,20 @@ const CREATE_PERSON = gql`
   }
 `
 
-const PersonForm = () =&gt; {
+const PersonForm = () => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
 
-  const [createPerson] = useMutation(CREATE_PERSON) // HIGHLIGHT LINE
+  const [createPerson] = useMutation(CREATE_PERSON)
 
-  const submit = (event) =&gt; {
+  const submit = (event) => {
     event.preventDefault()
 
-    // BEGIN HIGHLIGHT
+
     createPerson({ variables: { name, phone, street, city } })
-    // END HIGHLIGHT
+
 
     setName('')
     setPhone('')
@@ -479,48 +496,51 @@ const PersonForm = () =&gt; {
   }
 
   return (
-    &lt;div&gt;
-      &lt;h2&gt;create new&lt;/h2&gt;
-      &lt;form onSubmit={submit}&gt;
-        &lt;div&gt;
-          name &lt;input value={name}
-            onChange={({ target }) =&gt; setName(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-          phone &lt;input value={phone}
-            onChange={({ target }) =&gt; setPhone(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-          street &lt;input value={street}
-            onChange={({ target }) =&gt; setStreet(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-          city &lt;input value={city}
-            onChange={({ target }) =&gt; setCity(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;button type='submit'&gt;add!&lt;/button&gt;
-      &lt;/form&gt;
-    &lt;/div&gt;
+    <div>
+      <h2>create new</h2>
+      <form onSubmit={submit}>
+        <div>
+          name <input value={name}
+            onChange={({ target }) => setName(target.value)}
+          />
+        </div>
+        <div>
+          phone <input value={phone}
+            onChange={({ target }) => setPhone(target.value)}
+          />
+        </div>
+        <div>
+          street <input value={street}
+            onChange={({ target }) => setStreet(target.value)}
+          />
+        </div>
+        <div>
+          city <input value={city}
+            onChange={({ target }) => setCity(target.value)}
+          />
+        </div>
+        <button type='submit'>add!</button>
+      </form>
+    </div>
   )
 }
 
 export default PersonForm
+
 ```
 
 شيفرة النموذج مباشرة وقد أُبرزت الأسطر المهمة. يمكننا تعريف دوال الـ mutation باستخدام خطاف&nbsp;<code>useMutation</code>. يعيد الخطاف&nbsp;<em>مصفوفة</em>، يحتوي عنصرها الأول على الدالة التي تُحدث الـ mutation.
 
 ```js
 const [createPerson] = useMutation(CREATE_PERSON)
+
 ```
 
 تتلقى متغيرات الاستعلام القيم عند إجراء الاستعلام:
 
 ```
 createPerson({ variables: { name, phone, street, city } })
+
 ```
 
 فعّل مكوّن&nbsp;<em>PersonForm</em>&nbsp;في الملف&nbsp;<em>App.jsx</em>:
@@ -528,29 +548,30 @@ createPerson({ variables: { name, phone, street, city } })
 ```js
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
-import PersonForm from './components/PersonForm' // HIGHLIGHT LINE
+import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
 // ...
 
-const App = () =&gt; {
+const App = () => {
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
-  // BEGIN HIGHLIGHT
+
   return (
-    &lt;div&gt;
-      &lt;Persons persons={result.data.allPersons} /&gt;
-      &lt;PersonForm /&gt;
-    &lt;/div&gt;
+    <div>
+      <Persons persons={result.data.allPersons} />
+      <PersonForm />
+    </div>
   )
-  // END HIGHLIGHT
+
 }
 
 export default App
+
 ```
 
 يُضاف الأشخاص الجدد بشكل جيد، لكن الشاشة لا تُحدَّث. السبب أن Apollo Client لا يستطيع تحديث الذاكرة المؤقتة للتطبيق تلقائياً، لذا لا تزال تحتوي على الحالة السابقة للـ mutation. يمكننا تحديث الشاشة بإعادة تحميل الصفحة، إذ تُفرَّغ الذاكرة المؤقتة عند إعادة تحميل الصفحة. لكن لا بد أن تكون هناك طريقة أفضل لفعل ذلك.
@@ -562,24 +583,25 @@ export default App
 التغيير صغير. لنضبط الاستعلام ليستطلع كل ثانيتين:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const result = useQuery(ALL_PERSONS, {
-    pollInterval: 2000 // HIGHLIGHT LINE
+    pollInterval: 2000
   })
 
   if (result.loading)  {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
   return (
-    &lt;div&gt;
-      &lt;Persons persons = {result.data.allPersons}/&gt;
-      &lt;PersonForm /&gt;
-    &lt;/div&gt;
+    <div>
+      <Persons persons = {result.data.allPersons}/>
+      <PersonForm />
+    </div>
   )
 }
 
 export default App
+
 ```
 
 الحل بسيط، وفي كل مرة يضيف فيها مستخدم شخصاً جديداً، يظهر فوراً على شاشات جميع المستخدمين.
@@ -591,7 +613,7 @@ export default App
 ```js
 // ...
 
-// BEGIN HIGHLIGHT
+
 const ALL_PERSONS = gql`
   query {
     allPersons {
@@ -601,7 +623,7 @@ const ALL_PERSONS = gql`
     }
   }
 `
-// END HIGHLIGHT
+
 
 const PersonForm = () => {
   const [name, setName] = useState('')
@@ -609,14 +631,15 @@ const PersonForm = () => {
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
 
-  // BEGIN HIGHLIGHT
+
   const [createPerson] = useMutation(CREATE_PERSON, {
     refetchQueries: [{ query: ALL_PERSONS }],
   })
-  // END HIGHLIGHT
+
 
   // ...
 }
+
 ```
 
 مزايا هذا الحل وعيوبه شبه معاكسة للحل السابق. لا توجد حركة ويب إضافية لأن الاستعلامات لا تُجرى احتياطاً. لكن إذا حدّث أحد المستخدمين الآن حالة الخادم، فلا تظهر التغييرات للمستخدمين الآخرين فوراً.
@@ -631,6 +654,7 @@ const [createPerson] = useMutation(CREATE_PERSON, {
     { query: ANOTHER_QUERY },
   ], // مرّر ما تحتاج من استعلامات
 })
+
 ```
 
 توجد طرق أخرى لتحديث الذاكرة المؤقتة. المزيد عنها لاحقاً في هذا الجزء.
@@ -682,6 +706,7 @@ export const CREATE_PERSON = gql`
     }
   }
 `
+
 ```
 
 ثم يستورد كل مكوّن الاستعلامات التي يحتاجها:
@@ -689,10 +714,11 @@ export const CREATE_PERSON = gql`
 ```js
 import { ALL_PERSONS } from './queries'
 
-const App = () =&gt; {
+const App = () => {
   const result = useQuery(ALL_PERSONS)
   // ...
 }
+
 ```
 
 تجد الشيفرة الحالية للتطبيق على&nbsp;<a href="https://github.com/fullstack-hy2020/graphql-phonebook-frontend/tree/part8-2" target="_blank" rel="noreferrer noopener">GitHub</a>&nbsp;في الفرع&nbsp;<em>part8-2</em>.
@@ -706,33 +732,35 @@ const App = () =&gt; {
 لنسجّل معالج أخطاء للـ mutation. يتلقى مكوّن&nbsp;<em>PersonForm</em>&nbsp;دالة&nbsp;<code>setError</code>&nbsp;كـ prop، تُستخدم لضبط رسالة تشير إلى الخطأ:
 
 ```js
-const PersonForm = ({ setError }) =&gt; { // HIGHLIGHT LINE
+const PersonForm = ({ setError }) => {
   // ...
 
   const [ createPerson ] = useMutation(CREATE_PERSON, {
     refetchQueries: [  {query: ALL_PERSONS } ],
-    onError: (error) =&gt; setError(error.message), // HIGHLIGHT LINE
+    onError: (error) => setError(error.message),
   })
 
   // ...
 }
+
 ```
 
 أنشئ مكوّناً منفصلاً للإشعار في الملف&nbsp;<em>src/components/Notify.jsx</em>:
 
 ```js
-const Notify = ({ errorMessage }) =&gt; {
+const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
     return null
   }
   return (
-    &lt;div style={{ color: 'red' }}&gt;
+    <div style={{ color: 'red' }}>
       {errorMessage}
-    &lt;/div&gt;
+    </div>
   )
 }
 
 export default Notify
+
 ```
 
 يتلقى المكوّن رسالة خطأ محتملة كـ prop. وإذا ضُبطت رسالة خطأ، تُعرض على الشاشة.
@@ -740,36 +768,37 @@ export default Notify
 اعرض مكوّن&nbsp;<em>Notify</em>&nbsp;الذي يعرض رسالة الخطأ في الملف&nbsp;<em>App.jsx</em>:
 
 ```js
-import Notify from './components/Notify' // HIGHLIGHT LINE
+import Notify from './components/Notify'
 
 // ...
 
-const App = () =&gt; {
-  const [errorMessage, setErrorMessage] = useState(null) // HIGHLIGHT LINE
+const App = () => {
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading)  {
-    return &lt;div&gt;loading...&lt;/div&gt;
+    return <div>loading...</div>
   }
 
-// BEGIN HIGHLIGHT
-  const notify = (message) =&gt; {
+
+  const notify = (message) => {
     setErrorMessage(message)
-    setTimeout(() =&gt; {
+    setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
   }
-  // END HIGHLIGHT
+
 
   return (
-    &lt;div&gt;
-      &lt;Notify errorMessage={errorMessage} /&gt;  // HIGHLIGHT LINE
-      &lt;Persons persons = {result.data.allPersons} /&gt;
-      &lt;PersonForm setError={notify} /&gt;  // HIGHLIGHT LINE
-    &lt;/div&gt;
+    <div>
+      <Notify errorMessage={errorMessage} />
+      <Persons persons = {result.data.allPersons} />
+      <PersonForm setError={notify} />
+    </div>
   )
 }
+
 ```
 
 الآن يُبلَّغ المستخدم بحدوث خطأ عبر إشعار بسيط.
@@ -798,6 +827,7 @@ export const EDIT_NUMBER = gql`
     }
   }
 `
+
 ```
 
 أنشئ مكوّناً جديداً&nbsp;<em>PhoneForm</em>&nbsp;في الملف&nbsp;<em>src/components/PhoneForm.jsx</em>&nbsp;لتحديث رقم هاتف. يضيف المكوّن نموذجاً إلى التطبيق حيث يمكنك إدخال رقم هاتف جديد لشخص محدد. الأجزاء المثيرة للاهتمام في الشيفرة مُبرَزة:
@@ -807,49 +837,50 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { EDIT_NUMBER } from '../queries'
 
-const PhoneForm = () =&gt; {
+const PhoneForm = () => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
-// BEGIN HIGHLIGHT
-  const [ changeNumber ] = useMutation(EDIT_NUMBER)
-// END HIGHLIGHT
 
-  const submit = (event) =&gt; {
+  const [ changeNumber ] = useMutation(EDIT_NUMBER)
+
+
+  const submit = (event) => {
     event.preventDefault()
 
-// BEGIN HIGHLIGHT
+
     changeNumber({ variables: { name, phone } })
-    // END HIGHLIGHT
+
 
     setName('')
     setPhone('')
   }
 
   return (
-    &lt;div&gt;
-      &lt;h2&gt;change number&lt;/h2&gt;
+    <div>
+      <h2>change number</h2>
 
-      &lt;form onSubmit={submit}&gt;
-        &lt;div&gt;
-          name &lt;input
+      <form onSubmit={submit}>
+        <div>
+          name <input
             value={name}
-            onChange={({ target }) =&gt; setName(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;div&gt;
-          phone &lt;input
+            onChange={({ target }) => setName(target.value)}
+          />
+        </div>
+        <div>
+          phone <input
             value={phone}
-            onChange={({ target }) =&gt; setPhone(target.value)}
-          /&gt;
-        &lt;/div&gt;
-        &lt;button type='submit'&gt;change number&lt;/button&gt;
-      &lt;/form&gt;
-    &lt;/div&gt;
+            onChange={({ target }) => setPhone(target.value)}
+          />
+        </div>
+        <button type='submit'>change number</button>
+      </form>
+    </div>
   )
 }
 
 export default PhoneForm
+
 ```
 
 مكوّن&nbsp;<em>PhoneForm</em>&nbsp;مباشر: يطلب اسم الشخص ورقم هاتف جديداً عبر نموذج. وعند إرسال النموذج، يستدعي دالة&nbsp;<code>changeNumber</code>&nbsp;التي تتولى التحديث، والمُنشأة بخطاف&nbsp;<code>useMutation</code>.
@@ -857,20 +888,21 @@ export default PhoneForm
 فعّل المكوّن الجديد في الملف&nbsp;<em>App.jsx</em>:
 
 ```js
-import PhoneForm from './components/PhoneForm' // HIGHLIGHT LINE
+import PhoneForm from './components/PhoneForm'
 
-const App = () =&gt; {
+const App = () => {
   // ...
 
   return (
-    &lt;div&gt;
-      &lt;Notify errorMessage={errorMessage} /&gt;
-      &lt;Persons persons={result.data.allPersons} /&gt;
-      &lt;PersonForm setError={notify} /&gt;
-      &lt;PhoneForm setError={notify} /&gt; // HIGHLIGHT LINE
-    &lt;/div&gt;
+    <div>
+      <Notify errorMessage={errorMessage} />
+      <Persons persons={result.data.allPersons} />
+      <PersonForm setError={notify} />
+      <PhoneForm setError={notify} />
+    </div>
   )
 }
+
 ```
 
 يبدو قاتماً، لكنه يعمل:
@@ -886,22 +918,23 @@ const App = () =&gt; {
 بما أن GraphQL لا يعتبر هذا حالة خطأ، فلن يكون تسجيل معالج أخطاء&nbsp;<code>onError</code>&nbsp;مفيداً في هذه الحالة. لكن يمكننا إضافة دالة استدعاء راجعة&nbsp;<code>onCompleted</code>&nbsp;إلى خطاف&nbsp;<code>useMutation</code>، حيث يمكننا توليد رسالة خطأ محتملة:
 
 ```js
-const PhoneForm = ({ setError }) =&gt; { // HIGHLIGHT LINE
+const PhoneForm = ({ setError }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
-  // BEGIN HIGHLIGHT
+
   const [changeNumber] = useMutation(EDIT_NUMBER, {
-    onCompleted: (data) =&gt; {
+    onCompleted: (data) => {
       if (!data.editNumber) {
         setError('person not found')
       }
     }
   })
-  // END HIGHLIGHT
+
 
   // ...
 }
+
 ```
 
 تُنفَّذ دالة الاستدعاء الراجعة&nbsp;<code>onCompleted</code>&nbsp;دائماً عند اكتمال الـ mutation بنجاح. وإذا لم يُعثر على الشخص—أي إذا كانت نتيجة الاستعلام&nbsp;<code>data.editNumber</code>&nbsp;قيمتها&nbsp;<code>null</code>—يستخدم المكوّن دالة الاستدعاء الراجعة&nbsp;<code>setError</code>&nbsp;التي تلقاها عبر props لضبط رسالة خطأ مناسبة.

@@ -12,15 +12,17 @@ lang: ar
 تعلمنا في الأجزاء السابقة أنه يمكننا استخدام React لتعريف المكوّنات كدوال، تستقبل props كوسيط وتُعيد شجرة من عناصر React. وتُمثَّل هذه الشجرة عادةً بصيغة JSX. وفي بيئة المتصفح، استخدمنا مكتبة&nbsp;<a href="https://react.dev/reference/react-dom" target="_blank" rel="noreferrer noopener">ReactDOM</a>&nbsp;لتحويل هذه المكوّنات إلى شجرة DOM يمكن للمتصفح عرضها. وإليك مثالاً ملموساً على مكوّن بسيط جداً:
 
 ```js
-const HelloWorld = props =&gt; {
-  return &lt;div&gt;Hello world!&lt;/div&gt;;
+const HelloWorld = props => {
+  return <div>Hello world!</div>;
 };
+
 ```
 
 يعيد مكوّن <code>HelloWorld</code> عنصر <em>div</em> وحيداً أُنشئ باستخدام صيغة JSX. وقد نتذكر أن صيغة JSX هذه تُصرَّف إلى استدعاءات للدالة <code>React.createElement</code>، مثل هذا:
 
 ```
 React.createElement('div', null, 'Hello world!');
+
 ```
 
 ينشئ هذا السطر من الشيفرة عنصر <em>div</em> دون أي props ومع عنصر ابن وحيد هو نص <em>"Hello world"</em>. وعندما نعرض هذا المكوّن في عنصر DOM جذري باستخدام الدالة <code>render</code>، سيُعرض عنصر <em>div</em> كعنصر DOM المقابل له.
@@ -30,11 +32,12 @@ React.createElement('div', null, 'Hello world!');
 <a href="https://reactnative.dev/docs/intro-react-native-components" target="_blank" rel="noreferrer noopener">المكوّنات الأساسية</a>&nbsp;هي مجموعة من المكوّنات التي يوفّرها React Native، والتي تستخدم خلف الكواليس المكوّنات الأصلية للمنصة. لنُنفّذ المثال السابق باستخدام React Native:
 
 ```js
-import { Text } from 'react-native'; // HIGHLIGHT LINE
+import { Text } from 'react-native';
 
 const HelloWorld = props => {
-  return &lt;Text>Hello world!&lt;/Text>; // HIGHLIGHT LINE
+  return <Text>Hello world!</Text>;
 };
+
 ```
 
 إذن نستورد مكوّن <a href="https://reactnative.dev/docs/text" target="_blank" rel="noreferrer noopener">Text</a> من React Native ونستبدل عنصر <code>div</code> بعنصر <code>Text</code>. ولكثير من عناصر DOM المألوفة نظيراتها في React Native. وإليك بعض الأمثلة المختارة من <a href="https://reactnative.dev/docs/components-and-apis" target="_blank" rel="noreferrer noopener">وثائق المكوّنات الأساسية</a> في React Native:
@@ -50,15 +53,16 @@ const HelloWorld = props => {
 ```js
 import { Text, Pressable, Alert } from 'react-native';
 
-const PressableText = props =&gt; {
+const PressableText = props => {
   return (
-    &lt;Pressable
-      onPress={() =&gt; Alert.alert('You pressed the text!')}
-    &gt;
-      &lt;Text&gt;You can press me&lt;/Text&gt;
-    &lt;/Pressable&gt;
+    <Pressable
+      onPress={() => Alert.alert('You pressed the text!')}
+    >
+      <Text>You can press me</Text>
+    </Pressable>
   );
 };
+
 ```
 
 ## تثبيت الاعتماديات في مشروع Expo
@@ -69,6 +73,7 @@ const PressableText = props =&gt; {
 
 ```bash
 npx expo install expo-constants
+
 ```
 
 وإذا لم تكن متأكداً مما إذا كانت المكتبة تحتوي على شيفرة أصلية خاصة بـ Expo أو React Native، فيمكنك دائماً تثبيتها باستخدام الأمر <code>npx expo install</code>. وإذا لم يتعرّف Expo على الحزمة، فسيعود إلى تثبيتها باستخدام الأمر العادي <code>npm install</code>.
@@ -90,15 +95,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const Main = () =&gt; {
+const Main = () => {
   return (
-    &lt;View style={styles.container}&gt;
-      &lt;Text&gt;Rate Repository Application&lt;/Text&gt;
-    &lt;/View&gt;
+    <View style={styles.container}>
+      <Text>Rate Repository Application</Text>
+    </View>
   );
 };
 
 export default Main;
+
 ```
 
 بعد ذلك، لنستخدم مكوّن <code>Main</code> في مكوّن <code>App</code> داخل ملف <em>App.js</em> الموجود في المجلد الجذري لمشروعنا. استبدل المحتوى الحالي للملف بهذا:
@@ -106,11 +112,12 @@ export default Main;
 ```js
 import Main from './src/components/Main';
 
-const App = () =&gt; {
-  return &lt;Main /&gt;;
+const App = () => {
+  return <Main />;
 };
 
 export default App;
+
 ```
 
 ## إعادة تحميل التطبيق يدوياً
@@ -136,15 +143,16 @@ export default App;
 ```js
 import { Text, View } from 'react-native';
 
-const BigBlueText = () =&gt; {
+const BigBlueText = () => {
   return (
-    &lt;View style={{ padding: 20 }}&gt;
-      &lt;Text style={{ color: 'blue', fontSize: 24, fontWeight: '700' }}&gt;
+    <View style={{ padding: 20 }}>
+      <Text style={{ color: 'blue', fontSize: 24, fontWeight: '700' }}>
         Big blue text
-      &lt;/Text&gt;
-    &lt;/View&gt;
+      </Text>
+    </View>
   );
 };
+
 ```
 
 إضافةً إلى أسماء الخصائص، ربما لاحظت فرقاً آخر في المثال. ففي CSS تكون القيم الرقمية للخصائص عادةً مصحوبة بوحدة مثل <em>px</em> أو <em>%</em> أو <em>em</em> أو <em>rem</em>. أما في React Native فجميع قيم الخصائص المتعلقة بالأبعاد مثل <code>width</code> و<code>height</code> و<code>padding</code> و<code>margin</code> وكذلك أحجام الخطوط تكون <em>دون وحدة</em>. وتمثّل هذه القيم الرقمية بلا وحدة <em>بكسلات مستقلة عن الكثافة</em>. وإذا كنت تتساءل عن خصائص الأنماط المتاحة لمكوّنات أساسية معينة، فراجع <a href="https://github.com/vhpoet/react-native-styling-cheat-sheet" target="_blank" rel="noreferrer noopener">ورقة أنماط React Native المرجعية</a>.
@@ -152,9 +160,9 @@ const BigBlueText = () =&gt; {
 بشكل عام، لا يُعدّ تعريف الأنماط مباشرة في خاصية <code>style</code> فكرة جيدة، لأنه يجعل المكوّنات متضخمة وغير واضحة. وبدلاً من ذلك، ينبغي تعريف الأنماط خارج دالة عرض المكوّن باستخدام الدالة <a href="https://reactnative.dev/docs/stylesheet#create" target="_blank" rel="noreferrer noopener">StyleSheet.create</a>. وتقبل الدالة <code>StyleSheet.create</code> وسيطاً وحيداً هو كائن يتألف من كائنات أنماط مُسمّاة، وهي تُنشئ مرجع نمط StyleSheet من الكائن المعطى. وإليك مثالاً على كيفية إعادة هيكلة المثال السابق باستخدام الدالة <code>StyleSheet.create</code>:
 
 ```js
-import { Text, View, StyleSheet } from 'react-native'; // HIGHLIGHT LINE
+import { Text, View, StyleSheet } from 'react-native';
 
-// BEGIN HIGHLIGHT
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -165,17 +173,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-// END HIGHLIGHT
+
 
 const BigBlueText = () => {
   return (
-    &lt;View style={styles.container}> // HIGHLIGHT LINE
-      &lt;Text style={styles.text}> // HIGHLIGHT LINE
+    <View style={styles.container}>
+      <Text style={styles.text}>
         Big blue text
-      &lt;/Text>
-    &lt;/View>
+      </Text>
+    </View>
   );
 };
+
 ```
 
 أنشأنا كائني نمط مُسمّيين، <code>styles.container</code> و<code>styles.text</code>. ويمكننا داخل المكوّن الوصول إلى كائنات أنماط محددة بالطريقة نفسها التي نصل بها إلى أي مفتاح في كائن عادي.
@@ -199,41 +208,44 @@ const styles = StyleSheet.create({
   },
 });
 
-const FancyText = ({ isBlue, isBig, children }) =&gt; {
+const FancyText = ({ isBlue, isBig, children }) => {
   const textStyles = [
     styles.text,
-    isBlue &amp;&amp; styles.blueText,
-    isBig &amp;&amp; styles.bigText,
+    isBlue && styles.blueText,
+    isBig && styles.bigText,
   ];
 
-  return &lt;Text style={textStyles}&gt;{children}&lt;/Text&gt;;
+  return <Text style={textStyles}>{children}</Text>;
 };
 
-const Main = () =&gt; {
+const Main = () => {
   return (
-    &lt;&gt;
-      &lt;FancyText&gt;Simple text&lt;/FancyText&gt;
-      &lt;FancyText isBlue&gt;Blue text&lt;/FancyText&gt;
-      &lt;FancyText isBig&gt;Big text&lt;/FancyText&gt;
-      &lt;FancyText isBig isBlue&gt;
+    <>
+      <FancyText>Simple text</FancyText>
+      <FancyText isBlue>Blue text</FancyText>
+      <FancyText isBig>Big text</FancyText>
+      <FancyText isBig isBlue>
         Big blue text
-      &lt;/FancyText&gt;
-    &lt;/&gt;
+      </FancyText>
+    </>
   );
 };
+
 ```
 
 تُعرَّف props الآن دون قيمة صريحة:
 
 ```
-&lt;FancyText isBlue&gt;Blue text&lt;/FancyText&gt;
+<FancyText isBlue>Blue text</FancyText>
+
 ```
 
 في JSX، تزويد prop بدون قيمة هو صيغة خاصة تعني نفس معنى ={true}. ولذلك فإن السطرين التاليين متكافئان:
 
 ```
-&lt;FancyText isBlue&gt;Blue text&lt;/FancyText&gt;
-&lt;FancyText isBlue={true}&gt;Blue text&lt;/FancyText&gt;
+<FancyText isBlue>Blue text</FancyText>
+<FancyText isBlue={true}>Blue text</FancyText>
+
 ```
 
 في المثال، نستخدم المعامل <code>&amp;&amp;</code> مع التعبير <code>condition &amp;&amp; exprIfTrue</code>:
@@ -241,9 +253,10 @@ const Main = () =&gt; {
 ```js
     const textStyles = [
     styles.text,
-    isBlue &amp;&amp; styles.blueText, // HIGHLIGHT LINE
-    isBig &amp;&amp; styles.bigText,
+    isBlue && styles.blueText,
+    isBig && styles.bigText,
   ];
+
 ```
 
 فمثلاً، في السطر المميّز، يعطي التعبير <code>styles.blueText</code> إذا قُيّمت الشرط <code>isBlue</code> إلى true، وإلا فإنه يعطي <code>condition</code>، وهي في تلك الحالة قيمة تُقيَّم إلى false. وهذا اختصار عملي وواسع الانتشار للغاية.
@@ -252,6 +265,7 @@ const Main = () =&gt; {
 
 ```
 condition ? exprIfTrue : exprIfFalse
+
 ```
 
 ## واجهة مستخدم متسقة باستخدام الثيم
@@ -283,6 +297,7 @@ const theme = {
 };
 
 export default theme;
+
 ```
 
 بعد ذلك، ينبغي إنشاء مكوّن <code>Text</code> الفعلي الذي يستخدم إعداد الثيم هذا. أنشئ ملف <em>Text.jsx</em> في مجلد <em>components</em> حيث لدينا بالفعل بقية مكوّناتنا. وأضف المحتوى التالي إلى ملف <em>Text.jsx</em>:
@@ -313,20 +328,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const Text = ({ color, fontSize, fontWeight, style, ...props }) =&gt; {
+const Text = ({ color, fontSize, fontWeight, style, ...props }) => {
   const textStyle = [
     styles.text,
-    color === 'textSecondary' &amp;&amp; styles.colorTextSecondary,
-    color === 'primary' &amp;&amp; styles.colorPrimary,
-    fontSize === 'subheading' &amp;&amp; styles.fontSizeSubheading,
-    fontWeight === 'bold' &amp;&amp; styles.fontWeightBold,
+    color === 'textSecondary' && styles.colorTextSecondary,
+    color === 'primary' && styles.colorPrimary,
+    fontSize === 'subheading' && styles.fontSizeSubheading,
+    fontWeight === 'bold' && styles.fontWeightBold,
     style,
   ];
 
-  return &lt;NativeText style={textStyle} {...props} /&gt;;
+  return <NativeText style={textStyle} {...props} />;
 };
 
 export default Text;
+
 ```
 
 الآن نفّذنا مكوّن النص لدينا. ولهذا المكوّن متغيّرات متسقة من الألوان وأحجام الخطوط وأوزان الخطوط يمكننا استخدامها في أي مكان في تطبيقنا. ويمكننا الحصول على تنويعات نصية مختلفة باستخدام props مختلفة هكذا:
@@ -334,20 +350,21 @@ export default Text;
 ```js
 import Text from './Text';
 
-const Main = () =&gt; {
+const Main = () => {
   return (
-    &lt;&gt;
-      &lt;Text&gt;Simple text&lt;/Text&gt;
-      &lt;Text style={{ paddingBottom: 10 }}&gt;Text with custom style&lt;/Text&gt;
-      &lt;Text fontWeight="bold" fontSize="subheading"&gt;
+    <>
+      <Text>Simple text</Text>
+      <Text style={{ paddingBottom: 10 }}>Text with custom style</Text>
+      <Text fontWeight="bold" fontSize="subheading">
         Bold subheading
-      &lt;/Text&gt;
-      &lt;Text color="textSecondary"&gt;Text with secondary color&lt;/Text&gt;
-    &lt;/&gt;
+      </Text>
+      <Text color="textSecondary">Text with secondary color</Text>
+    </>
   );
 };
 
 export default Main;
+
 ```
 
 لا تتردد في توسيع هذا المكوّن أو تعديله إن رغبت في ذلك. وقد تكون فكرة جيدة أيضاً إنشاء مكوّنات نصية قابلة لإعادة الاستخدام مثل <code>Subheading</code> تستخدم مكوّن <code>Text</code>. كذلك واصل توسيع إعداد الثيم وتعديله مع تقدّم تطبيقك.
@@ -367,9 +384,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const FlexboxExample = () =&gt; {
-  return &lt;View style={styles.flexContainer}&gt;{/* ... */}&lt;/View&gt;;
+const FlexboxExample = () => {
+  return <View style={styles.flexContainer}>{/* ... */}</View>;
 };
+
 ```
 
 ربما تكون أهم خصائص حاوية flex هي التالية:
@@ -396,18 +414,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const FlexboxExample = () =&gt; {
+const FlexboxExample = () => {
   return (
-    &lt;View style={styles.flexContainer}&gt;
-      &lt;View style={styles.flexItemA}&gt;
-        &lt;Text&gt;Flex item A&lt;/Text&gt;
-      &lt;/View&gt;
-      &lt;View style={styles.flexItemB}&gt;
-        &lt;Text&gt;Flex item B&lt;/Text&gt;
-      &lt;/View&gt;
-    &lt;/View&gt;
+    <View style={styles.flexContainer}>
+      <View style={styles.flexItemA}>
+        <Text>Flex item A</Text>
+      </View>
+      <View style={styles.flexItemB}>
+        <Text>Flex item B</Text>
+      </View>
+    </View>
   );
 };
+
 ```
 
 من أكثر خصائص عناصر flex استخداماً خاصية <a href="https://css-tricks.com/almanac/properties/f/flex-grow/" target="_blank" rel="noreferrer noopener">flexGrow</a>. وهي تقبل قيمة بلا وحدة تحدّد قدرة عنصر flex على التمدد عند الحاجة. وإذا كانت قيمة <code>flexGrow</code> لجميع عناصر flex تساوي 1، فسيتقاسمون كل المساحة المتاحة بالتساوي. وإذا كانت قيمة <code>flexGrow</code> لعنصر flex تساوي 0، فسيستخدم فقط المساحة التي يتطلبها محتواه ويترك بقية المساحة لعناصر flex الأخرى.
@@ -439,22 +458,23 @@ const FlexboxExample = () =&gt; {
 ثبّتنا مكتبة <em>expo-status-bar</em> بالفعل عند إعداد Expo سابقاً. والمشكلة سهلة الإصلاح بإضافة مكوّن <code>StatusBar</code> إلى ملف <em>App.js</em>:
 
 ```js
-import { StatusBar } from 'expo-status-bar'; // HIGHLIGHT LINE
+import { StatusBar } from 'expo-status-bar';
 
 import Main from './src/components/Main';
 
 const App = () => {
-  // BEGIN HIGHLIGHT
+
   return (
-    &lt;>
-      &lt;StatusBar style="light" />
-      &lt;Main />
-    &lt;/>
+    <>
+      <StatusBar style="light" />
+      <Main />
+    </>
   );
-  // END HIGHLIGHT
+
 };
 
 export default App;
+
 ```
 
 يخبر مكوّن <code>StatusBar</code> نظام التشغيل بكيفية عرض شريط الحالة. وبضبط نمطه على <em>light</em>، تصبح أيقونات شريط الحالة أسهل رؤية على خلفية داكنة:
@@ -471,37 +491,39 @@ export default App;
 
 ```bash
 npm install react-router-native
+
 ```
 
 بعد ذلك، افتح ملف <em>App.js</em> وأضف مكوّن <code>NativeRouter</code> إلى مكوّن <code>App</code>:
 
 ```js
 import { StatusBar } from 'expo-status-bar';
-import { NativeRouter } from 'react-router-native'; // HIGHLIGHT LINE
+import { NativeRouter } from 'react-router-native';
 
 import Main from './src/components/Main';
 
 const App = () => {
   return (
-    &lt;>
-      &lt;StatusBar style="auto" />
-      // BEGIN HIGHLIGHT
-      &lt;NativeRouter>
-        &lt;Main />
-      &lt;/NativeRouter>
-      // END HIGHLIGHT
-    &lt;/>
+    <>
+      <StatusBar style="auto" />
+
+      <NativeRouter>
+        <Main />
+      </NativeRouter>
+
+    </>
   );
 };
 
 export default App;
+
 ```
 
 وبعد أن أصبح الموجّه جاهزاً، لنضف مسارنا الأول إلى مكوّن Main في ملف&nbsp;<em>Main.jsx</em>:
 
 ```js
 import { StyleSheet, View } from 'react-native';
-import { Route, Routes, Navigate } from 'react-router-native'; // HIGHLIGHT LINE
+import { Route, Routes, Navigate } from 'react-router-native';
 
 import RepositoryList from './RepositoryList';
 import AppBar from './AppBar';
@@ -516,19 +538,20 @@ const styles = StyleSheet.create({
 
 const Main = () => {
   return (
-    &lt;View style={styles.container}>
-      &lt;AppBar />
-      // BEGIN HIGHLIGHT
-      &lt;Routes>
-        &lt;Route path="/" element={&lt;RepositoryList />} />
-        &lt;Route path="*" element={&lt;Navigate to="/" replace />} />
-      &lt;/Routes>
-      // END HIGHLIGHT
-    &lt;/View>
+    <View style={styles.container}>
+      <AppBar />
+
+      <Routes>
+        <Route path="/" element={<RepositoryList />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+    </View>
   );
 };
 
 export default Main;
+
 ```
 
 وهذا كل شيء! آخر <code>Route</code> داخل <code>Routes</code> مخصص لالتقاط المسارات التي لا تطابق أي مسار معرّف سابقاً. وفي هذه الحالة، نريد الانتقال إلى العرض الرئيسي.
@@ -559,6 +582,7 @@ export default Main;
 
 ```bash
 npm install formik
+
 ```
 
 لنرَ كيف تعمل إدارة الحالة مع Formik بإنشاء نموذج لحساب&nbsp;<a href="https://en.wikipedia.org/wiki/Body_mass_index" target="_blank" rel="noreferrer noopener">مؤشر كتلة الجسم</a>:
@@ -572,49 +596,50 @@ const initialValues = {
   height: '',
 };
 
-const getBodyMassIndex = (mass, height) =&gt; {
+const getBodyMassIndex = (mass, height) => {
   return Math.round(mass / Math.pow(height, 2));
 };
 
-const BodyMassIndexForm = ({ onSubmit }) =&gt; {
+const BodyMassIndexForm = ({ onSubmit }) => {
   const formik = useFormik({
     initialValues,
     onSubmit,
   });
 
   return (
-    &lt;View&gt;
-      &lt;TextInput
+    <View>
+      <TextInput
         placeholder="Weight (kg)"
         value={formik.values.mass}
         onChangeText={formik.handleChange('mass')}
-      /&gt;
-      &lt;TextInput
+      />
+      <TextInput
         placeholder="Height (m)"
         value={formik.values.height}
         onChangeText={formik.handleChange('height')}
-      /&gt;
-      &lt;Pressable onPress={formik.handleSubmit}&gt;
-        &lt;Text&gt;Calculate&lt;/Text&gt;
-      &lt;/Pressable&gt;
-    &lt;/View&gt;
+      />
+      <Pressable onPress={formik.handleSubmit}>
+        <Text>Calculate</Text>
+      </Pressable>
+    </View>
   );
 };
 
-const BodyMassIndexCalculator = () =&gt; {
-  const onSubmit = values =&gt; {
+const BodyMassIndexCalculator = () => {
+  const onSubmit = values => {
     const mass = parseFloat(values.mass);
     const height = parseFloat(values.height);
 
-    if (!isNaN(mass) &amp;&amp; !isNaN(height) &amp;&amp; height !== 0) {
+    if (!isNaN(mass) && !isNaN(height) && height !== 0) {
       console.log(`Your body mass index is: ${getBodyMassIndex(mass, height)}`);
     }
   };
 
-  return &lt;BodyMassIndexForm onSubmit={onSubmit} /&gt;;
+  return <BodyMassIndexForm onSubmit={onSubmit} />;
 };
 
 export default BodyMassIndexCalculator;
+
 ```
 
 هذا المثال ليس جزءاً من تطبيقنا، لذا لا تحتاج إلى إضافة هذه الشيفرة إلى التطبيق. لكن يمكنك تجربته مثلاً في <a href="https://snack.expo.io/" target="_blank" rel="noreferrer noopener">Expo Snack</a>. وExpo Snack محرّر عبر الإنترنت لـReact Native، مشابه لـ<a href="https://jsfiddle.net/" target="_blank" rel="noreferrer noopener">JSFiddle</a> و<a href="https://codepen.io/" target="_blank" rel="noreferrer noopener">CodePen</a>. وهو منصة مفيدة لتجربة الشيفرة بسرعة. لاحظ أنك تحتاج أيضاً إلى إضافة Formik كاعتمادية في Expo Snack. ويمكنك فعل ذلك بإضافة الاعتمادية مباشرة إلى ملف <em>package.json</em>، مثلاً السطر: <code>"formik": "^2.4.9"</code>.
@@ -635,16 +660,17 @@ export default BodyMassIndexCalculator;
 
 ```bash
 npm install yup
+
 ```
 
 بعد ذلك، كمثال، لننشئ مخطط تحقق لنموذج مؤشر كتلة الجسم الذي نفّذناه سابقاً. نريد التحقق من أن الحقلين <code>mass</code> و<code>height</code> موجودان وأنهما رقميان. كذلك ينبغي أن تكون قيمة <code>mass</code> أكبر من أو تساوي 1، وقيمة <code>height</code> أكبر من أو تساوي 0.5. وإليك كيفية تعريف المخطط:
 
 ```js
-import * as yup from 'yup'; // HIGHLIGHT LINE
+import * as yup from 'yup';
 
 // ...
 
-// BEGIN HIGHLIGHT
+
 const validationSchema = yup.object().shape({
   mass: yup
     .number()
@@ -655,65 +681,68 @@ const validationSchema = yup.object().shape({
     .min(0.5, 'Height must be greater or equal to 0.5')
     .required('Height is required'),
 });
-// END HIGHLIGHT
+
 
 const BodyMassIndexForm = ({ onSubmit }) => {
   const formik = useFormik({
     initialValues,
-    // BEGIN HIGHLIGHT
+
     validationSchema,
-    // END HIGHLIGHT
+
     onSubmit,
   });
 
   return (
-    &lt;View>
-      &lt;TextInput
+    <View>
+      <TextInput
         placeholder="Weight (kg)"
         value={formik.values.mass}
         onChangeText={formik.handleChange('mass')}
-        onBlur={formik.handleBlur('mass')} // HIGHLIGHT LINE
+        onBlur={formik.handleBlur('mass')}
       />
-      // BEGIN HIGHLIGHT
-      {formik.touched.mass &amp;&amp; formik.errors.mass &amp;&amp; (
-        &lt;Text style={{ color: 'red' }}>{formik.errors.mass}&lt;/Text>
+
+      {formik.touched.mass && formik.errors.mass && (
+        <Text style={{ color: 'red' }}>{formik.errors.mass}</Text>
       )}
-      // END HIGHLIGHT
-      &lt;TextInput
+
+      <TextInput
         placeholder="Height (m)"
         value={formik.values.height}
         onChangeText={formik.handleChange('height')}
-        onBlur={formik.handleBlur('height')} // HIGHLIGHT LINE
+        onBlur={formik.handleBlur('height')}
       />
-      // BEGIN HIGHLIGHT
-      {formik.touched.height &amp;&amp; formik.errors.height &amp;&amp; (
-        &lt;Text style={{ color: 'red' }}>{formik.errors.height}&lt;/Text>
+
+      {formik.touched.height && formik.errors.height && (
+        <Text style={{ color: 'red' }}>{formik.errors.height}</Text>
       )}
-      // END HIGHLIGHT
-      &lt;Pressable onPress={formik.handleSubmit}>
-        &lt;Text>Calculate&lt;/Text>
-      &lt;/Pressable>
-    &lt;/View>
+
+      <Pressable onPress={formik.handleSubmit}>
+        <Text>Calculate</Text>
+      </Pressable>
+    </View>
   );
 };
 
 const BodyMassIndexCalculator = () => {
   // ...
 }
+
 ```
 
 كن على علم بأنك تحتاج إلى تضمين مكوّنات Text هذه داخل View الذي يعيده النموذج لعرض أخطاء التحقق:
 
 ```
- {formik.touched.mass &amp;&amp; formik.errors.mass &amp;&amp; (
-  &lt;Text style={{ color: 'red' }}&gt;{formik.errors.mass}&lt;/Text&gt;
+ {formik.touched.mass && formik.errors.mass && (
+  <Text style={{ color: 'red' }}>{formik.errors.mass}</Text>
  )}
+
 ```
 
 ```
- {formik.touched.height &amp;&amp; formik.errors.height &amp;&amp; (
-  &lt;Text style={{ color: 'red' }}&gt;{formik.errors.height}&lt;/Text&gt;
+ {formik.touched.height && formik.errors.height && (
+  <Text style={{ color: 'red' }}>{formik.errors.height}</Text>
  )}
+
 ```
 
 يُجرى التحقق افتراضياً في كل مرة تتغير فيها قيمة حقل وعند استدعاء الدالة <code>handleSubmit</code>. وإذا فشل التحقق، فلا تُستدعى الدالة المُمرَّرة لخاصية <code>onSubmit</code> في مكوّن <code>Formik</code>.
@@ -739,9 +768,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhatIsMyPlatform = () =&gt; {
-  return &lt;Text style={styles.text}&gt;Your platform is: {Platform.OS}&lt;/Text&gt;;
+const WhatIsMyPlatform = () => {
+  return <Text style={styles.text}>Your platform is: {Platform.OS}</Text>;
 };
+
 ```
 
 القيم الممكنة لثوابت <code>Platform.OS</code> هي <code>android</code> و<code>ios</code>. وهناك طريقة مفيدة أخرى لتعريف فروع شيفرة خاصة بالمنصة هي استخدام الدالة <code>Platform.select</code>. فعند تمرير كائن تكون مفاتيحه واحداً من <code>ios</code> أو <code>android</code> أو <code>native</code> أو <code>default</code>، تعيد الدالة <code>Platform.select</code> القيمة الأنسب للمنصة التي يعمل عليها المستخدم حالياً. ويمكننا إعادة كتابة المتغير <code>styles</code> في المثال السابق باستخدام الدالة <code>Platform.select</code> هكذا:
@@ -756,17 +786,19 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
 ```
 
 يمكننا حتى استخدام الدالة <code>Platform.select</code> لاستدعاء مكوّن خاص بمنصة عبر <code>require</code>:
 
 ```js
 const MyComponent = Platform.select({
-  ios: () =&gt; require('./MyIOSComponent'),
-  android: () =&gt; require('./MyAndroidComponent'),
+  ios: () => require('./MyIOSComponent'),
+  android: () => require('./MyAndroidComponent'),
 })();
 
-&lt;MyComponent /&gt;;
+<MyComponent />;
+
 ```
 
 غير أن هناك طريقة أكثر تطوراً لتنفيذ واستيراد مكوّنات خاصة بالمنصة (أو أي قطعة شيفرة أخرى) وهي استخدام امتدادي الملفين&nbsp;<em>.ios.jsx</em>&nbsp;و&nbsp;<em>.android.jsx</em>. لاحظ أن الامتداد&nbsp;<em>.jsx</em>&nbsp;يمكن أن يكون أيضاً امتداداً آخر يتعرّف عليه المُجمِّع، مثل&nbsp;<em>.js</em>. فيمكن أن تكون لدينا مثلاً الملفان&nbsp;<em>Button.ios.jsx</em>&nbsp;و&nbsp;<em>Button.android.jsx</em>&nbsp;اللذان يمكننا استيرادهما هكذا:
@@ -774,9 +806,10 @@ const MyComponent = Platform.select({
 ```js
 import Button from './Button';
 
-const PlatformSpecificButton = () =&gt; {
-  return &lt;Button /&gt;;
+const PlatformSpecificButton = () => {
+  return <Button />;
 };
+
 ```
 
 الآن، ستحتوي حزمة Android للتطبيق على المكوّن المعرّف في&nbsp;<em>Button.android.jsx</em>، بينما تحتوي حزمة iOS على المكوّن المعرّف في ملف <em>Button.ios.jsx</em>.

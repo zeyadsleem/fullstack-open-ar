@@ -32,6 +32,7 @@ lang: ar
 ├── index.js
 ├── package-lock.json
 ├── package.json
+
 ```
 
 حتى الآن كنا نستخدم <i>console.log</i> و<i>console.error</i> لطباعة معلومات مختلفة من الشيفرة.
@@ -48,6 +49,7 @@ const error = (...params) => {
 }
 
 module.exports = { info, error }
+
 ```
 
 يحتوي المسجِّل على دالتين، __info__ لطباعة رسائل السجل العادية، و__error__ لجميع رسائل الأخطاء.
@@ -63,6 +65,7 @@ const PORT = process.env.PORT
 const MONGODB_URI = process.env.MONGODB_URI
 
 module.exports = { MONGODB_URI, PORT }
+
 ```
 
 يمكن لأجزاء التطبيق الأخرى الوصول إلى متغيرات البيئة باستيراد وحدة الإعدادات:
@@ -71,6 +74,7 @@ module.exports = { MONGODB_URI, PORT }
 const config = require('./utils/config')
 
 logger.info(`Server running on port ${config.PORT}`)
+
 ```
 
 نُقلت معالجات المسارات أيضاً إلى وحدة مخصصة. يُشار عادةً إلى معالجات أحداث المسارات باسم <i>controllers</i>، ولهذا السبب أنشأنا مجلد <i>controllers</i> جديداً. جميع المسارات المتعلقة بالملاحظات موجودة الآن في وحدة <i>notes.js</i> داخل مجلد <i>controllers</i>.
@@ -142,6 +146,7 @@ notesRouter.put('/:id', (request, response, next) => {
 })
 
 module.exports = notesRouter
+
 ```
 
 هذا نسخ ولصق شبه حرفي لملف <i>index.js</i> السابق لدينا.
@@ -154,6 +159,7 @@ const notesRouter = require('express').Router()
 //...
 
 module.exports = notesRouter
+
 ```
 
 تصدّر الوحدة الموجّه ليكون متاحاً لجميع مستهلكي الوحدة.
@@ -164,12 +170,14 @@ module.exports = notesRouter
 
 ```js
 app.delete('/api/notes/:id', (request, response, next) => {
+
 ```
 
 وفي النسخة الحالية، لدينا:
 
 ```js
 notesRouter.delete('/:id', (request, response, next) => {
+
 ```
 
 إذن ما هي كائنات الموجّه هذه بالضبط؟ يقدم دليل Express التفسير التالي:
@@ -183,6 +191,7 @@ notesRouter.delete('/:id', (request, response, next) => {
 ```js
 const notesRouter = require('./controllers/notes')
 app.use('/api/notes', notesRouter)
+
 ```
 
 يُستخدم الموجّه الذي عرّفناه سابقاً <i>إذا</i> بدأ عنوان URL للطلب بـ <i>/api/notes</i>. لهذا السبب، يجب أن يعرّف كائن notesRouter الأجزاء النسبية من المسارات فقط، أي المسار الفارغ <i>/</i> أو المعامل <i>/:id</i> فقط.
@@ -220,6 +229,7 @@ app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 module.exports = app
+
 ```
 
 يستخدم الملف وسائط مختلفة، وأحدها <i>notesRouter</i> المرتبط بالمسار <i>/api/notes</i>.
@@ -258,6 +268,7 @@ module.exports = {
   unknownEndpoint,
   errorHandler
 }
+
 ```
 
 أُسندت مسؤولية إنشاء الاتصال بقاعدة البيانات إلى وحدة <i>app.js</i>. ملف <i>note.js</i> داخل مجلد <i>models</i> يعرّف فقط مخطط Mongoose للملاحظات.
@@ -283,6 +294,7 @@ noteSchema.set('toJSON', {
 })
 
 module.exports = mongoose.model('Note', noteSchema)
+
 ```
 
 تُبسَّط محتويات ملف <i>index.js</i> المستخدم لتشغيل التطبيق كما يلي:
@@ -295,6 +307,7 @@ const logger = require('./utils/logger')
 app.listen(config.PORT, () => {
   logger.info(`Server running on port ${config.PORT}`)
 })
+
 ```
 
 يستورد ملف <i>index.js</i> التطبيق الفعلي فقط من ملف <i>app.js</i> ثم يشغّل التطبيق. تُستخدم دالة _info_ في وحدة المسجِّل للطباعة في وحدة التحكم التي تخبر بأن التطبيق يعمل.
@@ -318,6 +331,7 @@ app.listen(config.PORT, () => {
 ├── index.js
 ├── package-lock.json
 ├── package.json
+
 ```
 
 بالنسبة للتطبيقات الأصغر، لا تهم البنية كثيراً. عندما يبدأ التطبيق بالنمو في الحجم، سيتعين عليك إنشاء نوع من البنية وفصل مسؤوليات التطبيق المختلفة في وحدات منفصلة. سيجعل هذا تطوير التطبيق أسهل بكثير.
@@ -341,7 +355,8 @@ const error = (...params) => {
   console.error(...params)
 }
 
-module.exports = { info, error } // highlight-line
+module.exports = { info, error }
+
 ```
 
 يصدّر الملف <i>كائناً</i> له حقلان، وكلاهما دالتان. يمكن استخدام الدالتين بطريقتين مختلفتين. الخيار الأول هو طلب الكائن بأكمله والإشارة إلى الدوال عبر الكائن باستخدام الترميز النقطي:
@@ -352,6 +367,7 @@ const logger = require('./utils/logger')
 logger.info('message')
 
 logger.error('error message')
+
 ```
 
 الخيار الآخر هو تفكيك الدوال إلى متغيراتها الخاصة في عبارة <i>require</i>:
@@ -361,6 +377,7 @@ const { info, error } = require('./utils/logger')
 
 info('message')
 error('error message')
+
 ```
 
 قد تكون طريقة التصدير الثانية مفضلة إذا كان جزء صغير فقط من الدوال المصدَّرة يُستخدم في ملف.
@@ -373,7 +390,8 @@ const Note = require('../models/note')
 
 // ...
 
-module.exports = notesRouter // highlight-line
+module.exports = notesRouter
+
 ```
 
 لأن «شيئاً» واحداً فقط يُصدَّر، يمكن استيراده واستخدامه فقط ككائن واحد:
@@ -384,6 +402,7 @@ const notesRouter = require('./controllers/notes')
 // ...
 
 app.use('/api/notes', notesRouter)
+
 ```
 
 الآن، يُسند «الشيء» المصدَّر (في هذه الحالة، كائن موجّه) إلى متغير _notesRouter_ ويُستخدم ككائن واحد.
@@ -448,6 +467,7 @@ const PORT = 3003
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
 ```
 
 حوّل التطبيق إلى مشروع <i>npm</i> فعّال. للحفاظ على إنتاجية تطويرك، اضبط التطبيق ليُنفَّذ بـ <i>node --watch</i>. يمكنك إنشاء قاعدة بيانات جديدة لتطبيقك باستخدام MongoDB Atlas، أو استخدام قاعدة البيانات نفسها من تمارين الجزء السابق.
@@ -494,6 +514,7 @@ module.exports = {
   reverse,
   average,
 }
+
 ```
 
 > تستخدم دالة _average_ طريقة [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) الخاصة بالمصفوفات. إذا لم تكن الطريقة مألوفة لك بعد، فهذا وقت مناسب لمشاهدة الفيديوهات الثلاثة الأولى من سلسلة [Functional JavaScript](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) على YouTube.
@@ -512,11 +533,12 @@ module.exports = {
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "node --test", // highlight-line
+    "test": "node --test",
     "lint": "eslint ."
   },
   // ...
 }
+
 ```
 
 
@@ -545,6 +567,7 @@ test('reverse of saippuakauppias', () => {
 
   assert.strictEqual(result, 'saippuakauppias')
 })
+
 ```
 
 يُعرِّف الاختبار الكلمة المفتاحية _test_ والمكتبة [assert](https://nodejs.org/docs/latest/api/assert.html)، التي تستخدمها الاختبارات للتحقق من نتائج الدوال قيد الاختبار.
@@ -553,6 +576,7 @@ test('reverse of saippuakauppias', () => {
 
 ```js
 const reverse = require('../utils/for_testing').reverse
+
 ```
 
 تُعرَّف حالات الاختبار الفردية بدالة _test_. الوسيط الأول للدالة هو وصف الاختبار كنص. الوسيط الثاني هو <i>دالة</i> تعرّف الوظيفة الخاصة بحالة الاختبار. تبدو وظيفة حالة الاختبار الثانية هكذا:
@@ -563,6 +587,7 @@ const reverse = require('../utils/for_testing').reverse
 
   assert.strictEqual(result, 'tcaer')
 }
+
 ```
 
 أولاً، ننفذ الشيفرة المطلوب اختبارها، أي نولّد عكس النص <i>react</i>. بعد ذلك، نتحقق من النتائج بالطريقة [strictEqual](https://nodejs.org/docs/latest/api/assert.html#assertstrictequalactual-expected-message) من مكتبة [assert](https://nodejs.org/docs/latest/api/assert.html).
@@ -581,6 +606,7 @@ test('reverse of react', () => {
 
   assert.strictEqual(result, 'tkaer')
 })
+
 ```
 
 يؤدي تشغيل هذا الاختبار إلى رسالة الخطأ التالية:
@@ -608,6 +634,7 @@ describe('average', () => {
     assert.strictEqual(average([]), 0)
   })
 })
+
 ```
 
 يكشف الاختبار أن الدالة لا تعمل بشكل صحيح مع مصفوفة فارغة (السبب أن القسمة على صفر في JavaScript تنتج <i>NaN</i>):
@@ -626,6 +653,7 @@ const average = array => {
     ? 0
     : array.reduce(reducer, 0) / array.length
 }
+
 ```
 
 إذا كان طول المصفوفة 0 فإننا نعيد 0، وفي جميع الحالات الأخرى نستخدم طريقة _reduce_ لحساب المتوسط.
@@ -636,6 +664,7 @@ const average = array => {
 describe('average', () => {
   // الاختبارات
 })
+
 ```
 
 يمكن استخدام كتل describe لتجميع الاختبارات في مجموعات منطقية. يستخدم مخرج الاختبار أيضاً اسم كتلة describe:
@@ -650,6 +679,7 @@ describe('average', () => {
 test('of empty array is zero', () => {
   assert.strictEqual(average([]), 0)
 })
+
 ```
 
 </div>
@@ -672,6 +702,7 @@ const dummy = (blogs) => {
 module.exports = {
   dummy
 }
+
 ```
 
 تحقق من أن إعداد الاختبار لديك يعمل بالاختبار التالي:
@@ -687,6 +718,7 @@ test('dummy returns one', () => {
   const result = listHelper.dummy(blogs)
   assert.strictEqual(result, 1)
 })
+
 ```
 
 #### 4.4: الدوال المساعدة واختبارات الوحدة، الخطوة 2
@@ -717,6 +749,7 @@ describe('total likes', () => {
     assert.strictEqual(result, 5)
   })
 })
+
 ```
 
 إذا كان تعريف قائمة مدخلات اختبار خاصة بك من المدونات جهداً كبيراً، يمكنك استخدام القائمة الجاهزة [هنا](https://github.com/fullstack-hy2020/misc/blob/master/blogs_for_test.md).
@@ -744,6 +777,7 @@ describe('total likes', () => {
   author: "Robert C. Martin",
   blogs: 3
 }
+
 ```
 
 إذا كان هناك العديد من كبار المدونين، فيكفي إعادة أي واحد منهم.
@@ -757,6 +791,7 @@ describe('total likes', () => {
   author: "Edsger W. Dijkstra",
   likes: 17
 }
+
 ```
 
 إذا كان هناك العديد من كبار المدونين، فيكفي إظهار أي واحد منهم.

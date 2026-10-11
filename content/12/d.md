@@ -15,6 +15,7 @@ lang: ar
 $ npm create vite@latest hello-front -- --template react
 $ cd hello-front
 $ npm install
+
 ```
 
 الخطوة التالية هي تحويل شيفرة JavaScript وCSS إلى ملفات ثابتة جاهزة للإنتاج. يمتلك Vite بالفعل الأمر&nbsp;<em>build</em>&nbsp;كسكربت npm فلنستخدمه:
@@ -27,6 +28,7 @@ $ npm run build
   ...
   The build folder is ready to be deployed.
   ...
+
 ```
 
 رائع! الخطوة الأخيرة هي إيجاد طريقة لاستخدام خادم لتقديم الملفات الثابتة. وكما تعلم، يمكننا استخدام <a href="https://expressjs.com/en/starter/static-files.html" target="_blank" rel="noreferrer noopener">express.static</a> مع خادم Express لتقديم الملفات الثابتة. سأترك ذلك كتمرين لك لتنفذه في المنزل. بدلاً من ذلك، سنمضي قدماً ونبدأ بكتابة ملف Dockerfile الخاص بنا:
@@ -41,6 +43,7 @@ COPY . .
 RUN npm ci
 
 RUN npm run build
+
 ```
 
 يبدو ذلك صحيحاً إلى حد ما. لنبنِه ونرَ إن كنا على المسار الصحيح. هدفنا أن ينجح البناء دون أخطاء. ثم سنستخدم bash للتحقق داخل الحاوية من وجود الملفات.
@@ -60,6 +63,7 @@ README.md   eslint.config.js  node_modules  package.json       src
 
 root@98fa9483ee85:/usr/src/app# ls dist
   assets	index.html  vite.svg
+
 ```
 
 يُعدّ <a href="https://www.npmjs.com/package/serve" target="_blank" rel="noreferrer noopener">serve</a> خياراً صالحاً لتقديم الملفات الثابتة بما أن لدينا Node بالفعل في الحاوية. لنجرب تثبيت serve وتقديم الملفات الثابتة بينما نحن داخل الحاوية.
@@ -79,6 +83,7 @@ root@98fa9483ee85:/usr/src/app# serve -n dist
    │   - Network:  http://172.17.0.2:3000   │
    │                                        │
    └────────────────────────────────────────┘
+
 ```
 
 رائع! لنضغط ctrl+c للخروج ثم نضيف ذلك إلى ملف Dockerfile.
@@ -96,10 +101,11 @@ RUN npm ci
 
 RUN npm run build
 
-// BEGIN HIGHLIGHT
+
 RUN npm install -g serve
 CMD ["serve", "-n", "dist"]
-// END HIGHLIGHT
+
+
 ```
 
 عندما نبني الصورة الآن باستخدام <code>docker build . -t hello-front</code> ونشغّلها باستخدام <code>docker run -p 5001:3000 hello-front</code>، سيصبح التطبيق متاحاً على <a href="http://localhost:5001/" target="_blank" rel="noreferrer noopener">http://localhost:5001</a>.
@@ -116,7 +122,7 @@ CMD ["serve", "-n", "dist"]
 
 ```
 # تعليمة FROM الأولى أصبحت الآن مرحلة تُسمى build-stage
-FROM node:24 AS build-stage // HIGHLIGHT LINE
+FROM node:24 AS build-stage
 WORKDIR /usr/src/app
 
 COPY . .
@@ -126,11 +132,12 @@ RUN npm ci
 RUN npm run build
 
 # هذه مرحلة جديدة، كل ما قبلها اختفى، باستثناء الملفات التي نريد نسخها بـCOPY
-FROM nginx:1.29-alpine // HIGHLIGHT LINE
+FROM nginx:1.29-alpine
 
 # انسخ المجلد dist من مرحلة build-stage إلى /usr/share/nginx/html
 # وُجد الموقع الهدف هنا في صفحة Docker hub
-COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html // HIGHLIGHT LINE
+COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
+
 ```
 
 لقد أعلنّا أيضاً&nbsp;<em>مرحلة أخرى</em>، حيث تُنسخ فقط الملفات ذات الصلة من المرحلة الأولى (المجلد&nbsp;<em>dist</em>&nbsp;الذي يحتوي على المحتوى الثابت).
@@ -180,6 +187,7 @@ RUN npm install
 
 # الأمر npm run dev هو الأمر الذي يبدأ التطبيق في وضع التطوير
 CMD ["npm", "run", "dev", "--", "--host"]
+
 ```
 
 > لاحظ الوسيطين الإضافيين&nbsp;<em>-- --host</em>&nbsp;في تعليمة&nbsp;<em>CMD</em>. فهما مطلوبان لكشف خادم التطوير ليكون مرئياً خارج شبكة Docker. افتراضياً، يُكشف خادم التطوير على localhost فقط، ورغم أننا ما زلنا نصل إلى الواجهة الأمامية باستخدام عنوان localhost، فهي في الواقع مرتبطة بشبكة Docker.
@@ -188,6 +196,7 @@ CMD ["npm", "run", "dev", "--", "--host"]
 
 ```bash
 docker build -f ./dev.Dockerfile -t hello-front-dev .
+
 ```
 
 سيُقدَّم Vite على المنفذ 5173، لذا يمكنك اختبار عمله بتشغيل حاوية مع نشر ذلك المنفذ.
@@ -202,10 +211,11 @@ docker build -f ./dev.Dockerfile -t hello-front-dev .
 
 ```
 $ docker run -p 5173:5173 -v "$(pwd):/usr/src/app/" hello-front-dev
-&gt; todo-vite@0.0.0 dev
-&gt; vite --host
+> todo-vite@0.0.0 dev
+> vite --host
 
   VITE v5.1.6  ready in 130 ms
+
 ```
 
 الآن يمكننا تحرير الملف&nbsp;<em>src/App.jsx</em>، وينبغي أن تُحمَّل التغييرات فورياً إلى المتصفح!
@@ -214,6 +224,7 @@ $ docker run -p 5173:5173 -v "$(pwd):/usr/src/app/" hello-front-dev
 
 ```
 Error: Cannot find module @rollup/rollup-linux-arm64-gnu
+
 ```
 
 المشكلة في المكتبة&nbsp;<a href="https://www.npmjs.com/package/rollup" target="_blank" rel="noreferrer noopener">rollup</a>&nbsp;التي لديها إصدار خاص بكل نظام تشغيل وبنية معالج. وبسبب ربط وحدة التخزين، تستخدم الحاوية الآن مجلد&nbsp;<em>node_modules</em>&nbsp;من مجلد الجهاز المضيف حيث يكون&nbsp;<em>@rollup/rollup-darwin-arm64</em>&nbsp;(الإصدار المناسب لـMac M1/M2) مثبتاً، لذا لا يُعثر على الإصدار الصحيح للمكتبة للحاوية&nbsp;<em>@rollup/rollup-linux-arm64-gnu</em>.
@@ -223,6 +234,7 @@ Error: Cannot find module @rollup/rollup-linux-arm64-gnu
 ```
 $ docker run -it -v "$(pwd):/usr/src/app/" hello-front-dev bash
 root@b83e9040b91d:/usr/src/app# npm install
+
 ```
 
 الآن أصبح إصدارا مكتبة rollup مثبتين والحاوية تعمل!
@@ -241,6 +253,7 @@ services:
     ports:
       - 5173:5173
     container_name: hello-front-dev # هذا سيسمي الحاوية hello-front-dev
+
 ```
 
 مع هذه التهيئة، يمكن لـ<code>docker compose -f docker-compose.dev.yml up</code> تشغيل التطبيق في وضع التطوير. بل لا تحتاج حتى إلى تثبيت Node لتطويره!
@@ -276,8 +289,9 @@ services:
       - 5173:5173
     container_name: hello-front-dev
 
-  debug-helper:    // HIGHLIGHT LINE
-    image: busybox // HIGHLIGHT LINE
+  debug-helper:
+    image: busybox
+
 ```
 
 لن يكون داخل حاوية Busybox أي عملية قيد التشغيل، لذا لا يمكننا تنفيذ <code>exec</code> فيها. ولهذا سيبدو مخرج <code>docker compose up</code> أيضاً هكذا:
@@ -292,6 +306,7 @@ front-dev       | > vite --host
 front-dev       |
 front-dev       |
 front-dev       |   VITE v7.3.1  ready in 153 ms
+
 ```
 
 هذا متوقع لأنه مجرد صندوق أدوات. لنستخدمه لإرسال طلب إلى hello-front-dev ونرى كيف يعمل DNS. وبينما تكون hello-front-dev قيد التشغيل، يمكننا تنفيذ الطلب باستخدام&nbsp;<a href="https://en.wikipedia.org/wiki/Wget" target="_blank" rel="noreferrer noopener">wget</a>&nbsp;لأنها أداة مضمّنة في Busybox لإرسال طلب من debug-helper إلى hello-front-dev.
@@ -303,11 +318,12 @@ $ docker compose -f docker-compose.dev.yml run debug-helper wget --header="Host:
 
 Connecting to app:5173 (192.168.240.3:5173)
 writing to stdout
-&lt;!doctype html>
-&lt;html lang="en">
-  &lt;head>
-    &lt;script type="module">
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module">
       ...
+
 ```
 
 الرابط <a href="http://app:5173">http://app:5173</a> هو الجزء المثير للاهتمام هنا. لقد قلنا ببساطة إننا نريد الاتصال بالمنفذ 5173 للخدمة <em>app</em>. و<em>app</em> هو اسم الخدمة المحدد في ملف <em>docker-compose.dev.yml</em>:
@@ -322,8 +338,9 @@ services:
     volumes:
       - ./:/usr/src/app
     ports:
-      - 5173:5173 // HIGHLIGHT LINE
+      - 5173:5173
     container_name: hello-front-dev
+
 ```
 
 المنفذ المستخدم هو المنفذ الذي يكون التطبيق متاحاً منه في تلك الحاوية، وهو محدد أيضاً في&nbsp;<em>docker-compose.dev.yml</em>. ولا يحتاج المنفذ إلى أن يُنشر لكي تتمكن الخدمات الأخرى في الشبكة نفسها من الاتصال به. فـ«المنافذ» (ports) في ملف docker-compose مخصصة للوصول الخارجي فقط.
@@ -340,17 +357,19 @@ services:
     volumes:
       - ./:/usr/src/app
     ports:
-      - 3210:5173  // HIGHLIGHT LINE
+      - 3210:5173
     container_name: hello-front-dev
 
   debug-helper:
     image: busybox
+
 ```
 
 مع&nbsp;<em>docker compose up</em>&nbsp;يكون التطبيق متاحاً على&nbsp;<a href="http://localhost:3210/" target="_blank" rel="noreferrer noopener">http://localhost:3210</a>&nbsp;من&nbsp;<em>الجهاز المضيف</em>، لكن الأمر
 
 ```bash
 docker compose -f docker-compose.dev.yml run debug-helper wget --header="Host: localhost" -O - http://app:5173
+
 ```
 
 لا يزال يعمل لأن المنفذ لا يزال 5173 داخل شبكة Docker.
@@ -366,13 +385,23 @@ docker compose -f docker-compose.dev.yml run debug-helper wget --header="Host: l
 قد تتساءل لماذا يحتوي الأمر أعلاه على <code>header="Host: localhost"</code>. والسبب أنه <a href="https://vite.dev/config/server-options.html#server-allowedhosts" data-type="link" data-id="https://vite.dev/config/server-options.html#server-allowedhosts">افتراضياً</a> لا يُسمح لخادم تطوير Vite بالاستجابة إلا إذا كان المضيف هو <em>localhost</em>. والآن اسم المضيف داخل شبكة Docker هو <em>app</em>، وإذا لم نضبط ترويسة Host، فسنحصل على<em> HTTP/1.1 403 Forbidden</em> كاستجابة. ويمكننا السماح بأسماء مضيفين إضافية بتحرير الملف <em>vite.config.js</em>:
 
 ```js
-import { defineConfig } from 'vite'<br>import react from '@vitejs/plugin-react'<br><br>export default defineConfig({<br>  plugins: [react()],<br>  server: {<br>    allowedHosts: ['app', 'localhost'],<br>  }<br>})
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+plugins: [react()],
+server: {
+allowedHosts: ['app', 'localhost'],
+}
+})
+
 ```
 
 الآن لم نعد نحتاج إلى ترويسة Host ويعمل ما يلي:
 
 ```bash
 docker compose -f docker-compose.dev.yml run debug-helper wget -O - http://app:5173
+
 ```
 
 <div class="tasks">
@@ -418,6 +447,7 @@ http {
     }
   }
 }
+
 ```
 
 <strong>ملاحظة</strong>&nbsp;نستخدم اصطلاح التسمية المألوف أيضاً مع Nginx،&nbsp;<em>nginx.dev.conf</em>&nbsp;لتهيئات التطوير، والاسم الافتراضي&nbsp;<em>nginx.conf</em>&nbsp;في غير ذلك.
@@ -437,6 +467,7 @@ services:
     container_name: reverse-proxy
     depends_on:
       - app # انتظر بدء حاوية الواجهة الأمامية
+
 ```
 
 وبعد إضافة ذلك، يمكننا تشغيل <code>docker compose -f docker-compose.dev.yml up</code> ونرى ما يحدث.
@@ -446,6 +477,7 @@ $ docker container ls
 CONTAINER ID   IMAGE            COMMAND  PORTS                   NAMES
 a02ae58f3e8d   nginx:1.29.1     ...      0.0.0.0:8080->80/tcp    reverse-proxy
 5ee0284566b4   hello-front-dev  ...      0.0.0.0:5173->5173/tcp  hello-front-dev
+
 ```
 
 سيؤدي الاتصال بـ&nbsp;<a href="http://localhost:8080/" target="_blank" rel="noreferrer noopener">http://localhost:8080</a>&nbsp;إلى صفحة مألوفة المظهر بحالة 502.
@@ -458,9 +490,10 @@ a02ae58f3e8d   nginx:1.29.1     ...      0.0.0.0:8080->80/tcp    reverse-proxy
 $ docker exec -it reverse-proxy bash
 
 root@374f9e62bfa8:\# curl http://localhost:80
-  &lt;html&gt;
-  &lt;head&gt;&lt;title&gt;502 Bad Gateway&lt;/title&gt;&lt;/head&gt;
+  <html>
+  <head><title>502 Bad Gateway</title></head>
   ...
+
 ```
 
 ولمساعدتنا، أنشأ Docker Compose شبكة عند تشغيلنا <code>docker compose up</code>. كما أضاف جميع الحاويات المذكورة في <em>docker-compose.dev.yml</em> إلى الشبكة. ويضمن DNS تمكننا من العثور على الحاويات الأخرى في الشبكة. ويُمنح كل حاوية اسمين: اسم الخدمة واسم الحاوية، ويمكن استخدام كليهما للتواصل مع الحاوية.
@@ -469,20 +502,21 @@ root@374f9e62bfa8:\# curl http://localhost:80
 
 ```
 root@374f9e62bfa8:\# curl http://app:5173
-&lt;!doctype html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;script type="module" src="/@vite/client"&gt;&lt;/script&gt;
-    &lt;meta charset="UTF-8" /&gt;
-    &lt;link rel="icon" type="image/svg+xml" href="/vite.svg" /&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
-    &lt;title&gt;Vite + React&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id="root"&gt;&lt;/div&gt;
-    &lt;script type="module" src="/src/main.jsx"&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module" src="/@vite/client"></script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
 ```
 
 هذا كل شيء! لنستبدل عنوان proxy_pass في nginx.dev.conf بذلك العنوان.
@@ -500,8 +534,9 @@ services:
     ports:
       - 8080:80
     container_name: reverse-proxy
-    depends_on:      // HIGHLIGHT LINE
-      - app // HIGHLIGHT LINE
+    depends_on:
+      - app
+
 ```
 
 إذا لم نفرض ترتيب البدء باستخدام&nbsp;<em>depends_on</em>&nbsp;فهناك خطر أن يفشل Nginx عند بدء التشغيل لأنه يحاول تحليل جميع أسماء DNS المشار إليها في ملف التهيئة:
@@ -518,10 +553,11 @@ http {
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection 'upgrade';
 
-      proxy_pass http://app:5173;    // HIGHLIGHT LINE
+      proxy_pass http://app:5173;
     }
   }
 }
+
 ```
 
 لاحظ أن&nbsp;<em>depends_on</em>&nbsp;لا يضمن أن الخدمة في الحاوية المعتمد عليها جاهزة للعمل، بل يضمن فقط أن الحاوية قد بدأت (وأُضيف المُدخل المقابل إلى DNS). وإذا احتاجت خدمة إلى انتظار خدمة أخرى لتصبح جاهزة قبل البدء، فينبغي استخدام&nbsp;<a href="https://docs.docker.com/compose/startup-order/" target="_blank" rel="noreferrer noopener">حلول أخرى</a>.

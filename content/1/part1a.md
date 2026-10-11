@@ -15,6 +15,7 @@ lang: ar
 
 ```bash
 npm create vite@latest
+
 ```
 
 لنجب عن الأسئلة التي تعرضها الأداة كما يلي:
@@ -28,12 +29,14 @@ npm create vite@latest
 ```bash
 cd part1
 npm install
+
 ```
 
 يُبدأ التطبيق كما يلي:
 
 ```bash
 npm run dev
+
 ```
 
 تقول وحدة التحكم إن التطبيق بدأ على منفذ localhost رقم 5173، أي العنوان <http://localhost:5173/>:
@@ -54,6 +57,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 ويصبح الملف <i>App.jsx</i> كما يلي
@@ -68,6 +72,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 يمكن حذف الملفين <i>App.css</i> و<i>index.css</i> والمجلد <i>assets</i> لأننا لا نحتاج إليها في تطبيقنا الآن.
@@ -78,6 +83,7 @@ export default App
 
 ```js
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 يعرض محتواه داخل عنصر <i>div</i> المعرّف في الملف <i>index.html</i> والذي يحمل قيمة <i>id</i> تساوي 'root'.
@@ -98,6 +104,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />)
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+
 ```
 
 يمكنك أن تجرّب إضافة بعض HTML إلى الملف هناك. لكن عند استخدام React، يُعرَّف عادةً كل المحتوى الذي يجب عرضه كمكوّنات React.
@@ -110,6 +117,7 @@ const App = () => (
     <p>Hello world</p>
   </div>
 )
+
 ```
 
 كما خمّنت على الأرجح، سيُعرض المكوّن كوسم <i>div</i> يحيط بوسم <i>p</i> يحتوي على النص <i>Hello world</i>.
@@ -122,12 +130,14 @@ const App = () => (
     <p>Hello world</p>
   </div>
 )
+
 ```
 
 ثم تُسنَد الدالة إلى متغير ثابت <i>App</i>:
 
 ```js
 const App = ...
+
 ```
 
 توجد عدة طرق لتعريف الدوال في JavaScript. سنستخدم هنا [دوال السهم](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)، وهي موصوفة في نسخة من JavaScript تُعرف باسم [ECMAScript 6](https://262.ecma-international.org/6.0/index.html?_gl=1*xxe99l*_ga*MjA1MjAzOTEwMC4xNzc0MjU2OTkx*_ga_TDCK4DWEPP*czE3NzQyNTY5OTEkbzEkZzEkdDE3NzQyNTczNzUkajYwJGwwJGgw)، وتُسمى أيضًا ES6.
@@ -142,6 +152,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 بعبارة أخرى، تُعيد الدالة قيمة التعبير.
@@ -159,6 +170,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 ولاحظ ما يحدث في وحدة تحكم المتصفح
@@ -191,6 +203,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 تُقيَّم أي شيفرة JavaScript داخل الأقواس المعقوفة، وتُدمج نتيجة هذا التقييم في المكان المحدد في HTML الذي ينتجه المكوّن.
@@ -199,6 +212,7 @@ const App = () => {
 
 ```js
 export default App
+
 ```
 
 لا يظهر export في معظم أمثلة مادة الدورة. وبدون export، ينهار المكوّن والتطبيق بأكمله.
@@ -227,6 +241,7 @@ const App = () => {
     )
   )
 }
+
 ```
 
 تتولى [Babel](https://babeljs.io/repl/) عملية الترجمة. والمشاريع المنشأة باستخدام *Vite* مهيأة للترجمة تلقائيًا. سنتعلم المزيد عن هذا الموضوع في [الجزء 7](/part7) من هذه الدورة.
@@ -239,12 +254,14 @@ JSX "شبيه بـ [XML](https://developer.mozilla.org/en-US/docs/Web/XML/XML_in
 
 ```html
 <br>
+
 ```
 
 لكن عند كتابة JSX، يجب إغلاق الوسم:
 
 ```html
 <br />
+
 ```
 
 ### مكوّنات متعددة
@@ -266,10 +283,11 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello /> // highlight-line
+      <Hello />
     </div>
   )
 }
+
 ```
 
 عرّفنا مكوّنًا جديدًا <i>Hello</i> واستخدمناه داخل المكوّن <i>App</i>. وبطبيعة الحال، يمكن استخدام المكوّن عدة مرات:
@@ -287,6 +305,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 **ملاحظة**: يُحذف <em>export</em> في الأسفل في هذه <i>الأمثلة</i>، الآن وفي المستقبل. لكنه ما زال ضروريًا لتعمل الشيفرة
@@ -302,13 +321,14 @@ const App = () => {
 لنعدّل المكوّن <i>Hello</i> كما يلي:
 
 ```js
-const Hello = (props) => { // highlight-line
+const Hello = (props) => {
   return (
     <div>
-      <p>Hello {props.name}</p> // highlight-line
+      <p>Hello {props.name}</p>
     </div>
   )
 }
+
 ```
 
 الآن أصبح للدالة التي تعرّف المكوّن معامل props. ويتلقى هذا المعامل كوسيط كائنًا يحتوي على حقول تقابل كل "props" يحددها مستخدم المكوّن.
@@ -320,11 +340,12 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello name='George' /> // highlight-line
-      <Hello name='Daisy' /> // highlight-line
+      <Hello name='George' />
+      <Hello name='Daisy' />
     </div>
   )
 }
+
 ```
 
 يمكن أن يكون هناك عدد اعتباطي من الـ props، ويمكن أن تكون قيمها نصوصًا "مكتوبة مباشرة" أو نتائج تعبيرات JavaScript. وإذا حُصل على قيمة prop باستخدام JavaScript فيجب لفّها بأقواس معقوفة.
@@ -333,28 +354,29 @@ const App = () => {
 
 ```js
 const Hello = (props) => {
-  console.log(props) // highlight-line
+  console.log(props)
   return (
     <div>
       <p>
-        Hello {props.name}, you are {props.age} years old // highlight-line
+        Hello {props.name}, you are {props.age} years old
       </p>
     </div>
   )
 }
 
 const App = () => {
-  const name = 'Peter' // highlight-line
-  const age = 10       // highlight-line
+  const name = 'Peter'
+  const age = 10
 
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello name='Maya' age={26 + 10} /> // highlight-line
-      <Hello name={name} age={age} />     // highlight-line
+      <Hello name='Maya' age={26 + 10} />
+      <Hello name={name} age={age} />
     </div>
   )
 }
+
 ```
 
 الـ props التي يرسلها المكوّن <i>App</i> هي قيم المتغيرات، ونتيجة تقييم تعبير الجمع، ونص عادي.
@@ -405,10 +427,11 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'react/prop-types': 0, // highlight-line
+      'react/prop-types': 0,
     },
   },
 ]
+
 ```
 
 سنتعرّف على ESLint بمزيد من التفصيل [في الجزء 3](/part3/validation_and_es_lint#lint).
@@ -433,6 +456,7 @@ const footer = () => {
     </div>
   )
 }
+
 ```
 
 واستخدمته هكذا
@@ -443,10 +467,11 @@ const App = () => {
     <div>
       <h1>Greetings</h1>
       <Hello name='Maya' age={26 + 10} />
-      <footer /> // highlight-line
+      <footer />
     </div>
   )
 }
+
 ```
 
 فلن تعرض الصفحة المحتوى المعرّف داخل مكوّن footer، وبدلًا من ذلك ينشئ React فقط عنصر [footer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/footer) فارغًا، أي عنصر HTML المدمج بدلًا من عنصر React المخصص الذي يحمل الاسم نفسه. وإذا غيّرت الحرف الأول من اسم المكوّن إلى حرف كبير، فإن React ينشئ عنصر <i>div</i> معرّفًا في مكوّن Footer، ويُعرض على الصفحة.
@@ -461,6 +486,7 @@ const App = () => {
     <Footer />
   )
 }
+
 ```
 
 فالنتيجة هي رسالة خطأ.
@@ -477,6 +503,7 @@ const App = () => {
     <Footer />
   ]
 }
+
 ```
 
 لكن عند تعريف المكوّن الجذري للتطبيق، فإن هذا ليس أمرًا حكيمًا بشكل خاص، ويجعل الشيفرة تبدو قبيحة بعض الشيء.
@@ -497,6 +524,7 @@ const App = () => {
     </>
   )
 }
+
 ```
 
 الآن تُترجم الشيفرة بنجاح، ولم يعد DOM الذي ينشئه React يحتوي على عنصر div الإضافي.
@@ -521,6 +549,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 لكن لا يظهر شيء على الشاشة. قضيت 15 دقيقة أحاول إيجاد مشكلة في الشيفرة، لكنني لم أستطع معرفة أين يمكن أن تكون المشكلة.
@@ -539,12 +568,14 @@ export default App
 
 ```js
 <p>{friends[0]}</p>
+
 ```
 
 وهذا يسبب مشكلة لأن العنصر المطلوب عرضه داخل الأقواس المعقوفة هو كائن.
 
 ```js
 { name: 'Peter', age: 4 }
+
 ```
 
 في React، يجب أن تكون العناصر الفردية المعروضة داخل الأقواس المعقوفة قيمًا أولية، مثل الأعداد أو النصوص.
@@ -567,18 +598,21 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 فالآن يُعرض اسم الصديق منفصلًا داخل الأقواس المعقوفة
 
 ```js
 {friends[0].name}
+
 ```
 
 والعمر
 
 ```js
 {friends[0].age}
+
 ```
 
 بعد تصحيح الخطأ، يجب أن تمسح رسائل الخطأ من وحدة التحكم بالضغط على 🚫 ثم تعيد تحميل محتوى الصفحة وتتأكد من عدم عرض أي رسائل خطأ.
@@ -595,6 +629,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 في هذا الجزء، لا يستحق الأمر حتى محاولة استخدام العرض المباشر للجداول، وسنعود إليه في الجزء التالي.
@@ -623,6 +658,7 @@ part1
 part2
   phonebook
   countries
+
 ```
 
 انظر إلى [مستودع التسليم النموذجي](https://github.com/fullstack-hy2020/example-submission-repository) هذا!
@@ -645,6 +681,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 و<i>App.jsx</i> ليطابق ما يلي
@@ -677,6 +714,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 واحذف الملفين الإضافيين <i>App.css</i> و<i>index.css</i>، واحذف أيضًا المجلد <i>assets</i>.
@@ -699,6 +737,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 **تحذير** لا تحاول برمجة كل المكوّنات في الوقت نفسه، لأن ذلك سيكسر التطبيق بأكمله على الأرجح. تقدّم بخطوات صغيرة، فاصنع أولًا مثلًا المكوّن <i>Header</i>، وفقط عندما يعمل بالتأكيد، يمكنك الانتقال إلى المكوّن التالي.
@@ -723,6 +762,7 @@ const Content = ... {
     </div>
   )
 }
+
 ```
 
 يمرّر تطبيقنا المعلومات بطريقة بدائية جدًا في الوقت الحالي، لأنه يعتمد على متغيرات فردية. وسنصلح ذلك في [الجزء 2](/part2)، لكن قبل ذلك، لننتقل إلى part1b لتعلّم JavaScript.

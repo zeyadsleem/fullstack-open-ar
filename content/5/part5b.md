@@ -16,11 +16,12 @@ lang: ar
   // ...
   "dependencies": {
     "axios": "^1.9.0",
-    "react": "^19.1.0", // highlight-line
-    "react-dom": "^19.1.0" // highlight-line
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   // ...
 }
+
 ```
 
 شغّل أيضاً الأمر _npm install_ الذي يثبّت الاعتماديات وفقاً لملف <i>package.json</i>. هذا ضروري إذا كنت مثلاً قد نسختَ مستودع المثال في مرحلة سابقة من الدورة، حين كان إصدار أقدم من React لا يزال قيد الاستخدام.
@@ -74,6 +75,7 @@ const LoginForm = ({
 }
 
 export default LoginForm
+
 ```
 
 تُعرَّف الحالة وجميع الدوال المرتبطة بها خارج المكوّن وتُمرَّر إلى المكوّن عبر props.
@@ -100,6 +102,7 @@ const LoginForm = (props) => {
     </div>
   )
 }
+
 ```
 
 حيث تُسنَد الخصائص مباشرةً إلى متغيراتها الخاصة بدلاً من الوصول إلى خصائص كائن _props_ عبر ما يشبه _props.handleSubmit_.
@@ -108,7 +111,7 @@ const LoginForm = (props) => {
 
 ```js
 const App = () => {
-  const [loginVisible, setLoginVisible] = useState(false) // highlight-line
+  const [loginVisible, setLoginVisible] = useState(false)
 
   // ...
 
@@ -137,6 +140,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 تحتوي حالة مكوّن <i>App</i> الآن على القيمة المنطقية <i>loginVisible</i> التي تحدد ما إذا كان ينبغي عرض نموذج تسجيل الدخول للمستخدم أم لا.
@@ -147,6 +151,7 @@ const App = () => {
 <button onClick={() => setLoginVisible(true)}>log in</button>
 
 <button onClick={() => setLoginVisible(false)}>cancel</button>
+
 ```
 
 تُحدَّد رؤية المكوّن بإعطاء المكوّن قاعدة نمط [مضمّنة](/part2/adding_styles_to_react_app#inline-styles)، حيث تكون قيمة خاصية [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display) هي <i>none</i> إذا لم نرد عرض المكوّن:
@@ -162,12 +167,14 @@ const showWhenVisible = { display: loginVisible ? '' : 'none' }
 <div style={showWhenVisible}>
   // زر
 </div>
+
 ```
 
 نستخدم مرة أخرى المعامل الثلاثي «علامة الاستفهام». إذا كانت _loginVisible_ تساوي <i>true</i>، فستكون قاعدة CSS للمكوّن:
 
 ```css
 display: 'none';
+
 ```
 
 وإذا كانت _loginVisible_ تساوي <i>false</i>، فلن تتلقى <i>display</i> أي قيمة متعلقة برؤية المكوّن.
@@ -188,6 +195,7 @@ display: 'none';
     handleSubmit={handleLogin}
   />
 </Togglable>
+
 ```
 
 تختلف طريقة استخدام المكوّن قليلاً عن مكوّناتنا السابقة. فللمكوّن وسمَا فتح وإغلاق يحيطان بمكوّن <i>LoginForm</i>. في مصطلحات React، يُعدّ <i>LoginForm</i> مكوّناً ابناً لـ <i>Togglable</i>.
@@ -199,6 +207,7 @@ display: 'none';
   <p>this line is at start hidden</p>
   <p>also this is hidden</p>
 </Togglable>
+
 ```
 
 شيفرة مكوّن <i>Togglable</i> موضحة أدناه:
@@ -230,6 +239,7 @@ const Togglable = (props) => {
 }
 
 export default Togglable
+
 ```
 
 الجزء الجديد والمثير للاهتمام في الشيفرة هو [props.children](https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children) الذي يُستخدم للإشارة إلى المكوّنات الأبناء للمكوّن. المكوّنات الأبناء هي عناصر React التي نعرّفها بين وسمَي فتح وإغلاق المكوّن.
@@ -241,6 +251,7 @@ export default Togglable
   {props.children}
   <button onClick={toggleVisibility}>cancel</button>
 </div>
+
 ```
 
 على عكس props «العادية» التي رأيناها سابقاً، تُضيف React خاصية <i>children</i> تلقائياً وهي موجودة دائماً. وإذا عُرّف مكوّن بوسم إغلاق ذاتي _/>_ كهذا:
@@ -251,6 +262,7 @@ export default Togglable
   note={note}
   toggleImportance={() => toggleImportanceOf(note.id)}
 />
+
 ```
 
 فإن <i>props.children</i> عندئذٍ مصفوفة فارغة.
@@ -275,6 +287,7 @@ const NoteForm = ({ onSubmit, handleChange, value}) => {
     </div>
   )
 }
+
 ```
 
 بعد ذلك، لنعرّف مكوّن النموذج داخل مكوّن <i>Togglable</i>:
@@ -287,6 +300,7 @@ const NoteForm = ({ onSubmit, handleChange, value}) => {
     handleChange={handleNoteChange}
   />
 </Togglable>
+
 ```
 
 يمكنك إيجاد شيفرة تطبيقنا الحالي كاملةً في فرع <i>part5-4</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-4).
@@ -336,6 +350,7 @@ const NoteForm = ({ createNote }) => {
 }
 
 export default NoteForm
+
 ```
 
 **ملاحظة** في الوقت نفسه، غيّرنا سلوك التطبيق بحيث تصبح الملاحظات الجديدة مهمة افتراضياً، أي أن الحقل <i>important</i> يحصل على القيمة <i>true</i>.
@@ -350,7 +365,7 @@ export default NoteForm
 ```js
 const App = () => {
   // ...
-  const addNote = (noteObject) => { // highlight-line
+  const addNote = (noteObject) => {
     noteService
       .create(noteObject)
       .then(returnedNote => {
@@ -366,6 +381,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 يمكننا فعل الشيء نفسه مع نموذج تسجيل الدخول، لكننا سنترك ذلك لتمرين اختياري.
@@ -385,20 +401,21 @@ const App = () => {
 لنجرِ التغييرات التالية على مكوّن <i>App</i>:
 
 ```js
-import { useState, useEffect, useRef } from 'react' // highlight-line
+import { useState, useEffect, useRef } from 'react'
 
 const App = () => {
   // ...
-  const noteFormRef = useRef() // highlight-line
+  const noteFormRef = useRef()
 
   const noteForm = () => (
-    <Togglable buttonLabel='new note' ref={noteFormRef}>  // highlight-line
+    <Togglable buttonLabel='new note' ref={noteFormRef}>
       <NoteForm createNote={addNote} />
     </Togglable>
   )
 
   // ...
 }
+
 ```
 
 يُستخدم خطاف [useRef](https://react.dev/reference/react/useRef) لإنشاء مرجع <i>noteFormRef</i> الذي يُسند إلى مكوّن <i>Togglable</i> المحتوي على نموذج إنشاء الملاحظة. يعمل المتغير <i>noteFormRef</i> كمرجع إلى المكوّن. ويضمن هذا الخطاف بقاء المرجع (ref) نفسه طوال عمليات إعادة عرض المكوّن.
@@ -406,9 +423,9 @@ const App = () => {
 نجري أيضاً التغييرات التالية على مكوّن <i>Togglable</i>:
 
 ```js
-import { useState, useImperativeHandle } from 'react' // highlight-line
+import { useState, useImperativeHandle } from 'react'
 
-const Togglable = (props) => { // highlight-line
+const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -438,6 +455,7 @@ const Togglable = (props) => { // highlight-line
 }
 
 export default Togglable
+
 ```
 
 يستخدم المكوّن خطاف [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle) لجعل دالته <i>toggleVisibility</i> متاحة خارج المكوّن.
@@ -448,7 +466,7 @@ export default Togglable
 const App = () => {
   // ...
   const addNote = (noteObject) => {
-    noteFormRef.current.toggleVisibility() // highlight-line
+    noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
       .then(returnedNote => {     
@@ -457,6 +475,7 @@ const App = () => {
   }
   // ...
 }
+
 ```
 
 وخلاصة القول، إن دالة [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle) هي خطاف في React يُستخدم لتعريف دوال في مكوّن يمكن استدعاؤها من خارج المكوّن.
@@ -475,6 +494,7 @@ const App = () => {
 const Togglable = () => ...
   // ...
 }
+
 ```
 
 ونستخدمه هكذا:
@@ -493,6 +513,7 @@ const Togglable = () => ...
     third
   </Togglable>
 </div>
+
 ```
 
 ننشئ <i>ثلاث نسخ منفصلة من المكوّن</i>، ولكل منها حالتها المنفصلة:
@@ -574,13 +595,14 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <div style={blogStyle}> // highlight-line
+    <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}
       </div>
       // ...
   </div>
 )}
+
 ```
 
 **ملاحظة:** رغم أن الوظيفة المنفَّذة في هذا الجزء تكاد تكون مطابقة للوظيفة التي يوفرها مكوّن <i>Togglable</i>، فلا يمكن استخدامه مباشرةً لتحقيق السلوك المطلوب. سيكون الحل الأسهل هو إضافة حالة إلى مكوّن المدونة تتحكم في عرض التفاصيل أو عدم عرضها.
@@ -604,6 +626,7 @@ const Blog = ({ blog }) => {
   title: "The Joel Test: 12 Steps to Better Code",
   url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
 },
+
 ```
 
 فسيتعين عليك إرسال طلب HTTP PUT إلى العنوان <i>/api/blogs/5a43fde2cbd20b12a2c34e91</i> ببيانات الطلب التالية:
@@ -616,6 +639,7 @@ const Blog = ({ blog }) => {
   title: "The Joel Test: 12 Steps to Better Code",
   url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
 }
+
 ```
 
 يجب تحديث الواجهة الخلفية أيضاً للتعامل مع مرجع المستخدم.
@@ -703,12 +727,14 @@ export default [
     }
   }
 ]
+
 ```
 
 ملاحظة: إذا كنت تستخدم Visual Studio Code مع إضافة ESLint، فقد تحتاج إلى إضافة إعداد مساحة عمل لكي يعمل. وإذا ظهرت لك رسالة <i>Failed to load plugin react: Cannot find module 'eslint-plugin-react'</i> فستكون هناك حاجة إلى إعداد إضافي. وقد تساعد إضافة السطر التالي إلى settings.json:
 
 ```js
 "eslint.workingDirectories": [{ "mode": "auto" }]
+
 ```
 
 انظر [هنا](https://github.com/microsoft/vscode-eslint/issues/880#issuecomment-578052807) لمزيد من المعلومات.
@@ -717,6 +743,7 @@ export default [
 
 ```bash
 npm run lint
+
 ```
 
 أو باستخدام إضافة Eslint في محرّرك.

@@ -16,6 +16,7 @@ npx create-next-app@latest notes-app
 
 ? Would you like to use the recommended Next.js defaults?
 ❯   Yes, use recommended defaults
+
 ```
 
 قرّرنا المضي بالإعدادات الافتراضية الموصى بها.
@@ -40,16 +41,18 @@ npx create-next-app@latest notes-app
 ├── public
 ├── README.md
 └── tsconfig.json
+
 ```
 
 ينبغي أن تبدو أشياء كثيرة هنا مألوفة. يمكننا تخمين أن&nbsp;<em>next.config.ts</em>&nbsp;يحتوي على إعدادات Next.js. ومن المثير للاهتمام أن الملفين&nbsp;<em>AGENTS.md</em>&nbsp;و&nbsp;<em>CLAUDE.md</em>&nbsp;يُنشآن أيضاً لوكلاء البرمجة. ويوجّه AGENTS.md تحذيراً إلى الوكلاء الذين قد يعتمدون على بيانات تعلّم أقدم:
 
 ```
-&lt;!-- BEGIN:nextjs-agent-rules -->
+<!-- BEGIN:nextjs-agent-rules -->
 <em># This is NOT the Next.js you know</em>
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-&lt;!-- END:nextjs-agent-rules -->
+<!-- END:nextjs-agent-rules -->
+
 ```
 
 أهم مجلد هو&nbsp;<em>app</em>&nbsp;الذي سيحتوي على معظم شيفرة التطبيق.
@@ -63,26 +66,29 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body>{children}&lt;/body>
-    &lt;/html>
+    <html lang="en">
+      <body>{children}</body>
+    </html>
   )
 }
+
 ```
 
 بعد ذلك، نغيّر محتوى&nbsp;<em>page.tsx</em>&nbsp;ليصبح كما يلي:
 
 ```js
 const Home = () => {
-  return &lt;div>hello next.js&lt;/div>
+  return <div>hello next.js</div>
 }
 export default Home
+
 ```
 
 الآن يمكننا تشغيل التطبيق
 
 ```bash
 npm run dev
+
 ```
 
 وأصبح لدينا تطبيق Next.js بسيط يعمل:
@@ -94,25 +100,26 @@ npm run dev
 ```js
 const Home = () => {
   return (
-    &lt;div>
-      &lt;div>
-        &lt;h2>notes app&lt;/h2>
+    <div>
+      <div>
+        <h2>notes app</h2>
         An example app for{" "}
-        &lt;a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-nextjs">
+        <a href="https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-nextjs">
           Full Stack Open Next.js
-        &lt;/a>
-      &lt;/div>
-      &lt;div>
+        </a>
+      </div>
+      <div>
         See{" "}
-        &lt;a href="https://github.com/fullstack-hy2020/nextjs-notes">
+        <a href="https://github.com/fullstack-hy2020/nextjs-notes">
           https://github.com/fullstack-hy2020/nextjs-notes
-        &lt;/a>{" "}
+        </a>{" "}
         for the source code
-      &lt;/div>
-    &lt;/div>
+      </div>
+    </div>
   )
 }
 export default Home
+
 ```
 
 تبدو الصفحة الرئيسية لتطبيقنا كمكوّن React عادي. لكنها ليست كذلك. في Next.js، تكون المكوّنات داخل مجلد&nbsp;<em>app</em>&nbsp;من نوع&nbsp;<a href="https://react.dev/reference/rsc/server-components">React Server Components</a>&nbsp;افتراضياً. وخلافاً لمكوّنات React التقليدية التي كنا نكتبها حتى الآن، تُعرض مكوّنات الخادم (Server Components) على الخادم وليس في المتصفح.
@@ -127,6 +134,7 @@ const Home = () => {
   )
 }
 export default Home
+
 ```
 
 عندما ننتقل إلى&nbsp;<a href="http://localhost:3000/">http://localhost:3000</a>، يظهر ناتج&nbsp;<em>console.log</em>&nbsp;في الطرفية التي يعمل فيها الخادم:
@@ -154,11 +162,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body>{children}&lt;/body>
-    &lt;/html>
+    <html lang="en">
+      <body>{children}</body>
+    </html>
   )
 }
+
 ```
 
 ما دور هذا الملف؟ التخطيط هو غلاف واجهة مشترك يُعرض حول كل صفحة ضمن نطاقه. في هذه الحالة، يغلّف التخطيط الجذري التطبيق بأكمله ويوفّر وسمي&nbsp;<code>&lt;html&gt;</code>&nbsp;و&nbsp;<code>&lt;body&gt;</code>&nbsp;. وتستقبل خاصية&nbsp;<code>children</code>&nbsp;محتوى الصفحة الحالية (أي المكوّن المصدَّر من&nbsp;<em>page.tsx</em>&nbsp;). تبقى التخطيطات ثابتة عبر التنقلات ولا يُعاد عرضها، ما يجعلها مثالية للعناصر المشتركة مثل أشرطة التنقل والتذييلات.
@@ -178,20 +187,21 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body>
-        &lt;nav>
-          &lt;Link href="/">home&lt;/Link>
+    <html lang="en">
+      <body>
+        <nav>
+          <Link href="/">home</Link>
           {" | "}
-          &lt;Link href="/notes">notes&lt;/Link>
+          <Link href="/notes">notes</Link>
           {" | "}
-          &lt;Link href="/notes/new">create new&lt;/Link>
-        &lt;/nav>
+          <Link href="/notes/new">create new</Link>
+        </nav>
         {children}
-      &lt;/body>
-    &lt;/html>
+      </body>
+    </html>
   )
 }
+
 ```
 
 يستخدم شريط التنقل المكوّن&nbsp;<a href="https://nextjs.org/docs/app/api-reference/components/link">Link</a>&nbsp;للروابط. وسلوك المكوّن واضح تماماً: فهو يوفّر توجيهاً من جهة العميل تماماً كما يفعل نظيره في React Router.
@@ -219,19 +229,20 @@ const notes = [
 
 const Notes = () => {
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;ul>
+    <div>
+      <h2>Notes</h2>
+      <ul>
         {notes.map(note => (
-          &lt;li key={note.id}>
-            {note.content} {note.important &amp;&amp; &lt;strong>(important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            {note.content} {note.important && <strong>(important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
 export default Notes
+
 ```
 
 لا شيء مفاجئ في المكوّن. يمكننا الآن الانتقال إلى العرض الجديد:
@@ -260,6 +271,7 @@ export const getNotes = () => {
 export const addNote = (content: string, important: boolean) => {
   notes.push({ id: nextId++, content, important })
 }
+
 ```
 
 يصدّر الملف الآن الدالة&nbsp;<em>getNotes</em>&nbsp;بسلوك واضح.
@@ -271,24 +283,25 @@ export const addNote = (content: string, important: boolean) => {
 أصبح&nbsp;<em>app/notes/page.tsx</em>&nbsp;الآن كما يلي:
 
 ```js
-import { getNotes } from "../services/notes" // HIGHLIGHT LINE
+import { getNotes } from "../services/notes"
 
 const Notes = () => {
-  const notes = getNotes() // HIGHLIGHT LINE
+  const notes = getNotes()
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;ul>
+    <div>
+      <h2>Notes</h2>
+      <ul>
         {notes.map(note => (
-          &lt;li key={note.id}>
-            {note.content} {note.important &amp;&amp; &lt;strong>(important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            {note.content} {note.important && <strong>(important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
 export default Notes
+
 
 ```
 
@@ -301,28 +314,29 @@ export default Notes
 ```js
 const NewNote = () => {
   return (
-    &lt;div>
-      &lt;h2>Create a new note&lt;/h2>
-      &lt;form>
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Create a new note</h2>
+      <form>
+        <div>
+          <label>
             Content
-            &lt;input type="text" name="content" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
-            &lt;input type="checkbox" name="important" />
+            <input type="text" name="content" required />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="important" />
             Important
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Create&lt;/button>
-      &lt;/form>
-    &lt;/div>
+          </label>
+        </div>
+        <button type="submit">Create</button>
+      </form>
+    </div>
   )
 }
 
 export default NewNote
+
 ```
 
 يبدو النموذج جيداً لكنه لا يفعل شيئاً. فكيف ننفّذ إرسال النموذج؟
@@ -345,6 +359,7 @@ export const createNote = async (formData: FormData) => {
   addNote(content, important)
   redirect("/notes")
 }
+
 ```
 
 يأخذ الإجراء&nbsp;<em>createNote</em>&nbsp;المعامل&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">formData</a>&nbsp;، ويستخدم الدالة&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData/get">get</a>&nbsp;للوصول إلى قيم النموذج. ثم يستخدم الدالة&nbsp;<em>addNote</em>&nbsp;المعرّفة في&nbsp;<em>app/services/notes.ts</em>&nbsp;لحفظ الملاحظة المنشأة في قائمة الملاحظات. وأخيراً، يستدعي&nbsp;<a href="https://nextjs.org/docs/app/api-reference/functions/redirect">redirect</a>&nbsp;لإعادة المستخدم إلى قائمة الملاحظات.
@@ -354,32 +369,33 @@ export const createNote = async (formData: FormData) => {
 ويُمرَّر إجراء الخادم كخاصية <em>action</em> إلى <em>&lt;form></em>:
 
 ```js
-import { createNote } from "./actions" // HIGHLIGHT LINE
+import { createNote } from "./actions"
 
 const NewNote = () => {
   return (
-    &lt;div>
-      &lt;h2>Create a new note&lt;/h2>
-      &lt;form action={createNote}> // HIGHLIGHT LINE
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Create a new note</h2>
+      <form action={createNote}>
+        <div>
+          <label>
             Content
-            &lt;input type="text" name="content" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
-            &lt;input type="checkbox" name="important" />
+            <input type="text" name="content" required />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="important" />
             Important
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Create&lt;/button>
-      &lt;/form>
-    &lt;/div>
+          </label>
+        </div>
+        <button type="submit">Create</button>
+      </form>
+    </div>
   )
 }
 
 export default NewNote
+
 ```
 
 عند إرسال النموذج، يرسل المتصفح بيانات النموذج إلى الخادم كطلب POST، ثم يُنفَّذ إجراء الخادم وتُحدَّث الصفحة. كل ذلك دون كتابة أي شيفرة JavaScript من جهة العميل. وهذا يعني أن مكوّن النموذج يمكن أن يبقى مكوّن خادم.
@@ -395,8 +411,9 @@ export const createNote = async (formData: FormData) => {
   const content = formData.get("content") as string
   const important = formData.get("important") === "on"
   addNote(content, important)
-  redirect("/notes") // HIGHLIGHT LINE
+  redirect("/notes")
 }
+
 ```
 
 إذاً يُستدعى الأمر&nbsp;<a href="https://nextjs.org/docs/app/api-reference/functions/redirect">redirect</a>&nbsp;لإعادة المستخدم إلى العرض&nbsp;<em>notes</em>&nbsp;الذي يسرد الملاحظات. وكانت التطبيقات التقليدية المعروضة من جهة الخادم تلجأ في هذه الحالة إلى نمط&nbsp;<a href="https://en.wikipedia.org/wiki/Post/Redirect/Get">post-redirect-get</a>&nbsp;.
@@ -412,6 +429,7 @@ export const createNote = async (formData: FormData) => {
 ```bash
 npm run build
 npm start
+
 ```
 
 يُظهر ناتج البناء شيئاً مثيراً للاهتمام:
@@ -431,6 +449,7 @@ Route (app)
 ├ ○ /_not-found
 ├ ○ /notes
 └ ○ /notes/new
+
 ```
 
 لاحظ رمز&nbsp;<em>○</em>&nbsp;بجانب كل مسار. هذا يعني أن جميع صفحاتنا <strong>ثابتة</strong>، إذ&nbsp;<a href="https://nextjs.org/docs/app/getting-started/linking-and-navigating#server-rendering">عُرضت مسبقاً</a>&nbsp;وقت البناء إلى ملفات HTML. وعندما يطلب المستخدم&nbsp;<em>/notes</em>&nbsp;، يقدّم Next.js ملف HTML المبني مسبقاً فوراً دون تشغيل أي شيفرة من جهة الخادم.
@@ -445,7 +464,7 @@ Route (app)
 "use server"
 
 import { redirect } from "next/navigation"
-import { revalidatePath } from "next/cache" // HIGHLIGHT LINE
+import { revalidatePath } from "next/cache"
 import { addNote } from "../services/notes"
 
 export const createNote = async (formData: FormData) => {
@@ -453,9 +472,10 @@ export const createNote = async (formData: FormData) => {
   const important = formData.get("important") === "on"
   addNote(content, important)
 
-  revalidatePath("/notes") // HIGHLIGHT LINE
+  revalidatePath("/notes")
   redirect("/notes")
 }
+
 ```
 
 يخبر الاستدعاء&nbsp;<em>revalidatePath("/notes")</em>&nbsp;Next.js بإبطال النسخة المخزّنة مؤقتاً من صفحة&nbsp;<em>/notes</em>&nbsp;. وفي المرة التالية التي يطلب فيها أحدهم ذلك المسار، سيعيد Next.js عرضه ببيانات حديثة بدلاً من تقديم النسخة القديمة من وقت البناء.
@@ -486,7 +506,7 @@ export const createNote = async (formData: FormData) => {
 import { notFound } from "next/navigation"
 import { getNoteById } from "../../services/notes"
 
-const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
+const NotePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
   const note = getNoteById(Number(id))
 
@@ -495,14 +515,15 @@ const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
   }
 
   return (
-    &lt;div>
-      &lt;h2>{note.content}&lt;/h2>
-      &lt;p>{note.important ? "Important" : "Not important"}&lt;/p>
-    &lt;/div>
+    <div>
+      <h2>{note.content}</h2>
+      <p>{note.important ? "Important" : "Not important"}</p>
+    </div>
   )
 }
 
 export default NotePage
+
 ```
 
 عندما لا تُوجد الملاحظة، نستدعي&nbsp;<a href="https://nextjs.org/docs/app/api-reference/functions/not-found">notFound()</a>&nbsp;من&nbsp;<em>next/navigation</em>&nbsp;. ترمي هذه الدالة خطأً خاصاً يلتقطه Next.js ويعرض أقرب ملف&nbsp;<em>not-found.tsx</em>&nbsp;، أو صفحة 404 افتراضية إن لم يوجد أي منها. وهذه هي الطريقة الاصطلاحية للإشارة إلى مورد مفقود في موجّه تطبيق Next.js.
@@ -515,31 +536,33 @@ export default NotePage
 export const getNoteById = (id: number) => {
   return notes.find((note) => note.id === id)
 }
+
 ```
 
 لنوسّع&nbsp;<em>app/notes/page.tsx</em>&nbsp;لتمكين الانتقال إلى الملاحظات الفردية:
 
 ```js
-import Link from "next/link" // HIGHLIGHT LINE
+import Link from "next/link"
 import { getNotes } from "../services/notes"
 
 const Notes = () => {
   const notes = getNotes()
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;ul>
+    <div>
+      <h2>Notes</h2>
+      <ul>
         {notes.map((note) => (
-          &lt;li key={note.id}>
-            &lt;Link href={`/notes/${note.id}`}>{note.content}&lt;/Link> // HIGHLIGHT LINE
-            {note.important &amp;&amp; &lt;strong> (important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>{note.content}</Link>
+            {note.important && <strong> (important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
 export default Notes
+
 ```
 
 ### مزيد من الوظائف
@@ -558,6 +581,7 @@ export const toggleImportance = (id: number) => {
     note.important = !note.important
   }
 }
+
 ```
 
 الآن، في actions/notes، يكون إجراء الخادم كما يلي ويفترض أنه يستقبل معرّف الملاحظة المبدَّلة كمعامل formData:
@@ -569,6 +593,7 @@ export const toggleNoteImportance = async (formData: FormData) => {
   revalidatePath(`/notes/${id}`)
   revalidatePath("/notes")
 }
+
 ```
 
 بعد تبديل الأهمية، يحتاج الإجراء إلى إعادة التحقق من مسار الملاحظة نفسها ومن قائمة الملاحظات. وهذا يبقي جميع العروض متزامنة مع التغيير.
@@ -578,9 +603,9 @@ export const toggleNoteImportance = async (formData: FormData) => {
 ```ts
 import { notFound } from "next/navigation"
 import { getNoteById } from "../../services/notes"
-import { toggleNoteImportance } from "../../actions/notes" // HIGHLIGHT LINE
+import { toggleNoteImportance } from "../../actions/notes"
 
-const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
+const NotePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
   const note = getNoteById(Number(id))
 
@@ -589,20 +614,21 @@ const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
   }
 
   return (
-    &lt;div>
-      &lt;h2>{note.content}&lt;/h2>
-      &lt;p>{note.important ? "Important" : "Not important"}&lt;/p>
-      // BEGIN HIGHLIGHT
-      &lt;form action={toggleNoteImportance}>
-        &lt;input type="hidden" name="id" value={note.id} />
-        &lt;button type="submit">
+    <div>
+      <h2>{note.content}</h2>
+      <p>{note.important ? "Important" : "Not important"}</p>
+
+      <form action={toggleNoteImportance}>
+        <input type="hidden" name="id" value={note.id} />
+        <button type="submit">
           {note.important ? "Mark as not important" : "Mark as important"}
-        &lt;/button>
-      &lt;/form>
-      // END HIGHLIGHT
-    &lt;/div>
+        </button>
+      </form>
+
+    </div>
   )
 }
+
 ```
 
 التغيير مثير للاهتمام. فأصبح الزر الذي يبدّل الأهمية داخل وسمي form، وإجراء الخادم هو إجراء النموذج. ويحتاج إجراء الخادم إلى&nbsp;<em>id</em>&nbsp;الملاحظة، ولهذا يحتوي النموذج على حقل إدخال&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/hidden">مخفي</a>&nbsp;، يتيح تضمين بيانات لا يمكن لمستخدمي النموذج رؤيتها أو تعديلها.
@@ -613,9 +639,10 @@ const NotePage = async ({ params }: { params: Promise&lt;{ id: string }> }) => {
 export const toggleNoteImportance = async (formData: FormData) => {
   const id = Number(formData.get("id"))
   toggleImportance(id)
-  revalidatePath(`/notes/${id}`) // HIGHLIGHT LINE
-  revalidatePath("/notes") // HIGHLIGHT LINE
+  revalidatePath(`/notes/${id}`)
+  revalidatePath("/notes")
 }
+
 ```
 
 كل شيء يعمل بدون هذين السطرين في وضع التطوير، ولكن عند تشغيل التطبيق في الإنتاج باستخدام&nbsp;<em>npm run build &amp;&amp; npm start</em>&nbsp;لا ينعكس تبديل الأهمية في الواجهة رغم تنفيذ الطلب في الواجهة الخلفية.
@@ -648,23 +675,24 @@ const NoteList = ({ notes }: { notes: Note[] }) => {
     : notes
 
   return (
-    &lt;div>
-      &lt;button onClick={() => setShowImportant(!showImportant)}>
+    <div>
+      <button onClick={() => setShowImportant(!showImportant)}>
         {showImportant ? "Show all" : "Show important"}
-      &lt;/button>
-      &lt;ul>
+      </button>
+      <ul>
         {notesToShow.map((note) => (
-          &lt;li key={note.id}>
-            &lt;Link href={`/notes/${note.id}`}>{note.content}&lt;/Link>
-            {note.important &amp;&amp; &lt;strong> (important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>{note.content}</Link>
+            {note.important && <strong> (important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
 
 export default NoteList
+
 ```
 
 منطق المكوّن مألوف جداً لدينا. فهو يستقبل قائمة الملاحظات كخاصية، وبناءً على حالته&nbsp;<em>showImportant</em>&nbsp;يعرض إما كل الملاحظات أو المهمة فقط. ويُستخدم زر للتحكم في قيمة&nbsp;<em>showImportant</em>&nbsp;.
@@ -678,13 +706,14 @@ import NoteList from "./NoteList"
 const Notes = () => {
   const notes = getNotes()
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;NoteList notes={notes} />
-    &lt;/div>
+    <div>
+      <h2>Notes</h2>
+      <NoteList notes={notes} />
+    </div>
   )
 }
 export default Notes
+
 ```
 
 ![صورة توضيحية](/images/mooc/87c8aa3d6643.webp)
@@ -725,7 +754,7 @@ import { getNotes } from "../services/notes"
 const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
   const { important } = await searchParams
   const showImportant = important === "true"
@@ -735,32 +764,34 @@ const Notes = async ({
     : allNotes
 
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;div>
-        &lt;Link href={showImportant ? "/notes" : "/notes?important=true"}>
+    <div>
+      <h2>Notes</h2>
+      <div>
+        <Link href={showImportant ? "/notes" : "/notes?important=true"}>
           {showImportant ? "show all" : "show important only"}
-        &lt;/Link>
-      &lt;/div>
-      &lt;ul>
+        </Link>
+      </div>
+      <ul>
         {notes.map((note) => (
-          &lt;li key={note.id}>
-            &lt;Link href={`/notes/${note.id}`}>{note.content}&lt;/Link>
-            {note.important &amp;&amp; &lt;strong> (important)&lt;/strong>}
-          &lt;/li>
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>{note.content}</Link>
+            {note.important && <strong> (important)</strong>}
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
+
 ```
 
 هناك الكثير لاستيعابه. أولاً، أصبح مبدّل وضع العرض رابطاً:
 
 ```
-&lt;Link href={showImportant ? "/notes" : "/notes?important=true"}&gt;
+<Link href={showImportant ? "/notes" : "/notes?important=true"}>
   {showImportant ? "show all" : "show important only"}
-&lt;/Link&gt;
+</Link>
+
 
 ```
 
@@ -774,17 +805,18 @@ const Notes = async ({
 const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
-  // BEGIN HIGHLIGHT
+
   const { important } = await searchParams
   const showImportant = important === "true"
-// END HIGHLIGHT
+
 
   const allNotes = getNotes()
   const notes = showImportant
     ? allNotes.filter((note) => note.important)
     : allNotes
+
 
 ```
 

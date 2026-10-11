@@ -12,7 +12,8 @@ lang: ar
 نبدأ بتثبيت الحزم المطلوبة:
 
 ```bash
-npm install next-auth@beta bcryptjs &amp;&amp; npm install -D @types/bcryptjs
+npm install next-auth@beta bcryptjs && npm install -D @types/bcryptjs
+
 ```
 
 #### تغيير المخطط
@@ -24,8 +25,9 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   name: text("name").notNull(),
-  passwordHash: text("password_hash").notNull().default(""), // HIGHLIGHT LINE
+  passwordHash: text("password_hash").notNull().default(""),
 })
+
 ```
 
 يُسمى العمود&nbsp;<em>passwordHash</em>&nbsp;في TypeScript ويُقابل&nbsp;<em>password_hash</em>&nbsp;في قاعدة البيانات. نخزّن التجزئة فقط، ولا نخزّن كلمة المرور النصية الصريحة أبداً. القيمة الافتراضية المتمثلة في نص فارغ تتيح لنا إضافة العمود إلى جدول يحتوي بالفعل على صفوف دون خرق قيد not-null.
@@ -35,6 +37,7 @@ export const users = pgTable("users", {
 ```bash
 npx drizzle-kit generate
 npx drizzle-kit migrate
+
 ```
 
 #### إعدادات NextAuth
@@ -93,6 +96,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
 })
+
 ```
 
 تدعم NextAuth العديد من&nbsp;<a href="https://authjs.dev/getting-started/providers">مزوّدي المصادقة</a>&nbsp;المختلفين مثل Google وGitHub وFacebook. هنا نستخدم&nbsp;<a href="https://authjs.dev/getting-started/authentication/credentials">مزوّد بيانات الاعتماد (Credentials provider)</a>، الذي يتيح للمستخدمين تسجيل الدخول باسم مستخدم وكلمة مرور.
@@ -107,6 +111,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   name: user.name,
   email: user.username,
 }
+
 ```
 
 يحتوي نوع الجلسة المدمج في NextAuth على ثلاثة حقول:&nbsp;<em>id</em>&nbsp;و&nbsp;<em>name</em>&nbsp;و&nbsp;<em>email</em>. ليس لدينا بريد إلكتروني في مخططنا، لذا نعيد استخدام حقل&nbsp;<em>email</em>&nbsp;لتخزين اسم المستخدم بدلاً منه. هذا حلّ التفافي متعمّد: فلا تقدّم NextAuth حقل&nbsp;<em>username</em>&nbsp;مدمجاً، وبدلاً من توسيع نوع الجلسة بتعريفات TypeScript مخصّصة، نعيد استخدام حقل موجود يؤدي الغرض نفسه المتمثل في تحديد هوية المستخدم بشكل فريد. والنتيجة أننا حيثما قرأنا الجلسة لاحقاً على الخادم باستخدام&nbsp;<em>auth()</em>، نستخرج اسم المستخدم من&nbsp;<em>session.user.email</em>.
@@ -129,6 +134,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 import { handlers } from "@/auth"
 
 export const { GET, POST } = handlers
+
 ```
 
 جزء [...nextauth] هو&nbsp;<a href="https://nextjs.org/docs/app/getting-started/layouts-and-pages#creating-a-dynamic-segment">مقطع مسار شامل (catch-all route segment)</a>&nbsp;في Next.js يطابق أي مسار تحت&nbsp;<em>/api/auth/</em>، مثل&nbsp;<em>/api/auth/signin</em>&nbsp;و&nbsp;<em>/api/auth/signout</em>&nbsp;و&nbsp;<em>/api/auth/session</em>. تعترض NextAuth كل هذه المسارات وتتولى التعامل معها تلقائياً.
@@ -151,8 +157,9 @@ export default function AuthSessionProvider({
 }: {
   children: React.ReactNode
 }) {
-  return &lt;SessionProvider>{children}&lt;/SessionProvider>
+  return <SessionProvider>{children}</SessionProvider>
 }
+
 ```
 
 ثم نحدّث&nbsp;<em>layout.tsx</em>&nbsp;لنلفّ التطبيق داخل&nbsp;<em>AuthSessionProvider</em>، مما يمنح كل مكوّن عميل في الشجرة وصولاً إلى الجلسة عبر&nbsp;<em>useSession</em>:
@@ -167,16 +174,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body>
-        &lt;AuthSessionProvider> // HIGHLIGHT LINE
-          &lt;NavBar />
+    <html lang="en">
+      <body>
+        <AuthSessionProvider>
+          <NavBar />
           {children}
-        &lt;/AuthSessionProvider> // HIGHLIGHT LINE
-      &lt;/body>
-    &lt;/html>
+        </AuthSessionProvider>
+      </body>
+    </html>
   )
 }
+
 ```
 
 #### شريط التنقل
@@ -193,28 +201,29 @@ export default function NavBar() {
   const { data: session } = useSession()
 
   return (
-    &lt;nav>
-      &lt;Link href="/">home&lt;/Link>
+    <nav>
+      <Link href="/">home</Link>
       {" | "}
-      &lt;Link href="/notes">notes&lt;/Link>
+      <Link href="/notes">notes</Link>
       {" | "}
-      &lt;Link href="/users">users&lt;/Link>
+      <Link href="/users">users</Link>
       {" | "}
-      // BEGIN HIGHLIGHT
+
       {session ? (
-        &lt;>
-          &lt;Link href="/notes/new">create new&lt;/Link>
+        <>
+          <Link href="/notes/new">create new</Link>
           {" | "}
-          &lt;em>{session.user?.name} logged in&lt;/em>{" "}
-          &lt;button onClick={() => signOut()}>logout&lt;/button>
-        &lt;/>
+          <em>{session.user?.name} logged in</em>{" "}
+          <button onClick={() => signOut()}>logout</button>
+        </>
       ) : (
-        &lt;Link href="/login">login&lt;/Link>
+        <Link href="/login">login</Link>
       )}
-      // END HIGHLIGHT
-    &lt;/nav>
+
+    </nav>
   )
 }
+
 ```
 
 عند وجود جلسة، يعرض شريط التنقل اسم المستخدم المسجّل، ورابطاً لإنشاء ملاحظة جديدة، وزر تسجيل خروج يستدعي&nbsp;<a href="https://authjs.dev/getting-started/session-management/custom-pages#sign-out">signOut</a>. وعند عدم وجود جلسة، يعرض رابط تسجيل دخول بدلاً من ذلك.
@@ -234,7 +243,7 @@ export default function LoginPage() {
   const router = useRouter()
   const [error, setError] = useState("")
 
-  const handleSubmit = async (e: React.SubmitEvent&lt;HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
 
@@ -253,27 +262,28 @@ export default function LoginPage() {
   }
 
   return (
-    &lt;div>
-      &lt;h2>Login&lt;/h2>
-      {error &amp;&amp; &lt;p style={{ color: "red" }}>{error}&lt;/p>}
-      &lt;form onSubmit={handleSubmit}>
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Login</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>
             Username
-            &lt;input type="text" name="username" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
+            <input type="text" name="username" required />
+          </label>
+        </div>
+        <div>
+          <label>
             Password
-            &lt;input type="password" name="password" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Login&lt;/button>
-      &lt;/form>
-    &lt;/div>
+            <input type="password" name="password" required />
+          </label>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   )
 }
+
 ```
 
 يستدعي النموذج&nbsp;<a href="https://authjs.dev/getting-started/session-management/custom-pages#sign-in">signIn</a>&nbsp;من&nbsp;<em>next-auth/react</em>&nbsp;مع&nbsp;<em>redirect: false</em>، ما يعني أن NextAuth ستُعيد النتيجة ككائن بدلاً من إعادة توجيه المتصفح تلقائياً. وإذا فشلت المصادقة، فستُضبط قيمة&nbsp;<em>result.error</em>&nbsp;ونعرض رسالة خطأ. وإذا نجحت، نستخدم موجّه Next.js للانتقال إلى الصفحة الرئيسية ونستدعي&nbsp;<em>router.refresh()</em>&nbsp;لإجبار مكوّنات الخادم في الشجرة على إعادة العرض بالجلسة الجديدة.
@@ -298,6 +308,7 @@ export const getCurrentUser = async () => {
     where: eq(users.username, session.user.email),
   })
 }
+
 ```
 
 تذكّر أننا في دالة&nbsp;<em>authorize</em>&nbsp;في&nbsp;<em>auth.ts</em>&nbsp;خزّنّا اسم المستخدم في حقل&nbsp;<em>email</em>&nbsp;لكائن المستخدم المُعاد. وتستخرج دالة&nbsp;<em>getCurrentUser</em>&nbsp;تلك القيمة من الجلسة وتجلب سجل المستخدم الكامل من قاعدة البيانات.
@@ -308,10 +319,10 @@ export const getCurrentUser = async () => {
 
 ```js
 export const createNote = async (formData: FormData) => {
-  const session = await auth() // HIGHLIGHT LINE
-  if (!session) { // HIGHLIGHT LINE
-    redirect("/login") // HIGHLIGHT LINE
-  } // HIGHLIGHT LINE
+  const session = await auth()
+  if (!session) {
+    redirect("/login")
+  }
 
   const content = formData.get("content") as string
   const important = formData.get("important") === "on"
@@ -320,6 +331,7 @@ export const createNote = async (formData: FormData) => {
   revalidatePath("/notes")
   redirect("/notes")
 }
+
 ```
 
 إذا لم تكن هناك جلسة نشطة، يُوجَّه المستخدم إلى صفحة تسجيل الدخول قبل إنشاء أي ملاحظة.
@@ -337,6 +349,7 @@ export const addNote = async (content: string, important: boolean) => {
 
   await db.insert(notes).values({ content, important, userId: user.id })
 }
+
 ```
 
 #### متغيرات البيئة
@@ -345,6 +358,7 @@ export const addNote = async (content: string, important: boolean) => {
 
 ```
 echo "$(openssl rand -base64 32)"
+
 ```
 
 انسخ الناتج يدوياً إلى&nbsp;<em>.env.local</em>:
@@ -352,6 +366,7 @@ echo "$(openssl rand -base64 32)"
 ```
 DATABASE_URL=postgresql://...
 AUTH_SECRET=your-generated-secret-here
+
 ```
 
 على Vercel، أضف&nbsp;<em>AUTH_SECRET</em>&nbsp;و&nbsp;<em>AUTH_URL</em>&nbsp;تحت&nbsp;<em>Settings &gt; Environment Variables</em>. وقيمة&nbsp;<em>AUTH_URL</em>&nbsp;هي الرابط العام لتطبيقك المنشور، مثلاً&nbsp;<em><a href="https://your-app.vercel.app/">https://your-app.vercel.app</a></em>.
@@ -381,11 +396,12 @@ const username = process.argv[2]
 const password = process.argv[3]
 
 if (!username || !password) {
-  console.log("Usage: npx tsx set-password.ts &lt;username> &lt;password>")
+  console.log("Usage: npx tsx set-password.ts <username> <password>")
   process.exit(1)
 }
 
 setPassword(username, password).then(() => process.exit(0))
+
 ```
 
 يقرأ النص اسم مستخدم وكلمة مرور نصية صريحة من وسائط سطر الأوامر. ويجزّئ كلمة المرور باستخدام&nbsp;<a href="https://www.npmjs.com/package/bcryptjs#usage">bcrypt.hash</a>&nbsp;بمعامل كلفة قدره 10، ثم يحدّث صف المستخدم المطابق في قاعدة البيانات. يتحكم معامل الكلفة في مقدار الكلفة الحسابية لحساب التجزئة: فالقيم الأعلى أبطأ في الكسر بالقوة الغاشمة لكنها أبطأ أيضاً في التحقق عند تسجيل الدخول. والقيمة 10 هي الافتراضية الموصى بها عادةً.
@@ -394,6 +410,7 @@ setPassword(username, password).then(() => process.exit(0))
 
 ```bash
 npx tsx set-password.ts mluukkai secretpassword
+
 ```
 
 هذا النص بطبيعة الحال أداة تطويرية فقط.
@@ -441,6 +458,7 @@ export const registerUser = async (formData: FormData) => {
 
   redirect("/login")
 }
+
 ```
 
 يقرأ الإجراء&nbsp;<em>username</em>&nbsp;و&nbsp;<em>name</em>&nbsp;و&nbsp;<em>password</em>&nbsp;من بيانات النموذج، ويجزّئ كلمة المرور بـ<em>bcrypt.hash</em>، ويُدرج المستخدم الجديد، ويوجّه إلى صفحة تسجيل الدخول.
@@ -453,32 +471,33 @@ import { registerUser } from "../actions/users"
 
 export default function RegisterPage() {
   return (
-    &lt;div>
-      &lt;h2>Register&lt;/h2>
-      &lt;form action={registerUser}>
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Register</h2>
+      <form action={registerUser}>
+        <div>
+          <label>
             Username
-            &lt;input type="text" name="username" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
+            <input type="text" name="username" required />
+          </label>
+        </div>
+        <div>
+          <label>
             Name
-            &lt;input type="text" name="name" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
+            <input type="text" name="name" required />
+          </label>
+        </div>
+        <div>
+          <label>
             Password
-            &lt;input type="password" name="password" required />
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Register&lt;/button>
-      &lt;/form>
-    &lt;/div>
+            <input type="password" name="password" required />
+          </label>
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
   )
 }
+
 ```
 
 أخيراً، أضف رابطاً إلى صفحة التسجيل في&nbsp;<em>NavBar.tsx</em>&nbsp;ليتمكن المستخدمون غير المُصادَقين من العثور عليها:
@@ -493,30 +512,31 @@ export default function NavBar() {
   const { data: session } = useSession()
 
   return (
-    &lt;nav>
-      &lt;Link href="/">home&lt;/Link>
+    <nav>
+      <Link href="/">home</Link>
       {" | "}
-      &lt;Link href="/notes">notes&lt;/Link>
+      <Link href="/notes">notes</Link>
       {" | "}
-      &lt;Link href="/users">users&lt;/Link>
+      <Link href="/users">users</Link>
       {" | "}
       {session ? (
-        &lt;>
-          &lt;Link href="/notes/new">create new&lt;/Link>
+        <>
+          <Link href="/notes/new">create new</Link>
           {" | "}
-          &lt;em>{session.user?.name} logged in&lt;/em>{" "}
-          &lt;button onClick={() => signOut()}>logout&lt;/button>
-        &lt;/>
+          <em>{session.user?.name} logged in</em>{" "}
+          <button onClick={() => signOut()}>logout</button>
+        </>
       ) : (
-        &lt;>
-          &lt;Link href="/login">login&lt;/Link>
+        <>
+          <Link href="/login">login</Link>
           {" | "}
-          &lt;Link href="/register">register&lt;/Link> // HIGHLIGHT LINE
-        &lt;/>
+          <Link href="/register">register</Link>
+        </>
       )}
-    &lt;/nav>
+    </nav>
   )
 }
+
 ```
 
 الآن يمكن للمستخدمين الجدد التسجيل عبر النموذج، ولم تعد هناك حاجة لتعيين كلمات المرور يدوياً بنص&nbsp;<em>set-password.ts</em>.
@@ -531,6 +551,7 @@ export default function NavBar() {
 import { handlers } from "@/auth"
 
 export const { GET, POST } = handlers
+
 ```
 
 البادئة <em>@/</em> هي اسم مستعار للمسار يُقابل جذر مشروعك. فبدلاً من كتابة مسار نسبي مثل <em>../../../auth</em>، يمكنك دائماً كتابة <em>@/auth</em> بغض النظر عن عمق تداخل الملف المستورِد. وهذا يجعل الاستيرادات أسهل قراءة وإعادة هيكلة.
@@ -545,6 +566,7 @@ export const { GET, POST } = handlers
     }
   }
 }
+
 ```
 
 تتضمن مشاريع Next.js الجديدة المنشأة بـ<em>create-next-app</em>&nbsp;هذا الإعداد افتراضياً. وإذا لم يكن مشروعك يحتويه، فأضف مدخل&nbsp;<em>paths</em>&nbsp;أعلاه وأعد تشغيل خادم لغة TypeScript. ثم يمكنك تنظيف كل سلاسل الاستيراد النسبي في أنحاء الشيفرة.
@@ -554,6 +576,7 @@ export const { GET, POST } = handlers
 ```js
 import { db } from "../../db"
 import { users } from "../../db/schema"
+
 ```
 
 يمكنك كتابة:
@@ -561,6 +584,7 @@ import { users } from "../../db/schema"
 ```js
 import { db } from "@/db"
 import { users } from "@/db/schema"
+
 ```
 
 يشير كلاهما إلى الملفات نفسها، لكن نسخ <em>@/</em> لا لبس فيها دائماً ولا تتعطل عند نقل ملف إلى مجلد مختلف.
@@ -589,26 +613,27 @@ import { createNote } from "../../actions/notes"
 
 const NewNote = () => {
   return (
-    &lt;div>
-      &lt;h2>Create a new note&lt;/h2>
-      &lt;form action={createNote}>
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Create a new note</h2>
+      <form action={createNote}>
+        <div>
+          <label>
             Content
-            &lt;input type="text" name="content" required minLength={10} /> // HIGHLIGHT LINE
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
-            &lt;input type="checkbox" name="important" />
+            <input type="text" name="content" required minLength={10} />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="important" />
             Important
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Create&lt;/button>
-      &lt;/form>
-    &lt;/div>
+          </label>
+        </div>
+        <button type="submit">Create</button>
+      </form>
+    </div>
   )
 }
+
 ```
 
 هذا سريع ولا يتطلب شيفرة إضافية، لكنه يعمل في المتصفح فقط. إذ يمكن للمستخدم تجاوزه تماماً بإرسال طلب HTTP مباشرة إلى نقطة نهاية إجراء الخادم. لذا ينبغي دائماً دعم التحقق من جهة العميل بتحقق من جهة الخادم أيضاً.
@@ -623,17 +648,18 @@ export const createNote = async (formData: FormData) => {
   }
 
   const content = formData.get("content") as string
-  // BEGIN HIGHLIGHT
-  if (!content || content.length &lt; 10) {
+
+  if (!content || content.length < 10) {
     throw new Error("Note content must be at least 10 characters long")
   }
-  // END HIGHLIGHT
+
   const important = formData.get("important") === "on"
   await addNote(content, important)
 
   revalidatePath("/notes")
   redirect("/notes")
 }
+
 ```
 
 رمي خطأ من إجراء خادم يجعل Next.js يعرض أقرب&nbsp;<a href="https://nextjs.org/docs/app/getting-started/error-handling">حدود خطأ (error boundary)</a>. هذا مناسب للإخفاقات غير المتوقعة، لكنه بالنسبة إلى أخطاء التحقق الموجّهة للمستخدم تجربة سيئة: إذ يرى المستخدم صفحة خطأ بدلاً من رسالة مفيدة بجانب النموذج.
@@ -648,7 +674,7 @@ export const createNote = async (formData: FormData) => {
 
 ```ts
 export const createNote = async (
-  prevState: { error: string }, // HIGHLIGHT LINE
+  prevState: { error: string },
   formData: FormData,
 ) => {
   const session = await getServerSession(authOptions)
@@ -657,8 +683,8 @@ export const createNote = async (
   }
 
   const content = formData.get("content") as string
-  if (!content || content.length &lt; 10) {
-    return { error: "Note content must be at least 10 characters long" } // HIGHLIGHT LINE
+  if (!content || content.length < 10) {
+    return { error: "Note content must be at least 10 characters long" }
   }
   const important = formData.get("important") === "on"
   await addNote(content, important)
@@ -666,41 +692,43 @@ export const createNote = async (
   revalidatePath("/notes")
   redirect("/notes")
 }
+
 ```
 
 من جهة النموذج، يصبح المكوّن مكوّن عميل ليتمكن من استخدام خطاف <em>useActionState</em>. يأخذ الخطاف دالة الإجراء وقيمة حالة أولية، ويُعيد الحالة الحالية وإجراءً ملفوفاً لتمريره إلى النموذج:
 
 ```js
-"use client" // HIGHLIGHT LINE
+"use client"
 
 import { useActionState } from "react"
 import { createNote } from "../../actions/notes"
 
 const NewNote = () => {
-  const [state, formAction] = useActionState(createNote, { error: "" }) // HIGHLIGHT LINE
+  const [state, formAction] = useActionState(createNote, { error: "" })
 
   return (
-    &lt;div>
-      &lt;h2>Create a new note&lt;/h2>
-      &lt;form action={formAction}> // HIGHLIGHT LINE
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Create a new note</h2>
+      <form action={formAction}>
+        <div>
+          <label>
             Content
-            &lt;input type="text" name="content" />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
-            &lt;input type="checkbox" name="important" />
+            <input type="text" name="content" />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="important" />
             Important
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Create&lt;/button>
-        {state.error &amp;&amp; &lt;p style={{ color: "red" }}>{state.error}&lt;/p>} // HIGHLIGHT LINE
-      &lt;/form>
-    &lt;/div>
+          </label>
+        </div>
+        <button type="submit">Create</button>
+        {state.error && <p style={{ color: "red" }}>{state.error}</p>}
+      </form>
+    </div>
   )
 }
+
 ```
 
 عندما يرسل المستخدم النموذج بمحتوى قصير جداً، يُعيد إجراء الخادم <em>{ error: "..." }</em>. ويخزّن <em>useActionState</em> ذلك بوصفه <em>state</em> الجديد، ويُعاد عرض المكوّن مع إظهار رسالة الخطأ أسفل زر الإرسال. ولا يحدث أي انتقال بين الصفحات. وعندما يكون المحتوى صالحاً، يستدعي الإجراء <em>redirect("/notes")</em> كما كان من قبل ويُوجَّه المستخدم إلى قائمة الملاحظات.
@@ -748,7 +776,7 @@ type NotificationContextType = {
   showNotification: (message: string, type?: NotificationType) => void
 }
 
-const NotificationContext = createContext&lt;NotificationContextType>({
+const NotificationContext = createContext<NotificationContextType>({
   message: "",
   type: "success",
   showNotification: () => {},
@@ -760,7 +788,7 @@ export const NotificationProvider = ({
   children: React.ReactNode
 }) => {
   const [message, setMessage] = useState("")
-  const [type, setType] = useState&lt;NotificationType>("success")
+  const [type, setType] = useState<NotificationType>("success")
 
   const showNotification = (
     msg: string,
@@ -772,13 +800,14 @@ export const NotificationProvider = ({
   }
 
   return (
-    &lt;NotificationContext value={{ message, type, showNotification }}>
+    <NotificationContext value={{ message, type, showNotification }}>
       {children}
-    &lt;/NotificationContext>
+    </NotificationContext>
   )
 }
 
 export const useNotification = () => useContext(NotificationContext)
+
 ```
 
 يحتوي السياق على <em>message</em> و<em>type</em> كحالة. وتضبط دالة <em>showNotification</em> الرسالة وتجدول&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/API/setTimeout">setTimeout</a>&nbsp;لمسحها بعد 5 ثوانٍ.
@@ -805,8 +834,9 @@ export default function Notification() {
     backgroundColor: type === "success" ? "#16a34a" : "#dc2626",
   }
 
-  return &lt;div style={style}>{message}&lt;/div>
+  return <div style={style}>{message}</div>
 }
+
 ```
 
 عندما تكون <em>message</em> فارغة يُعيد المكوّن <em>null</em> ولا يعرض شيئاً. وعندما تكون هناك رسالة، يعرض شريطاً ملوّناً: أخضر لـ<em>"success"</em>&nbsp;وأحمر لـ<em>"error"</em>.
@@ -825,19 +855,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body>
-        &lt;AuthSessionProvider>
-          &lt;NotificationProvider>
-            &lt;NavBar />
-            &lt;Notification />
+    <html lang="en">
+      <body>
+        <AuthSessionProvider>
+          <NotificationProvider>
+            <NavBar />
+            <Notification />
             {children}
-          &lt;/NotificationProvider>
-        &lt;/AuthSessionProvider>
-      &lt;/body>
-    &lt;/html>
+          </NotificationProvider>
+        </AuthSessionProvider>
+      </body>
+    </html>
   )
 }
+
 ```
 
 يبقى <em>AuthSessionProvider</em>&nbsp;الغلاف الخارجي الأقصى لأن سياق <em>SessionProvider</em>&nbsp;في NextAuth يجب أن يكون أيضاً مكوّن عميل. ويقع <em>NotificationProvider</em>&nbsp;داخله، فيكون السياقان متاحين لجميع مكوّنات العميل في الشجرة.
@@ -859,20 +890,21 @@ export const createNote = async (
   }
 
   const content = formData.get("content") as string
-  if (!content || content.length &lt; 10) {
-    // BEGIN HIGHLIGHT
+  if (!content || content.length < 10) {
+
     return {
       error: "Note content must be at least 10 characters long",
       success: false,
     }
-    // END HIGHLIGHT
+
   }
   const important = formData.get("important") === "on"
   await addNote(content, important)
 
   revalidatePath("/notes")
-  return { error: "", success: true } // HIGHLIGHT LINE
+  return { error: "", success: true }
 }
+
 ```
 
 عند فشل التحقق يُعيد الإجراء <em>{ error: "...", success: false }</em>. وعند النجاح يستدعي <em>revalidatePath</em>&nbsp;لإبطال قائمة الملاحظات المخزّنة مؤقتاً ويُعيد <em>{ error: "", success: true }</em>. ولم يعد التوجيه موجوداً في الإجراء.
@@ -895,39 +927,40 @@ const NewNote = () => {
   const { showNotification } = useNotification()
   const router = useRouter()
 
-// BEGIN HIGHLIGHT
+
   useEffect(() => {
     if (state.success) {
       showNotification("note created")
       router.push("/notes")
     }
   }, [state, showNotification, router])
-// END HIGHLIGHT
+
 
   return (
-    &lt;div>
-      &lt;h2>Create a new note&lt;/h2>
-      &lt;form action={formAction}>
-        &lt;div>
-          &lt;label>
+    <div>
+      <h2>Create a new note</h2>
+      <form action={formAction}>
+        <div>
+          <label>
             Content
-            &lt;input type="text" name="content" />
-          &lt;/label>
-        &lt;/div>
-        &lt;div>
-          &lt;label>
-            &lt;input type="checkbox" name="important" />
+            <input type="text" name="content" />
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="important" />
             Important
-          &lt;/label>
-        &lt;/div>
-        &lt;button type="submit">Create&lt;/button>
-        {state.error &amp;&amp; &lt;p style={{ color: "red" }}>{state.error}&lt;/p>}
-      &lt;/form>
-    &lt;/div>
+          </label>
+        </div>
+        <button type="submit">Create</button>
+        {state.error && <p style={{ color: "red" }}>{state.error}</p>}
+      </form>
+    </div>
   )
 }
 
 export default NewNote
+
 ```
 
 يعمل خطاف&nbsp;<a href="https://react.dev/reference/react/useEffect">useEffect</a>&nbsp;بعد كل عرض تتغير فيه <em>state</em>. وعندما تكون <em>state.success</em>&nbsp;بقيمة <em>true</em>، يُطلق الإشعار والانتقال. ولأن <em>showNotification</em>&nbsp;تخزّن الرسالة في السياق، فسيلتقطها مكوّن <em>Notification</em>&nbsp;المعروض في <em>layout.tsx</em>&nbsp;ويعرض الشريط الأخضر في صفحة <em>/notes</em>&nbsp;بعد التوجيه.
@@ -957,7 +990,7 @@ export default NewNote
 مع وجود Tailwind، يتم التنسيق بإضافة أسماء الأصناف إلى عناصر JSX. ويمكن إعطاء <em>body</em>&nbsp;في <em>app/layout.tsx</em>&nbsp;لون خلفية ولون نص:
 
 ```js
-import "./globals.css" // HIGHLIGHT LINE
+import "./globals.css"
 import AuthSessionProvider from "./components/SessionProvider"
 import NavBar from "./components/NavBar"
 import { NotificationProvider } from "./components/NotificationContext"
@@ -969,19 +1002,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    &lt;html lang="en">
-      &lt;body className="min-h-screen bg-background text-foreground"> // HIGHLIGHT LINE
-        &lt;AuthSessionProvider>
-          &lt;NotificationProvider>
-            &lt;NavBar />
-            &lt;Notification />
-            &lt;main>{children}&lt;/main>
-          &lt;/NotificationProvider>
-        &lt;/AuthSessionProvider>
-      &lt;/body>
-    &lt;/html>
+    <html lang="en">
+      <body className="min-h-screen bg-background text-foreground">
+        <AuthSessionProvider>
+          <NotificationProvider>
+            <NavBar />
+            <Notification />
+            <main>{children}</main>
+          </NotificationProvider>
+        </AuthSessionProvider>
+      </body>
+    </html>
   )
 }
+
 ```
 
 تضمن <a href="https://tailwindcss.com/docs/min-height">min-h-screen</a>&nbsp;أن يمتد body ليملأ ارتفاع نافذة العرض بالكامل، بينما يطبّق <a href="https://tailwindcss.com/docs/background-color">bg-background</a>&nbsp;و&nbsp;<a href="https://tailwindcss.com/docs/text-color">text-foreground</a>&nbsp;ألوان الخلفية والنص الافتراضية للسمة كخصائص CSS مخصّصة معرّفة في <em>globals.css</em>. والملف منشأ بواسطة <em>create-next-app</em>&nbsp;ويبدو هكذا:
@@ -1013,6 +1047,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
 ```
 
 يحمّل سطر <em>@import "tailwindcss"</em>&nbsp;جميع أدوات Tailwind المساعدة. ومتغيرا CSS ‏<em>--background</em>&nbsp;و<em>--foreground</em>&nbsp;معرّفان في <em>:root</em>&nbsp;ويتحولان تلقائياً إلى قيم الوضع الداكن عندما يفضّل نظام تشغيل المستخدم مخطط ألوان داكناً. وتقوم كتلة <em>@theme inline</em>&nbsp;بتعيين هذين المتغيرين في لوحة ألوان Tailwind بحيث تُحلّ أصناف مثل <em>bg-background</em>&nbsp;و<em>text-foreground</em>&nbsp;إلى القيم الصحيحة.
@@ -1026,42 +1061,43 @@ import { getNotes } from "../services/notes"
 const Notes = async ({
   searchParams,
 }: {
-  searchParams: Promise&lt;{ important?: string }>
+  searchParams: Promise<{ important?: string }>
 }) => {
   const { important } = await searchParams
   const showImportant = important === "true"
   const notes = await getNotes(showImportant)
 
   return (
-    &lt;div className="max-w-2xl mx-auto p-6">
-      &lt;h2 className="text-2xl font-bold mb-4">Notes&lt;/h2>
-      &lt;div className="mb-4">
-        &lt;Link
+    <div className="max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">Notes</h2>
+      <div className="mb-4">
+        <Link
           href={showImportant ? "/notes" : "/notes?important=true"}
           className="text-blue-600 hover:underline"
         >
           {showImportant ? "show all" : "show important only"}
-        &lt;/Link>
-      &lt;/div>
-      &lt;ul className="space-y-2">
+        </Link>
+      </div>
+      <ul className="space-y-2">
         {notes.map((note) => (
-          &lt;li key={note.id} className="border rounded p-3 hover:bg-gray-50">
-            &lt;Link
+          <li key={note.id} className="border rounded p-3 hover:bg-gray-50">
+            <Link
               href={`/notes/${note.id}`}
               className="text-blue-600 hover:underline"
             >
               {note.content}
-            &lt;/Link>
-            {note.important &amp;&amp; (
-              &lt;strong className="ml-2 text-amber-600">(important)&lt;/strong>
+            </Link>
+            {note.important && (
+              <strong className="ml-2 text-amber-600">(important)</strong>
             )}
-          &lt;/li>
+          </li>
         ))}
-      &lt;/ul>
-    &lt;/div>
+      </ul>
+    </div>
   )
 }
 export default Notes
+
 ```
 
 تقيّد <a href="https://tailwindcss.com/docs/max-width"><em>max-w-2xl</em></a>&nbsp;عرض المحتوى، ويوسّطه <a href="https://tailwindcss.com/docs/margin"><em>mx-auto</em></a>&nbsp;بهوامش أفقية تلقائية، ويضيف <a href="https://tailwindcss.com/docs/padding"><em>p-6</em></a>&nbsp;حشوة داخلية. ويجعل <a href="https://tailwindcss.com/docs/font-size"><em>text-2xl</em></a>&nbsp;و&nbsp;<a href="https://tailwindcss.com/docs/font-weight"><em>font-bold</em></a>&nbsp;العنوان كبيراً وعريضاً، بينما يضيف <a href="https://tailwindcss.com/docs/margin"><em>mb-4</em></a>&nbsp;تباعداً أسفله. ويضيف <a href="https://tailwindcss.com/docs/space"><em>space-y-2</em></a>&nbsp;تباعداً عمودياً بين عناصر القائمة، ويمنح <a href="https://tailwindcss.com/docs/border-width"><em>border</em></a>&nbsp;‏<a href="https://tailwindcss.com/docs/border-radius"><em>rounded</em></a>&nbsp;‏<a href="https://tailwindcss.com/docs/padding"><em>p-3</em></a>&nbsp;‏<a href="https://tailwindcss.com/docs/background-color"><em>hover:bg-gray-50</em></a>&nbsp;كل ملاحظة مظهر بطاقة ناعمة مع إبراز عند مرور المؤشر.
@@ -1078,46 +1114,47 @@ const NavBar = () => {
   const { data: session } = useSession()
 
   return (
-    &lt;nav className="bg-gray-800 text-white px-6 py-3 flex items-center gap-4">
-      &lt;Link href="/" className="hover:text-gray-300">
+    <nav className="bg-gray-800 text-white px-6 py-3 flex items-center gap-4">
+      <Link href="/" className="hover:text-gray-300">
         home
-      &lt;/Link>
-      &lt;Link href="/notes" className="hover:text-gray-300">
+      </Link>
+      <Link href="/notes" className="hover:text-gray-300">
         notes
-      &lt;/Link>
-      &lt;Link href="/users" className="hover:text-gray-300">
+      </Link>
+      <Link href="/users" className="hover:text-gray-300">
         users
-      &lt;/Link>
-      &lt;div className="ml-auto flex items-center gap-4">
+      </Link>
+      <div className="ml-auto flex items-center gap-4">
         {session ? (
-          &lt;>
-            &lt;Link href="/notes/new" className="hover:text-gray-300">
+          <>
+            <Link href="/notes/new" className="hover:text-gray-300">
               create new
-            &lt;/Link>
-            &lt;em className="text-gray-300">{session.user?.name} logged in&lt;/em>
-            &lt;button
+            </Link>
+            <em className="text-gray-300">{session.user?.name} logged in</em>
+            <button
               onClick={() => signOut()}
               className="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded text-sm"
             >
               logout
-            &lt;/button>
-          &lt;/>
+            </button>
+          </>
         ) : (
-          &lt;>
-            &lt;Link href="/login" className="hover:text-gray-300">
+          <>
+            <Link href="/login" className="hover:text-gray-300">
               login
-            &lt;/Link>
-            &lt;Link href="/register" className="hover:text-gray-300">
+            </Link>
+            <Link href="/register" className="hover:text-gray-300">
               register
-            &lt;/Link>
-          &lt;/>
+            </Link>
+          </>
         )}
-      &lt;/div>
-    &lt;/nav>
+      </div>
+    </nav>
   )
 }
 
 export default NavBar
+
 ```
 
 تُقرأ أسماء الأصناف تقريباً كنص عادي: <a href="https://tailwindcss.com/docs/background-color"><em>bg-gray-800</em></a>&nbsp;يضبط خلفية داكنة، و<a href="https://tailwindcss.com/docs/text-color"><em>text-white</em></a>&nbsp;يجعل النص أبيض، و<a href="https://tailwindcss.com/docs/padding"><em>px-6</em></a>&nbsp;و&nbsp;<a href="https://tailwindcss.com/docs/padding"><em>py-3</em></a>&nbsp;يضيفان حشوة أفقية وعمودية، ويضع <a href="https://tailwindcss.com/docs/flex"><em>flex</em></a>&nbsp;‏<a href="https://tailwindcss.com/docs/align-items"><em>items-center</em></a>&nbsp;‏<a href="https://tailwindcss.com/docs/gap"><em>gap-4</em></a>&nbsp;الأبناء في صف مع تباعد، ويدفع <a href="https://tailwindcss.com/docs/margin"><em>ml-auto</em></a>&nbsp;القسم المعتمد على الجلسة إلى الحافة اليمنى. وتحتوي <a href="https://tailwindcss.com/docs">وثائق</a> Tailwind على مرجع قابل للبحث لكل صنف من أصناف الأدوات المساعدة.
@@ -1136,13 +1173,14 @@ interface NavLinkProps {
 
 const NavLink = ({ href, children }: NavLinkProps) => {
   return (
-    &lt;Link href={href} className="hover:text-gray-300">
+    <Link href={href} className="hover:text-gray-300">
       {children}
-    &lt;/Link>
+    </Link>
   )
 }
 
 export default NavLink
+
 ```
 
 مع وجود <em>NavLink</em>، يصبح كل عنصر تنقل في <em>NavBar</em>&nbsp;على شكل <em>&lt;NavLink href="...">label&lt;/NavLink></em>&nbsp;بدلاً من <em>&lt;Link></em>&nbsp;مع <em>className</em>&nbsp;متكرر. ويحتفظ زر تسجيل الخروج المعتمد على الجلسة بتنسيقه المضمّن الخاص لأنه ذو معالجة بصرية مختلفة وغير متكرر في مكان آخر:
@@ -1157,32 +1195,33 @@ export default function NavBar() {
   const { data: session } = useSession()
 
   return (
-    &lt;nav className="bg-gray-800 text-white px-6 py-3 flex items-center gap-4">
-      &lt;NavLink href="/">home&lt;/NavLink>
-      &lt;NavLink href="/notes">notes&lt;/NavLink>
-      &lt;NavLink href="/users">users&lt;/NavLink>
-      &lt;div className="ml-auto flex items-center gap-4">
+    <nav className="bg-gray-800 text-white px-6 py-3 flex items-center gap-4">
+      <NavLink href="/">home</NavLink>
+      <NavLink href="/notes">notes</NavLink>
+      <NavLink href="/users">users</NavLink>
+      <div className="ml-auto flex items-center gap-4">
         {session ? (
-          &lt;>
-            &lt;NavLink href="/notes/new">create new&lt;/NavLink>
-            &lt;em className="text-gray-300">{session.user?.name} logged in&lt;/em>
-            &lt;button
+          <>
+            <NavLink href="/notes/new">create new</NavLink>
+            <em className="text-gray-300">{session.user?.name} logged in</em>
+            <button
               onClick={() => signOut()}
               className="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded text-sm"
             >
               logout
-            &lt;/button>
-          &lt;/>
+            </button>
+          </>
         ) : (
-          &lt;>
-            &lt;NavLink href="/login">login&lt;/NavLink>
-            &lt;NavLink href="/register">register&lt;/NavLink>
-          &lt;/>
+          <>
+            <NavLink href="/login">login</NavLink>
+            <NavLink href="/register">register</NavLink>
+          </>
         )}
-      &lt;/div>
-    &lt;/nav>
+      </div>
+    </nav>
   )
 }
+
 ```
 
 هناك نهج آخر لتحقيق الأمر نفسه وهو استخدام توجيه&nbsp;<a href="https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes">@layer components</a>&nbsp;في ملف CSS لديك. يتيح لك ذلك تعريف أصناف CSS مخصّصة تجمع عدة أدوات مساعدة من Tailwind، دون إنشاء مكوّن React منفصل. وكلا النهجين يعمل جيداً: فاستخراج مكوّن React يُبقي منطق التنسيق في المكان نفسه الذي توجد فيه بنية المكوّن، بينما يُبقي نهج طبقة CSS جميع تعريفات التنسيق معاً في ملف CSS واحد.
@@ -1233,6 +1272,7 @@ const importantNotes = await db
   .select()
   .from(notes)
   .where(eq(notes.important, true))
+
 ```
 
 وجلب مستخدم مع ملاحظاته باستخدام ربط صريح:
@@ -1247,6 +1287,7 @@ const result = await db
   .from(users)
   .leftJoin(notes, eq(notes.userId, users.id))
   .where(eq(users.id, 1))
+
 ```
 
 يمنحك هذا مصفوفة مسطّحة من الصفوف (صف لكل ملاحظة مربوطة)، ثم تجمّعها بنفسك، بخلاف الواجهة العلائقية التي تمنحك كائناً متداخلاً.
@@ -1273,6 +1314,7 @@ export const GET = async () => {
   const notes = await getNotes(false)
   return NextResponse.json(notes)
 }
+
 ```
 
 تؤدي زيارة <em>/api/notes</em>&nbsp;في المتصفح (أو بـ<em>curl</em>) الآن إلى إرجاع مصفوفة الملاحظات بصيغة JSON:
@@ -1282,6 +1324,7 @@ export const GET = async () => {
   { "id": 1, "content": "next.js utilizes React Server Components", "important": true, "userId": 1 },
   { "id": 2, "content": "next.js is built on top of React", "important": true, "userId": 1 }
 ]
+
 ```
 
 قد تبدو نقطة النهاية التي تتيح إنشاء ملاحظة عبر POST هكذا:
@@ -1302,7 +1345,7 @@ export const POST = async (req: NextRequest) => {
   const body = await req.json()
   const { content, important = false } = body
 
-  if (!content || content.length &lt; 10) {
+  if (!content || content.length < 10) {
     return NextResponse.json(
       { error: "Content must be at least 10 characters" },
       { status: 400 },
@@ -1313,6 +1356,7 @@ export const POST = async (req: NextRequest) => {
   revalidatePath("/notes")
   return NextResponse.json({ success: true }, { status: 201 })
 }
+
 ```
 
 يقرأ معالج <em>POST</em>&nbsp;جسم الطلب بصيغة JSON باستخدام <em>req.json()</em>، ويتحقق من المحتوى، ويستدعي دالة الخدمة <em>addNote</em>&nbsp;نفسها التي يستخدمها إجراء الخادم. ويُفحص التحقق من المصادقة بـ<em>getServerSession</em>، وإذا لم توجد جلسة تُعاد استجابة HTTP 401.
@@ -1363,11 +1407,12 @@ export const POST = async (req: NextRequest) => {
 
 ```js
 <em>// app/notes/loading.tsx</em>
-const Loading = () =&gt; {
-  return &lt;p&gt;Loading notes...&lt;/p&gt;
+const Loading = () => {
+  return <p>Loading notes...</p>
 }
 
 export default Loading
+
 
 ```
 
@@ -1382,17 +1427,18 @@ import Statistics from "./Statistics"
 
 const Notes = () => {
   return (
-    &lt;div>
-      &lt;h2>Notes&lt;/h2>
-      &lt;Suspense fallback={&lt;p>Loading notes...&lt;/p>}>
-        &lt;NoteList />
-      &lt;/Suspense>
-      &lt;Suspense fallback={&lt;p>Loading statistics...&lt;/p>}>
-        &lt;Statistics />
-      &lt;/Suspense>
-    &lt;/div>
+    <div>
+      <h2>Notes</h2>
+      <Suspense fallback={<p>Loading notes...</p>}>
+        <NoteList />
+      </Suspense>
+      <Suspense fallback={<p>Loading statistics...</p>}>
+        <Statistics />
+      </Suspense>
+    </div>
   )
 }
+
 ```
 
 يمكن أن يكون كل مكوّن ملفوف مكوّن خادم غير متزامن يجلب بياناته بنفسه. ويبثّ Next.js كل بديل (fallback) فوراً ويستبدله بالمحتوى الحقيقي بمجرد انتهاء ذلك المكوّن، فلا تعيق الأقسام البطيئة الأقسام السريعة.
@@ -1402,7 +1448,8 @@ const Notes = () => {
 في HTML العادي، كنت ستحمّل صورة بوسم <em>&lt;img></em>:
 
 ```
-&lt;img src="/profile.jpg" alt="User profile" width="200" height="200" />
+<img src="/profile.jpg" alt="User profile" width="200" height="200" />
+
 ```
 
 هذا يعمل، لكن المتصفحات تحمّل الصورة بالحجم الكامل بغض النظر عن حجم شاشة الجهاز، ولا يوجد تحسين تلقائي. ويوفّر Next.js مكوّن&nbsp;<a href="https://nextjs.org/docs/app/api-reference/components/image">Image</a>&nbsp;الذي يحسّن الصور تلقائياً من أجل الأداء:
@@ -1412,18 +1459,19 @@ import Image from "next/image"
 
 const Profile = () => {
   return (
-    &lt;div>
-      &lt;Image
+    <div>
+      <Image
         src="/profile.jpg"
         alt="User profile"
         width={200}
         height={200}
       />
-    &lt;/div>
+    </div>
   )
 }
 
 export default Profile
+
 ```
 
 يقدّم مكوّن Image عدة فوائد رئيسية:
@@ -1435,7 +1483,8 @@ export default Profile
 بالنسبة إلى الصور المخزّنة في مجلد <em>public</em>، يبدأ المسار بـ<em>/</em>:
 
 ```
-&lt;Image src="/images/logo.png" alt="Logo" width={100} height={50} />
+<Image src="/images/logo.png" alt="Logo" width={100} height={50} />
+
 ```
 
 بالنسبة إلى الصور الخارجية المستضافة على نطاقات أخرى، تحتاج إلى ضبط النطاقات المسموح بها في <em>next.config.js</em>:
@@ -1454,30 +1503,33 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+
 ```
 
 ثم يمكنك استخدام الرابط الخارجي:
 
 ```
-&lt;Image
+<Image
   src="https://example.com/photo.jpg"
   alt="Photo"
   width={400}
   height={300}
 />
+
 ```
 
 إذا كنت لا تعرف أبعاد الصورة مسبقاً (مثلاً الصور التي يرفعها المستخدمون)، فيمكنك استخدام خاصية <em>fill</em>&nbsp;لجعل الصورة تملأ حاويتها الأب:
 
 ```
-&lt;div style={{ position: 'relative', width: '100%', height: '400px' }}>
-  &lt;Image
+<div style={{ position: 'relative', width: '100%', height: '400px' }}>
+  <Image
     src="/dynamic-image.jpg"
     alt="Dynamic content"
     fill
     style={{ objectFit: 'cover' }}
   />
-&lt;/div>
+</div>
+
 ```
 
 يجب أن تكون الحاوية الأب بـ<em>position: relative</em>&nbsp;أو <em>position: fixed</em>&nbsp;أو <em>position: absolute</em>&nbsp;حتى تعمل <em>fill</em>&nbsp;بشكل صحيح.
@@ -1497,6 +1549,7 @@ export const metadata: Metadata = {
   title: "Notes app",
   description: "A simple notes application built with Next.js",
 }
+
 ```
 
 يدمج Next.js البيانات الوصفية من التخطيط الجذري نزولاً عبر التخطيطات والصفحات المتداخلة، فيمكن لصفحة فرعية تجاوز الحقول التي تحتاجها فقط دون تكرار كل شيء.
@@ -1510,14 +1563,15 @@ import { getNoteById } from "../../services/notes"
 export const generateMetadata = async ({
   params,
 }: {
-  params: Promise&lt;{ id: string }>
-}): Promise&lt;Metadata> => {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> => {
   const { id } = await params
   const note = await getNoteById(Number(id))
   return {
     title: note ? note.content.slice(0, 50) : "Note not found",
   }
 }
+
 ```
 
 يعمل هذا على الخادم، ويظهر العنوان الناتج في وسم <em>&lt;title></em>&nbsp;في HTML، وهو أمر مهم لمحركات البحث ولعنوان علامة التبويب في المتصفح. وتتبع وسوم Open Graph الخاصة بالمشاركة الاجتماعية النمط نفسه باستخدام المفتاح <em>openGraph</em>&nbsp;داخل كائن البيانات الوصفية.
@@ -1585,6 +1639,7 @@ export const generateMetadata = async ({
   margin: 2rem 0;
   opacity: 0.2;
 }
+
 ```
 
 <div class="tasks">

@@ -28,29 +28,31 @@ lang: ar
 │   └── react-35ef61ed.svg
 ├── index.html
 └── vite.svg
+
 ```
 
 يحمّل ملف&nbsp;<em>index.html</em>&nbsp;في الجذر ملف JavaScript المجمّع عبر وسم&nbsp;<em>script</em>:
 
 ```
-&lt;!doctype html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;meta charset="UTF-8" /&gt;
-    &lt;link rel="icon" type="image/svg+xml" href="/vite.svg" /&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
-    &lt;title&gt;Vite + React&lt;/title&gt;
-    // BEGIN HIGHLIGHT
-    &lt;script type="module" crossorigin src="/assets/index-e92ae01e.js"&gt;&lt;/script&gt;
-    // END HIGHLIGHT
-    // BEGIN HIGHLIGHT
-    &lt;link rel="stylesheet" href="/assets/index-d526a0c5.css"&gt;
-    // END HIGHLIGHT
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id="root"&gt;&lt;/div&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+
+    <script type="module" crossorigin src="/assets/index-e92ae01e.js"></script>
+
+
+    <link rel="stylesheet" href="/assets/index-d526a0c5.css">
+
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
 ```
 
 تُجمَّع CSS أيضاً في ملف واحد.
@@ -86,18 +88,21 @@ lang: ar
 │   ├── main.jsx
 │   └── App.jsx
 └── package.json
+
 ```
 
 نبدأ بتثبيت React وreact-dom:
 
 ```bash
 npm install react react-dom
+
 ```
 
 نحتاج أيضاً إلى تثبيت esbuild:
 
 ```bash
 npm install --save-dev esbuild
+
 ```
 
 في البداية نضيف سكربتين إلى&nbsp;<em>package.json</em>:
@@ -110,22 +115,24 @@ npm install --save-dev esbuild
   },
   // ...
 }
+
 ```
 
 نحتاج للتطبيق إلى الملف&nbsp;<em>dist/index.html</em>&nbsp;الذي يحمّل حزمة JavaScript:
 
 ```
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;meta charset="UTF-8" /&gt;
-    &lt;title&gt;esbuild app&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id="root"&gt;&lt;/div&gt;
-    &lt;script src="./main.js"&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>esbuild app</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./main.js"></script>
+  </body>
+</html>
+
 ```
 
 نقطة الدخول&nbsp;<em>src/main.jsx</em>&nbsp;هي المعتادة:
@@ -135,7 +142,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
-ReactDOM.createRoot(document.getElementById('root')).render(&lt;App /&gt;)
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
 ```
 
 مكوّن التطبيق البسيط&nbsp;<em>src/App.jsx</em>&nbsp;كما يلي:
@@ -143,24 +151,26 @@ ReactDOM.createRoot(document.getElementById('root')).render(&lt;App /&gt;)
 ```js
 import React, { useState } from 'react'
 
-const App = () =&gt; {
+const App = () => {
   const [counter, setCounter] = useState(0)
 
   return (
-    &lt;div&gt;
-      &lt;p&gt;count: {counter}&lt;/p&gt;
-      &lt;button onClick={() =&gt; setCounter(counter + 1)}&gt;increment&lt;/ button&gt;
-    &lt;/div&gt;
+    <div>
+      <p>count: {counter}</p>
+      <button onClick={() => setCounter(counter + 1)}>increment</ button>
+    </div>
   )
 }
 
 export default App
+
 ```
 
 الآن يمكننا تجميع التطبيق:
 
 ```bash
 npm run build
+
 ```
 
 المخرج هو ملف واحد&nbsp;<em>dist/main.js</em>&nbsp;يحتوي شيفرة تطبيقك مع مكتبة React مجمّعة معاً.
@@ -176,12 +186,13 @@ npm run build
 ```json
 {
   "scripts": {
-    // BEGIN HIGHLIGHT
+
     "build": "esbuild src/main.jsx --bundle --minify --outfile=dist/main.js --jsx=automatic",
-    // END HIGHLIGHT
+
     "serve": "npx serve dist"
   }
 }
+
 ```
 
 يخفض التصغير حجم الحزمة من نحو 1.1 MB إلى نحو 190 KB، وهو انخفاض كبير.
@@ -197,12 +208,13 @@ npm run build
 ```json
 {
   "scripts": {
-    // BEGIN HIGHLIGHT
+
     "build": "esbuild src/main.jsx --bundle --minify --sourcemap --outfile=dist/main.js --jsx=automatic",
-    // END HIGHLIGHT
+
     "serve": "npx serve dist"
   }
 }
+
 ```
 
 الآن صار الخطأ مفهوماً:
@@ -218,13 +230,15 @@ npm run build
 تفهم المتصفحات JavaScript المعياري، لكن JSX ليس JavaScript صالحاً، ولا يمكن لأي متصفح تحليله مباشرة. عندما نكتب:
 
 ```js
-const element = &lt;App /&gt;
+const element = <App />
+
 ```
 
 يجب تحويله إلى شيء يمكن للمتصفح تشغيله:
 
 ```js
 const element = React.createElement(App, null)
+
 ```
 
 ولهذا فإن التحويل خطوة مطلوبة لأي مشروع React، وليس تحسيناً اختيارياً. ينفذه esbuild تلقائياً أثناء تجميع الحزم. مع العلم&nbsp;<em>--jsx=automatic</em>، يتعامل esbuild مع JSX دون أي أداة خارجية. في سير العمل القديم القائم على Webpack كان عليك تثبيت&nbsp;<a href="https://babeljs.io/" target="_blank" rel="noopener">Babel</a>&nbsp;والحزم المتعلقة به وتهيئتها لتحويل JSX من أجل المتصفح. مع esbuild، تُحوَّل الملفات المنتهية بـ&nbsp;<em>.jsx</em>&nbsp;مباشرة دون إعداد إضافي.
@@ -238,11 +252,12 @@ const element = React.createElement(App, null)
   "scripts": {
     "build": "esbuild src/main.jsx --bundle --minify --sourcemap --outfile=dist/main.js --jsx=automatic",
     "serve": "npx serve dist",
-    // BEGIN HIGHLIGHT
+
     "dev": "esbuild src/main.jsx --bundle --outfile=dist/main.js --jsx=automatic --servedir=./dist --watch"
-    // END HIGHLIGHT
+
   }
 }
+
 ```
 
 تشغيل&nbsp;<em>npm run dev</em>&nbsp;يفعل شيئين في آن واحد. أولاً يخبر <a href="https://esbuild.github.io/api/#watch" target="_blank" rel="noopener">--watch</a>&nbsp;esbuild بمراقبة كل ملفات المصدر المستوردة بحثاً عن تغييرات وإعادة بناء الحزمة تلقائياً كلما حُفظ أي منها. ثانياً يبدأ <a href="https://esbuild.github.io/api/#serve" target="_blank" rel="noopener">--servedir</a>&nbsp;خادم HTTP خفيفاً يقدّم محتويات مجلد&nbsp;<em>dist</em>، أي <em>index.html</em>&nbsp;وملف <em>main.js</em>&nbsp;المبني حديثاً، على&nbsp;<em><a href="http://localhost:8000/" target="_blank" rel="noopener">http://localhost:8000</a></em>.
@@ -268,6 +283,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
+
 ```
 
 تمكّن إضافة&nbsp;<em>@vitejs/plugin-react</em>&nbsp;تحويل JSX، والتحديث السريع (الاستبدال الحار للوحدات الذي يحافظ على حالة المكوّن)، وميزات أخرى خاصة بـ React.
@@ -284,6 +300,7 @@ export default defineConfig({
     open: true,        // فتح المتصفح تلقائياً
   },
 })
+
 ```
 
 #### تمرير طلبات API عبر وسيط
@@ -303,6 +320,7 @@ export default defineConfig({
     },
   },
 })
+
 ```
 
 مع هذه التهيئة، يُمرَّر أي طلب يرسله تطبيق React إلى&nbsp;<em>/api/notes</em>&nbsp;تلقائياً إلى&nbsp;<em><a href="http://localhost:3001/api/notes" target="_blank" rel="noopener">http://localhost:3001/api/notes</a></em>&nbsp;بواسطة خادم التطوير في Vite. لا تحتاج شيفرة واجهتك الأمامية أبداً إلى تضمين&nbsp;<em>localhost:3001</em>&nbsp;في عناوين URL أثناء التطوير.
@@ -315,12 +333,14 @@ export default defineConfig({
 
 ```
 VITE_BACKEND_URL=http://localhost:3001/api/notes
+
 ```
 
 وملف&nbsp;<em>.env.production</em>&nbsp;لقيم الإنتاج:
 
 ```
 VITE_BACKEND_URL=https://myapp.fly.dev/api/notes
+
 ```
 
 <strong>مهم:</strong>&nbsp;يجب أن تبدأ كل متغيرات البيئة المكشوفة للمتصفح بالبادئة&nbsp;<em>VITE_</em>. تبقى المتغيرات بدون هذه البادئة على الخادم فقط ولا تُضمَّن في الحزمة. هذا إجراء أمني متعمد لمنع تسريب الأسرار عن غير قصد.
@@ -328,15 +348,16 @@ VITE_BACKEND_URL=https://myapp.fly.dev/api/notes
 يمكنك الوصول إلى المتغير في شيفرة تطبيقك عبر&nbsp;<em>import.meta.env</em>:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const notes = useNotes(import.meta.env.VITE_BACKEND_URL)
 
   return (
-    &lt;div&gt;
+    <div>
       {notes.length} notes on server {import.meta.env.VITE_BACKEND_URL}
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 يختار Vite تلقائياً ملف&nbsp;<em>.env</em>&nbsp;الصحيح بناءً على الوضع:
@@ -353,6 +374,7 @@ const App = () =&gt; {
 
 ```bash
 npm install --save-dev @vitejs/plugin-legacy
+
 ```
 
 ```js
@@ -368,6 +390,7 @@ export default defineConfig({
     }),
   ],
 })
+
 ```
 
 تنشئ إضافة legacy تلقائياً حزمة منفصلة للمتصفحات الأقدم باستخدام Babel.
@@ -378,6 +401,7 @@ export default defineConfig({
 
 ```js
 import './index.css'
+
 ```
 
 سيعالجه Vite ويضمّنه في البناء. في الإنتاج، تُستخرج CSS إلى ملف منفصل. أثناء التطوير، تُحقن عبر وسوم&nbsp;<em>&lt;style&gt;</em>&nbsp;مع دعم إعادة التحميل الحار.
@@ -387,17 +411,19 @@ import './index.css'
 ```js
 import styles from './App.module.css'
 
-const App = () =&gt; (
-  &lt;div className={styles.container}&gt;
+const App = () => (
+  <div className={styles.container}>
     hello vite
-  &lt;/div&gt;
+  </div>
 )
+
 ```
 
 يمكن إضافة معالجات CSS المسبقة مثل&nbsp;<a href="https://sass-lang.com/" target="_blank" rel="noopener">Sass</a>&nbsp;بمجرد تثبيت المعالج المسبق، دون إضافة أو تهيئة:
 
 ```bash
 npm install --save-dev sass
+
 ```
 
 بعد ذلك، تعمل ملفات&nbsp;<em>.scss</em>&nbsp;تلقائياً.
@@ -421,6 +447,7 @@ export default defineConfig({
     sourcemap: true,
   },
 })
+
 ```
 
 لاحظ أن خرائط مصدر الإنتاج تزيد وقت البناء وتكشف شيفرتك المصدرية لأي شخص ينظر إلى تبويب الشبكة. في كثير من الحالات يكون من الأفضل رفع خرائط المصدر إلى خدمة مراقبة الأخطاء (مثل Sentry) وإبقاؤها خارج الخادم العام.

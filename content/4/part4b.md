@@ -27,13 +27,14 @@ lang: ar
 {
   // ...
   "scripts": {
-    "start": "NODE_ENV=production node index.js", // highlight-line
-    "dev": "NODE_ENV=development node --watch index.js", // highlight-line
-    "test": "NODE_ENV=test node --test", // highlight-line
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node --watch index.js",
+    "test": "NODE_ENV=test node --test",
     "lint": "eslint ."
   }
   // ...
 }
+
 ```
 
 حدّدنا وضع التطبيق ليكون <i>development</i> في سكربت _npm run dev_. وحدّدنا أيضاً أن الأمر الافتراضي _npm start_ سيعرّف الوضع بأنه <i>production</i>.
@@ -42,6 +43,7 @@ lang: ar
 
 ```bash
 npm install cross-env
+
 ```
 
 يمكننا بعد ذلك تحقيق التوافق عبر المنصات باستخدام مكتبة cross-env في سكربتات npm المعرّفة في <i>package.json</i>:
@@ -50,13 +52,14 @@ npm install cross-env
 {
   // ...
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js", // highlight-line
-    "dev": "cross-env NODE_ENV=development node --watch index.js", // highlight-line
-    "test": "cross-env  NODE_ENV=test node --test", // highlight-line
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint ."
   },
   // ...
 }
+
 ```
 
 
@@ -83,6 +86,7 @@ module.exports = {
   MONGODB_URI,
   PORT
 }
+
 ```
 
 يحتوي ملف <i>.env</i> على <i>متغيرات منفصلة</i> لعناوين قاعدتي بيانات التطوير والاختبار:
@@ -94,6 +98,7 @@ PORT=3001
 // highlight-start
 TEST_MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongodb.net/testNoteApp?retryWrites=true&w=majority&appName=Cluster0
 // highlight-end
+
 ```
 
 تشبه الوحدة _config_ التي نفّذناها قليلاً حزمة [node-config](https://github.com/lorenwest/node-config). كتابة تنفيذنا الخاص مبرَّرة لأن تطبيقنا بسيط، وأيضاً لأنها تعلّمنا دروساً قيّمة.
@@ -110,6 +115,7 @@ TEST_MONGODB_URI=mongodb+srv://fullstack:thepasswordishere@cluster0.a5qfl.mongod
 
 ```bash
 npm install --save-dev supertest
+
 ```
 
 لنكتب اختبارنا الأول في ملف <i>tests/note_api.test.js</i>:
@@ -132,6 +138,7 @@ test('notes are returned as json', async () => {
 after(async () => {
   await mongoose.connection.close()
 })
+
 ```
 
 يستورد الاختبار تطبيق Express من الوحدة <i>app.js</i> ويلفّه بدالة <i>supertest</i> في كائن يُسمى [superagent](https://github.com/visionmedia/superagent). يُسنَد هذا الكائن إلى المتغير <i>api</i>، ويمكن للاختبارات استخدامه لإرسال طلبات HTTP إلى الواجهة الخلفية.
@@ -142,6 +149,7 @@ after(async () => {
 
 ```js
 .expect('Content-Type', /application\/json/)
+
 ```
 
 القيمة المطلوبة معرّفة الآن كـ [تعبير نمطي](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) أو regex اختصاراً. يبدأ التعبير النمطي بشرطة مائلة / وينتهي بها، وبما أن النص المطلوب <i>application/json</i> يحتوي أيضاً على الشرطة المائلة نفسها، فقد سُبقت بعلامة \ حتى لا تُفسَّر كمحرف إنهاء للتعبير النمطي.
@@ -150,6 +158,7 @@ after(async () => {
 
 ```js
 .expect('Content-Type', 'application/json')
+
 ```
 
 لكن المشكلة هنا هي أنه عند استخدام نص، يجب أن تكون قيمة الترويسة مطابقة تماماً. أما مع التعبير النمطي الذي عرّفناه، فمن المقبول أن <i>تحتوي</i> الترويسة على النص المذكور. القيمة الفعلية للترويسة هي <i>application/json; charset=utf-8</i>، أي أنها تحتوي أيضاً على معلومات حول ترميز المحارف. لكن اختبارنا لا يهمه ذلك، ولذا من الأفضل تعريف الاختبار كتعبير نمطي بدلاً من نص مطابق تماماً.
@@ -162,6 +171,7 @@ after(async () => {
 after(async () => {
   await mongoose.connection.close()
 })
+
 ```
 
 تفصيل صغير لكن مهم: في [بداية](/part4/structure_of_backend_application_introduction_to_testing#project-structure) هذا الجزء استخرجنا تطبيق Express إلى ملف <i>app.js</i>، وتغيّر دور ملف <i>index.js</i> ليصبح تشغيل التطبيق على المنفذ المحدّد عبر _app.listen_:
@@ -174,6 +184,7 @@ const logger = require('./utils/logger')
 app.listen(config.PORT, () => {
   logger.info(`Server running on port ${config.PORT}`)
 })
+
 ```
 
 تستخدم الاختبارات فقط تطبيق Express المعرّف في ملف <i>app.js</i>، وهو لا يستمع إلى أي منافذ:
@@ -181,11 +192,12 @@ app.listen(config.PORT, () => {
 ```js
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const app = require('../app') // highlight-line
+const app = require('../app')
 
-const api = supertest(app) // highlight-line
+const api = supertest(app)
 
 // ...
+
 ```
 
 تقول وثائق supertest ما يلي:
@@ -216,6 +228,7 @@ test('a specific note is within the returned notes', async () => {
 })
 
 // ...
+
 ```
 
 يخزّن كلا الاختبارين استجابة الطلب في المتغير _response_، وعلى عكس الاختبار السابق الذي استخدم الدوال التي يوفرها _supertest_ للتحقق من رمز الحالة والترويسات، نفحص هذه المرة بيانات الاستجابة المخزّنة في خاصية <i>response.body</i>. تتحقق اختباراتنا من صيغة بيانات الاستجابة ومحتواها باستخدام الدالة [strictEqual](https://nodejs.org/docs/latest/api/assert.html#assertstrictequalactual-expected-message) من مكتبة assert.
@@ -229,6 +242,7 @@ test('a specific note is within the returned notes', async () => {
   const contents = response.body.map(e => e.content)
   assert(contents.includes('HTML is easy'))
 })
+
 ```
 
 
@@ -240,6 +254,7 @@ const response = await api.get('/api/notes')
 // لا يصل التنفيذ إلى هنا إلا بعد اكتمال طلب HTTP
 // تُحفظ نتيجة طلب HTTP في المتغير response
 assert.strictEqual(response.body.length, 2)
+
 ```
 
 يعيق الوسيط الذي يطبع معلومات عن طلبات HTTP مخرجات تنفيذ الاختبارات. لنعدّل logger بحيث لا يطبع إلى الطرفية في وضع الاختبار:
@@ -264,6 +279,7 @@ const error = (...params) => {
 module.exports = {
   info, error
 }
+
 ```
 
 ### تهيئة قاعدة البيانات قبل الاختبارات
@@ -277,11 +293,11 @@ module.exports = {
 ```js
 
 const assert = require('node:assert')
-const { test, after, beforeEach } = require('node:test') // highlight-line
+const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const Note = require('../models/note') // highlight-line
+const Note = require('../models/note')
 
 const api = supertest(app)
 
@@ -311,6 +327,7 @@ beforeEach(async () => {
 // highlight-end
 
 // ...
+
 ```
 
 تُفرَّغ قاعدة البيانات في البداية، وبعد ذلك نحفظ الملاحظتين المخزّنتين في المصفوفة _initialNotes_ في قاعدة البيانات. بهذا نضمن أن تكون قاعدة البيانات في الحالة نفسها قبل تشغيل كل اختبار.
@@ -323,10 +340,11 @@ beforeEach(async () => {
 test('all notes are returned', async () => {
   const response = await api.get('/api/notes')
 
-  assert.strictEqual(response.body.length, initialNotes.length) // highlight-line
+  assert.strictEqual(response.body.length, initialNotes.length)
 })
 
 // ...
+
 
 ```
 
@@ -351,12 +369,14 @@ test.only('all notes are returned', async () => {
 
   assert.strictEqual(response.body.length, 2)
 })
+
 ```
 
 عند تشغيل الاختبارات مع الخيار _--test-only_، أي بالأمر:
 
 ```
 npm test -- --test-only
+
 ```
 
 تُنفَّذ فقط الاختبارات المعلَّمة بـ _only_.
@@ -369,18 +389,21 @@ npm test -- --test-only
 
 ```js
 npm test -- tests/note_api.test.js
+
 ```
 
 يمكن استخدام الخيار [--test-name-pattern](https://nodejs.org/api/test.html#filtering-tests-by-name) لتشغيل اختبارات باسم محدد:
 
 ```js
 npm test -- --test-name-pattern="a specific note is within the returned notes"
+
 ```
 
 يمكن أن تشير الوسيطة المقدَّمة إلى اسم الاختبار أو كتلة describe. ويمكن أن تحتوي أيضاً على جزء من الاسم فقط. الأمر التالي سيشغّل جميع الاختبارات التي يحتوي اسمها على <i>notes</i>:
 
 ```js
 npm run test -- --test-name-pattern="notes"
+
 ```
 
 ### async/await
@@ -395,6 +418,7 @@ npm run test -- --test-name-pattern="notes"
 Note.find({}).then(notes => {
   console.log('operation returned the following notes', notes)
 })
+
 ```
 
 تعيد الدالة _Note.find()_ وعداً، ويمكننا الوصول إلى نتيجة العملية بتسجيل دالة استدعاء مرتد عبر الدالة _then_.
@@ -412,6 +436,7 @@ Note.find({})
     console.log('the first note is removed')
     // مزيد من الشيفرة هنا
   })
+
 ```
 
 سلسلة then جيدة، لكن يمكننا فعل أفضل. قدّمت [دوال المولّد](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) التي أُضيفت في ES6 [طريقة ذكية](https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/async%20%26%20performance/ch4.md#iterating-generators-asynchronously) لكتابة شيفرة غير متزامنة بطريقة «تبدو متزامنة». لكن الصيغة ثقيلة بعض الشيء وغير مستخدمة على نطاق واسع.
@@ -424,6 +449,7 @@ Note.find({})
 const notes = await Note.find({})
 
 console.log('operation returned the following notes', notes)
+
 ```
 
 تبدو الشيفرة تماماً كالشيفرة المتزامنة. يتوقف تنفيذ الشيفرة عند <em>const notes = await Note.find({})</em> وينتظر حتى يتحقق الوعد <i>fulfilled</i> المرتبط به، ثم يواصل تنفيذه إلى السطر التالي. وعندما يستمر التنفيذ، تُسنَد نتيجة العملية التي أعادت وعداً إلى المتغير _notes_.
@@ -435,6 +461,7 @@ const notes = await Note.find({})
 const response = await notes[0].deleteOne()
 
 console.log('the first note is removed')
+
 ```
 
 بفضل الصيغة الجديدة، أصبحت الشيفرة أبسط بكثير من سلسلة then السابقة.
@@ -446,7 +473,7 @@ console.log('the first note is removed')
 هذا يعني أنه لكي تعمل الأمثلة السابقة، يجب أن تستخدم دوال async. لاحظ السطر الأول في تعريف دالة السهم:
 
 ```js
-const main = async () => { // highlight-line
+const main = async () => {
   const notes = await Note.find({})
   console.log('operation returned the following notes', notes)
 
@@ -454,7 +481,8 @@ const main = async () => { // highlight-line
   console.log('the first note is removed')
 }
 
-main() // highlight-line
+main()
+
 ```
 
 تعلن الشيفرة أن الدالة المُسنَدة إلى _main_ غير متزامنة. بعد ذلك، تستدعي الشيفرة الدالة بـ <code>main()</code>.
@@ -471,6 +499,7 @@ notesRouter.get('/', (request, response) => {
     response.json(notes)
   })
 })
+
 ```
 
 يتغيّر إلى ما يلي:
@@ -480,6 +509,7 @@ notesRouter.get('/', async (request, response) => {
   const notes = await Note.find({})
   response.json(notes)
 })
+
 ```
 
 يمكننا التحقق من نجاح إعادة الهيكلة باختبار نقطة النهاية عبر المتصفح وتشغيل الاختبارات التي كتبناها سابقاً.
@@ -511,6 +541,7 @@ test('a valid note can be added ', async () => {
 
   assert(contents.includes('async/await simplifies making async calls'))
 })
+
 ```
 
 يفشل الاختبار لأننا أعدنا بالخطأ رمز الحالة <i>200 OK</i> عند إنشاء ملاحظة جديدة. لنغيّر ذلك إلى رمز الحالة <i>201 CREATED</i>:
@@ -526,10 +557,11 @@ notesRouter.post('/', (request, response, next) => {
 
   note.save()
     .then(savedNote => {
-      response.status(201).json(savedNote) // highlight-line
+      response.status(201).json(savedNote)
     })
     .catch(error => next(error))
 })
+
 ```
 
 لنكتب أيضاً اختباراً يتحقق من أن ملاحظة بلا محتوى لن تُحفظ في قاعدة البيانات.
@@ -549,12 +581,14 @@ test('note without content is not added', async () => {
 
   assert.strictEqual(response.body.length, initialNotes.length)
 })
+
 ```
 
 يتحقق كلا الاختبارين من الحالة المخزّنة في قاعدة البيانات بعد عملية الحفظ، عبر جلب جميع ملاحظات التطبيق.
 
 ```js
 const response = await api.get('/api/notes')
+
 ```
 
 ستتكرر خطوات التحقق نفسها في اختبارات أخرى لاحقاً، ومن الجيد استخراج هذه الخطوات في دوال مساعدة. لنضف الدالة إلى ملف جديد باسم <i>tests/test_helper.js</i> يقع في المجلد نفسه الذي يقع فيه ملف الاختبار.
@@ -589,6 +623,7 @@ const notesInDb = async () => {
 module.exports = {
   initialNotes, nonExistingId, notesInDb
 }
+
 ```
 
 تعرّف الوحدة الدالة _notesInDb_ التي يمكن استخدامها للتحقق من الملاحظات المخزّنة في قاعدة البيانات. كما توجد في الوحدة المصفوفة _initialNotes_ التي تحتوي على الحالة الأولية لقاعدة البيانات. ونعرّف أيضاً مسبقاً الدالة _nonExistingId_ التي يمكن استخدامها لإنشاء معرّف كائن في قاعدة البيانات لا ينتمي إلى أي كائن ملاحظة فيها.
@@ -601,7 +636,7 @@ const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const helper = require('./test_helper') // highlight-line
+const helper = require('./test_helper')
 const Note = require('../models/note')
 
 const api = supertest(app)
@@ -609,10 +644,10 @@ const api = supertest(app)
 beforeEach(async () => {
   await Note.deleteMany({})
 
-  let noteObject = new Note(helper.initialNotes[0]) // highlight-line
+  let noteObject = new Note(helper.initialNotes[0])
   await noteObject.save()
 
-  noteObject = new Note(helper.initialNotes[1]) // highlight-line
+  noteObject = new Note(helper.initialNotes[1])
   await noteObject.save()
 })
 
@@ -626,7 +661,7 @@ test('notes are returned as json', async () => {
 test('all notes are returned', async () => {
   const response = await api.get('/api/notes')
 
-  assert.strictEqual(response.body.length, helper.initialNotes.length) // highlight-line
+  assert.strictEqual(response.body.length, helper.initialNotes.length)
 })
 
 test('a specific note is within the returned notes', async () => {
@@ -648,10 +683,10 @@ test('a valid note can be added ', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const notesAtEnd = await helper.notesInDb() // highlight-line
-  assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1) // highlight-line
+  const notesAtEnd = await helper.notesInDb()
+  assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1)
 
-  const contents = notesAtEnd.map(n => n.content) // highlight-line
+  const contents = notesAtEnd.map(n => n.content)
   assert(contents.includes('async/await simplifies making async calls'))
 })
 
@@ -665,14 +700,15 @@ test('note without content is not added', async () => {
     .send(newNote)
     .expect(400)
 
-  const notesAtEnd = await helper.notesInDb() // highlight-line
+  const notesAtEnd = await helper.notesInDb()
 
-  assert.strictEqual(notesAtEnd.length, helper.initialNotes.length) // highlight-line
+  assert.strictEqual(notesAtEnd.length, helper.initialNotes.length)
 })
 
 after(async () => {
   await mongoose.connection.close()
 })
+
 ```
 
 تعمل الشيفرة التي تستخدم الوعود وتنجح الاختبارات. نحن جاهزون لإعادة هيكلة شيفرتنا لاستخدام صيغة async/await.
@@ -695,12 +731,13 @@ notesRouter.post('/', (request, response, next) => {
     })
     .catch((error) => next(error))
 })
+
 ```
 
 يتغيّر كما يلي:
 
 ```js
-notesRouter.post('/', async (request, response) => { // highlight-line
+notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   const note = new Note({
@@ -713,6 +750,7 @@ notesRouter.post('/', async (request, response) => { // highlight-line
   response.status(201).json(savedNote)
   // highlight-end
 })
+
 ```
 
 تحتاج إلى إضافة الكلمة المفتاحية _async_ في بداية المعالج لتمكين استخدام صيغة _async/await_. تصبح الشيفرة أبسط بكثير.
@@ -725,7 +763,8 @@ notesRouter.post('/', async (request, response) => { // highlight-line
     .then((savedNote) => {
       response.json(savedNote)
     })
-    .catch((error) => next(error)) // highlight-line
+    .catch((error) => next(error))
+
 ```
 
 عند استخدام صيغة _async/await_، سيستدعي Express [تلقائياً](https://expressjs.com/en/guide/error-handling.html) الوسيط المسؤول عن معالجة الأخطاء إذا رمى عبارة await خطأً أو رُفض الوعد المنتظر. هذا يجعل الشيفرة النهائية أنظف.
@@ -754,6 +793,7 @@ test('a specific note can be viewed', async () => {
 
   assert.deepStrictEqual(resultNote.body, noteToView)
 })
+
 ```
 
 أولاً، يجلب الاختبار ملاحظة واحدة من قاعدة البيانات. ثم يتحقق من إمكانية استرجاع تلك الملاحظة المحددة عبر API. وأخيراً، يتحقق من أن محتوى الملاحظة المجلوبة كما هو متوقع.
@@ -762,6 +802,7 @@ test('a specific note can be viewed', async () => {
 
 ```js
 assert.deepStrictEqual(resultNote.body, noteToView)
+
 ```
 
 السبب هو أن _strictEqual_ تستخدم الدالة [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is) لمقارنة التشابه، أي أنها تقارن ما إذا كان الكائنان نفسيهما. في حالتنا، نريد التحقق من أن محتويات الكائنات، أي قيم حقولها، متماثلة. ولهذا الغرض تصلح _deepStrictEqual_.
@@ -777,6 +818,7 @@ notesRouter.get('/:id', async (request, response) => {
     response.status(404).end()
   }
 })
+
 ```
 
 ### إعادة هيكلة المسار المسؤول عن حذف ملاحظة
@@ -799,6 +841,7 @@ test('a note can be deleted', async () => {
 
   assert.strictEqual(notesAtEnd.length, helper.initialNotes.length - 1)
 })
+
 ```
 
 بُني الاختبار بشكل مشابه للاختبار الذي يتحقق من عرض ملاحظة واحدة. أولاً، تُجلب ملاحظة واحدة من قاعدة البيانات، ثم يُختبَر حذفها عبر API. وأخيراً، يُتحقق من أن الملاحظة لم تعد موجودة في قاعدة البيانات وأن العدد الإجمالي للملاحظات انخفض بمقدار واحد.
@@ -810,6 +853,7 @@ notesRouter.delete('/:id', async (request, response) => {
   await Note.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
+
 ```
 
 يمكنك العثور على شيفرة تطبيقنا الحالي كاملةً في فرع <i>part4-4</i> من [مستودع GitHub هذا](https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-4).
@@ -828,6 +872,7 @@ beforeEach(async () => {
   noteObject = new Note(helper.initialNotes[1])
   await noteObject.save()
 })
+
 ```
 
 تحفظ الدالة أول ملاحظتين من المصفوفة _helper.initialNotes_ في قاعدة البيانات بعمليتين منفصلتين. الحل مقبول، لكن توجد طريقة أفضل لحفظ عدة كائنات في قاعدة البيانات:
@@ -849,6 +894,7 @@ test('notes are returned as json', async () => {
   console.log('entered test')
   // ...
 }
+
 ```
 
 نحفظ الملاحظات المخزّنة في المصفوفة في قاعدة البيانات داخل حلقة _forEach_. لكن الاختبارات لا تبدو تعمل تماماً، لذا أضفنا بعض سجلات الطرفية لمساعدتنا في إيجاد المشكلة.
@@ -861,6 +907,7 @@ done
 entered test
 saved
 saved
+
 ```
 
 رغم استخدامنا صيغة async/await، لا يعمل حلّنا كما توقعنا. يبدأ تنفيذ الاختبار قبل تهيئة قاعدة البيانات!
@@ -880,6 +927,7 @@ beforeEach(async () => {
   const promiseArray = noteObjects.map(note => note.save())
   await Promise.all(promiseArray)
 })
+
 ```
 
 الحل متقدّم نوعاً ما رغم مظهره المتراص. يُسنَد المتغير _noteObjects_ إلى مصفوفة من كائنات Mongoose المُنشأة بالباني _Note_ لكل ملاحظة من ملاحظات المصفوفة _helper.initialNotes_. وينشئ السطر التالي من الشيفرة مصفوفة جديدة <i>تتكوّن من وعود</i>، تُنشأ باستدعاء الدالة _save_ لكل عنصر في المصفوفة _noteObjects_. بعبارة أخرى، إنها مصفوفة وعود لحفظ كل عنصر في قاعدة البيانات.
@@ -899,6 +947,7 @@ beforeEach(async () => {
     await noteObject.save()
   }
 })
+
 ```
 
 قد تؤدي الطبيعة غير المتزامنة لـ JavaScript إلى سلوك مفاجئ، ولهذا السبب من المهم الانتباه جيداً عند استخدام صيغة async/await. فرغم أن الصيغة تسهّل التعامل مع الوعود، فإنه ما زال ضرورياً فهم كيفية عمل الوعود!
@@ -908,8 +957,9 @@ beforeEach(async () => {
 ```js
 beforeEach(async () => {
   await Note.deleteMany({})
-  await Note.insertMany(helper.initialNotes) // highlight-line
+  await Note.insertMany(helper.initialNotes)
 })
+
 ```
 
 يمكن العثور على شيفرة تطبيقنا على [GitHub](https://github.com/fullstack-hy2020/part3-notes-backend/tree/part4-5)، فرع <i>part4-5</i>.
@@ -1098,6 +1148,7 @@ describe('when there is initially some notes saved', () => {
 after(async () => {
   await mongoose.connection.close()
 })
+
 ```
 
 تُجمَّع مخرجات الاختبار في الطرفية وفقاً لكتل <i>describe</i>:

@@ -41,27 +41,28 @@ lang: ar
 
 ```js
 const App = () => {
-  const [patients, setPatients] = useState&lt;Patient[]>([]);
+  const [patients, setPatients] = useState<Patient[]>([]);
   // ...
 
   return (
-    &lt;div className="App">
-      &lt;Router>
-        &lt;Container>
-          &lt;Routes>
+    <div className="App">
+      <Router>
+        <Container>
+          <Routes>
             // ...
-            &lt;Route path="/" element={
-              &lt;PatientListPage
+            <Route path="/" element={
+              <PatientListPage
                 patients={patients}
-                setPatients={setPatients} // HIGHLIGHT LINE
+                setPatients={setPatients}
               />}
             />
-          &lt;/Routes>
-        &lt;/Container>
-      &lt;/Router>
-    &lt;/div>
+          </Routes>
+        </Container>
+      </Router>
+    </div>
   );
 };
+
 ```
 
 لإبقاء مترجم TypeScript راضياً، تُكتب الـ props بالأنواع كما يلي:
@@ -69,12 +70,13 @@ const App = () => {
 ```js
 interface Props {
   patients : Patient[]
-  setPatients: React.Dispatch&lt;React.SetStateAction&lt;Patient[]&gt;&gt;
+  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
 }
 
-const PatientListPage = ({ patients, setPatients } : Props ) =&gt; {
+const PatientListPage = ({ patients, setPatients } : Props ) => {
   // ...
 }
+
 ```
 
 إذن نوع الدالة <em>setPatients</em> هو <em>React.Dispatch&lt;React.SetStateAction&lt;Patient[]>></em>. يمكننا رؤية النوع في المحرر عند مرور المؤشر فوق الدالة:
@@ -88,33 +90,34 @@ const PatientListPage = ({ patients, setPatients } : Props ) =&gt; {
 ```js
 const PatientListPage = ({ patients, setPatients } : Props ) => {
 
-  const [modalOpen, setModalOpen] = useState&lt;boolean>(false);
-  const [error, setError] = useState&lt;string>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
   // ...
 
-  const closeModal = (): void => { // HIGHLIGHT LINE
+  const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
   };
 
-  const submitNewPatient = async (values: PatientFormValues) => { // HIGHLIGHT LINE
+  const submitNewPatient = async (values: PatientFormValues) => {
     // ...
   };
   // ...
 
   return (
-    &lt;div className="App">
+    <div className="App">
       // ...
-      &lt;AddPatientModal
+      <AddPatientModal
         modalOpen={modalOpen}
-        onSubmit={submitNewPatient} // HIGHLIGHT LINE
+        onSubmit={submitNewPatient}
         error={error}
-        onClose={closeModal} // HIGHLIGHT LINE
+        onClose={closeModal}
       />
-    &lt;/div>
+    </div>
   );
 };
+
 ```
 
 تبدو الأنواع كما يلي:
@@ -123,25 +126,28 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: PatientFormValues) => Promise&lt;void>;
+  onSubmit: (values: PatientFormValues) => Promise<void>;
   error?: string;
 }
 
 const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => {
   // ...
 }
+
 ```
 
 <em>onClose</em>&nbsp;مجرد دالة لا تأخذ أي معاملات ولا تعيد شيئاً، لذا فنوعها هو:
 
 ```
-() =&gt; void
+() => void
+
 ```
 
 "نوع <code>onSubmit</code> أكثر إثارة للاهتمام قليلاً. فهو يأخذ معاملاً واحداً من النوع <code>PatientFormValues</code>، ولأنه دالة غير متزامنة، يعيد <code>Promise</code>. ولأن الدالة لا تعيد قيمة، فالنوع الكامل هو:
 
 ```
-(values: PatientFormValues) => Promise&lt;void>
+(values: PatientFormValues) => Promise<void>
+
 ```
 
 <div class="tasks">
@@ -195,6 +201,7 @@ const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => {
     endDate: '2019-08-28'
   }
 }
+
 ```
 
 نلاحظ فوراً أنه في حين أن الحقول الأولى متماثلة، يحتوي المدخل الأول على حقل <em>discharge</em> ويحتوي المدخل الثاني على الحقلين <em>employerName</em> و<em>sickLeave</em>. ويبدو أن لجميع المدخلات بعض الحقول المشتركة، لكن بعض الحقول خاصة بكل مدخل.
@@ -218,6 +225,7 @@ interface BaseEntry {
   specialist: string;
   diagnosisCodes?: string[];
 }
+
 ```
 
 إذا أردنا ضبطه أكثر قليلاً، فبما أن لدينا بالفعل نوع&nbsp;<em>Diagnosis</em>&nbsp;معرّفاً في الواجهة الخلفية، قد نرغب ببساطة في الإشارة إلى حقل&nbsp;<em>code</em>&nbsp;من نوع&nbsp;<em>Diagnosis</em>&nbsp;مباشرةً في حال تغيّر نوعه يوماً ما. يمكننا فعل ذلك هكذا:
@@ -228,8 +236,9 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Diagnosis['code'][]; // HIGHLIGHT LINE
+  diagnosisCodes?: Diagnosis['code'][];
 }
+
 ```
 
 كما ذُكر <a href="/part9/first_steps_with_typescript#the-alternative-array-syntax" target="_blank" rel="noreferrer noopener">سابقاً في هذا الجزء</a>، يمكننا تعريف مصفوفة بالصيغة&nbsp;<em>Array&lt;Type&gt;</em>&nbsp;بدلاً من تعريفها&nbsp;<em>Type[]</em>. في هذه الحالة تحديداً، تبدأ كتابة&nbsp;<em>Diagnosis['code'][]</em>&nbsp;تبدو غريبة بعض الشيء، لذا سنقرر استخدام الصيغة البديلة (التي توصي بها أيضاً قاعدة ESlint المسماة <a href="https://typescript-eslint.io/rules/array-type/#array-simple" target="_blank" rel="noreferrer noopener">array-simple</a>):
@@ -240,8 +249,9 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array&lt;Diagnosis['code']>; // HIGHLIGHT LINE
+  diagnosisCodes?: Array<Diagnosis['code']>;
 }
+
 ```
 
 الآن وقد عرّفنا <em>BaseEntry</em>، يمكننا البدء بإنشاء أنواع المدخلات الموسّعة التي سنستخدمها فعلاً. لنبدأ بإنشاء نوع&nbsp;<em>HealthCheckEntry</em>.
@@ -262,6 +272,7 @@ interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
+
 ```
 
 الآن نحتاج فقط إلى إنشاء نوعي&nbsp;<em>OccupationalHealthcareEntry</em>&nbsp;و&nbsp;<em>HospitalEntry</em>&nbsp;حتى نتمكن من دمجهما في اتحاد (union) وتصديرهما كنوع Entry هكذا:
@@ -271,6 +282,7 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
 ```
 
 ### Omit مع الاتحادات
@@ -278,16 +290,18 @@ export type Entry =
 ثمة نقطة مهمة تتعلق بالاتحادات: عندما تستخدمها مع&nbsp;<em>Omit</em>&nbsp;لاستبعاد خاصية ما، فإنها تعمل بطريقة قد تكون غير متوقعة. لنفترض أننا نريد إزالة&nbsp;<em>id</em>&nbsp;من كل&nbsp;<em>Entry</em>. قد نفكر في استخدام
 
 ```
-Omit&lt;Entry, 'id'&gt;
+Omit<Entry, 'id'>
+
 ```
 
 لكن <a href="https://github.com/microsoft/TypeScript/issues/42680" target="_blank" rel="noreferrer noopener">ذلك لن يعمل كما قد نتوقع</a>. في الواقع، سيحتوي النوع الناتج على الخصائص المشتركة فقط، وليس الخصائص غير المشتركة بينها. ومن الحلول البديلة الممكنة تعريف دالة خاصة شبيهة بـOmit للتعامل مع مثل هذه الحالات:
 
 ```ts
 // تعريف Omit خاص للاتحادات
-type UnionOmit&lt;T, K extends string | number | symbol&gt; = T extends unknown ? Omit&lt;T, K&gt; : never;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 // تعريف Entry بدون خاصية 'id'
-type EntryWithoutId = UnionOmit&lt;Entry, 'id'&gt;;
+type EntryWithoutId = UnionOmit<Entry, 'id'>;
+
 ```
 
 الآن أصبحنا مستعدين لوضع اللمسات الأخيرة على التطبيق!

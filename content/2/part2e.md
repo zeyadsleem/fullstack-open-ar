@@ -15,6 +15,7 @@ lang: ar
 
 ```js
 import './index.css'
+
 ```
 
 لنضف قاعدة CSS التالية إلى الملف <i>index.css</i>:
@@ -23,6 +24,7 @@ import './index.css'
 h1 {
   color: green;
 }
+
 ```
 
 تتكوّن قواعد CSS من <i>محدّدات</i> و<i>تعريفات</i>. يحدّد المحدّد العناصر التي يجب تطبيق القاعدة عليها. المحدّد أعلاه هو <i>h1</i>، وسيطابق جميع وسوم العناوين <i>h1</i> في تطبيقنا.
@@ -34,8 +36,9 @@ h1 {
 ```css
 h1 {
   color: green;
-  font-style: italic;  // highlight-line
+  font-style: italic;
 }
+
 ```
 
 هناك طرق عديدة لمطابقة العناصر باستخدام [أنواع مختلفة من محدّدات CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
@@ -55,6 +58,7 @@ const Note = ({ note, toggleImportance }) => {
     </li>
   )
 }
+
 ```
 
 لنضف القاعدة التالية إلى ورقة الأنماط لدينا (بما أن معرفتي بتصميم الويب الأنيق تقترب من الصفر، فالأنماط لا معنى لها تقريباً):
@@ -65,6 +69,7 @@ li {
   padding-top: 3px;
   font-size: 15px;
 }
+
 ```
 
 استخدام أنواع العناصر لتعريف قواعد CSS مشكِل بعض الشيء. إذا احتوى تطبيقنا على وسوم <i>li</i> أخرى، فستُطبَّق عليها قاعدة النمط نفسها أيضاً.
@@ -75,6 +80,7 @@ li {
 
 ```html
 <li class="note">some text...</li>
+
 ```
 
 في React علينا استخدام خاصية [className](https://react.dev/learn#adding-styles) بدلاً من خاصية class. مع أخذ ذلك في الاعتبار، لنُجرِ التغييرات التالية على مكوّن <i>Note</i>:
@@ -86,12 +92,13 @@ const Note = ({ note, toggleImportance }) => {
     : 'make important'
 
   return (
-    <li className='note'> // highlight-line
+    <li className='note'>
       {note.content} 
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
 }
+
 ```
 
 تُعرَّف محدّدات الأصناف بالصيغة _.classname_:
@@ -102,6 +109,7 @@ const Note = ({ note, toggleImportance }) => {
   padding-top: 5px;
   font-size: 15px;
 }
+
 ```
 
 إذا أضفت الآن عناصر <i>li</i> أخرى إلى التطبيق، فلن تتأثر بقاعدة النمط أعلاه.
@@ -126,6 +134,7 @@ const Notification = ({ message }) => {
 }
 
 export default Notification
+
 ```
 
 إذا كانت قيمة prop <em>message</em> هي <em>null</em>، فلا يُعرض شيء على الشاشة، وفي الحالات الأخرى تُعرض الرسالة داخل عنصر div.
@@ -136,20 +145,20 @@ export default Notification
 import { useState, useEffect } from 'react'
 import Note from './components/Note'
 import noteService from './services/notes'
-import Notification from './components/Notification' // highlight-line
+import Notification from './components/Notification'
 
 const App = () => {
   const [notes, setNotes] = useState([]) 
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('some error happened...') // highlight-line
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   // ...
 
   return (
     <div>
       <h1>Notes</h1>
-      <Notification message={errorMessage} /> // highlight-line
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all' }
@@ -159,6 +168,7 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 ثم لنضف قاعدة نمط تناسب رسالة خطأ:
@@ -173,6 +183,7 @@ const App = () => {
   padding: 10px;
   margin-bottom: 10px;
 }
+
 ```
 
 الآن أصبحنا مستعدين لإضافة المنطق الخاص بعرض رسالة الخطأ. لنغيّر الدالة <em>toggleImportanceOf</em> على النحو التالي:
@@ -198,6 +209,7 @@ const App = () => {
         setNotes(notes.filter(n => n.id !== id))
       })
   }
+
 ```
 
 عند حدوث الخطأ نضيف رسالة خطأ وصفية إلى حالة <em>errorMessage</em>. وفي الوقت نفسه نبدأ مؤقتاً يعيّن حالة <em>errorMessage</em> إلى <em>null</em> بعد خمس ثوانٍ.
@@ -221,6 +233,7 @@ const App = () => {
   color: green;
   font-style: italic;
 }
+
 ```
 
 لكن ككائن نمط مضمّن في React سيبدو هكذا:
@@ -230,6 +243,7 @@ const App = () => {
   color: 'green',
   fontStyle: 'italic'
 }
+
 ```
 
 تُعرَّف كل خاصية CSS كخاصية منفصلة في كائن JavaScript. ويمكن ببساطة تعريف القيم الرقمية للبكسلات كأعداد صحيحة. ومن أبرز الفروق مقارنة بـCSS العادي أن خصائص CSS الموصولة بشرطات (kebab case) تُكتب بصيغة camelCase.
@@ -254,11 +268,12 @@ const Footer = () => {
 }
 
 export default Footer
+
 ```
 
 ```js
 import { useState, useEffect } from 'react'
-import Footer from './components/Footer' // highlight-line
+import Footer from './components/Footer'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import noteService from './services/notes'
@@ -274,10 +289,11 @@ const App = () => {
 
       // ...  
 
-      <Footer /> // highlight-line
+      <Footer />
     </div>
   )
 }
+
 ```
 
 تأتي الأنماط المضمّنة بقيود معينة. فعلى سبيل المثال، لا يمكن استخدام ما يُسمى [الحالات الزائفة](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) (pseudo-classes) بشكل مباشر.
@@ -332,6 +348,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 هذه قيمة أولية طبيعية جداً لأن الملاحظات مجموعة، أي أن هناك ملاحظات كثيرة ستخزّنها الحالة.
@@ -340,10 +357,11 @@ const App = () => {
 
 ```js
 const App = () => {
-  const [notes, setNotes] = useState(null) // highlight-line
+  const [notes, setNotes] = useState(null)
 
   // ...
 }
+
 ```
 
 ينهار التطبيق:
@@ -360,15 +378,17 @@ const App = () => {
 
   // ...
 
-  {notesToShow.map(note =>  // highlight-line
+  {notesToShow.map(note =>
     <Note key={note.id} note={note} />
   )}
+
 ```
 
 رسالة الخطأ هي
 
 ```bash
 Cannot read properties of null (reading 'map')
+
 ```
 
 يُسند إلى المتغير _notesToShow_ أولاً قيمة الحالة _notes_ ثم تحاول الشيفرة استدعاء الدالة _map_ على كائن غير موجود، أي على _null_.
@@ -382,9 +402,10 @@ Cannot read properties of null (reading 'map')
     noteService
       .getAll()
       .then(initialNotes => {
-        setNotes(initialNotes)  // highlight-line
+        setNotes(initialNotes)
       })
   }, [])
+
 ```
 
 لكن المشكلة أن التأثير لا يُنفَّذ إلا <i>بعد العرض الأول</i>.
@@ -392,9 +413,10 @@ Cannot read properties of null (reading 'map')
 
 ```js
 const App = () => {
-  const [notes, setNotes] = useState(null) // highlight-line
+  const [notes, setNotes] = useState(null)
 
   // ...
+
 ```
 
 ففي العرض الأول تُنفَّذ الشيفرة التالية:
@@ -405,6 +427,7 @@ notesToShow = notes
 // ...
 
 notesToShow.map(note => ...)
+
 ```
 
 وهذا يفجّر التطبيق لأننا لا نستطيع استدعاء الدالة _map_ على القيمة _null_.
@@ -417,7 +440,7 @@ notesToShow.map(note => ...)
 
 ```js
 const App = () => {
-  const [notes, setNotes] = useState(null) // highlight-line
+  const [notes, setNotes] = useState(null)
   // ... 
 
   useEffect(() => {
@@ -437,6 +460,7 @@ const App = () => {
 
   // ...
 } 
+
 ```
 
 إذن في العرض الأول لا يُعرض شيء. وعندما تصل الملاحظات من الواجهة الخلفية، استخدم التأثير الدالة _setNotes_ لتعيين قيمة الحالة _notes_. وهذا يؤدي إلى إعادة عرض المكوّن، وفي العرض الثاني تُعرض الملاحظات على الشاشة.
@@ -452,7 +476,8 @@ const App = () => {
       .then(initialNotes => {
         setNotes(initialNotes)  
       })
-  }, []) // highlight-line
+  }, [])
+
 ```
 
 يُستخدم المعامل الثاني لـ<em>useEffect</em> [لتحديد عدد مرات تنفيذ التأثير](https://react.dev/reference/react/useEffect#parameters). والمبدأ هو أن التأثير يُنفَّذ دائماً بعد العرض الأول للمكوّن <i>و</i>عندما تتغيّر قيمة المعامل الثاني.
@@ -509,6 +534,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 تحتوي واجهة مستخدم التطبيق على نموذج يُكتب في حقل إدخاله اسم العملة المطلوبة. وإذا كانت العملة موجودة، يعرض التطبيق أسعار صرفها مقابل العملات الأخرى:
@@ -536,9 +562,10 @@ const App = () => {
           setRates(response.data.rates)
         })
     }
-  }, [currency]) // highlight-line
+  }, [currency])
   // ...
 }
+
 ```
 
 أصبح لخطاف useEffect الآن _[currency]_ كمعامل ثانٍ. لذلك تُنفَّذ دالة التأثير بعد العرض الأول، و<i>دائماً</i> عندما تتغيّر مصفوفة الاعتماديات _[currency]_ بوصفها معامله الثاني. أي أنه عندما تحصل الحالة _currency_ على قيمة جديدة، يتغيّر محتوى مصفوفة الاعتماديات وتُنفَّذ دالة التأثير.
@@ -549,6 +576,7 @@ const App = () => {
 if (currency) { 
   // تُجلب أسعار الصرف
 }
+
 ```
 
 وهو ما يمنع طلب أسعار الصرف مباشرة بعد العرض الأول عندما لا يزال المتغير _currency_ يحمل القيمة الأولية، أي قيمة _null_.
@@ -569,6 +597,7 @@ if (currency) {
         setRates(response.data.rates)
       })
   }
+
 ```
 
 ومع ذلك، هناك حالات لا تنجح فيها تلك التقنية. فعلى سبيل المثال، <i>قد</i> تصادف إحدى هذه الحالات في التمرين 2.20 حيث قد يوفّر استخدام useEffect حلاً. لاحظ أن هذا يعتمد إلى حد كبير على النهج الذي اخترته، فمثلاً لا يستخدم الحل النموذجي هذه الحيلة.
@@ -627,6 +656,7 @@ if (currency) {
 export VITE_SOME_KEY=54l41n3n4v41m34rv0 && npm run dev // لنظام Linux/macOS Bash
 ($env:VITE_SOME_KEY="54l41n3n4v41m34rv0") -and (npm run dev) // لنظام Windows PowerShell
 set "VITE_SOME_KEY=54l41n3n4v41m34rv0" && npm run dev // لنظام Windows cmd.exe
+
 ```
 
 يمكنك الوصول إلى قيمة المفتاح من الكائن _import.meta.env_:
@@ -634,6 +664,7 @@ set "VITE_SOME_KEY=54l41n3n4v41m34rv0" && npm run dev // لنظام Windows cmd.
 ```js
 const api_key = import.meta.env.VITE_SOME_KEY
 // المتغير api_key يحمل الآن القيمة المعيّنة عند بدء التشغيل
+
 ```
 
 **ملاحظة:** لمنع تسريب متغيرات البيئة إلى العميل عن طريق الخطأ، لا يُعرَض لـVite إلا المتغيرات المسبوقة بـVITE_.

@@ -17,6 +17,7 @@ lang: ar
 
 ```bash
  npm install typescript --save-dev
+
 ```
 
 لنجرِ أيضاً التعديلات المطلوبة في <em>package.json</em>:
@@ -24,18 +25,20 @@ lang: ar
 ```json
 {
   // ..
-  "type": "module", // HIGHLIGHT LINE
+  "type": "module",
   "scripts": {
     "tsc": "tsc"
   },
   // ..
 }
+
 ```
 
 يمكننا الآن تهيئة إعدادات tsconfig.json بتشغيل:
 
 ```bash
  npm run tsc -- --init
+
 ```
 
 > <strong>لاحظ</strong> الشرطتين الإضافيتين <em>--</em> قبل الوسيط الفعلي! تُفسَّر الوسائط قبل <em>--</em> على أنها خاصة بأمر <em>npm</em>، أما التي بعدها فتكون مخصصة للأمر الذي يُشغَّل عبر السكربت (أي <em>tsc</em> في هذه الحالة).
@@ -59,6 +62,7 @@ lang: ar
     "noFallthroughCasesInSwitch": true
   }
 }
+
 ```
 
 لنتناول كل إعداد على حدة:
@@ -99,6 +103,7 @@ lang: ar
 ```bash
 npm install express
 npm install --save-dev eslint @eslint/js typescript-eslint @stylistic/eslint-plugin @types/express
+
 ```
 
 الآن يجب أن يبدو ملف&nbsp;<em>package.json</em>&nbsp;لدينا هكذا:
@@ -126,6 +131,7 @@ npm install --save-dev eslint @eslint/js typescript-eslint @stylistic/eslint-plu
     "express": "^5.2.1"
   }
 }
+
 ```
 
 ننشئ أيضاً ملف&nbsp;<em>eslint.config.mjs</em>&nbsp;بالمحتوى التالي:
@@ -165,6 +171,7 @@ export default tseslint.config({
   },
 });
 
+
 ```
 
 الآن نحتاج فقط إلى تهيئة بيئة التطوير لدينا، ونكون جاهزين لبدء كتابة شيفرة جدّية.
@@ -173,6 +180,7 @@ export default tseslint.config({
 
 ```bash
 npm install --save-dev concurrently
+
 ```
 
 نعرّف أخيراً بضعة سكربتات npm إضافية، وها نحن جاهزون للبدء:
@@ -182,14 +190,15 @@ npm install --save-dev concurrently
   // ...
   "scripts": {
     "tsc": "tsc",
-// BEGIN HIGHLIGHT
+
     "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\"",
     "start": "node index.ts",
     "lint": "eslint ."
-// END HIGHLIGHT
+
   },
   // ...
 }
+
 ```
 
 عرّفنا أيضاً السكربت <code>npm start</code> لتشغيل نسخة الإنتاج من التطبيق.
@@ -209,14 +218,15 @@ app.use(express.json());
 
 const PORT = 3000;
 
-app.get('/ping', (_req, res) =&gt; {
+app.get('/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
 });
 
-app.listen(PORT, () =&gt; {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 ```
 
 الآن، إذا شغّلنا التطبيق بـ<code>npm run dev</code> أو <code>npm start</code> يمكننا التحقق من أن طلباً إلى <a href="http://localhost:3000/ping" target="_blank" rel="noreferrer noopener">http://localhost:3000/ping</a> يعطي الاستجابة <em>pong</em>، أي أن إعدادنا سليم!
@@ -236,7 +246,19 @@ app.listen(PORT, () =&gt; {
 رغم عدم استخدامنا أياً من هذه الميزات الآن، لنضف الراية إلى السكربتات:
 
 ```json
-{<br>  // ... <br>  "scripts": {<br>    "tsc": "tsc",<br>     // BEGIN HIGHLIGHT<br>    "dev": "concurrently \"tsc --watch\" \"node --watch --experimental-transform-types index.ts\"",<br>    "start": "node --experimental-transform-types index.ts",<br>     // END HIGHLIGHT<br>    "lint": "eslint ."<br>  },<br>  // ...<br>}
+{
+// ...
+"scripts": {
+"tsc": "tsc",
+
+"dev": "concurrently \"tsc --watch\" \"node --watch --experimental-transform-types index.ts\"",
+"start": "node --experimental-transform-types index.ts",
+
+"lint": "eslint ."
+},
+// ...
+}
+
 ```
 
 لاحظ أن الراية موسومة بـ<em>تجريبية</em>، أي أن سلوكها قد يتغير في إصدارات Node المستقبلية. ومع نضوج دعم TypeScript الأصلي في Node، يُتوقع أن تصبح ميزات مثل تحويل enum جزءاً من السلوك الافتراضي في النهاية.
@@ -244,7 +266,9 @@ app.listen(PORT, () =&gt; {
 ستحصل على تحذير بشأن الطابع التجريبي:
 
 ```
-(node:80296) ExperimentalWarning: Transform Types is an experimental feature and might change at any time<br>(Use `node --trace-warnings ...` to show where the warning was created)
+(node:80296) ExperimentalWarning: Transform Types is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
 ```
 
 يمكن إسكات التحذير بإضافة الراية <code>--disable-warning=ExperimentalWarning</code>.
@@ -295,6 +319,7 @@ app.listen(PORT, () =&gt; {
   },
   // ...
 ]
+
 ```
 
 لنبدأ بإنشاء نقطة نهاية تُرجع جميع مدخلات مذكرات الرحلات.
@@ -310,22 +335,23 @@ import express from 'express';
 
 const router = express.Router();
 
-router.get('/', (_req, res) =&gt; {
+router.get('/', (_req, res) => {
   res.send('Fetching all diaries!');
 });
 
-router.post('/', (_req, res) =&gt; {
+router.post('/', (_req, res) => {
   res.send('Saving a diary!');
 });
 
 export default router;
+
 ```
 
 سنوجّه جميع الطلبات ذات البادئة&nbsp;<em>/api/diaries</em>&nbsp;إلى ذلك الموجّه تحديداً في&nbsp;<em>index.ts</em>
 
 ```js
 import express from 'express';
-import diaryRouter from './routes/diaries.ts'; // HIGHLIGHT LINE
+import diaryRouter from './routes/diaries.ts';
 const app = express();
 app.use(express.json());
 
@@ -336,11 +362,12 @@ app.get('/ping', (_req, res) => {
   res.send('pong');
 });
 
-app.use('/api/diaries', diaryRouter); // HIGHLIGHT LINE
+app.use('/api/diaries', diaryRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
 ```
 
 والآن، إذا أرسلنا طلب HTTP GET إلى&nbsp;<a href="http://localhost:3000/api/diaries" target="_blank" rel="noreferrer noopener">http://localhost:3000/api/diaries</a>، ينبغي أن نرى الرسالة:&nbsp;<em>Fetching all diaries!</em>
@@ -354,11 +381,11 @@ app.listen(PORT, () => {
 ```js
 import diaryData from '../../data/entries.json';
 
-const getEntries = () =&gt; {
+const getEntries = () => {
   return diaryData;
 };
 
-const addDiary = () =&gt; {
+const addDiary = () => {
   return null;
 };
 
@@ -366,6 +393,7 @@ export default {
   getEntries,
   addDiary
 };
+
 ```
 
 لكن هناك شيء غير صحيح:
@@ -376,6 +404,7 @@ export default {
 
 ```js
 import diaryData from '../../data/entries.json' with { type: "json" };
+
 ```
 
 هذا مطلوب لأنه إذا كنت تستورد شيئاً غير الشيفرة، يحتاج Node.js إلى معرفة نوع الملف الذي تستورده. بدون هذه الإشارة، يرى ملف <em>.json</em> ولا يعرف ما إذا كان عليه التعامل معه كشيفرة أو كبيانات، فيرمي خطأً.
@@ -383,7 +412,24 @@ import diaryData from '../../data/entries.json' with { type: "json" };
 لنضمن الآن عمل الوظائف من الطرف إلى الطرف، ولنربط الموجّه بالخدمة:
 
 ```js
-import express from 'express';<br>import diaryService from '../services/diaryService.ts'; // HIGHLIGHT LINE<br><br>const router = express.Router();<br><br>router.get('/', (_req, res) => {<br>  // BEGIN HIGHLIGHT<br>  const data = diaryService.getEntries()<br>  res.send(data);<br>  // END HIGHLIGHT<br>});<br><br>router.post('/', (_req, res) => {<br>  res.send("add a new diary");<br>});<br><br>export default router;
+import express from 'express';
+import diaryService from '../services/diaryService.ts';
+
+const router = express.Router();
+
+router.get('/', (_req, res) => {
+
+const data = diaryService.getEntries()
+res.send(data);
+
+});
+
+router.post('/', (_req, res) => {
+res.send("add a new diary");
+});
+
+export default router;
+
 ```
 
 وبالفعل، نرى المذكرات في نقطة النهاية:
@@ -410,6 +456,7 @@ import express from 'express';<br>import diaryService from '../services/diarySer
 export type Weather = 'sunny' | 'rainy' | 'cloudy' | 'windy' | 'stormy';
 
 export type Visibility = 'great' | 'good' | 'ok' | 'poor';
+
 ```
 
 ومن هناك، يمكننا المتابعة بإنشاء نوع DiaryEntry، الذي سيكون&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces" target="_blank" rel="noreferrer noopener">واجهة</a>&nbsp;(interface):
@@ -422,21 +469,22 @@ export interface DiaryEntry {
   visibility: Visibility;
   comment: string;
 }
+
 ```
 
 يمكننا الآن محاولة كتابة نوع JSON المستورد:
 
 ```js
 import diaryData from '../../data/entries.json' with { type: "json" };
-import type { DiaryEntry } from '../types.ts'; // HIGHLIGHT LINE
+import type { DiaryEntry } from '../types.ts';
 
-const diaries: DiaryEntry[] = diaryData; // HIGHLIGHT LINE
+const diaries: DiaryEntry[] = diaryData;
 
-// BEGIN HIGHLIGHT
+
 const getEntries = (): DiaryEntry[]  => {
   return diaries;
 };
-// END HIGHLIGHT
+
 
 const addDiary = () => {
   return null;
@@ -446,6 +494,7 @@ export default {
   getEntries,
   addDiary
 };
+
 ```
 
 لكن بما أن قيم JSON معلنة مسبقاً، فإن إسناد نوع لمجموعة البيانات يؤدي إلى خطأ:
@@ -462,7 +511,7 @@ export default {
 import diaryData from '../../data/entries.json' with { type: "json" };
 import type { DiaryEntry } from '../types.ts';
 
-const diaries: DiaryEntry[] = diaryData as DiaryEntry[]; // HIGHLIGHT LINE
+const diaries: DiaryEntry[] = diaryData as DiaryEntry[];
 
 const getEntries = (): DiaryEntry[]  => {
   return diaries;
@@ -476,6 +525,7 @@ export default {
   getEntries,
   addDiary
 };
+
 ```
 
 ينبغي ألا نستخدم تأكيد النوع أبداً إلا إذا لم يكن هناك طريقة أخرى للمتابعة، إذ يبقى هناك دائماً خطر تأكيد نوع غير مناسب لكائن والتسبب في خطأ تشغيل سيئ. وبينما يثق المترجم بأنك تعرف ما تفعل عند استخدام&nbsp;<em>as</em>، فإننا بهذا لا نستفيد من كامل قوة TypeScript بل نعتمد على المبرمج في تأمين الشيفرة.
@@ -496,12 +546,13 @@ const diaryEntries: DiaryEntry[] = [
 ];
 
 export default diaryEntries;
+
 ```
 
 الآن، عندما نستورد المصفوفة، يفسّرها المترجم بشكل صحيح:
 
 ```js
-import diaries from '../../data/entries.ts'; // HIGHLIGHT LINE
+import diaries from '../../data/entries.ts';
 import type { DiaryEntry } from '../types.ts';
 
 const getEntries = (): DiaryEntry[] => {
@@ -516,6 +567,7 @@ export default {
   getEntries,
   addDiary
 };
+
 ```
 
 لاحظ أنه إذا أردنا أن نكون قادرين على حفظ مدخلات دون حقل معيّن، مثل&nbsp;<em>comment</em>، يمكننا ضبط نوع الحقل&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/objects.html#optional-properties" target="_blank" rel="noreferrer noopener">اختيارياً</a>&nbsp;بإضافة&nbsp;<em>?</em>&nbsp;إلى تعريف النوع:
@@ -528,6 +580,7 @@ export interface DiaryEntry {
   visibility: Visibility;
   comment?: string;
 }
+
 ```
 
 > <strong>import type</strong>
@@ -562,9 +615,10 @@ export interface DiaryEntry {
 
 ```js
 const getNonSensitiveEntries =
-  (): Pick&lt;DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'&gt;[] =&gt; {
+  (): Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>[] => {
     // ...
   }
+
 ```
 
 وسيتوقع المترجم من الدالة أن تُرجع مصفوفة قيم من نوع&nbsp;<em>DiaryEntry</em>&nbsp;المعدّل، تشمل الحقول الأربعة المختارة فقط.
@@ -572,32 +626,34 @@ const getNonSensitiveEntries =
 في هذه الحالة، نريد استبعاد حقل واحد فقط، لذا سيكون من الأفضل استخدام النوع المساعد&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys" target="_blank" rel="noreferrer noopener">Omit</a>&nbsp;الذي يمكننا استخدامه لتحديد الحقول المراد استبعادها:
 
 ```js
-const getNonSensitiveEntries = (): Omit&lt;DiaryEntry, 'comment'&gt;[] =&gt; {
+const getNonSensitiveEntries = (): Omit<DiaryEntry, 'comment'>[] => {
   // ...
 }
+
 ```
 
 لتحسين القراءة، ينبغي بالتأكيد تعريف&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases" target="_blank" rel="noreferrer noopener">اسم نوع مستعار</a>&nbsp;(type alias)&nbsp;<em>NonSensitiveDiaryEntry</em>&nbsp;في ملف&nbsp;<em>types.ts</em>:
 
 ```ts
-export type NonSensitiveDiaryEntry = Omit&lt;DiaryEntry, 'comment'&gt;;
+export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
+
 ```
 
 تتغير الشيفرة هكذا:
 
 ```js
 import diaries from '../../data/entries.ts';
-import type { NonSensitiveDiaryEntry, DiaryEntry } from '../types.ts'; // HIGHLIGHT LINE
+import type { NonSensitiveDiaryEntry, DiaryEntry } from '../types.ts';
 
 const getEntries = (): DiaryEntry[] => {
   return diaries;
 };
 
-// BEGIN HIGHLIGHT
+
 const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
   return diaries;
 };
-// END HIGHLIGHT
+
 
 const addDiary = () => {
   return null;
@@ -606,8 +662,9 @@ const addDiary = () => {
 export default {
   getEntries,
   addDiary,
-  getNonSensitiveEntries // HIGHLIGHT LINE
+  getNonSensitiveEntries
 };
+
 ```
 
 هناك أمر مقلق في تطبيقنا. في&nbsp;<em>getNonSensitiveEntries</em>، نُعيد مدخلات المذكرات كاملة، و<em>لا يظهر أي خطأ</em>&nbsp;رغم كتابة الأنواع!
@@ -627,7 +684,7 @@ const getEntries = () : DiaryEntry[] => {
   return diaries
 }
 
-// BEGIN HIGHLIGHT
+
 const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
   return diaries.map(({ id, date, weather, visibility }) => ({
     id,
@@ -636,7 +693,7 @@ const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
     visibility,
   }));
 };
-// END HIGHLIGHT
+
 
 const addDiary = () => {
   return null;
@@ -647,6 +704,7 @@ export default {
   getNonSensitiveEntries,
   addDiary
 }
+
 ```
 
 تشمل الأنواع المساعدة العديد من الأدوات العملية، ومن الجدير بلا شك أن تستغرق بعض الوقت في دراسة&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank" rel="noreferrer noopener">التوثيق</a>.
@@ -659,7 +717,7 @@ import diaryService from '../services/diaryService.ts';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(diaryService.getNonSensitiveEntries()); // HIGHLIGHT LINE
+  res.send(diaryService.getNonSensitiveEntries());
 });
 
 router.post('/', (_req, res) => {
@@ -667,6 +725,7 @@ router.post('/', (_req, res) => {
 });
 
 export default router;
+
 ```
 
 الاستجابة هي ما نتوقعه بالضبط:
@@ -680,17 +739,19 @@ export default router;
 إذا مرّرنا المؤشر مثلاً فوق المعامل <em>res</em>، نلاحظ أن نوعه هو:
 
 ```
-Response&lt;any, Record&lt;string, any&gt;, number&gt;
+Response<any, Record<string, any>, number>
+
 ```
 
 يبدو غريباً بعض الشيء. النوع&nbsp;<em>Response</em>&nbsp;هو&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-types" target="_blank" rel="noreferrer noopener">نوع عام</a>&nbsp;(generic type) له ثلاثة&nbsp;<em>معاملات نوع</em>. إذا فتحنا تعريف النوع (بالنقر بزر الفأرة الأيمن واختيار&nbsp;<em>Go to Type Definition</em>&nbsp;في VS Code) نرى ما يلي:
 
 ```js
-export interface Response&lt;
+export interface Response<
     ResBody = any,
-    LocalsObj extends Record&lt;string, any&gt; = Record&lt;string, any&gt;,
+    LocalsObj extends Record<string, any> = Record<string, any>,
     StatusCode extends number = number,
-&gt; extends http.ServerResponse, Express.Response {
+> extends http.ServerResponse, Express.Response {
+
 ```
 
 معامل النوع الأول هو الأكثر إثارة للاهتمام بالنسبة لنا، فهو يقابل&nbsp;<em>جسم الاستجابة</em>&nbsp;(response body) وقيمته الافتراضية&nbsp;<em>any</em>. ولهذا يقبل مترجم TypeScript أي نوع من الاستجابات ولا نحصل على أي مساعدة لجعل الاستجابة صحيحة.
@@ -698,15 +759,16 @@ export interface Response&lt;
 يمكننا، بل وينبغي لنا على الأرجح، إعطاء نوع مناسب كمتغير النوع. في حالتنا، هو مصفوفة من مدخلات المذكرات:
 
 ```js
-import express, { type Response } from 'express'; // HIGHLIGHT LINE
+import express, { type Response } from 'express';
 import type { NonSensitiveDiaryEntry } from "../types.ts";
 // ...
 
-router.get('/', (_req, res: Response&lt;NonSensitiveDiaryEntry[]>) => { // HIGHLIGHT LINE
+router.get('/', (_req, res: Response<NonSensitiveDiaryEntry[]>) => {
   res.send(diaryService.getNonSensitiveEntries());
 });
 
 // ...
+
 ```
 
 إذا حاولنا الآن الاستجابة بنوع بيانات خاطئ، نحصل على خطأ نوع
@@ -745,8 +807,9 @@ export default {
   getEntries,
   getNonSensitiveEntries,
   addDiary,
-  findById // HIGHLIGHT LINE
+  findById
 }
+
 ```
 
 لكن تظهر مرة أخرى مشكلة جديدة:
@@ -758,10 +821,11 @@ export default {
 أولاً وقبل كل شيء، في حالات كهذه، علينا أن نقرر ما ينبغي أن تكون عليه&nbsp;<em>قيمة الإرجاع</em>&nbsp;إذا لم يُعثر على الكائن، وكيف ينبغي التعامل مع الحالة. تُرجع دالة&nbsp;<em>find</em>&nbsp;في المصفوفة القيمة&nbsp;<em>undefined</em>&nbsp;إذا لم يُعثر على الكائن، وهذا مناسب. يمكننا حل مشكلتنا بكتابة نوع قيمة الإرجاع كما يلي:
 
 ```ts
-const findById = (id: number): DiaryEntry | undefined => {  // HIGHLIGHT LINE
+const findById = (id: number): DiaryEntry | undefined => {
   const entry = diaries.find(d => d.id === id);
   return entry;
 }
+
 ```
 
 معالج المسار هو التالي:
@@ -783,6 +847,7 @@ router.get('/:id', (req, res) => {
 // ...
 
 export default router;
+
 ```
 
 ### إضافة مذكرة جديدة
@@ -792,7 +857,17 @@ export default router;
 تبدو شيفرة معالجة الاستجابة كما يلي:
 
 ```js
-router.post('/', (req, res) => {<br>  const { date, weather, visibility, comment } = req.body;<br>  const addedEntry = diaryService.addDiary({    <br>    date,<br>    weather,<br>    visibility,<br>    comment,<br>  });  <br>  res.json(addedEntry);<br>})
+router.post('/', (req, res) => {
+const { date, weather, visibility, comment } = req.body;
+const addedEntry = diaryService.addDiary({
+date,
+weather,
+visibility,
+comment,
+});
+res.json(addedEntry);
+})
+
 ```
 
 إذن، تفكّك الشيفرة المعاملات من جسم الطلب (request body) وتضعها في كائن يُعطى كمعامل للدالة <em>addDiary</em> في <em>diaryService</em>.
@@ -800,7 +875,8 @@ router.post('/', (req, res) => {<br>  const { date, weather, visibility, comment
 لكن انتظر، ما نوع هذا الكائن؟ إنه ليس بالضبط&nbsp;<em>DiaryEntry</em>، لأنه ما زال يفتقد حقل&nbsp;<em>id</em>. قد يكون من المفيد إنشاء نوع جديد&nbsp;<em>NewDiaryEntry</em>&nbsp;لمدخلة لم تُحفظ بعد. لننشئه في&nbsp;<em>types.ts</em>&nbsp;باستخدام نوع&nbsp;<em>DiaryEntry</em>&nbsp;الموجود والنوع المساعد&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys" target="_blank" rel="noreferrer noopener">Omit</a>:
 
 ```ts
-export type NewDiaryEntry = Omit&lt;DiaryEntry, 'id'&gt;;
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+
 ```
 
 الآن يمكننا استخدام النوع الجديد في <em>diaryService</em>، وتفكيك كائن المدخلة الجديدة عند إنشاء مدخلة ليتم حفظها:
@@ -819,6 +895,7 @@ const addDiary = ( entry: NewDiaryEntry ): DiaryEntry => {
   diaries.push(newDiaryEntry);
   return newDiaryEntry;
 };
+
 ```
 
 هناك الكثير من الأحمر في محررنا:
@@ -831,6 +908,7 @@ const addDiary = ( entry: NewDiaryEntry ): DiaryEntry => {
 
 ```
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 ```
 
 لتحليل البيانات الواردة، يجب أن يكون وسيط&nbsp;<em>json</em>&nbsp;مهيأً:
@@ -847,6 +925,7 @@ app.use('/api/diaries', diaryRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 ```
 
 الآن التطبيق جاهز لاستقبال طلبات HTTP POST لمدخلات مذكرات جديدة من النوع الصحيح!
@@ -864,6 +943,7 @@ const newDiaryEntry = diaryService.addDiary({
   visibility,
   comment,
 });
+
 ```
 
 نودّ الحصول على ضمان بأن الكائن في طلب POST من النوع الصحيح. لنعرّف الآن دالة <em>parseNewDiaryEntry</em> تستقبل جسم الطلب كمعامل وتُرجع كائن <em>NewDiaryEntry</em> مكتوب النوع بشكل صحيح. ستُعرَّف الدالة في ملف <em>utils.ts</em>.
@@ -876,8 +956,8 @@ import parseNewDiaryEntry from '../utils.ts';
 
 router.post('/', (req, res) => {
   try {
-    const newDiaryEntry = parseNewDiaryEntry(req.body); // HIGHLIGHT LINE
-    const addedEntry = diaryService.addDiary(newDiaryEntry);   // HIGHLIGHT LINE
+    const newDiaryEntry = parseNewDiaryEntry(req.body);
+    const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.json(addedEntry);
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.';
@@ -887,6 +967,7 @@ router.post('/', (req, res) => {
     res.status(400).send(errorMessage);
   }
 })
+
 ```
 
 يمكننا الآن أيضاً إزالة السطر الأول الذي يتجاهل قاعدة ESLint ‏<em>no-unsafe-assignment</em>.
@@ -907,6 +988,7 @@ const parseNewDiaryEntry = (object): NewDiaryEntry => {
 };
 
 export default parseNewDiaryEntry;
+
 ```
 
 ينبغي أن تحلل الدالة كل حقل وأن تتأكد من أن قيمة الإرجاع من النوع&nbsp;<em>NewDiaryEntry</em>&nbsp;بالضبط. يعني هذا أنه يجب علينا فحص كل حقل على حدة.
@@ -931,6 +1013,7 @@ const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 }
 
 export default parseNewDiaryEntry;
+
 ```
 
 <a href="https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown" target="_blank" rel="noreferrer noopener">unknown</a>&nbsp;هو النوع الأمثل لحالتنا هذه من التحقق من صحة المدخلات، لأننا لا نحتاج بعد إلى تعريف نوع يطابق&nbsp;<em>any</em>، بل يمكننا أولاً التحقق من النوع ثم تأكيد أنه النوع المتوقع. باستخدام&nbsp;<em>unknown</em>&nbsp;لا نحتاج أيضاً للقلق بشأن قاعدة ESlint ‏<em>@typescript-eslint/no-explicit-any</em>، لأننا لا نستخدم&nbsp;<em>any</em>. غير أننا قد نحتاج مع ذلك إلى استخدام&nbsp;<em>any</em>&nbsp;في بعض الحالات التي لا نكون فيها بعد متأكدين من النوع ونحتاج إلى الوصول إلى خصائص كائن من نوع&nbsp;<em>any</em>&nbsp;للتحقق من قيم الخصائص نفسها أو فحص أنواعها.
@@ -963,13 +1046,14 @@ export default parseNewDiaryEntry;
 ينبغي أن تبدو الدالة هكذا تقريباً:
 
 ```ts
-const parseComment = (comment: unknown): string =&gt; {
+const parseComment = (comment: unknown): string => {
   if (!comment || !isString(comment)) {
     throw new Error('Incorrect or missing comment');
   }
 
   return comment;
 };
+
 ```
 
 تستقبل الدالة معاملاً من نوع&nbsp;<em>unknown</em>&nbsp;وتُرجعه بالنوع&nbsp;<em>string</em>&nbsp;إذا كان موجوداً وبالنوع الصحيح.
@@ -977,15 +1061,17 @@ const parseComment = (comment: unknown): string =&gt; {
 تبدو دالة التحقق من النص كما يلي:
 
 ```js
-const isString = (text: unknown): text is string =&gt; {
+const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
+
 ```
 
 الدالة هي ما يُسمى&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates" target="_blank" rel="noreferrer noopener">حارس نوع</a> (type guard). يعني ذلك أنها دالة تُرجع قيمة منطقية&nbsp;<em>و</em>&nbsp;لديها&nbsp;<em>مُحمَّل نوع</em>&nbsp;(type predicate) كنوع إرجاع. في حالتنا، مُحمَّل النوع هو:
 
 ```
 text is string
+
 ```
 
 الصيغة العامة لمُحمَّل النوع هي&nbsp;<em>parameterName is Type</em>&nbsp;حيث&nbsp;<em>parameterName</em>&nbsp;هو اسم معامل الدالة و<em>Type</em>&nbsp;هو النوع المستهدف.
@@ -1031,16 +1117,17 @@ text is string
 سنضيف الدالتين التاليتين:
 
 ```ts
-const isDate = (date: string): boolean =&gt; {
+const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-const parseDate = (date: unknown): string =&gt; {
+const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
       throw new Error('Incorrect or missing date: ' + date);
   }
   return date;
 };
+
 ```
 
 الشيفرة ليست شيئاً مميزاً. الأمر الوحيد هو أننا لا نستطيع استخدام حارس نوع مبني على مُحمَّل نوع هنا، لأن التاريخ في هذه الحالة يُعتبر مجرد&nbsp;<em>string</em>. لاحظ أنه رغم أن دالة&nbsp;<em>parseDate</em>&nbsp;تقبل المتغير&nbsp;<em>date</em>&nbsp;بوصفه&nbsp;<em>unknown</em>، فبعد فحص نوعه بـ<em>isString</em>، يعرف مترجم TypeScript أن نوعه&nbsp;<em>string</em>، ولهذا يمكننا إعطاء المتغير لدالة&nbsp;<em>isDate</em>&nbsp;التي تتطلب نصاً دون أي مشاكل.
@@ -1050,20 +1137,22 @@ const parseDate = (date: unknown): string =&gt; {
 نريد أن يعمل التحقق والتحليل كما يلي:
 
 ```js
-const parseWeather = (weather: unknown): Weather =&gt; {
+const parseWeather = (weather: unknown): Weather => {
   if (!weather || !isString(weather) || !isWeather(weather)) {
       throw new Error('Incorrect or missing weather: ' + weather);
   }
   return weather;
 };
+
 ```
 
 السؤال هو: كيف يمكننا التحقق من أن النص بصيغة محددة؟ إحدى الطرق الممكنة لكتابة حارس النوع هي هذه:
 
 ```ts
-const isWeather = (str: string): str is Weather =&gt; {
+const isWeather = (str: string): str is Weather => {
   return ['sunny', 'rainy', 'cloudy', 'stormy'].includes(str);
 };
+
 ```
 
 سيعمل هذا بشكل جيد، لكن المشكلة أن قائمة القيم الممكنة لـWeather لا تبقى بالضرورة متزامنة مع تعريفات الأنواع إذا عُدّل النوع. هذا بالتأكيد ليس جيداً، لأننا نريد مصدراً واحداً فقط لجميع أنواع الطقس الممكنة.
@@ -1084,6 +1173,7 @@ export const Weather = {
 } as const;
 
 export type Weather = typeof Weather[keyof typeof Weather];
+
 ```
 
 لاحظ أننا نعرّف كائناً ثابتاً (const object) ونوعاً بالاسم نفسه. يتيح TypeScript ذلك لأنهما يعيشان في مساحتَي أسماء منفصلتين. النوع مشتق مباشرةً من قيم الكائن، لذا يبقيان متزامنين تلقائياً دائماً.
@@ -1091,15 +1181,22 @@ export type Weather = typeof Weather[keyof typeof Weather];
 الآن يمكننا التحقق من أن نصاً ما هو إحدى القيم المقبولة، ويمكن كتابة حارس النوع هكذا:
 
 ```ts
-const isWeather = (param: string): param is Weather =&gt; {
+const isWeather = (param: string): param is Weather => {
   return (Object.values(Weather) as string[]).includes(param);
 };
+
 ```
 
 لا يوجد شيء مفاجئ في المحلّل:
 
 ```js
-const parseWeather = (weather: unknown): Weather => {<br>  if (!weather || !isString(weather) || !isWeather(weather)) {<br>    throw new Error('Incorrect or missing weather: ' + weather);<br>  }<br>  return weather;<br>};
+const parseWeather = (weather: unknown): Weather => {
+if (!weather || !isString(weather) || !isWeather(weather)) {
+throw new Error('Incorrect or missing weather: ' + weather);
+}
+return weather;
+};
+
 ```
 
 ما زلنا بحاجة إلى إعطاء المعاملة نفسها للنوع Visibility. يبدو <em>كائن const</em> كما يلي:
@@ -1113,21 +1210,23 @@ export const Visibility = {
 } as const;
 
 export type Visibility = typeof Visibility[keyof typeof Visibility];
+
 ```
 
 حارس النوع والمحلّل أدناه:
 
 ```ts
-const isVisibility = (param: string): param is Visibility =&gt; {
+const isVisibility = (param: string): param is Visibility => {
   return (Object.values(Visibility) as string[]).includes(param);
 };
 
-const parseVisibility = (visibility: unknown): Visibility =&gt; {
+const parseVisibility = (visibility: unknown): Visibility => {
   if (!visibility || !isString(visibility) || !isVisibility(visibility)) {
     throw new Error('Incorrect or missing visibility: ' + visibility);
   }
   return visibility;
 };
+
 ```
 
 ---
@@ -1196,6 +1295,7 @@ const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 
   return newEntry;
 };
+
 ```
 
 لا تجتاز الشيفرة فحص الأنواع:
@@ -1212,7 +1312,7 @@ const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
     throw new Error('Incorrect or missing data');
   }
 
-  if ('comment' in object &amp;&amp; 'date' in object &amp;&amp; 'weather' in object &amp;&amp; 'visibility' in object)  {
+  if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
     const newEntry: NewDiaryEntry = {
       weather: parseWeather(object.weather),
       visibility: parseVisibility(object.visibility),
@@ -1225,6 +1325,7 @@ const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 
   throw new Error('Incorrect data: some fields are missing');
 };
+
 ```
 
 إذا لم يُقيَّم الحارس إلى true، يُرمى استثناء.
@@ -1234,11 +1335,12 @@ const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 ```js
 const parseVisibility = (visibility: unknown): Visibility => {
   // أُزيل فحص !visibility
-  if (!isString(visibility) || !isVisibility(visibility)) { // HIGHLIGHT LINE
+  if (!isString(visibility) || !isVisibility(visibility)) {
       throw new Error('Incorrect visibility: ' + visibility);
   }
   return visibility;
 };
+
 ```
 
 إذا كان حقل ما، مثل&nbsp;<em>comment</em>، اختيارياً، ينبغي أن يأخذ تضييق النوع ذلك في الحسبان، ولم يكن ممكناً استخدام المعامل&nbsp;<a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-in-operator-narrowing" target="_blank" rel="noreferrer noopener">in</a>&nbsp;تماماً كما فعلنا هنا، لأن اختبار&nbsp;<em>in</em>&nbsp;يتطلب وجود الحقل.
@@ -1269,22 +1371,24 @@ const parseVisibility = (visibility: unknown): Visibility => {
 
 ```bash
 npm install zod
+
 ```
 
 إن محلّلات الحقول ذات القيم الأولية مثل
 
 ```ts
-const isString = (text: unknown): text is string =&gt; {
+const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
-const parseComment = (comment: unknown): string =&gt; {
+const parseComment = (comment: unknown): string => {
   if (!isString(comment)) {
     throw new Error('Incorrect comment');
   }
 
   return comment;
 };
+
 ```
 
 يسهل استبدالها كما يلي:
@@ -1297,6 +1401,7 @@ import { z } from 'zod';
 const parseComment = (comment: unknown): string => {
   return z.string().parse(comment);
 };
+
 ```
 
 أولاً تُستخدم دالة&nbsp;<a href="https://zod.dev/?id=strings" target="_blank" rel="noreferrer noopener">string</a>&nbsp;في Zod لتعريف النوع المطلوب (أو <em>المخطط</em>&nbsp;بمصطلحات Zod). بعد ذلك يُحلَّل المتغير (وهو من النوع&nbsp;<em>unknown</em>) بالدالة&nbsp;<a href="https://zod.dev/?id=parse" target="_blank" rel="noreferrer noopener">parse</a>&nbsp;التي تُرجع القيمة بالنوع المطلوب أو ترمي استثناءً.
@@ -1309,12 +1414,12 @@ export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
     throw new Error('Incorrect or missing data');
   }
 
-  if ('comment' in object &amp;&amp; 'date' in object &amp;&amp; 'weather' in object &amp;&amp; 'visibility' in object)  {
+  if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
     const newEntry: NewDiaryEntry = {
       weather: parseWeather(object.weather),
       visibility: parseVisibility(object.visibility),
       date: parseDate(object.date),
-      comment: z.string().parse(object.comment)     // HIGHLIGHT LINE
+      comment: z.string().parse(object.comment)
     };
 
     return newEntry;
@@ -1322,6 +1427,7 @@ export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 
   throw new Error('Incorrect data: some fields are missing');
 };
+
 ```
 
 لدى Zod مجموعة من عمليات التحقق الخاصة بالنصوص، مثلاً واحدة تتحقق مما إذا كان النص <a href="https://zod.dev/?id=dates" target="_blank" rel="noreferrer noopener">تاريخاً</a>&nbsp;صالحاً، لذا نتخلص أيضاً من محلّل حقل التاريخ:
@@ -1332,12 +1438,12 @@ export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
     throw new Error('Incorrect or missing data');
   }
 
-  if ('comment' in object &amp;&amp; 'date' in object &amp;&amp; 'weather' in object &amp;&amp; 'visibility' in object)  {
+  if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
     const newEntry: NewDiaryEntry = {
       weather: parseWeather(object.weather),
       visibility: parseVisibility(object.visibility),
-      date: z.iso.date().parse(object.date),      // HIGHLIGHT LINE
-      comment: z.string().optional().parse(object.comment)    // HIGHLIGHT LINE
+      date: z.iso.date().parse(object.date),
+      comment: z.string().optional().parse(object.comment)
     };
 
     return newEntry;
@@ -1345,6 +1451,7 @@ export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
 
   throw new Error('Incorrect data: some fields are missing');
 };
+
 ```
 
 قرّرنا أيضاً جعل حقل التعليق <a href="https://zod.dev/?id=optional" target="_blank" rel="noreferrer noopener">اختيارياً</a>.
@@ -1357,18 +1464,19 @@ export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
     throw new Error('Incorrect or missing data');
   }
 
-  if ('comment' in object &amp;&amp; 'date' in object &amp;&amp; 'weather' in object &amp;&amp; 'visibility' in object)  {
+  if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
     const newEntry: NewDiaryEntry = {
-// BEGIN HIGHLIGHT
+
       weather: z.enum(Weather).parse(object.weather),
       visibility: z.enum(Visibility).parse(object.visibility),
-// END HIGHLIGHT
+
       date: z.iso.date().parse(object.date),
       comment: z.string().parse(object.comment)
     };
 
   throw new Error('Incorrect data: some fields are missing');
 };
+
 ```
 
 حتى الآن استخدمنا Zod فقط لتحليل نوع أو مخطط الحقول الفردية، لكن يمكننا المضي خطوة أبعد وتعريف&nbsp;<em>مدخلة المذكرة الجديدة</em>&nbsp;كاملةً كمخطط&nbsp;<a href="https://zod.dev/?id=objects" target="_blank" rel="noreferrer noopener">كائن</a>&nbsp;في Zod:
@@ -1380,6 +1488,7 @@ const NewEntrySchema = z.object({
   date: z.iso.date(),
   comment: z.string().optional()
 });
+
 ```
 
 الآن يكفي استدعاء&nbsp;<em>parse</em>&nbsp;على المخطط المعرَّف:
@@ -1388,6 +1497,7 @@ const NewEntrySchema = z.object({
 export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
   return NewEntrySchema.parse(object);
 };
+
 ```
 
 بمساعدة&nbsp;<a href="https://zod.dev/basics?id=handling-errors" target="_blank" rel="noreferrer noopener">التوثيق</a>&nbsp;يمكننا أيضاً تحسين معالجة الأخطاء:
@@ -1403,15 +1513,16 @@ router.post('/', (req, res) => {
     const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.json(addedEntry);
   } catch (error: unknown) {
-   // BEGIN HIGHLIGHT
+
     if (error instanceof z.ZodError) {
       res.status(400).send({ error: error.issues });
     } else {
       res.status(400).send({ error: 'unknown error' });
     }
-   // END HIGHLIGHT
+
   }
 });
+
 ```
 
 تبدو الاستجابة في حالة الخطأ جيدة جداً:
@@ -1429,7 +1540,8 @@ export interface DiaryEntry {
   comment?: string;
 }
 
-export type NewDiaryEntry = Omit&lt;DiaryEntry, 'id'&gt;;
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+
 ```
 
 إذن، إلى جانب النوع&nbsp;<em>NewDiaryEntry</em>&nbsp;لدينا أيضاً مخطط Zod باسم&nbsp;<em>NewEntrySchema</em>&nbsp;يعرّف شكل المدخلة الجديدة. يمكننا استخدام المخطط لـ<a href="https://zod.dev/?id=type-inference" target="_blank" rel="noreferrer noopener">استنتاج</a>&nbsp;النوع:
@@ -1447,17 +1559,19 @@ export interface DiaryEntry {
 }
 
 // استنتاج النوع من المخطط
-export type NewDiaryEntry = z.infer&lt;typeof NewEntrySchema>;
+export type NewDiaryEntry = z.infer<typeof NewEntrySchema>;
+
 ```
 
 يمكننا المضي في هذا أبعد قليلاً وتعريف&nbsp;<em>DiaryEntry</em>&nbsp;انطلاقاً من&nbsp;<em>NewDiaryEntry</em>:
 
 ```ts
-export type NewDiaryEntry = z.infer&lt;typeof NewEntrySchema>;
+export type NewDiaryEntry = z.infer<typeof NewEntrySchema>;
 
 export interface DiaryEntry extends NewDiaryEntry {
   id: number;
 }
+
 ```
 
 يزيل هذا كل التكرار في تعريفات الأنواع والمخططات. يبدو الأمر رجعياً بعض الشيء، لكن للأسف العكس غير ممكن: لا يمكننا تعريف مخطط Zod انطلاقاً من تعريفات أنواع TypeScript، لذا أصبح مخطط Zod الآن المصدر الوحيد لنوعنا. وبما أن المخطط هو أيضاً أساس النوع، سننقل تعريف المخطط إلى ملف <em>types.ts</em>.
@@ -1472,15 +1586,16 @@ export interface DiaryEntry extends NewDiaryEntry {
 export const parseNewDiaryEntry = (object: unknown): NewDiaryEntry => {
   return NewEntrySchema.parse(object);
 };
+
 ```
 
 واستدعاء محلّل Zod مباشرةً في معالج المسار:
 
 ```js
-import { NewEntrySchema, type NonSensitiveDiaryEntry } from '../types.ts'; // HIGHLIGHT LINE
+import { NewEntrySchema, type NonSensitiveDiaryEntry } from '../types.ts';
 
 router.post('/', (req, res) => {  try {
-    const newDiaryEntry = NewEntrySchema.parse(req.body); // HIGHLIGHT LINE
+    const newDiaryEntry = NewEntrySchema.parse(req.body);
     const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.json(addedEntry);
 
@@ -1492,6 +1607,7 @@ router.post('/', (req, res) => {  try {
     }
   }
 });
+
 ```
 
 يمكننا المضي قدماً خطوة إضافية. فبدلاً من استدعاء دالة تحليل جسم الطلب صراحةً في معالج المسار، يمكن أيضاً إجراء التحقق من صحة المدخلات في دالة وسيط.
@@ -1511,6 +1627,7 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
     next(error);
   }
 };
+
 ```
 
 يستدعي الوسيط فقط محلّل المخطط على جسم الطلب. وإذا رمى التحليل استثناءً، يُمرَّر إلى وسيط معالجة الأخطاء.
@@ -1518,10 +1635,11 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
 إذن، بعد أن يجتاز الطلب هذا الوسيط،&nbsp;<em>يُعرف أن جسم الطلب مدخلة مذكرة جديدة سليمة</em>. يمكننا إخبار مترجم TypeScript بهذه الحقيقة بإعطاء معامل نوع لـ<em>Request</em>:
 
 ```js
-router.post('/', newDiaryParser, (req: Request&lt;unknown, unknown, NewDiaryEntry>, res: Response&lt;DiaryEntry>) => {
+router.post('/', newDiaryParser, (req: Request<unknown, unknown, NewDiaryEntry>, res: Response<DiaryEntry>) => {
   const addedEntry = diaryService.addDiary(req.body);
   res.json(addedEntry);
 });
+
 ```
 
 بفضل الوسيط، أصبح جسم الطلب معروف النوع الصحيح ويمكن إعطاؤه مباشرةً كمعامل للدالة&nbsp;<em>diaryService.addDiary</em>.
@@ -1539,11 +1657,12 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
   }
 };
 
-router.post('/', newDiaryParser, (req: Request&lt;unknown, unknown, NewDiaryEntry>, res: Response&lt;DiaryEntry>) => {
+router.post('/', newDiaryParser, (req: Request<unknown, unknown, NewDiaryEntry>, res: Response<DiaryEntry>) => {
   // ...
 });
 
-router.use(errorMiddleware); // HIGHLIGHT LINE
+router.use(errorMiddleware);
+
 ```
 
 يمكن العثور على النسخة النهائية من الشيفرة المصدرية في فرع part3 من مستودع GitHub ‏<a href="https://github.com/fullstack-hy2020/flightdiary/tree/part3" target="_blank" rel="noreferrer noopener">هذا</a>.

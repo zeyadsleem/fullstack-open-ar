@@ -25,25 +25,26 @@ const App = () => {
   const notes = []
 
   return (
-    &lt;div>
-      &lt;h2>Notes app&lt;/h2>
-      &lt;form onSubmit={addNote}>
-        &lt;input name="note" />
-        &lt;button type="submit">add&lt;/button>
-      &lt;/form>
+    <div>
+      <h2>Notes app</h2>
+      <form onSubmit={addNote}>
+        <input name="note" />
+        <button type="submit">add</button>
+      </form>
       {notes.map((note) => (
-        &lt;li key={note.id}>
-          {note.important ? &lt;strong>{note.content}&lt;/strong> : note.content}
-          &lt;button onClick={() => toggleImportance(note.id)}>
+        <li key={note.id}>
+          {note.important ? <strong>{note.content}</strong> : note.content}
+          <button onClick={() => toggleImportance(note.id)}>
             {note.important ? 'make not important' : 'make important'}
-          &lt;/button>
-        &lt;/li>
+          </button>
+        </li>
       ))}
-    &lt;/div>
+    </div>
   )
 }
 
 export default App
+
 ```
 
 الشيفرة الأولية موجودة على GitHub في هذا&nbsp;<a href="https://github.com/fullstack-hy2020/query-notes/tree/part6-0" target="_blank" rel="noopener">المستودع</a>، في الفرع&nbsp;<em>part6-0</em>.
@@ -56,44 +57,47 @@ export default App
 
 ```bash
 npm install @tanstack/react-query
+
 ```
 
 نحتاج إلى بضع إضافات في الملف&nbsp;<em>main.jsx</em>&nbsp;لتمرير دوال المكتبة إلى التطبيق بأكمله:
 
 ```js
 import { createRoot } from 'react-dom/client'
-// BEGIN HIGHLIGHT
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-// END HIGHLIGHT
+
 
 import App from './App.jsx'
 
-// BEGIN HIGHLIGHT
+
 const queryClient = new QueryClient()
-// END HIGHLIGHT
+
 
 createRoot(document.getElementById('root')).render(
-  // BEGIN HIGHLIGHT
-  &lt;QueryClientProvider client={queryClient}>
-    &lt;App />
-  &lt;/QueryClientProvider>
-  // END HIGHLIGHT
+
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+
 )
+
 ```
 
 لنستخدم&nbsp;<a href="https://github.com/typicode/json-server" target="_blank" rel="noopener">JSON Server</a>&nbsp;كما في الأجزاء السابقة لمحاكاة الواجهة الخلفية. JSON Server مهيّأ مسبقاً في المشروع المثال، ويحتوي جذر المشروع على ملف&nbsp;<em>db.json</em>&nbsp;يضم افتراضياً ملاحظتين. يمكنك تشغيل الخادم بالأمر:
 
 ```bash
 npm run server
+
 ```
 
 يمكننا الآن استرجاع الملاحظات في مكوّن&nbsp;<em>App</em>. تتوسّع الشيفرة كما يلي:
 
 ```js
 
-// BEGIN HIGHLIGHT
+
 import { useQuery } from '@tanstack/react-query'
-// END HIGHLIGHT
+
 
 const App = () => {
   const addNote = async (event) => {
@@ -107,7 +111,7 @@ const App = () => {
     console.log('toggle importance of', note.id)
   }
 
-  // BEGIN HIGHLIGHT
+
   const result = useQuery({
     queryKey: ['notes'],
     queryFn: async () => {
@@ -122,16 +126,17 @@ const App = () => {
   console.log(JSON.parse(JSON.stringify(result)))
 
   if (result.isPending) {
-    return &lt;div>loading data...&lt;/div>
+    return <div>loading data...</div>
   }
 
   const notes = result.data
-  // END HIGHLIGHT
+
 
   return (
     // ...
   )
 }
+
 ```
 
 يتم جلب البيانات من الخادم، كما في الفصل السابق، باستخدام دالة&nbsp;<em>fetch</em>&nbsp;من Fetch API. غير أن استدعاء الدالة أصبح الآن ملفوفاً داخل&nbsp;<a href="https://tanstack.com/query/latest/docs/react/guides/queries" target="_blank" rel="noopener">استعلام</a>&nbsp;يكوّنه خطاف&nbsp;<a href="https://tanstack.com/query/latest/docs/react/reference/useQuery" target="_blank" rel="noopener">useQuery</a>. يتلقّى استدعاء&nbsp;<em>useQuery</em>&nbsp;كمعامل كائناً فيه الحقلان&nbsp;<em>queryKey</em>&nbsp;و&nbsp;<em>queryFn</em>. قيمة الحقل&nbsp;<em>queryKey</em>&nbsp;هي مصفوفة تحتوي على النص&nbsp;<em>notes</em>، وهي تعمل بمنزلة&nbsp;<a href="https://tanstack.com/query/latest/docs/react/guides/query-keys" target="_blank" rel="noopener">مفتاح</a>&nbsp;للاستعلام المعرَّف، أي قائمة الملاحظات.
@@ -143,7 +148,8 @@ const App = () => {
 كما نرى، عند عرض المكوّن لأول مرة يظل الاستعلام في حالة الانتظار (pending)، أي أن طلب HTTP المرتبط لا يزال معلّقاً. في هذه المرحلة، لا يُعرض سوى ما يلي:
 
 ```
-&lt;div&gt;loading data...&lt;/div&gt;
+<div>loading data...</div>
+
 ```
 
 غير أن طلب HTTP يكتمل بسرعة كبيرة بحيث يستحيل رؤية النص. وعند اكتمال الطلب يُعرض المكوّن مرة أخرى. ويكون الاستعلام في الحالة&nbsp;<em>success</em>&nbsp;عند العرض الثاني، ويحتوي الحقل&nbsp;<em>data</em>&nbsp;من كائن الاستعلام على البيانات التي أعادها الطلب، أي قائمة الملاحظات المعروضة على الشاشة.
@@ -155,35 +161,37 @@ const App = () => {
 ```js
 const baseUrl = 'http://localhost:3001/notes'
 
-export const getNotes = async () =&gt; {
+export const getNotes = async () => {
   const response = await fetch(baseUrl)
   if (!response.ok) {
     throw new Error('Failed to fetch notes')
   }
   return await response.json()
 }
+
 ```
 
 أصبح مكوّن&nbsp;<em>App</em>&nbsp;الآن مبسّطاً قليلاً:
 
 ```js
 import { useQuery } from '@tanstack/react-query'
-// BEGIN HIGHLIGHT
+
 import { getNotes } from './requests'
-// END HIGHLIGHT
+
 
 const App = () => {
   // ...
 
   const result = useQuery({
     queryKey: ['notes'],
-    // BEGIN HIGHLIGHT
+
     queryFn: getNotes
-    // END HIGHLIGHT
+
   })
 
   // ...
 }
+
 ```
 
 شيفرة التطبيق الحالية موجودة على&nbsp;<a href="https://github.com/fullstack-hy2020/query-notes/tree/part6-1" target="_blank" rel="noopener">GitHub</a>&nbsp;في الفرع&nbsp;<em>part6-1</em>.
@@ -205,7 +213,7 @@ export const getNotes = async () => {
   return await response.json()
 }
 
-// BEGIN HIGHLIGHT
+
 export const createNote = async (newNote) => {
   const options = {
     method: 'POST',
@@ -221,36 +229,38 @@ export const createNote = async (newNote) => {
 
   return await response.json()
 }
-// END HIGHLIGHT
+
+
 ```
 
 سيتغيّر مكوّن&nbsp;<em>App</em>&nbsp;كما يلي
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { getNotes, createNote } from './requests'
-// END HIGHLIGHT
+
 
 const App = () => {
-  // BEGIN HIGHLIGHT
+
   const newNoteMutation = useMutation({
     mutationFn: createNote,
   })
-  // END HIGHLIGHT
+
 
   const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.reset()
-    // BEGIN HIGHLIGHT
+
     newNoteMutation.mutate({ content, important: true })
-    // END HIGHLIGHT
+
   }
 
   //
 
 }
+
 ```
 
 لإنشاء ملاحظة جديدة، نعرّف&nbsp;<a href="https://tanstack.com/query/latest/docs/react/guides/mutations" target="_blank" rel="noopener">mutation</a>&nbsp;باستخدام الدالة&nbsp;<a href="https://tanstack.com/query/latest/docs/react/reference/useMutation" target="_blank" rel="noopener">useMutation</a>:
@@ -259,6 +269,7 @@ const App = () => {
 const newNoteMutation = useMutation({
   mutationFn: createNote,
 })
+
 ```
 
 المعامل هو الدالة التي أضفناها إلى الملف&nbsp;<em>requests.js</em>&nbsp;والتي تستخدم Fetch API لإرسال ملاحظة جديدة إلى الخادم.
@@ -267,6 +278,7 @@ const newNoteMutation = useMutation({
 
 ```
 newNoteMutation.mutate({ content, important: true })
+
 ```
 
 حلّنا جيد، إلا أنه لا يعمل. تُحفظ الملاحظة الجديدة على الخادم، لكنها لا تظهر محدَّثة على الشاشة.
@@ -276,33 +288,35 @@ newNoteMutation.mutate({ content, important: true })
 لحسن الحظ، الإبطال سهل، ويمكن تنفيذه بتعريف دالة الاستدعاء&nbsp;<em>onSuccess</em>&nbsp;المناسبة للـ mutation:
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-// END HIGHLIGHT
+
 import { getNotes, createNote } from './requests'
 
 const App = () => {
-  // BEGIN HIGHLIGHT
+
   const queryClient = useQueryClient()
-  // END HIGHLIGHT
+
 
   const newNoteMutation = useMutation({
     mutationFn: createNote,
-    // BEGIN HIGHLIGHT
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] })
     },
-    // END HIGHLIGHT
+
   })
 
   // ...
 }
+
 ```
 
 الآن، بعد تنفيذ الـ mutation بنجاح، يُستدعى ما يلي
 
 ```
 queryClient.invalidateQueries({ queryKey: ['notes'] })
+
 ```
 
 وهذا بدوره يجعل TanStack Query يحدّث تلقائياً الاستعلام ذا المفتاح&nbsp;<em>notes</em>، أي يجلب الملاحظات من الخادم. ونتيجة لذلك، يعرض التطبيق الحالة الأحدث على الخادم، أي تُعرض الملاحظة المضافة أيضاً.
@@ -310,7 +324,7 @@ queryClient.invalidateQueries({ queryKey: ['notes'] })
 لننفّذ أيضاً تغيير أهمية الملاحظات. تُضاف دالة لتحديث الملاحظات إلى الملف&nbsp;<em>requests.js</em>:
 
 ```js
-export const updateNote = async (updatedNote) =&gt; {
+export const updateNote = async (updatedNote) => {
   const options = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -325,6 +339,7 @@ export const updateNote = async (updatedNote) =&gt; {
 
   return await response.json()
 }
+
 ```
 
 يتم تحديث الملاحظة أيضاً عبر mutation. يتوسّع مكوّن&nbsp;<em>App</em>&nbsp;كما يلي:
@@ -332,9 +347,9 @@ export const updateNote = async (updatedNote) =&gt; {
 ```js
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-// BEGIN HIGHLIGHT
+
 import { getNotes, createNote, updateNote } from './requests'
-// END HIGHLIGHT
+
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -346,14 +361,14 @@ const App = () => {
     }
   })
 
-  // BEGIN HIGHLIGHT
+
   const updateNoteMutation = useMutation({
     mutationFn: updateNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] })
     }
   })
-  // END HIGHLIGHT
+
 
   const addNote = async (event) => {
     event.preventDefault()
@@ -363,13 +378,14 @@ const App = () => {
   }
 
   const toggleImportance = (note) => {
-    // BEGIN HIGHLIGHT
+
     updateNoteMutation.mutate({...note, important: !note.important })
-    // END HIGHLIGHT
+
   }
 
   // ...
 }
+
 ```
 
 إذن مرة أخرى، يُبطل الـ mutation الذي أنشأناه استعلام notes كي تُعرض الملاحظة المحدَّثة بشكل صحيح. استخدام الـ mutations سهل؛ إذ تتلقّى الدالة&nbsp;<em>mutate</em>&nbsp;ملاحظة كمعامل، وقد غُيّرت أهميتها إلى نقيض القيمة القديمة.
@@ -383,9 +399,10 @@ const App = () => {
 ```js
 const updateNoteMutation = useMutation({
   mutationFn: updateNote,
-  onSuccess: () =&gt; {
+  onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['notes'] })  }
 })
+
 ```
 
 نتيجة ذلك، بالطبع، أنه بعد طلب PUT الذي يسبّب تغيير الملاحظة، يُجري التطبيق طلب GET جديداً لاسترجاع بيانات الاستعلام من الخادم:
@@ -404,16 +421,17 @@ const App = () => {
 
   const newNoteMutation = useMutation({
     mutationFn: createNote,
-    // BEGIN HIGHLIGHT
+
     onSuccess: (newNote) => {
       const notes = queryClient.getQueryData(['notes'])
       queryClient.setQueryData(['notes'], notes.concat(newNote))
-    // END HIGHLIGHT
+
     }
   })
 
   // ...
 }
+
 ```
 
 أي أن كائن&nbsp;<em>queryClient</em>&nbsp;يقرأ أولاً في دالة الاستدعاء&nbsp;<em>onSuccess</em>&nbsp;حالة&nbsp;<em>notes</em>&nbsp;الحالية للاستعلام ويحدّثها بإضافة ملاحظة جديدة تُستلم كمعامل لدالة الاستدعاء. وقيمة المعامل هي القيمة التي تعيدها الدالة&nbsp;<em>createNote</em>&nbsp;المعرَّفة في الملف&nbsp;<em>requests.js</em>&nbsp;كما يلي:
@@ -432,10 +450,11 @@ export const createNote = async (newNote) => {
     throw new Error('Failed to create note')
   }
 
-  // BEGIN HIGHLIGHT
+
   return await response.json()
-  // END HIGHLIGHT
+
 }
+
 ```
 
 سيكون من السهل نسبياً إجراء تغيير مماثل على الـ mutation الذي يغيّر أهمية الملاحظة، لكننا نتركه كتمرين اختياري.
@@ -452,13 +471,14 @@ const App = () => {
   const result = useQuery({
     queryKey: ['notes'],
     queryFn: getNotes,
-    // BEGIN HIGHLIGHT
+
     refetchOnWindowFocus: false
-    // END HIGHLIGHT
+
   })
 
   // ...
 }
+
 ```
 
 إذا أضفت عبارة console.log إلى الشيفرة، يمكنك أن ترى من وحدة تحكم المتصفح كم مرة يجعل TanStack Query التطبيق يُعاد عرضه. والقاعدة العامة أن إعادة العرض تحدث على الأقل كلما دعت الحاجة إليها، أي عند تغيّر حالة الاستعلام. يمكنك القراءة أكثر عن ذلك مثلاً&nbsp;<a href="https://tkdodo.eu/blog/react-query-render-optimizations" target="_blank" rel="noopener">هنا</a>.
@@ -471,7 +491,7 @@ const App = () => {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getNotes, createNote, updateNote } from '../requests'
 
-export const useNotes = () =&gt; {
+export const useNotes = () => {
   const queryClient = useQueryClient()
 
   const result = useQuery({
@@ -482,7 +502,7 @@ export const useNotes = () =&gt; {
 
   const newNoteMutation = useMutation({
     mutationFn: createNote,
-    onSuccess: (newNote) =&gt; {
+    onSuccess: (newNote) => {
       const notes = queryClient.getQueryData(['notes'])
       queryClient.setQueryData(['notes'], notes.concat(newNote))
     }
@@ -490,7 +510,7 @@ export const useNotes = () =&gt; {
 
   const updateNoteMutation = useMutation({
     mutationFn: updateNote,
-    onSuccess: () =&gt; {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] })
     }
   })
@@ -498,12 +518,13 @@ export const useNotes = () =&gt; {
   return {
     notes: result.data,
     isPending: result.isPending,
-    addNote: (content) =&gt; newNoteMutation.mutate({ content, important: true }),
-    toggleImportance: (note) =&gt; updateNoteMutation.mutate({
+    addNote: (content) => newNoteMutation.mutate({ content, important: true }),
+    toggleImportance: (note) => updateNoteMutation.mutate({
       ...note, important: !note.important
     }),
   }
 }
+
 ```
 
 تغلّف دالة الخطاف كل الشيفرة المتعلقة بـ TanStack Query: الاستعلام الخاص بجلب الملاحظات وكلا الـ mutations الخاصة بإنشاء الملاحظات وتحديثها. وتُخفى تفاصيل التنفيذ هذه عن مستخدم الخطاف، إذ تعيد الدالة كائناً بسيطاً يحتوي على
@@ -517,10 +538,10 @@ export const useNotes = () =&gt; {
 ```js
 import { useNotes } from './hooks/useNotes'
 
-const App = () =&gt; {
+const App = () => {
   const { notes, isPending, addNote: addNoteToServer, toggleImportance } = useNotes()
 
-  const addNote = async (event) =&gt; {
+  const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.reset()
@@ -528,27 +549,28 @@ const App = () =&gt; {
   }
 
   if (isPending) {
-    return &lt;div&gt;loading data...&lt;/div&gt;
+    return <div>loading data...</div>
   }
 
   return (
-    &lt;div&gt;
-      &lt;h2&gt;Notes app&lt;/h2&gt;
-      &lt;form onSubmit={addNote}&gt;
-        &lt;input name="note" /&gt;
-        &lt;button type="submit"&gt;add&lt;/button&gt;
-      &lt;/form&gt;
-      {notes.map((note) =&gt; (
-        &lt;li key={note.id}&gt;
-          {note.important ? &lt;strong&gt;{note.content}&lt;/strong&gt; : note.content}
-          &lt;button onClick={() =&gt; toggleImportance(note)}&gt;
+    <div>
+      <h2>Notes app</h2>
+      <form onSubmit={addNote}>
+        <input name="note" />
+        <button type="submit">add</button>
+      </form>
+      {notes.map((note) => (
+        <li key={note.id}>
+          {note.important ? <strong>{note.content}</strong> : note.content}
+          <button onClick={() => toggleImportance(note)}>
             {note.important ? 'make not important' : 'make important'}
-          &lt;/button&gt;
-        &lt;/li&gt;
+          </button>
+        </li>
       ))}
-    &lt;/div&gt;
+    </div>
   )
 }
+
 ```
 
 شيفرة التطبيق موجودة على&nbsp;<a href="https://github.com/fullstack-hy2020/query-notes/tree/part6-3" target="_blank" rel="noopener">GitHub</a>&nbsp;في الفرع&nbsp;<em>part6-3</em>.
@@ -600,45 +622,48 @@ import { useState } from 'react'
 import Display from './components/Display'
 import Controls from './components/Controls'
 
-const App = () =&gt; {
+const App = () => {
   const [counter, setCounter] = useState(0)
 
   return (
-    &lt;div&gt;
-      &lt;Display counter={counter} /&gt;
-      &lt;Controls counter={counter} setCounter={setCounter} /&gt;
-    &lt;/div&gt;
+    <div>
+      <Display counter={counter} />
+      <Controls counter={counter} setCounter={setCounter} />
+    </div>
   )
 }
+
 ```
 
 يعرّف مكوّن&nbsp;<em>App</em>&nbsp;حالة التطبيق ويمرّرها إلى مكوّن&nbsp;<em>Display</em>&nbsp;الذي يعرض قيمة العدّاد:
 
 ```js
-const Display = ({ counter }) =&gt; {
+const Display = ({ counter }) => {
 
   return (
-    &lt;div&gt;{counter}&lt;/div&gt;
+    <div>{counter}</div>
   )
 }
+
 ```
 
 وإلى مكوّن&nbsp;<em>Controls</em>&nbsp;الذي يعرض الأزرار:
 
 ```js
-const Controls = ({ counter, setCounter }) =&gt; {
-  const increment = () =&gt; setCounter(counter + 1)
-  const decrement = () =&gt; setCounter(counter - 1)
-  const zero = () =&gt; setCounter(0)
+const Controls = ({ counter, setCounter }) => {
+  const increment = () => setCounter(counter + 1)
+  const decrement = () => setCounter(counter - 1)
+  const zero = () => setCounter(0)
 
   return (
-    &lt;div&gt;
-      &lt;button onClick={increment}&gt;plus&lt;/button&gt;
-      &lt;button onClick={decrement}&gt;minus&lt;/button&gt;
-      &lt;button onClick={zero}&gt;zero&lt;/button&gt;
-    &lt;/div&gt;
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
+
 ```
 
 ينمو التطبيق:
@@ -648,17 +673,18 @@ const Controls = ({ counter, setCounter }) =&gt; {
 يتغيّر دور مكوّن&nbsp;<em>App</em>: فهو لا يزال يحتفظ بحالة التطبيق، لكنه لم يعد يعرض المكوّنات التي تستخدم حالة العدّاد مباشرة:
 
 ```js
-const App = () =&gt; {
+const App = () => {
   const [counter, setCounter] = useState(0)
 
   return (
-    &lt;div&gt;
-      &lt;Navbar /&gt;
-      &lt;Panel counter={counter} setCounter={setCounter} /&gt;
-      &lt;Footer /&gt;
-    &lt;/div&gt;
+    <div>
+      <Navbar />
+      <Panel counter={counter} setCounter={setCounter} />
+      <Footer />
+    </div>
   )
 }
+
 ```
 
 المكوّن الجديد&nbsp;<em>Panel</em>&nbsp;مسؤول عن عرض المكوّنات التي تعرض العدّاد والأزرار:
@@ -667,14 +693,15 @@ const App = () =&gt; {
 import Display from './Display'
 import Controls from './Controls'
 
-const Panel = ({ counter, setCounter }) =&gt; {
+const Panel = ({ counter, setCounter }) => {
   return (
-    &lt;div&gt;
-      &lt;Display counter={counter} /&gt;
-      &lt;Controls counter={counter} setCounter={setCounter} /&gt;
-    &lt;/div&gt;
+    <div>
+      <Display counter={counter} />
+      <Controls counter={counter} setCounter={setCounter} />
+    </div>
   )
 }
+
 ```
 
 التسلسل الهرمي لمكوّنات التطبيق كما يلي:
@@ -685,6 +712,7 @@ App (state)
  │    ├── Display
  │    └── Controls
  └── Footer
+
 ```
 
 لا تزال حالة التطبيق في مكوّن&nbsp;<em>App</em>. ولتمكين&nbsp;<em>Display</em>&nbsp;و&nbsp;<em>Controls</em>&nbsp;من الوصول إلى حالة العدّاد، يجب تمرير الحالة ودالة تحديثها كـ props عبر مكوّن&nbsp;<em>Panel</em>، رغم أن&nbsp;<em>Panel</em>&nbsp;نفسه لا يحتاجهما. وينشأ هذا النوع من الحالات بسهولة عند استخدام حالة أُنشئت بخطاف&nbsp;<em>useState</em>. وتُسمّى هذه الظاهرة&nbsp;<a href="https://kentcdodds.com/blog/prop-drilling" target="_blank" rel="noopener">prop drilling</a>.
@@ -701,6 +729,7 @@ import { createContext } from 'react'
 const CounterContext = createContext()
 
 export default CounterContext
+
 ```
 
 يمكن لمكوّن&nbsp;<em>App</em>&nbsp;الآن أن&nbsp;<em>يوفّر</em>&nbsp;السياق لمكوّناته الفرعية كما يلي:
@@ -712,14 +741,15 @@ const App = () => {
   const [counter, setCounter] = useState(0)
 
   return (
-    // BEGIN HIGHLIGHT
-    &lt;CounterContext.Provider value={{counter, setCounter}}>
-      &lt;Panel />
-      &lt;Footer />
-    &lt;/CounterContext.Provider>
-    // END HIGHLIGHT
+
+    <CounterContext.Provider value={{counter, setCounter}}>
+      <Panel />
+      <Footer />
+    </CounterContext.Provider>
+
   )
 }
+
 ```
 
 يتم توفير السياق بلفّ المكوّنات الفرعية داخل مكوّن&nbsp;<em>CounterContext.Provider</em>&nbsp;وتعيين قيمة مناسبة للسياق.
@@ -729,29 +759,31 @@ const App = () => {
 لاحظ أن مكوّن&nbsp;<em>Panel</em>&nbsp;لم يعد يتلقّى أي props متعلقة بالعدّاد، لذا يُبسَّط إلى:
 
 ```js
-const Panel = () =&gt; {
+const Panel = () => {
   return (
-    &lt;div&gt;
-      &lt;Display /&gt;
-      &lt;Controls /&gt;
-    &lt;/div&gt;
+    <div>
+      <Display />
+      <Controls />
+    </div>
   )
 }
+
 ```
 
 يمكن للمكوّنات الأخرى الآن الوصول إلى السياق باستخدام خطاف&nbsp;<a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener">useContext</a>. يتغيّر مكوّن&nbsp;<em>Display</em>&nbsp;كما يلي:
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useContext } from 'react'
 import CounterContext from './CounterContext'
 
 const Display = () => {
   const { counter } = useContext(CounterContext)
-  // END HIGHLIGHT
 
-  return &lt;div>{counter}&lt;/div>
+
+  return <div>{counter}</div>
 }
+
 ```
 
 لم يعد مكوّن&nbsp;<em>Display</em>&nbsp;بحاجة إلى أي props. فهو يحصل على قيمة العدّاد باستدعاء خطاف&nbsp;<em>useContext</em>&nbsp;مع كائن&nbsp;<em>CounterContext</em>&nbsp;كمعامل له.
@@ -759,28 +791,29 @@ const Display = () => {
 وبالمثل، يتغيّر مكوّن&nbsp;<em>Controls</em>&nbsp;إلى:
 
 ```js
-// BEGIN HIGHLIGHT
+
 import { useContext } from 'react'
 import CounterContext from './CounterContext'
 
 const Controls = () => {
   const { counter, setCounter } = useContext(CounterContext)
-  // END HIGHLIGHT
+
 
   const increment = () => setCounter(counter + 1)
   const decrement = () => setCounter(counter - 1)
   const zero = () => setCounter(0)
 
   return (
-    &lt;div>
-      &lt;button onClick={increment}>plus&lt;/button>
-      &lt;button onClick={decrement}>minus&lt;/button>
-      &lt;button onClick={zero}>zero&lt;/button>
-    &lt;/div>
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
 
 export default Controls
+
 ```
 
 أصبحت المكوّنات الآن قادرة على الوصول إلى المحتوى الذي يعيّنه مزوّد السياق، أي حالة العدّاد ودالة تحديثها.
@@ -789,6 +822,7 @@ export default Controls
 
 ```js
 const { counter } = useContext(CounterContext)
+
 ```
 
 ### تعريف سياق العدّاد في ملفه الخاص
@@ -802,17 +836,18 @@ const CounterContext = createContext()
 
 export default CounterContext
 
-// BEGIN HIGHLIGHT
+
 export const CounterContextProvider = (props) => {
   const [counter, setCounter] = useState(0)
 
   return (
-    &lt;CounterContext.Provider value={{ counter, setCounter }}>
+    <CounterContext.Provider value={{ counter, setCounter }}>
       {props.children}
-    &lt;/CounterContext.Provider>
+    </CounterContext.Provider>
   )
 }
-// END HIGHLIGHT
+
+
 ```
 
 يصدّر الملف الآن كلاً من كائن&nbsp;<em>CounterContext</em>&nbsp;ومكوّن&nbsp;<em>CounterContextProvider</em>، وهو أساساً مزوّد سياق تحتوي قيمته على العدّاد ودالة تحديثه.
@@ -824,17 +859,18 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import App from './App'
-// BEGIN HIGHLIGHT
+
 import { CounterContextProvider } from './CounterContext'
-// END HIGHLIGHT
+
 
 createRoot(document.getElementById('root')).render(
-  // BEGIN HIGHLIGHT
-  &lt;CounterContextProvider>
-    &lt;App />
-  &lt;/CounterContextProvider>
-  // END HIGHLIGHT
+
+  <CounterContextProvider>
+    <App />
+  </CounterContextProvider>
+
 )
+
 ```
 
 أصبح السياق الذي يعرّف قيمة العدّاد ووظائفه متاحاً الآن&nbsp;<em>لجميع</em>&nbsp;مكوّنات التطبيق.
@@ -845,37 +881,39 @@ createRoot(document.getElementById('root')).render(
 import Panel from './components/Panel'
 import Footer from './components/Footer'
 
-const App = () =&gt; {
+const App = () => {
 
   return (
-    &lt;div&gt;
-      &lt;Navbar /&gt;
-      &lt;Panel /&gt;
-      &lt;Footer /&gt;
-  &lt;/div&gt;
+    <div>
+      <Navbar />
+      <Panel />
+      <Footer />
+  </div>
   )
 }
 
 export default App
+
 ```
 
 لا يزال السياق يُستخدم بالطريقة نفسها، ولا حاجة إلى أي تغييرات في المكوّنات الأخرى. فمثلاً، يبقى&nbsp;<em>Controls</em>:
 
 ```js
-const Controls = () =&gt; {
+const Controls = () => {
   const { counter, setCounter } = useContext(CounterContext)
-  const increment = () =&gt; setCounter(counter + 1)
-  const decrement = () =&gt; setCounter(counter - 1)
-  const zero = () =&gt; setCounter(0)
+  const increment = () => setCounter(counter + 1)
+  const decrement = () => setCounter(counter - 1)
+  const zero = () => setCounter(0)
 
   return (
-    &lt;div&gt;
-      &lt;button onClick={increment}&gt;plus&lt;/button&gt;
-      &lt;button onClick={decrement}&gt;minus&lt;/button&gt;
-      &lt;button onClick={zero}&gt;zero&lt;/button&gt;
-    &lt;/div&gt;
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
+
 ```
 
 الحل جيد تماماً. أصبحت حالة التطبيق بأكملها، أي قيمة العدّاد، معزولة الآن في ملف&nbsp;<em>CounterContext</em>. وتصل المكوّنات إلى الجزء الذي تحتاجه بالضبط من السياق باستخدام خطاف&nbsp;<em>useContext</em>&nbsp;وصيغة التفكيك في JavaScript.
@@ -892,20 +930,21 @@ export default CounterContext
 export const CounterContextProvider = (props) => {
   const [counter, setCounter] = useState(0)
 
-// BEGIN HIGHLIGHT
+
   const increment = () => setCounter(counter + 1)
   const decrement = () => setCounter(counter - 1)
   const zero = () => setCounter(0)
-// END HIGHLIGHT
+
 
   return (
-    // BEGIN HIGHLIGHT
-    &lt;CounterContext.Provider value={{ counter, increment, decrement, zero }}>
-    // END HIGHLIGHT
+
+    <CounterContext.Provider value={{ counter, increment, decrement, zero }}>
+
       {props.children}
-    &lt;/CounterContext.Provider>
+    </CounterContext.Provider>
   )
 }
+
 ```
 
 الآن يمكننا استخدام الدوال المستحصل عليها من السياق مباشرة كمعالجات أحداث للأزرار:
@@ -915,18 +954,19 @@ import { useContext } from 'react'
 import CounterContext from '../CounterContext'
 
 const Controls = () => {
-  // BEGIN HIGHLIGHT
+
   const { increment, decrement, zero } = useContext(CounterContext)
-  // END HIGHLIGHT
+
 
   return (
-    &lt;div>
-      &lt;button onClick={increment}>plus&lt;/button>
-      &lt;button onClick={decrement}>minus&lt;/button>
-      &lt;button onClick={zero}>zero&lt;/button>
-    &lt;/div>
+    <div>
+      <button onClick={increment}>plus</button>
+      <button onClick={decrement}>minus</button>
+      <button onClick={zero}>zero</button>
+    </div>
   )
 }
+
 ```
 
 لا يزال هناك مجال لتحسين آخر. إذا نظرنا إلى طريقة استخدام سياق العدّاد، نلاحظ أن الشيفرة المتكررة (boilerplate) نفسها تظهر في كلا المكوّنين اللذين يستهلكانه:
@@ -936,11 +976,12 @@ import { useContext } from 'react'
 import CounterContext from '../CounterContext'
 
 const Display = () => {
-  // BEGIN HIGHLIGHT
+
   const { counter } = useContext(CounterContext)
-  // END HIGHLIGHT
+
   // ...
 }
+
 ```
 
 ```js
@@ -948,11 +989,12 @@ import { useContext } from 'react'
 import CounterContext from '../CounterContext'
 
 const Controls = () => {
-  // BEGIN HIGHLIGHT
+
   const { increment, decrement, zero } = useContext(CounterContext)
-  // END HIGHLIGHT
+
   // ...
 }
+
 ```
 
 يمكننا أن نخطو بالحل خطوة إضافية بإنشاء خطاف مخصّص يعيد السياق مباشرة. لنضفه إلى الملف&nbsp;<em>hooks/useCounter.js</em>:
@@ -961,9 +1003,10 @@ const Controls = () => {
 import { useContext } from 'react'
 import CounterContext from '../CounterContext'
 
-const useCounter = () =&gt; useContext(CounterContext)
+const useCounter = () => useContext(CounterContext)
 
 export default useCounter
+
 ```
 
 أصبح استخدام السياق الآن أبسط بخطوة:
@@ -982,6 +1025,7 @@ const Controls = () => {
   const { increment, decrement, zero } = useCounter()
   // ...
 }
+
 ```
 
 نحن راضون عن الحل. فهو يعزل كل إدارة الحالة بالكامل داخل السياق. والمكوّنات التي تستخدم الحالة لا تعرف شيئاً عن كيفية تنفيذها. وبفضل الخطاف المخصّص، فهي لا تدرك حتى أن الحل قائم على Context API.

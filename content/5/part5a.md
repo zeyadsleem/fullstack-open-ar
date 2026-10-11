@@ -86,6 +86,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 يمكن العثور على شيفرة التطبيق الحالية على [GitHub](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-1)، في الفرع <i>part5-1</i>. إذا استنسخت المستودع، لا تنسَ تشغيل _npm install_ قبل محاولة تشغيل الواجهة الأمامية.
@@ -99,6 +100,7 @@ export default App
 
 ```js
 ({ target }) => setUsername(target.value)
+
 ```
 
 لم تُنفَّذ بعد الدالة _handleLogin_ المسؤولة عن معالجة البيانات في النموذج.
@@ -119,12 +121,13 @@ const login = async credentials => {
 }
 
 export default { login }
+
 ```
 
 يمكن تنفيذ دالة معالجة تسجيل الدخول كما يلي:
 
 ```js
-import loginService from './services/login' // highlight-line
+import loginService from './services/login'
 
 const App = () => {
   // ...
@@ -136,7 +139,7 @@ const App = () => {
 
   // ...
 
-  const handleLogin = async event => { // highlight-line
+  const handleLogin = async event => {
     event.preventDefault()
     
     // highlight-start
@@ -156,6 +159,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 إذا نجح تسجيل الدخول، تُفرَّغ حقول النموذج <i>و</i>تُحفظ استجابة الخادم (بما فيها <i>الرمز</i> وتفاصيل المستخدم) في الحقل <i>user</i> من حالة التطبيق.
@@ -209,6 +213,7 @@ const App = () => {
     // ...
   )
 }
+
 ```
 
 ونعرضهما شرطياً:
@@ -230,8 +235,8 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      {!user && loginForm()} // highlight-line
-      {user && noteForm()} // highlight-line
+      {!user && loginForm()}
+      {user && noteForm()}
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -252,12 +257,14 @@ const App = () => {
     </div>
   )
 }
+
 ```
 
 استُخدمت [حيلة React](https://react.dev/learn/conditional-rendering#logical-and-operator-) التي تبدو غريبة قليلاً لكنها شائعة الاستخدام لعرض النموذجين شرطياً:
 
 ```js
 {!user && loginForm()}
+
 ```
 
 إذا قُيّم التعبير الأول إلى false أو كان [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) (قيمة كاذبة)، فلن يُنفَّذ التعبير الثاني (توليد النموذج) إطلاقاً.
@@ -283,6 +290,7 @@ return (
     <div>
       <button onClick={() => setShowAll(!showAll)}>
     // ...
+
 ```
 
 الحل ليس مثالياً، لكننا سنتركه على حاله الآن.
@@ -307,6 +315,7 @@ return (
   </label>
 </div>
 // ...
+
 ```
 
 لماذا نفّذنا النموذج بهذه الطريقة؟ بصرياً، يمكن تحقيق النتيجة نفسها بشيفرة أبسط، دون عنصر <i>label</i> منفصل:
@@ -321,6 +330,7 @@ return (
   />
 </div>
 // ...
+
 ```
 
 يُستخدم عنصر <i>label</i> في النماذج لوصف حقول <i>input</i> وتسميتها. فهو يوفّر وصفاً لحقل الإدخال، ويساعد المستخدم على فهم المعلومات التي ينبغي إدخالها في كل حقل. ويرتبط هذا الوصف برمجياً بحقل الإدخال المقابل، ما يحسّن إمكانية الوصول في النموذج. 
@@ -341,13 +351,14 @@ const handleLogin = async (event) => {
       username, password,
     })
 
-    setUser(user) // highlight-line
+    setUser(user)
     setUsername('')
     setPassword('')
   } catch (exception) {
     // ...
   }
 }
+
 ```
 
 لنصلح إنشاء ملاحظات جديدة ليعمل مع الواجهة الخلفية. يعني هذا إضافة رمز المستخدم المسجّل للدخول إلى ترويسة Authorization في طلب HTTP.
@@ -358,7 +369,7 @@ const handleLogin = async (event) => {
 import axios from 'axios'
 const baseUrl = '/api/notes'
 
-let token = null // highlight-line
+let token = null
 
 // highlight-start
 const setToken = newToken => {
@@ -378,7 +389,7 @@ const create = async newObject => {
   }
 // highlight-end
 
-  const response = await axios.post(baseUrl, newObject, config) // highlight-line
+  const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
 
@@ -387,7 +398,8 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken } // highlight-line
+export default { getAll, create, update, setToken }
+
 ```
 
 تحتوي وحدة noteService على متغير خاص باسم _token_. ويمكن تغيير قيمته بالدالة _setToken_ التي تصدّرها الوحدة. أما _create_، بصيغة async/await الآن، فتضع الرمز في ترويسة <i>Authorization</i>. وتُمرَّر الترويسة إلى axios كوسيط ثالث في دالة <i>post</i>.
@@ -400,7 +412,7 @@ const handleLogin = async (event) => {
 
   try {
     const user = await loginService.login({ username, password })
-    noteService.setToken(user.token) // highlight-line
+    noteService.setToken(user.token)
     setUser(user)
     setUsername('')
     setPassword('')
@@ -408,6 +420,7 @@ const handleLogin = async (event) => {
     // ...
   }
 }
+
 ```
 
 والآن أصبحت إضافة ملاحظات جديدة تعمل من جديد!
@@ -422,6 +435,7 @@ const handleLogin = async (event) => {
 
 ```js
 window.localStorage.setItem('name', 'juha tauriainen')
+
 ```
 
 يحفظ النص المُمرَّر كوسيط ثانٍ كقيمة للمفتاح <i>name</i>.
@@ -430,6 +444,7 @@ window.localStorage.setItem('name', 'juha tauriainen')
 
 ```js
 window.localStorage.getItem('name')
+
 ```
 
 بينما تحذف [removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem) مفتاحاً.
@@ -461,6 +476,7 @@ window.localStorage.getItem('name')
       // ...
     }
   }
+
 ```
 
 تُحفظ الآن تفاصيل المستخدم المسجّل للدخول في التخزين المحلي، ويمكن عرضها في وحدة التحكم (بكتابة _window.localStorage_ فيها):
@@ -504,6 +520,7 @@ const App = () => {
 
   // ...
 }
+
 ```
 
 تضمن المصفوفة الفارغة كوسيط للخطاف أن يُنفَّذ الخطاف فقط عند عرض المكوّن [للمرة الأولى](https://react.dev/reference/react/useEffect#parameters).
@@ -515,12 +532,14 @@ const App = () => {
 
 ```js
 window.localStorage.removeItem('loggedNoteappUser')
+
 ```
 
 أو بالأمر الذي يفرّغ <i>localstorage</i> بالكامل:
 
 ```js
 window.localStorage.clear()
+
 ```
 
 يمكن العثور على شيفرة التطبيق الحالية على [GitHub](https://github.com/fullstack-hy2020/part2-notes-frontend/tree/part5-3)، في الفرع <i>part5-3</i>.
@@ -548,6 +567,7 @@ window.localStorage.clear()
 
 ```bash
 git clone https://github.com/fullstack-hy2020/bloglist-frontend
+
 ```
 
 <i>أزل إعدادات git من التطبيق المستنسخ</i>
@@ -555,6 +575,7 @@ git clone https://github.com/fullstack-hy2020/bloglist-frontend
 ```bash
 cd bloglist-frontend   // انتقل إلى المستودع المستنسخ
 rm -rf .git
+
 ```
 
 يُشغَّل التطبيق بالطريقة المعتادة، لكن عليك تثبيت اعتمادياته أولاً:
@@ -562,6 +583,7 @@ rm -rf .git
 ```bash
 npm install
 npm run dev
+
 ```
 
 نفّذ وظيفة تسجيل الدخول في الواجهة الأمامية. يُحفظ الرمز المُعاد عند نجاح تسجيل الدخول في حالة التطبيق <i>user</i>.
@@ -599,6 +621,7 @@ npm run dev
     </div>
   )
 }
+
 ```
 
 #### 5.2: واجهة قائمة المدونات الأمامية، الخطوة 2
